@@ -1,0 +1,110 @@
+\documentclass [11pt,a4paper,oneside,openany]{book} %Classe del documento, formato carta, singola facciata, apertura capitoli pag destra/sinista (ininfluente se impostato oneside). Formato libro
+%%\usepackage[italian]{babel} %Lingua Documento (da impostare per la sillabazione)
+\usepackage{graphicx} %Pacchetto necessario per la gestione delle immagini
+\usepackage{xcolor,colortbl} %Colori
+\usepackage {fancyhdr} %Pacchetto per la gestione accurata della pagina
+\usepackage {setspace} %Pacchetto necessario per i comandi successivi onehalfspacing, singlespacing....
+\usepackage{titlesec} % Pacchetto per le sezioni e sottosezioni
+\usepackage{longtable} %Pacchetto per la gestione delle tabelle grandi
+\usepackage[colorlinks=true]{hyperref} %Segnalibri nel pdf finale, sotto relativi parametri
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc} %Pacchetti per le lettere accentate utf8
+\usepackage{listings} %Pacchetto per formattare codice sorgente
+\usepackage{mathtools} %Pacchetto matematica
+\usepackage{float} %Pacchetto per il posizionamento delle figure
+
+\hypersetup{
+	bookmarksnumbered=true,
+	linkcolor=black,
+	citecolor=black,
+	urlcolor=black,
+}
+
+\usepackage{geometry} % Dimensione pagina
+
+\geometry{a4paper} % Formato carta
+\addtolength{\textheight}{75pt} %Margini
+\oddsidemargin 30pt
+
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{3}
+
+
+\begin{document} %Inizio Documento
+
+%%FRONTESPIZIO%%=========================================
+\begin{titlepage}
+
+ \begin{center} 
+     \includegraphics[height=6cm]{logo.eps}\\
+     \vspace{4em}
+     {\Large \textsc{Software Engineering II}}\\
+     \vspace{6em}
+     {\LARGE \textbf{Travlendar+}}\\
+     \vspace{3em}
+     {\Large \textsc{Requirements Analysis}}\\
+     \vspace{1em}
+     {\Large \textsc{and}}\\
+     \vspace{1em}
+     {\Large \textsc{Specifications Document}}\\
+ \end{center}
+ 
+    \vskip 2cm
+ 
+ 	Authors:
+ 	\vspace{0.5em}
+ 	\begin{center}
+      {\Large \textit{Edoardo D'Amico}}\\
+      {\Large \textit{Gabbolini Giovanni}}\\
+      {\Large \textit{Parroni Federico}}\\
+    \end{center}
+
+\vskip 2.0cm
+\begin{center}
+{\normalsize 1$^{st}$ October 2017}
+\end{center}
+
+\end{titlepage}
+
+\newpage
+
+%%INTESTAZIONI PAGINA%%==================================
+\pagestyle{fancy}
+\renewcommand{\chaptername}{Chapter}
+\renewcommand{\chaptermark} [1]{\chaptername\ \thechapter.\ #1}{} 
+\renewcommand{\chaptermark}[1]{\markboth{\thechapter.\ #1}{}} 
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+\fancyhf{}
+\fancyhead[LE,RO]{\bfseries\thepage} 
+\fancyhead[LO,RE]{\bfseries\leftmark} 
+\fancypagestyle{plain}{%
+\fancyhead{} % leva l'intestazione
+\renewcommand{\headrulewidth}{0pt} % e la linea
+}
+
+
+%%INDICE%%==============================================
+\renewcommand{\contentsname}{Indice}
+\renewcommand{\listfigurename}{Elenco delle Figure}
+\renewcommand{\listtablename}{Elenco delle Tabelle}
+\tableofcontents
+
+\linespread{1.5}\selectfont		%interlinea
+%%CAPITOLI===============================================
+\input{cap1_introduzione} %nome del file LaTeX del capitolo
+\input{cap2_overalldesc}
+%input{cap3_struttura_del_progetto}
+%\input{cap4_calibrazione_della_videocamera}
+%\input{cap5_riconoscimento}
+%\input{cap6_localizzazione}
+%\input{cap7_inseguitore}
+%\input{cap8_test}
+%\input{cap9_conclusioni}
+%...
+
+
+%%APPENDICI==============================================
+\appendix
+%%\input{appendiceA}
+
+\end{document}
