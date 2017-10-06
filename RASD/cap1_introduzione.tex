@@ -16,6 +16,9 @@ The main goals the app must fulfill are:
 \end{enumerate}
 
 \section{Scope}
+%The world and the machine is a way of thinking about problems and phenomena relevant in the reality of the software system we are to develop. The world contains the phenomena that occours in reality but are not observable by our system; the machine instead contains the phenomena which take place inside the system and are not observable from outside of it. The intersection between these two sets of phenomena is the so called set of shared phenomena, which contains the phenomena that are controlled by the world and observed by the machine or controlled by the machine and observed by the world.
+Here we provide a brief description of the aspects of the reality of interest which the application is going to interact with.
+
 User can receive an appointment on a certain date, time and location (over a region), that can be reached using different available travel means. The appointment can be held either at a specific time or in a time interval and lasts for a certain amount of time. An appointment can be recurrent, in other words, it repeats regularly over time (e.g., lunch, training, etc.). User can travel with someone else and can pick up or leave off these people during the day.
 
 User can have his own travel means and a pass for public transportation. 
@@ -29,17 +32,29 @@ The travel means considered in this scenario can be grouped in three categories:
 Weather conditions can change during the day affecting usable travel means.
 
 At the beginning of the day, or on demand, user can request a schedule of his daily appointments, following some criteria evaluated according to their assigned priority and satisfying some constraints imposed by the user.
-When a new appointment is received, user create a new item in the application and saves it in the appointment list. User can request a reschedule to the application due to unexpected changes of his plan (e.g. a cancelled appointment).
+When a new appointment is received, user creates a new item in the application and saves it in the appointment list. User can request a reschedule to the application due to unexpected changes of his plan (e.g. a cancelled appointment).
 
+\subsection{World Phenomena}
+\begin{itemize}
+\item User receives a new appointment
+\item User has to travel alone or with someone else
+\item User owns private travel means and/or passes for public transportation
+\item User wakes up
+\item User pass expires
+\end{itemize}
 
-World phenomena:
-user moves
-user takes travel means
-weather changes
-
-Shared phenomena:
-allocation of a new appointment
-user picks up a persons
+\subsection{Shared Phenomena}
+\begin{itemize}
+\item Shared travel mean moves
+\item Shared travel mean its not available anymore
+\item Wheather condition changes
+\item Public travel means reach a stop-place
+\item Public travel means are late 
+\item User requests a schedule to the machine
+\item User inserts a new appointment into the application
+\item User requests to book rides
+\item User moves
+\end{itemize}
 
 \section{Definitions, Acronyms, Abbreviations}
 
