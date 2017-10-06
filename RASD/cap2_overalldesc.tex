@@ -1,20 +1,38 @@
 \chapter{Overall Description}
 
 \section{Product Perspective}
+Constraints are impositions on some parameters managed by the system during the process of scheduling the appointments. These can be selected by the user when he inserts an appointment or when he requests a schedule, otherwise the constraints are initialized to default values. 
+
 The costraints that can be chosen for a schedule by the user are the following:
 \begin{itemize}
-\item Maximum travelling distance with a specific travel mean: the user can set a maximum amount of km to travel with a travel mean
-\item Travel means time slots: user can specify a time interval in which a travel mean can be used.
-\item User can deactivate a particular travel means
-\item User can set a wake up time, before that the scheduler cannot assign any action to do
+\item Maximum travelling distance with a specific travel mean: the user can set a maximum amount of km to travel with a travel mean;
+\item Travel means time slots: user can specify a time interval in which a travel mean can be used;
+\item User can deactivate a particular travel means;
+\item User can set a wake up time, before that the scheduler cannot assign any action to do;
 \item User can select which travel means use under certain weather condition
-\item \textbf{(User initially position can be set either manually or via GPS)}
 \end{itemize}
 
 The criteria that can be chosen for a schedule by the user are the following:
 
 \begin{itemize}
-\item Minimize carbon footprint
-\item Minimize money spent
-\item Minimize travelling time
+\item Minimize carbon footprint: the scheduler will try to minimize the amount of kilometers travelled in polluting means;
+\item Minimize money spent: the scheduler will try to avoid expensive means and to exploit the public ones (especially if the user has a pass) or going by bike or on foot;
+\item Minimize travelling time: the scheduler will compute the quickest possible path reaching all the appointments locations
 \end{itemize}
+
+\section{Product Functions}
+The following requirements are derived in order to fulfill the specified goals.
+\begin{enumerate}
+\renewcommand\labelenumi{\textbf{R\theenumi}}
+\item bla \label{req:R1}
+\end{enumerate}
+
+
+
+
+
+
+\begin{enumerate}
+\item bla
+\end{enumerate}
+
