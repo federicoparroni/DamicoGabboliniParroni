@@ -8,15 +8,26 @@ The main goals the app must fulfill are:
 
 \begin{enumerate}
 \renewcommand\labelenumi{\textbf{G\theenumi}}
-\item Schedule user appointments according to his necessities and his preferences, identifying the best mobility options \label{goal:G1}
-\item Schedule user appointments according to his necessities and his preferences, identifying the best mobility options \label{goal:G2}
-\item Make sure that the user can be in time for his appointments \label{goal:G3}
-\item Optimize the schedule with respect to some criteria and constraints chosen by the user \label{goal:G4}
-\item Provide a way to move between appointments location using several kinds of travel means \label{goal:G5}
-\item Localize public travel means or sharing services, and buy tickets or book a ride, respectively \label{goal:G6}
-\item Arrange the trips of the user, allowing him to locate travel services and buy public travel means tickets or book a sharing service \label{goal:G7}
-\item Create a system with a \textbf{graphic} user interface, in order to simplify input/output interactions with the user \label{goal:G8}
+%\item Schedule user appointments according to his necessities;% and his preferences, identifying the best mobility options; 
+%\label{goal:G1}
+%\item Make sure that the user can be in time for his appointments; \label{goal:G3}
+%\item Optimize the schedule with respect to some criteria and constraints chosen by the user; \label{goal:G4}
+%\item Provide a way to move between appointments location using several kinds of travel means; \label{goal:G5}
+%\item Localize public travel means or sharing services, and buy tickets or book a ride, respectively; \label{goal:G6}
+%\item Arrange the trips of the user, allowing him to locate travel services and buy public travel means tickets or book a sharing service; \label{goal:G7}
+%\item Create a system with a \textbf{graphic} user interface, in order to simplify input/output interactions with the user. \label{goal:G8}
+%\end{enumerate}
+
+\item Allow the user to insert a list of appointments according to his necessities and his preferences;  \label{goal:G1}
+
+\item The system S.P.W. to create a valid schedule of the user appointments (fare ref alla def) \label{goal:G2}
+
+%comprare biglietti
+
+\item 
+
 \end{enumerate}
+
 
 \section{Scope}
 %The world and the machine is a way of thinking about problems and phenomena relevant in the reality of the software system we are to develop. The world contains the phenomena that occours in reality but are not observable by our system; the machine instead contains the phenomena which take place inside the system and are not observable from outside of it. The intersection between these two sets of phenomena is the so called set of shared phenomena, which contains the phenomena that are controlled by the world and observed by the machine or controlled by the machine and observed by the world.
@@ -27,8 +38,8 @@ User can receive an appointment on a certain date, time and location (over a reg
 User can have his own travel means and a pass for public transportation. 
 The travel means considered in this scenario can be grouped in three categories: public, shared or private.
 \begin{itemize}
-\item Public travel means: these include trains, buses, underground, taxis, trams. They have to be taken in their \textbf{appositi} stops. User must have a valid ticket in order to get on a public travel means (except for taxis, that pick up the user wherever he wants upon a call and do not require any ticket). 
-\item Shared travel means: these include car and bike. They are located in specific places and require a reservation in order to be used by the user.
+\item Public travel means: these include trains, buses, underground, taxis, trams. They have to be taken in their \textbf{appositi} stops. User must have a valid ticket in order to get on a public travel means (except for taxis, that pick up the user wherever he wants upon a call and do not require any ticket); 
+\item Shared travel means: these include car and bike. They are located in specific places and require a reservation in order to be used by the user;
 \item Private travel means: vehicles owned by the user. They can be cars, bikes, motorbikes.
 \end{itemize}
 
@@ -38,36 +49,69 @@ When a new appointment is received, user creates a new item in the application a
 
 \subsection{World Phenomena}
 \begin{itemize}
-\item User receives a new appointment
-\item User has to travel alone or with someone else
-\item User owns private travel means and/or passes for public transportation
-\item User wakes up
-\item User pass expires
+\item User receives a new appointment;
+\item User picks up a person;
+\item User owns private travel means and/or passes for public transportation;
+\item User wakes up;
+\item User pass expires.
 \end{itemize}
 
 \subsection{Shared Phenomena}
 \begin{itemize}
-\item Shared travel mean moves
-\item Shared travel mean its not available anymore
-\item Wheather condition changes
-\item Public travel means reach a stop-place
-\item Public travel means are late 
-\item User requests a schedule to the machine
-\item User inserts a new appointment into the application
-\item User requests to book rides
-\item User moves
+\item Shared travel mean moves;
+\item Shared travel mean its not available anymore;
+\item Wheather condition changes;
+\item Public travel means reach a stop-place;
+\item Public travel means are late; 
+\item Public travel means are not available due to a strike day;
+\item User requests a schedule to the machine;
+\item User inserts a new appointment into the application;
+\item User requests to book rides;
+\item User moves.
 \end{itemize}
 
 \section{Definitions, Acronyms, Abbreviations}
 
-Appointment
-Constraint
-Criteria
-GPS
-Schedule/Scheduler
-System/Applications
+\newtheorem{mydef}{Definition}
 
+%/ = sinonimo
+sinonimi:
+Appointment/meeting
+Schedule/Scheduler
+System/Application
+preferences/constraint
+
+%\begin{mydef} \label{definition: 1}
+%Here is a new definition
+%\end{mydef} 
+%
+%\ref{definition: 1}
+
+def:
+preferences: constraints on appointments or schedules
+Opt Criteria: criteria followed by the scheduler in order to optimize
+
+Schedule: a set of time-ordered and not overlapping appointments where their starting times are fixed and they're linked each other by a path travelled with a specific transportation mean
+
+Valid Schedule: a Schedule which:
+\begin{itemize}
+\item is optimized according to the criteria chosen by the user;
+\item ensures that the user will be on time for all his appointments;
+\item respects the constraints imposed by the user
+\end{itemize}
+
+
+convenzioni:
+variables are italic
+states are bold
+
+abbr:
+GPS
 GUI: graphic user interface
+ETA: estimated time of arrival
+Should provide a way: SPW
+S.B.A.: should be able 
+API
 
 %\reqref{req:R1}
 %\goalref{goal:G1}

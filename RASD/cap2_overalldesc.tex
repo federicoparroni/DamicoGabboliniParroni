@@ -1,38 +1,123 @@
 \chapter{Overall Description}
 
 \section{Product Perspective}
-Constraints are impositions on some parameters managed by the system during the process of scheduling the appointments. These can be selected by the user when he inserts an appointment or when he requests a schedule, otherwise the constraints are initialized to default values. 
 
-The costraints that can be chosen for a schedule by the user are the following:
+\subsection{User Model}
+A user is represented within the application by a set of parameters:
+Some important informations about the user are held by the following ones:
 \begin{itemize}
-\item Maximum travelling distance with a specific travel mean: the user can set a maximum amount of km to travel with a travel mean;
-\item Travel means time slots: user can specify a time interval in which a travel mean can be used;
-\item User can deactivate a particular travel means;
-\item User can set a wake up time, before that the scheduler cannot assign any action to do;
-\item User can select which travel means use under certain weather condition
+\item \textit{travelPass}: indicates if the user has a pass for public transportation;
+\item \textit{hasBike};
+\item \textit{hasCar}.
 \end{itemize}
 
-The criteria that can be chosen for a schedule by the user are the following:
-
+\subsection{Appointment Model}
+An appointment is represented within the application by a set of parameters:
 \begin{itemize}
-\item Minimize carbon footprint: the scheduler will try to minimize the amount of kilometers travelled in polluting means;
-\item Minimize money spent: the scheduler will try to avoid expensive means and to exploit the public ones (especially if the user has a pass) or going by bike or on foot;
-\item Minimize travelling time: the scheduler will compute the quickest possible path reaching all the appointments locations
+\item \textit{duration}: the time extension of the appointment
+\item \textit{startingTime} or \textit{timeInterval}: the first should be given if the starting hour is well-known (deterministic), otherwise a time interval in which the appointment will be held it's provided. 
+%In particular: \begin{equation}timeInterval.start + duration \leq timeInterval.end \label{eqn:constrOnTimeInterval} \end{equation}
+\item \textit{location}: identifies the coordinates of the place where the appointment will be held;
+\item \textit{recurrent}: specifies if the appointment will be repeated over a fixed period of time;
+\item \textit{peopleVariation}: represents a variation occourring when the user picks up or leaves off someone.
 \end{itemize}
+
+The life cycle of an appointment can be represented by the following statechart:
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth, keepaspectratio]{"images/stateChartAppointment".png}
+\caption{Appointment statechart}
+\end{center}
+\end{figure}
+
+A newly-created appointment is \textbf{Unscheduled}. It could remain \textbf{Unscheduled} either when edited or there isn't a possible arrangement when a schedule is performed. Otherwise it becomes \textbf{Scheduled} if there's a feasible way to arrange it. When a scheduled appointment is edited all the appointments in that schedule return to be \textbf{Unscheduled}, because it's possible that they bring to a different schedule. When a scheduled appointment is fullfilled it becomes \textbf{Archived} and stored in the schedule history. If this last one is a recurrent appointment it must be reinsert in the list of unscheduled appointment so it will become \textbf{Unscheduled} again. The user can cancel an appointment in every moment. 
+
+\subsection{Schedule Model} \label{subsect:schmodel}
+A schedule is a set of Appointments in a given day, ordered by the scheduler following the criteria described below.
+A schedule is characterized by the following variables:
+\begin{itemize}
+\item \textit{date};
+\item \textit{startingPosition}: is the starting location of the user (e.g. user's home);
+\item \textit{startingNumberOfPeople}: the number of people that must reach the first appointment.
+\item \textit{wakeUpTime}: it is the starting time from which the schedule should start arranging appointments.
+\end{itemize}
+
+\subsubsection{The optimization criteria} \label{subsubsect:optcriteria} 
+The criteria that can be chosen for a schedule by the user  for the optimization are the following:
+\begin{itemize}
+\item \textit{Minimize carbon footprint}: the scheduler will try to minimize the amount of kilometers travelled in polluting means;
+\item \textit{Minimize money spent}: the scheduler will try to avoid expensive means and to exploit the public ones (especially if the user has a pass) or going by bike or on foot;
+\item \textit{Minimize travelling time}: the scheduler will compute the quickest possible path reaching all the appointments locations.
+\end{itemize}
+
+\subsection{Constraints}
+Constraints are impositions on some parameters managed by the system during the process of scheduling the appointments. We can distinguish between constraints on schedule and contraints on the single appointment. These can be selected by the user when he inserts an appointment or when he requests a schedule, otherwise the constraints are initialized to default values. 
+
+\subsubsection{Constraints on schedule} 
+\begin{itemize}
+\item \textit{Maximum travelling distance with a specific travel mean}: the user can set a maximum amount of km to travel with a travel mean;
+\item\textit{ Travel means time slots}: user can specify a time interval in which a travel mean can be used;
+\item \textit{User can deactivate a particular travel means};
+\item \textit{User can select which travel means uses under certain weather condition}.
+\end{itemize}
+
+\subsubsection{Constraints on appointment}
+\begin{itemize}
+\item \textit{User can deactivate a particular travel means}.
+\end{itemize}
+
+\subsection{Class Diagram}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth, keepaspectratio]{"images/classDiagram".png}
+\caption{System Class Diagram}
+\end{center}
+\end{figure}
 
 \section{Product Functions}
-The following requirements are derived in order to fulfill the specified goals.
+The following requirements are derived in order to fullfill the specified goals.
+\\
+
+Requirements for \goalref{goal:G1}:
 \begin{enumerate}
 \renewcommand\labelenumi{\textbf{R\theenumi}}
-\item bla \label{req:R1}
+\item The system SPW to create a new appointment allowing user to specify all its parameters; \label{req:R1}
+\item The system SPW to add constraints to a previously created appointment specifying which travel means have to be avoided during the travel to the meeting location; \label{req:R2}
+\\
+
+Requirements for \goalref{goal:G2}:
+
+\item Allow the user to set the parameters of the schedule (\ref{subsect:schmodel}), or to accept the default values;
+ 
+\item Allow the user to select the optimization criteria (\ref{subsubsect:optcriteria}) for the schedule;
+
+\item The system S.B.A. to retrieve information from an external API;
+
+\item T system S.B.A. to compare different travel 
+
+ 
+
 \end{enumerate}
 
+\subsection{ Assumptions, dependencies and constraints}
 
+\begin{itemize}
+\item The system should be able to retrieve information about public travel means. In particular:
+\begin{itemize}
+\item time schedule; 
+\item routes; 
+\item prices;
+\item information about delays;
+\item information on possible strike days.
+\end{itemize}
 
+\item The system should be able to retrieve information about shared means. In particular:
+\begin{itemize}
+\item position of the available ones;  
+\item prices per time unit;
+\end{itemize}
+\end{itemize}
 
+%list of requirements given the goals
 
-
-\begin{enumerate}
-\item bla
-\end{enumerate}
 
