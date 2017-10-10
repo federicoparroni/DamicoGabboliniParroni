@@ -24,12 +24,12 @@ The main goals the app must fulfill are:
 
 \item The system should offer the possibility to create a new account that the owner can use for authentication \label{goal:G3}
 
-\item The system S.B.A to book the travel means involved in the current schedule under user approval \label{goal:G5} 
+\item The system S.B.A to book the travel means involved in the current schedule under user approval \label{goal:G4} 
 
-\item The system S.B.A to display the result of the scheduling 
-\label{goal:G6}
+\item The system S.B.A to display the scheduling result \textbf{(fare riferimento alla definizione}) 
+\label{goal:G5}
 
-\item the system should offer a GUI that handles All the interactions with the user. \label{goal:G7}
+\item the system should offer a GUI that handles All the interactions with the user. \label{goal:G6}
  
 operation through a graphical interface
 %comprare biglietti
@@ -99,6 +99,7 @@ def:
 
 preferences: constraints on appointments or schedules
 
+\textbf{la toglierei questa in quanto abbiamo definito i optimization criteria nella sezione schedule model}
 Opt Criteria: criteria followed by the scheduler in order to optimize
 
 travel option: the combination of travel path and travel means that allow to reach one spot from another.
@@ -119,6 +120,19 @@ Valid Schedule: a Schedule which:
 \item respects the constraints imposed by the user
 \end{itemize}
 
+relative path: portion of a path travelled by the same travel means 
+
+Scheduling result: the set of:
+\begin{itemize}
+\item Graphical representation of the path that will be travelled by the user
+\item money spent for each relative path
+\item total money spent 
+\item Length of the path expressed in KM
+\item Length of relative path 
+\item Carbon footprint emission
+\item Exstimated travel time of each relative path
+\item Total exstimated travel time
+\end{itemize}
 
 convenzioni:
 variables are italic
