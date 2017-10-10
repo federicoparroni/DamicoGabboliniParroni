@@ -91,11 +91,23 @@ Requirements for \goalref{goal:G2}:
  
 \item Allow the user to select the optimization criteria (\ref{subsubsect:optcriteria}) for the schedule;
 
-\item The system S.B.A. to retrieve information from an external API;
+\item The system S.B.A. to gather information from external APIs about: 
+\begin{itemize}
+\item travel options with related travel option data;
+\item weather forecast;
+\item strike days;
+\end{itemize}
 
-\item T system S.B.A. to compare different travel 
+\item The system S.B.A. to select the best travel option according to the optimization criteria taking into account:
+user constraint
+travel option data 
+weather forecast
+information about strike day
 
- 
+
+%\item The system S.B.A. to compare different travel options with related travel option data according to the optimization criteria;
+
+\item The system S.B.A. to avoid a particular travel mean under a certain weather condition;
 
 \end{enumerate}
 
@@ -104,9 +116,6 @@ Requirements for \goalref{goal:G2}:
 \begin{itemize}
 \item The system should be able to retrieve information about public travel means. In particular:
 \begin{itemize}
-\item time schedule; 
-\item routes; 
-\item prices;
 \item information about delays;
 \item information on possible strike days.
 \end{itemize}
@@ -116,6 +125,8 @@ Requirements for \goalref{goal:G2}:
 \item position of the available ones;  
 \item prices per time unit;
 \end{itemize}
+
+\item It's possible to retrieve all travel options and travel option data from external APIs;
 \end{itemize}
 
 %list of requirements given the goals
