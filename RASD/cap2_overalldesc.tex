@@ -43,7 +43,7 @@ A schedule is characterized by the following variables:
 \end{itemize}
 
 \subsubsection{The optimization criteria} \label{subsubsect:optcriteria} 
-The criteria that can be chosen for a schedule by the user  for the optimization are the following:
+The criteria that can be chosen with priority for a schedule by the user  for the optimization are the following:
 \begin{itemize}
 \item \textit{Minimize carbon footprint}: the scheduler will try to minimize the amount of kilometers travelled in polluting means;
 \item \textit{Minimize money spent}: the scheduler will try to avoid expensive means and to exploit the public ones (especially if the user has a pass) or going by bike or on foot;
@@ -99,15 +99,21 @@ Requirements for \goalref{goal:G2}:
 \end{itemize}
 
 \item The system S.B.A. to select the best travel option according to the optimization criteria taking into account:
-user constraint
-travel option data 
-weather forecast
-information about strike day
-
+\begin{itemize}
+\item user constraint
+\item travel option data 
+\item weather forecast
+\item information about strike day
+\end{itemize}
 
 %\item The system S.B.A. to compare different travel options with related travel option data according to the optimization criteria;
 
 \item The system S.B.A. to avoid a particular travel mean under a certain weather condition;
+
+Requirements for \goalref{goal:G5}: 
+\item The system should offer to the user a way to link all his travel service accounts into the Travlendar+ account;
+
+\item The system S.B.A to book a travel mean through external API
 
 \end{enumerate}
 
@@ -122,12 +128,24 @@ information about strike day
 
 \item The system should be able to retrieve information about shared means. In particular:
 \begin{itemize}
-\item position of the available ones;  
+\item position of the available ones;
 \item prices per time unit;
 \end{itemize}
 
-\item It's possible to retrieve all travel options and travel option data from external APIs;
+\item there exist external APIs that allow to:
+\begin{itemize}
+\item retrieve all travel options and travel option data
+\item signed user to book and pay for all travel services
+\item retrive information about weather forecast
 \end{itemize}
+
+
+\item the device on which the application runs is connected to the internet;
+
+item 
+
+\end{itemize}
+
 
 %list of requirements given the goals
 
