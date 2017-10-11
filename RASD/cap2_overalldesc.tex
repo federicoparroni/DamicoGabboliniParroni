@@ -11,7 +11,7 @@ Some important informations about the user are held by the following ones:
 \item \textit{hasCar}.
 \end{itemize}
 
-\subsection{Appointment Model}
+\subsection{Appointment Model} \label{subsect:appointmentmodel}
 An appointment is represented within the application by a set of parameters:
 \begin{itemize}
 \item \textit{duration}: the time extension of the appointment
@@ -27,6 +27,7 @@ The life cycle of an appointment can be represented by the following statechart:
 \begin{center}
 \includegraphics[width=\textwidth, keepaspectratio]{"images/stateChartAppointment".png}
 \caption{Appointment statechart}
+\label{fig:stchartApp}
 \end{center}
 \end{figure}
 
@@ -61,7 +62,7 @@ Constraints are impositions on some parameters managed by the system during the 
 \item \textit{User can select which travel means uses under certain weather condition}.
 \end{itemize}
 
-\subsubsection{Constraints on appointment}
+\subsubsection{Constraints on appointment} \label{subsubsect:constronappoint}
 \begin{itemize}
 \item \textit{User can deactivate a particular travel means}.
 \end{itemize}
@@ -85,11 +86,7 @@ Requirements for \goalref{goal:G1}:
 \begin{enumerate}
 \renewcommand\labelenumi{\textbf{R\theenumi}}
 
-\item The system SPW to create a new appointment allowing user to specify all its parameters; \label{req:R1}
-
-\item The system SPW to add constraints to a previously created appointment specifying which travel means have to be avoided during the travel to the meeting location; \label{req:R2}
-\\
-
+\item The system S.B.A. to retrieve information from the user about his appointments; \label{req:R1}
 
 Requirements for \goalref{goal:G2}:
 

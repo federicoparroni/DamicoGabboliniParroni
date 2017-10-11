@@ -31,26 +31,30 @@ Giovanni will start the fourth year of his Master's degree. Surfing the internet
 
 \subsection{Use cases}
 
-\subsubsection{Appointment creation}
+\subsubsection{Appointment creation} \label{usecase:appcreation}
 
-\begin{table}[]
-\centering
-\caption{}
-\begin{tabular}{ll}
-\hline
-\textbf{Name}   & \textbf{Appointment creation}   \\ \hline
-\textbf{Actors} &  User \\ \hline
-\textbf{Goals} &  \goalref{goal:G1} \\ \hline
-\textbf{Input Condition} &   \\ \hline
-\textbf{Event Flow} &  \begin{enumerate}
-					   \item The user wants to add a new appointment to his schedule
-					   \item The user logs-in in the application (\textbf{ref to the log-in use case}.
-					   \item The 
-					   \end{enumerate}	
-\end{enumerate}  \\ \hline
+\begin{tabular}{|p{14cm}|} \hline
+\textbf{Name:} Appointment creation \\ \hline
+\textbf{Actors:} User \\ \hline
+\textbf{Goals:} \goalref{goal:G1} \\ \hline
+\textbf{Input Condition:} \\ \hline
+\textbf{Event Flow:}
+\begin{enumerate}
+\item The user wants to add a new appointment to his schedule;
+\item The user logs-in in the application (\textbf{ref to the log-in use case});
+\item The user requests the creation of a new appointment to the application;
+\item The system provides to the user a form to fill;
+\item The user fills up the form with the parameters (specified in \ref{subsect:appointmentmodel}) and constraints (specified in \ref{subsubsect:constronappoint} about the new appointment;					   \item The user submit the form to the system;
+\item The new appointment is allocated within the system as Unscheduled (referring to statechart in figure \label{fig:stchartApp})
+\end{enumerate}	\\ \hline
+\textbf{Output Condition:} The user submit the form after having filled it with all the parameters needed. The fields about constraints could also be left blank (they are optional); \\ \hline
+\textbf{Exceptions:}
+\begin{enumerate}
+\item Some fields of the form referring to parameters are left blank;
+\item The \textit{location} field doesn't belong to the domain area of the application (\textbf{riferimento alla domain assumption della regione})
+\end{enumerate} \\ \hline
+
 \end{tabular}
-\label{my-label}
-\end{table}
 
 \subsubsection{Notes on use cases}
 eventuali informzioni che specificano meglio come leggere i deagrammi che si producono
