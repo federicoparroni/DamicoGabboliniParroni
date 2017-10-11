@@ -42,6 +42,8 @@ A schedule is characterized by the following variables:
 \item \textit{wakeUpTime}: it is the starting time from which the schedule should start arranging appointments.
 \end{itemize}
 
+\includegraphics[width=\textwidth, keepaspectratio]{"images/stateChartSchedule1".png}
+
 \subsubsection{The optimization criteria} \label{subsubsect:optcriteria} 
 The criteria that can be chosen with priority for a schedule by the user  for the optimization are the following:
 \begin{itemize}
@@ -119,7 +121,8 @@ Requirements for \goalref{goal:G3}:
 
 \item The system S.B.A. to verify the e-mail given by the user
 
-\item The system S.B.A to login the authenticated user provided their e-mail and password
+Requirements for \goalref{goal:G9}:
+\item The system S.B.A to recognize a registered user given an e-mail and a password
 \\
 
 %\item The system S.B.A. to compare different travel options with related travel option data according to the optimization criteria;
@@ -143,6 +146,12 @@ Requirements for \goalref{goal:G5}:
 \item The stystem S.B.A to retrive the travel option from an external API \textbf{(questa che già si è detta ma serve anche per questo goal come facciamo?)}
 
 \item The S.B.A to retrive the length of a path from an external API  
+
+Requirments for \goalref{goal:G8}:
+
+\item The system S.B.A to store valid schedules requested by the user
+
+\item The system should let the user accept a schedule from the saved ones 
 
 \end{enumerate}
 
