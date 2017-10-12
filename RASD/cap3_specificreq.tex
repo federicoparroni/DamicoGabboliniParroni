@@ -33,7 +33,7 @@ Hardware interfaces are physical linking across which two or more separate compo
 %\end{itemize}
 
 \subsection{Software interfaces}
-Software interfaces are logical linking across which two or more separate component of a system exchange information. 
+Software interfaces are logical linking across which two or more separate applications running on a system exchange information. 
 \begin{itemize}
 \item API: information can be exchanged through HTTP request/response;
 \end{itemize}
@@ -45,3 +45,41 @@ Communication interfaces allows two different architectures of the system to exc
 \item GPS: cellular can retrieve his coordinates position through NMEA protocol;
 \item QRCode: present in most of the shared means, allows to quick identify the transportation which we are near;
 \end{itemize}
+
+
+\section{Functional requirements}
+\subsection{Scenarios}
+Here are some scenarios that describe the usage of the system.
+\subsubsection{Scenario 1} \label{scenario:1}
+Giovanni will start the fourth year of his Master's degree. Surfing the internet, he finds out that his lesson schedule for the first semester it has been published. Giovanni decides to fill in the application with his new appointments concerning the attendance of lessons. In fact he knows where to go, at which time and day and for which amount of time. Since he knows that these events will going to happen for 3 months, he sets that they should be recurrent
+
+\subsection{Use cases}
+
+
+\subsubsection{Appointment creation} \label{usecase:appcreation}
+
+\begin{tabular}{|p{14cm}|} \hline
+\textbf{Name:} Appointment creation \\ \hline
+\textbf{Actors:} User \\ \hline
+\textbf{Goals:} \goalref{goal:G1} \\ \hline
+\textbf{Input Condition:} \\ \hline
+\textbf{Event Flow:}
+\begin{enumerate}
+\item The user wants to add a new appointment to his schedule;
+\item The user logs-in in the application (\textbf{ref to the log-in use case});
+\item The user requests the creation of a new appointment to the application;
+\item The system provides to the user a form to fill;
+\item The user fills up the form with the parameters (specified in \ref{subsect:appointmentmodel}) and constraints (specified in \ref{subsubsect:constronappoint} about the new appointment;					   \item The user submit the form to the system;
+\item The new appointment is allocated within the system as Unscheduled (referring to statechart in figure \label{fig:stchartApp})
+\end{enumerate}	\\ \hline
+\textbf{Output Condition:} The user submit the form after having filled it with all the parameters needed. The fields about constraints could also be left blank (they are optional); \\ \hline
+\textbf{Exceptions:}
+\begin{enumerate}
+\item Some fields of the form referring to parameters are left blank;
+\item The \textit{location} field doesn't belong to the domain area of the application (\textbf{riferimento alla domain assumption della regione})
+\end{enumerate} \\ \hline
+
+\end{tabular}
+
+\subsubsection{Notes on use cases}
+eventuali informzioni che specificano meglio come leggere i deagrammi che si producono

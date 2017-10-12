@@ -11,7 +11,7 @@ Some important informations about the user are held by the following ones:
 \item \textit{hasCar}.
 \end{itemize}
 
-\subsection{Appointment Model}
+\subsection{Appointment Model} \label{subsect:appointmentmodel}
 An appointment is represented within the application by a set of parameters:
 \begin{itemize}
 \item \textit{duration}: the time extension of the appointment
@@ -19,7 +19,7 @@ An appointment is represented within the application by a set of parameters:
 %In particular: \begin{equation}timeInterval.start + duration \leq timeInterval.end \label{eqn:constrOnTimeInterval} \end{equation}
 \item \textit{location}: identifies the coordinates of the place where the appointment will be held;
 \item \textit{recurrent}: specifies if the appointment will be repeated over a fixed period of time;
-\item \textit{peopleVariation}: represents a variation occourring when the user picks up or leaves off someone.
+\item \textit{peopleTravelling}: represents a variation occourring when the user picks up or leaves off someone.
 \end{itemize}
 
 The life cycle of an appointment can be represented by the following statechart:
@@ -27,6 +27,7 @@ The life cycle of an appointment can be represented by the following statechart:
 \begin{center}
 \includegraphics[width=\textwidth, keepaspectratio]{"images/stateChartAppointment".png}
 \caption{Appointment statechart}
+\label{fig:stchartApp}
 \end{center}
 \end{figure}
 
@@ -41,6 +42,8 @@ A schedule is characterized by the following variables:
 \item \textit{startingNumberOfPeople}: the number of people that must reach the first appointment.
 \item \textit{wakeUpTime}: it is the starting time from which the schedule should start arranging appointments.
 \end{itemize}
+
+\includegraphics[width=\textwidth, keepaspectratio]{"images/stateChartSchedule1".png}
 
 \subsubsection{The optimization criteria} \label{subsubsect:optcriteria} 
 The criteria that can be chosen with priority for a schedule by the user  for the optimization are the following:
@@ -61,7 +64,7 @@ Constraints are impositions on some parameters managed by the system during the 
 \item \textit{User can select which travel means uses under certain weather condition}.
 \end{itemize}
 
-\subsubsection{Constraints on appointment}
+\subsubsection{Constraints on appointment} \label{subsubsect:constronappoint}
 \begin{itemize}
 \item \textit{User can deactivate a particular travel means}.
 \end{itemize}
@@ -75,15 +78,17 @@ Constraints are impositions on some parameters managed by the system during the 
 \end{figure}
 
 \section{Product Functions}
+
 The following requirements are derived in order to fullfill the specified goals.
 \\
 
+
 Requirements for \goalref{goal:G1}:
+
 \begin{enumerate}
 \renewcommand\labelenumi{\textbf{R\theenumi}}
-\item The system SPW to create a new appointment allowing user to specify all its parameters; \label{req:R1}
-\item The system SPW to add constraints to a previously created appointment specifying which travel means have to be avoided during the travel to the meeting location; \label{req:R2}
-\\
+
+\item The system S.B.A. to retrieve information from the user about his appointments; \label{req:R1}
 
 Requirements for \goalref{goal:G2}:
 
@@ -101,25 +106,76 @@ Requirements for \goalref{goal:G2}:
 \item The system S.B.A. to select the best travel option according to the optimization criteria taking into account:
 \begin{itemize}
 \item user constraint
+\item user parameters \textbf{(aggiungere riferimento a user model)}
 \item travel option data 
 \item weather forecast
 \item information about strike day
 \end{itemize}
 
+Requirements for \goalref{goal:G3}:
+
+\item The system S.B.A to handle a registration phase in which the user will provide an e-mail and a password
+
+\item The system S.B.A. to verify the e-mail given by the user
+
+Requirements for \goalref{goal:G9}:
+\item The system S.B.A to recognize a registered user given an e-mail and a password
+\\
+
 %\item The system S.B.A. to compare different travel options with related travel option data according to the optimization criteria;
 
-\item The system S.B.A. to avoid a particular travel mean under a certain weather condition;
+%\item The system S.B.A. to avoid a particular travel mean under a certain weather condition;
 
-Requirements for \goalref{goal:G5}: 
+
+
+Requirements for \goalref{goal:G4}: 
+
 \item The system should offer to the user a way to link all his travel service accounts into the Travlendar+ account;
 
-\item The system S.B.A to book a travel mean through external API
+\item The system S.B.A to book a travel mean through external API offered by third part application in which the user is signed
+\\
+
+
+Requirements for \goalref{goal:G5}:
+
+\item The system S.B.A to retrive the graphical representation of a path from an external API 
+
+\item The stystem S.B.A to retrive the travel option from an external API \textbf{(questa che già si è detta ma serve anche per questo goal come facciamo?)}
+
+\item The S.B.A to retrive the length of a path from an external API  
+
+Requirments for \goalref{goal:G8}:
+
+\item The system S.B.A to store valid schedules requested by the user
+
+\item The system should let the user accept a schedule from the saved ones 
 
 \end{enumerate}
+
+
+\subsection{User characteristics}
+Users can use our system when they want something that let them able to schedule theire meetings according to theire necessities and constraints. Necessary conditions for the users in order to use the system are: 
+
+\begin{itemize}
+\item He must have an \textbf{(specificare meglio in seguito in quale dispositivo occorre farla girare)} connected to the internet in which run the application
+\end{itemize}
+
+This is the only requirement that is needed. Anyway additional characteristics of the user lead to the exploitment of  all the system features. In fact some of them are guaranteed only after having submitted to the application some information.
+In this sense, wellcomed user's characteristics are:
+
+\begin{itemize}
+\item The ownership of some travel means
+\item The ownership of travel passes
+\item The registration to sharing services
+\end{itemize}
+
+Beside these, an obviously tacit assumption that is made it's that the user has an age in which is able to move where he wants with autonomy.
+
 
 \subsection{ Assumptions, dependencies and constraints}
 
 \begin{itemize}
+
 \item The system should be able to retrieve information about public travel means. In particular:
 \begin{itemize}
 \item information about delays;
@@ -137,10 +193,13 @@ Requirements for \goalref{goal:G5}:
 \item retrieve all travel options and travel option data
 \item signed user to book and pay for all travel services
 \item retrive information about weather forecast
+\item retrive a graphical representation of a path
+\item retrive the lenght of a path
 \end{itemize}
 
-
 \item The device on which the application runs is connected to the internet;
+
+\item every user has at least one personal e-mail 
 
 \end{itemize}
 
