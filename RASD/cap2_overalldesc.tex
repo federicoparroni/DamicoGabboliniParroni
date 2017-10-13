@@ -45,6 +45,8 @@ A schedule is characterized by the following variables:
 
 \includegraphics[width=\textwidth, keepaspectratio]{"images/stateChartSchedule1".png}
 
+When a schedule is requested by the user it is a \textbf{New} schedule, this last can be a valid schedule(fare riferimento alla definizione) or not, if it is the system save it in his memory otherwise it is discarded and a warning to the user is sent. When the user want to start a schedule he can accept one from the saved one and the schedule accepted is now \textbf{Running}. If the user edits an appointment in the running schedule this last id discarded because are not more valid a new scheduling operation is requested. when a schedile is fullfilled by the user this last is archived by the system
+
 \subsubsection{The optimization criteria} \label{subsubsect:optcriteria} 
 The criteria that can be chosen with priority for a schedule by the user  for the optimization are the following:
 \begin{itemize}
@@ -82,15 +84,22 @@ Constraints are impositions on some parameters managed by the system during the 
 The following requirements are derived in order to fullfill the specified goals.
 \\
 
+Requirments for \goalref{goal:G1}:
 
-Requirements for \goalref{goal:G1}:
+\item The system should offer a GUI that handles All the interactions with the user.
+
+Requirements for \goalref{goal:G2}:
 
 \begin{enumerate}
 \renewcommand\labelenumi{\textbf{R\theenumi}}
 
 \item The system S.B.A. to retrieve information from the user about his appointments; \label{req:R1}
 
-Requirements for \goalref{goal:G2}:
+Requirments for \goalref{goal:G3}:
+
+\item The system should let the user change the parameters and the constraints of an inserted appointment if requested 
+
+Requirements for \goalref{goal:G4}:
 
 \item Allow the user to set the parameters of the schedule (\ref{subsect:schmodel}), or to accept the default values;
  
@@ -112,13 +121,19 @@ Requirements for \goalref{goal:G2}:
 \item information about strike day
 \end{itemize}
 
-Requirements for \goalref{goal:G3}:
+Requirments for \goalref{goal:G5}:
+
+\item The system S.B.A to store valid schedules requested by the user
+
+\item The system should let the user accept a schedule from the saved ones 
+
+Requirements for \goalref{goal:G6}:
 
 \item The system S.B.A to handle a registration phase in which the user will provide an e-mail and a password
 
 \item The system S.B.A. to verify the e-mail given by the user
 
-Requirements for \goalref{goal:G9}:
+Requirements for \goalref{goal:G7}:
 \item The system S.B.A to recognize a registered user given an e-mail and a password
 \\
 
@@ -127,16 +142,14 @@ Requirements for \goalref{goal:G9}:
 %\item The system S.B.A. to avoid a particular travel mean under a certain weather condition;
 
 
-
-Requirements for \goalref{goal:G4}: 
+Requirements for \goalref{goal:G8}: 
 
 \item The system should offer to the user a way to link all his travel service accounts into the Travlendar+ account;
 
 \item The system S.B.A to book a travel mean through external API offered by third part application in which the user is signed
 \\
 
-
-Requirements for \goalref{goal:G5}:
+Requirements for \goalref{goal:G9}:
 
 \item The system S.B.A to retrive the graphical representation of a path from an external API 
 
@@ -144,11 +157,13 @@ Requirements for \goalref{goal:G5}:
 
 \item The S.B.A to retrive the length of a path from an external API  
 
-Requirments for \goalref{goal:G8}:
 
-\item The system S.B.A to store valid schedules requested by the user
+Requirments for \goalref{goal:G10}:
 
-\item The system should let the user accept a schedule from the saved ones 
+\item The system S.B.A to retrive the position of the user from his GPS
+
+\item The system S.B.A. to retrive from an external API the directions to give to the user for reach the next appointment; 
+
 
 \end{enumerate}
 
@@ -200,7 +215,7 @@ Beside these, an obviously tacit assumption that is made it's that the user has 
 
 \item The device on which the application runs is connected to the internet;
 
-
+\item The user has a GPS active in every moment
 \item every user has at least one personal e-mail 
 
 \end{itemize}
