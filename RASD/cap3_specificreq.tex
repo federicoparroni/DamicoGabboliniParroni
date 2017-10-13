@@ -7,21 +7,45 @@ The application shows its best potential when run in a mobile device, for instan
 The user can interact with the application through several graphical interfaces:
 \begin{enumerate}
 \item Registration/login interface: allows the user to insert credentials in order to registering or logging into the system;
-\item User profile interface: user can specify his characteristics, such as his passes, car and/or bike ownership;
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=250pt, keepaspectratio]{"images/interfaces/login interface".jpg}
+\caption{Registration/login interface}
+\end{center}
+\end{figure}
+\item User account interface: user can specify his profile characteristics, such as his passes, car and/or bike ownership;
 \item Appointment CRUD interface: allows creating, showing and editing appointment parameters and related constraints;
 \item Non-scheduled appointments interface: provides a list of all inserted appointments, but not \textbf{already} scheduled (includes the possibility to delete an item of the list);
-\item Schedule interface: user can set optimization criteria and request a schedule creation for a given date
-\item Schedule result interface: shows the computation of the requested schedule and permits to keep track of the completeness percentage, indicating the directions to be followed by the user in a map, in order to arrive to the next appointments
+\item Schedule interface: user can set parameters, contraints, optimization criteria and request a schedule creation for a given date;
+\item Schedules result interface: shows the computation of the requested schedules for a given date and asks the user to select one, then waits for confirmations for that;
+\item Schedule progress interface: permits to keep track of the completeness percentage, indicating the directions to be followed by the user in a map, in order to arrive to the next appointments;
+\item Tickets/rides reservation interface: allows user to buy tickets for public travel means and/or reserve a ride for the shared travel means;
+\item Appointments history interface: shows a list of archived appointments;
 \end{enumerate}
 
-
 \subsection{Hardware interfaces}
-The system relies on several hardware architectures:
+Hardware interfaces are physical linking across which two or more separate components of a system exchange information. A hardware interface is described by the mechanical and electrical signals at the interface and the protocol for sequencing them. There are no interesting hardware interfaces in our scope.
+%Our system relies on the following hardware interfaces:
+%\begin{itemize}
+%\item Mobile device: 
+%\item Server: the subsystem is based on the client-server paradigm. 
+%\item Travel means: gps on taxi and shared mean
+%\end{itemize}
+
+\subsection{Software interfaces}
+Software interfaces are logical linking across which two or more separate applications running on a system exchange information. 
 \begin{itemize}
-\item Mobile device:
-\item Servers: APIs
-\item Travel means: gps on taxi and shared mean
+\item API: information can be exchanged through HTTP request/response;
 \end{itemize}
+
+\subsection{Communications interfaces}
+Communication interfaces allows two different architectures of the system to exchange information through communication channel. These non-homogeneous component of the system can communicate thanks to the following software interfaces and protocols:
+\begin{itemize}
+\item Cellular connectivity: mobile devices can connect to the internet thanks to LTE standard;
+\item GPS: cellular can retrieve his coordinates position through NMEA protocol;
+\item QRCode: present in most of the shared means, allows to quick identify the transportation which we are near;
+\end{itemize}
+
 
 \section{Functional requirements}
 \subsection{Scenarios}
