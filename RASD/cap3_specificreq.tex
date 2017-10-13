@@ -51,10 +51,38 @@ Communication interfaces allows two different architectures of the system to exc
 \subsection{Scenarios}
 Here are some scenarios that describe the usage of the system.
 \subsubsection{Scenario 1} \label{scenario:1}
-Giovanni will start the fourth year of his Master's degree. Surfing the internet, he finds out that his lesson schedule for the first semester it has been published. Giovanni decides to fill in the application with his new appointments concerning the attendance of lessons. In fact he knows where to go, at which time and day and for which amount of time. Since he knows that these events will going to happen for 3 months, he sets that they should be recurrent
+Giovanni will start the fourth year of his Master's degree. Surfing the internet, he finds out that his lesson schedule for the first semester it has been published. Giovanni decides to fill in the application with his new appointments concerning the attendance of lessons. In fact he knows where to go, at which time and day and for which amount of time. Since he knows that these events will going to happen for 3 months, he sets that they should be recurrent.
 
 \subsection{Use cases}
 
+\subsubsection{User log-in}
+\begin{tabular}{|p{14cm}|} \hline
+
+\textbf{Name:} User log-in \\ \hline
+\textbf{Actors:} User \\ \hline
+\textbf{Goals}: \goalref{goal:G9} \\ \hline
+\textbf{Input Condition:} The user is registered to the system \\ \hline
+\textbf{Event Flow:} 
+\begin{enumerate}
+\item The user needs to log-in the application, so he runs it;
+\item The user requests to log-in to the system;
+\item The system provides to the user a form to fill;
+\item The user fills up the form with the his e-mail and his password (as said in \ref{subsect:usermodel})
+\item The user submits the form to the system;
+\item The system checks the user identity and provides to the user the main application page (\textbf{reference to the main application page})
+\end{enumerate} \\ \hline
+
+\textbf{Output Condition:} The user submits the form after having filled it with a matching e-mail and password. \\ \hline
+
+\textbf{Exceptions:} The user submits the form after having filled it with a wrong email or password. \\ \hline
+
+\textbf{Mapping on requirements:}
+\begin{itemize}
+\item Events from 3 through 5 granted by \reqref{req:R10};
+\item Event 6 grandet by \reqref{req:R9};
+\end{itemize} \\ \hline
+
+\end{tabular}
 
 \subsubsection{Appointment creation} \label{usecase:appcreation}
 
@@ -62,24 +90,41 @@ Giovanni will start the fourth year of his Master's degree. Surfing the internet
 \textbf{Name:} Appointment creation \\ \hline
 \textbf{Actors:} User \\ \hline
 \textbf{Goals:} \goalref{goal:G1} \\ \hline
-\textbf{Input Condition:} \\ \hline
+\textbf{Input Condition: The user is registered to the system} \\ \hline
 \textbf{Event Flow:}
 \begin{enumerate}
-\item The user wants to add a new appointment to his schedule;
+\item The user wants to add a new appointment to his schedule, so he runs the application;
 \item The user logs-in in the application (\textbf{ref to the log-in use case});
 \item The user requests the creation of a new appointment to the application;
 \item The system provides to the user a form to fill;
 \item The user fills up the form with the parameters (specified in \ref{subsect:appointmentmodel}) and constraints (specified in \ref{subsubsect:constronappoint} about the new appointment;					   \item The user submit the form to the system;
-\item The new appointment is allocated within the system as Unscheduled (referring to statechart in figure \label{fig:stchartApp})
+\item The system allocates the new appointment as Unscheduled (referring to statechart in figure; \label{fig:stchartApp})
+\item The system sends a confirmation to the user.
 \end{enumerate}	\\ \hline
-\textbf{Output Condition:} The user submit the form after having filled it with all the parameters needed. The fields about constraints could also be left blank (they are optional); \\ \hline
+\textbf{Output Condition:} The user submits the form after having filled it with all the parameters needed. The fields about constraints could also be left blank (they are optional) \\ \hline
 \textbf{Exceptions:}
 \begin{enumerate}
 \item Some fields of the form referring to parameters are left blank;
 \item The \textit{location} field doesn't belong to the domain area of the application (\textbf{riferimento alla domain assumption della regione})
 \end{enumerate} \\ \hline
+\textbf{Mapping on Requirements:}
+\begin{itemize}
+\item Events 4 through 7 are granted by \reqref{req:R2}
+\item Event 7 is granted by \reqref{req:R1}
+\end{itemize}  \\ \hline
+
 
 \end{tabular}
 
-\subsubsection{Notes on use cases}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=400pt, keepaspectratio]{"images/seqDiagramAppointmentCreation".png}
+\caption{Appointment creation sequence diagram}
+\label{img:seqDiagrAppCreation}
+\end{center}
+\end{figure}
+
+In the sequence diagram there's the assumption that the log-in proceeds successfully. The log-in procedure referenced is the one explained in (\textbf{use case del log-in}.)
+
+\subsection{Definition of use case diagrams}
 eventuali informzioni che specificano meglio come leggere i deagrammi che si producono
