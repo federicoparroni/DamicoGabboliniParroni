@@ -2,9 +2,9 @@
 
 \section{Product Perspective}
 
-\subsection{User Model}
-A user is represented within the application by a set of parameters.
-Some important informations about the user are held by the following ones:
+\subsection{User Model} \label{subsect:usermodel}
+A user is represented within the application by his password and his e-mail. 
+Some important informations about him are held by the following parameters:
 \begin{itemize}
 \item \textit{travelPass}: indicates if the user has a pass for public transportation;
 \item \textit{hasBike}: indicates if the user has his own car;
@@ -45,6 +45,10 @@ A schedule is characterized by the following variables:
 
 \includegraphics[width=\textwidth, keepaspectratio]{"images/stateChartSchedule1".png}
 
+When a schedule is requested by the user it is \textbf{New}, this last can be either validated or refused by the scheduler according to the definition of valid schedule \textbf{fare riferimento alla def}.
+In the first case the schedule is \textbf{saved} in the second one the schedule is \textbf{discarded} and a warning to the user is sent. In order to start a schedule the user must accept one of them from the saved ones, after that the schedule is \textbf{running}.If the user edits one of the appointments belonging to the running schedule, this one is not more valid and become \textbf{discarded}.when a schedile is fullfilled by the user this last is \textbf{archived} by the system.
+
+ 
 \subsubsection{The optimization criteria} \label{subsubsect:optcriteria} 
 Prioritizing criteria for the schedule optimization that can be chosen by the user are the following:
 \begin{itemize}
@@ -86,11 +90,24 @@ The following requirements are derived in order to fullfill the specified goals.
 Requirements for \goalref{goal:G1}:
 
 \begin{enumerate}
+
+\item The system should offer a GUI that handles All the interactions with the user.
+
+Requirements for \goalref{goal:G2}:
+
 \renewcommand\labelenumi{\textbf{R\theenumi}}
 
 \item The system S.B.A. to retrieve information from the user about his appointments; \label{req:R1}
 
-Requirements for \goalref{goal:G2}:
+\item The system S.B.A to store an appointment in his memory
+
+
+Requirements for \goalref{goal:G3}:
+
+\item The system should let the user change the parameters and the constraints of an inserted appointment if requested 
+
+Requirements for \goalref{goal:G4}:
+
 
 \item Allow the user to set the parameters of the schedule (\ref{subsect:schmodel}), or to accept the default values;
  
@@ -112,31 +129,32 @@ Requirements for \goalref{goal:G2}:
 \item information about strike day
 \end{itemize}
 
-Requirements for \goalref{goal:G3}:
+Requirements for \goalref{goal:G5}:
+
+\item The system S.B.A to store valid schedules requested by the user
+
+\item The system should let the user accept a schedule from the saved ones 
+
+Requirements for \goalref{goal:G6}:
 
 \item The system S.B.A to handle a registration phase in which the user will provide an e-mail and a password
 
 \item The system S.B.A. to verify the e-mail given by the user
 
+
 Requirements for \goalref{goal:G9}:
-\item The system S.B.A to recognize a registered user given an e-mail and a password
-\\
+\item The system S.B.A to recognize a registered user given an e-mail and a password \label{req:R9}
 
-%\item The system S.B.A. to compare different travel options with related travel option data according to the optimization criteria;
+\item The system S.B.A. to retrieve information from the user about his registration informations, i.e. his e-mail and password (\textbf{da verificare se serve o meno}); \label{req:R10}
 
-%\item The system S.B.A. to avoid a particular travel mean under a certain weather condition;
-
-
-
-Requirements for \goalref{goal:G4}: 
+Requirements for \goalref{goal:G8}: 
 
 \item The system should offer to the user a way to link all his travel service accounts into the Travlendar+ account;
 
 \item The system S.B.A to book a travel mean through external API offered by third party application in which the user is signed
 \\
 
-
-Requirements for \goalref{goal:G5}:
+Requirements for \goalref{goal:G9}:
 
 \item The system S.B.A to retrive the graphical representation of a path from an external API 
 
@@ -144,11 +162,19 @@ Requirements for \goalref{goal:G5}:
 
 \item The S.B.A to retrieve the length of a path from an external API  
 
-Requirments for \goalref{goal:G8}:
 
-\item The system S.B.A to store valid schedules requested by the user
+Requirements for \goalref{goal:G10}:
 
-\item The system should let the user accept a schedule from the saved ones 
+\item The system S.B.A to retrive the position of the user from his GPS
+
+\item The system S.B.A. to retrive from an external API the directions to give to the user for reach the next appointment;
+
+Requirements for \goalref{goal:g11}:
+
+\item The system should be able to send the password of a user to his e-mail
+
+\item The system should be able to display a user e-mail given his password 
+
 
 \end{enumerate}
 
@@ -198,6 +224,8 @@ Beside these, an obvious tacit assumption is that the user has a valid age to mo
 \end{itemize}
 
 \item The device on which the application runs is connected to the internet;
+
+\item The user has a GPS active in every moment
 
 \item every user has at least one personal e-mail 
 
