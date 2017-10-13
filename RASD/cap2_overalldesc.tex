@@ -45,8 +45,10 @@ A schedule is characterized by the following variables:
 
 \includegraphics[width=\textwidth, keepaspectratio]{"images/stateChartSchedule1".png}
 
-When a schedule is requested by the user it is a \textbf{New} schedule, this last can be a valid schedule(fare riferimento alla definizione) or not, if it is the system save it in his memory otherwise it is discarded and a warning to the user is sent. When the user want to start a schedule he can accept one from the saved one and the schedule accepted is now \textbf{Running}. If the user edits an appointment in the running schedule this last id discarded because are not more valid a new scheduling operation is requested. when a schedile is fullfilled by the user this last is archived by the system
+When a schedule is requested by the user it is \textbf{New}, this last can be either validated or refused by the scheduler according to the definition of valid schedule \textbf{fare riferimento alla def}.
+In the first case the schedule is \textbf{saved} in the second one the schedule is \textbf{discarded} and a warning to the user is sent. In order to start a schedule the user must accept one of them from the saved ones, after that the schedule is \textbf{running}.If the user edits one of the appointments belonging to the running schedule, this one is not more valid and become \textbf{discarded}.when a schedile is fullfilled by the user this last is \textbf{archived} by the system.
 
+ 
 \subsubsection{The optimization criteria} \label{subsubsect:optcriteria} 
 The criteria that can be chosen with priority for a schedule by the user  for the optimization are the following:
 \begin{itemize}
@@ -84,13 +86,15 @@ Constraints are impositions on some parameters managed by the system during the 
 The following requirements are derived in order to fullfill the specified goals.
 \\
 
+
 Requirments for \goalref{goal:G1}:
+
+\begin{enumerate}
 
 \item The system should offer a GUI that handles All the interactions with the user.
 
 Requirements for \goalref{goal:G2}:
 
-\begin{enumerate}
 \renewcommand\labelenumi{\textbf{R\theenumi}}
 
 \item The system S.B.A. to retrieve information from the user about his appointments; \label{req:R1}
@@ -162,7 +166,13 @@ Requirments for \goalref{goal:G10}:
 
 \item The system S.B.A to retrive the position of the user from his GPS
 
-\item The system S.B.A. to retrive from an external API the directions to give to the user for reach the next appointment; 
+\item The system S.B.A. to retrive from an external API the directions to give to the user for reach the next appointment;
+
+Requirments for \goalref{goal:g11}:
+
+\item The system should be able to send the password of a user to his e-mail
+
+\item The system should be able to display a user e-mail given his password 
 
 
 \end{enumerate}
