@@ -1,10 +1,10 @@
-\chapter{Overall Description}
+	\chapter{Overall Description}
 
 \section{Product Perspective}
 
-\subsection{User Model}
-A user is represented within the application by a set of parameters:
-Some important informations about the user are held by the following ones:
+\subsection{User Model} \label{subsect:usermodel}
+A user is represented within the application by his password and his e-mail. 
+Some important informations about him are held by the following parameters:
 \begin{itemize}
 \item \textit{travelPass}: indicates if the user has a pass for public transportation;
 \item \textit{hasBike};
@@ -90,6 +90,8 @@ Requirements for \goalref{goal:G1}:
 
 \item The system S.B.A. to retrieve information from the user about his appointments; \label{req:R1}
 
+\item The system S.B.A. to store an appointment in his memory \label{req:R2}
+
 Requirements for \goalref{goal:G2}:
 
 \item Allow the user to set the parameters of the schedule (\ref{subsect:schmodel}), or to accept the default values;
@@ -119,7 +121,9 @@ Requirements for \goalref{goal:G3}:
 \item The system S.B.A. to verify the e-mail given by the user
 
 Requirements for \goalref{goal:G9}:
-\item The system S.B.A to recognize a registered user given an e-mail and a password
+\item The system S.B.A to recognize a registered user given an e-mail and a password \label{req:R9}
+
+\item The system S.B.A. to retrieve information from the user about his registration informations, i.e. his e-mail and password (\textbf{da verificare se serve o meno}); \label{req:R10}
 \\
 
 %\item The system S.B.A. to compare different travel options with related travel option data according to the optimization criteria;
