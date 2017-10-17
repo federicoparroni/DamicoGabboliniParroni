@@ -15,6 +15,7 @@ Some important informations about him are held by the following parameters:
 An appointment is represented within the application by a set of parameters:
 \begin{itemize}
 \item \textit{duration}: the time extension of the appointment
+\item \textit{date}: the day in which the appointment is held;
 \item \textit{startingTime} or \textit{timeInterval}: the first should be given if the starting hour is well-known (deterministic), otherwise a time interval in which the appointment will be held it's provided. 
 %In particular: \begin{equation}timeInterval.start + duration \leq timeInterval.end \label{eqn:constrOnTimeInterval} \end{equation}
 \item \textit{location}: identifies the coordinates of the place where the appointment will be held;
@@ -34,7 +35,7 @@ The life cycle of an appointment can be represented by the following statechart:
 A newly-created appointment is \textbf{Unscheduled}. It could remain \textbf{Unscheduled} either when edited or there isn't a possible arrangement when a schedule is performed. Otherwise it becomes \textbf{Scheduled} if there's a feasible way to arrange it. When a scheduled appointment is edited all the appointments in that schedule return to be \textbf{Unscheduled}, because it's possible that they bring to a different schedule. When a scheduled appointment is fullfilled it becomes \textbf{Archived} and stored in the schedule history. If this last one is a recurrent appointment it must be reinsert in the list of unscheduled appointment so it will become \textbf{Unscheduled} again. The user can cancel an appointment in every moment. 
 
 \subsection{Schedule Model} \label{subsect:schmodel}
-A schedule is a set of Appointments in a given day, ordered by the scheduler following the criteria described below.
+A schedule is a subset of Appointments of a  given day, ordered by the scheduler following the criteria described below.
 A schedule is characterized by the following variables:
 \begin{itemize}
 \item \textit{date};
@@ -99,12 +100,14 @@ Requirements for \goalref{goal:G2}:
 
 \item The system S.B.A. to retrieve information from the user about his appointments; \label{req:R1}
 
-\item The system S.B.A to store an appointment in his memory
+\item The system S.B.A to store an appointment in his memory;
 
 
 Requirments for \goalref{goal:G3}:
 
-\item The system should let the user change the parameters and the constraints of an inserted appointment if requested 
+\item The system should let the user change the parameters and the constraints of an inserted appointment; 
+
+\item The system S.B.A to rewrite the appointment in his memory with his new parameters;
 
 Requirements for \goalref{goal:G4}:
 
@@ -129,9 +132,10 @@ Requirements for \goalref{goal:G4}:
 \item information about strike day
 \end{itemize}
 
-Requirments for \goalref{goal:G5}:
-
 \item The system S.B.A to store valid schedules requested by the user
+
+
+Requirments for \goalref{goal:G5}:
 
 \item The system should let the user accept a schedule from the saved ones 
 
