@@ -1,26 +1,32 @@
 \chapter{Specific requirements}
 
 \section{External Interface Requirements}
-The application shows its best potential when run in a mobile device, for instance a smartphone or a tablet. This permits to extend the features and the automatic tasks of the application, thanks to the built-in device functionalities. However, a computer client version of the application can be installed, too.
+The application shows its best potential when running in a mobile device, for instance a smartphone or a tablet. This permits to extend the features and the automatic tasks of the application, thanks to the built-in device functionalities. However, a computer client version of the application can be installed, too.
 
 \subsection{User interfaces}
 The user can interact with the application through several graphical interfaces:
 \begin{enumerate}
-\item Registration/login interface: allows the user to insert credentials in order to registering or logging into the system;
+\item \textbf{Registration/login interface}: allows the user to insert credentials in order to registering or logging into the system;
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=250pt, keepaspectratio]{"images/interfaces/login interface".jpg}
 \caption{Registration/login interface}
 \end{center}
 \end{figure}
-\item User account interface: user can specify his profile characteristics, such as his passes, car and/or bike ownership;
-\item Appointment CRUD interface: allows creating, showing and editing appointment parameters and related constraints;
-\item Non-scheduled appointments interface: provides a list of all inserted appointments, but not \textbf{already} scheduled (includes the possibility to delete an item of the list);
-\item Schedule interface: user can set parameters, contraints, optimization criteria and request a schedule creation for a given date;
-\item Schedules result interface: shows the computation of the requested schedules for a given date and asks the user to select one, then waits for confirmations for that;
-\item Schedule progress interface: permits to keep track of the completeness percentage, indicating the directions to be followed by the user in a map, in order to arrive to the next appointments;
-\item Tickets/rides reservation interface: allows user to buy tickets for public travel means and/or reserve a ride for the shared travel means;
-\item Appointments history interface: shows a list of archived appointments;
+\item \textbf{User account interface}: user can specify his profile characteristics, such as his passes, car and/or bike ownership;
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=250pt, keepaspectratio]{"images/interfaces/useraccount interface".jpg}
+\caption{User account interface}
+\end{center}
+\end{figure}
+\item \textbf{Appointment CRUD interface}: allows creating, showing and editing appointment parameters and related constraints;
+\item \textbf{Non-scheduled appointments interface}: provides a list of all inserted appointments, but not scheduled yet (includes the possibility to delete an item of the list);
+\item \textbf{Schedule interface}: user can set parameters, contraints, optimization criteria and request a schedule creation for a given date;
+\item \textbf{Schedules result interface}: shows the computation of the requested schedules for a given date and asks the user to select one, then waits for confirmation for that;
+\item \textbf{Schedule progress interface}: permits to keep track of the completeness percentage, indicating the directions to be followed by the user in a map, in order to arrive to the next appointments;
+\item \textbf{Tickets/rides reservation interface}: allows user to buy tickets for public travel means and/or reserve a ride for the shared travel means;
+\item \textbf{Appointments history interface}: shows a list of archived appointments;
 \end{enumerate}
 
 \subsection{Hardware interfaces}
@@ -39,11 +45,11 @@ Software interfaces are logical linking across which two or more separate applic
 \end{itemize}
 
 \subsection{Communications interfaces}
-Communication interfaces allows two different architectures of the system to exchange information through communication channel. These non-homogeneous component of the system can communicate thanks to the following software interfaces and protocols:
+Communication interfaces allows two different architectures of the system to exchange information through communication channel. These non-homogeneous components of the system can communicate thanks to the following software interfaces and protocols:
 \begin{itemize}
 \item Cellular connectivity: mobile devices can connect to the internet thanks to LTE standard;
 \item GPS: cellular can retrieve his coordinates position through NMEA protocol;
-\item QRCode: present in most of the shared means, allows to quick identify the transportation which we are near;
+\item QRCode: present in most of the shared means, allows to quickly identify the nearby transportation, associating that to an URL;
 \end{itemize}
 
 
@@ -51,7 +57,7 @@ Communication interfaces allows two different architectures of the system to exc
 \subsection{Scenarios}
 Here are some scenarios that describe the usage of the system.
 \subsubsection{Scenario 1} \label{scenario:1}
-Giovanni will start the fourth year of his Master's degree. Surfing the internet, he finds out that his lesson schedule for the first semester it has been published. Giovanni decides to fill in the application with his new appointments concerning the attendance of lessons. In fact he knows where to go, at which time and day and for which amount of time. Since he knows that these events will going to happen for 3 months, he sets that they should be recurrent.
+Giovanni will start the fourth year of his Master's degree. Surfing the internet, he finds out that his lesson schedule for the first semester it has been published. Giovanni decides to fill in the application with his new appointments related to lessons attendance. In fact he knows where to go, at which time and day and for which amount of time. Since he knows that these events will going to happen for 3 months, he sets them as recurrent.
 
 \subsection{Use cases}
 
@@ -97,11 +103,12 @@ Giovanni will start the fourth year of his Master's degree. Surfing the internet
 \item The user logs-in in the application (\textbf{ref to the log-in use case});
 \item The user requests the creation of a new appointment to the application;
 \item The system provides to the user a form to fill;
-\item The user fills up the form with the parameters (specified in \ref{subsect:appointmentmodel}) and constraints (specified in \ref{subsubsect:constronappoint} about the new appointment;					   \item The user submit the form to the system;
+\item The user fills up the form with the parameters (specified in \ref{subsect:appointmentmodel}) and constraints (specified in \ref{subsubsect:constronappoint} about the new appointment;
+\item The user submit the form to the system;
 \item The system allocates the new appointment as Unscheduled (referring to statechart in figure; \label{fig:stchartApp})
 \item The system sends a confirmation to the user.
 \end{enumerate}	\\ \hline
-\textbf{Output Condition:} The user submits the form after having filled it with all the parameters needed. The fields about constraints could also be left blank (they are optional) \\ \hline
+\textbf{Output Condition:} The user submit the form after filling it with all the parameters needed. Constraints fields could also be left blank (they are optional); \\ \hline
 \textbf{Exceptions:}
 \begin{enumerate}
 \item Some fields of the form referring to parameters are left blank;
@@ -112,7 +119,6 @@ Giovanni will start the fourth year of his Master's degree. Surfing the internet
 \item Events 4 through 7 are granted by (\textbf{requirement che il sistema può recuperare informazioni riguardanti un appointment})
 \item Event 7 is granted by (\textbf{requirement che il sistema è in grado di memorizzare un appointment}
 \end{itemize}  \\ \hline
-
 
 \end{tabular}
 

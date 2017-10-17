@@ -1,4 +1,4 @@
-	\chapter{Overall Description}
+\chapter{Overall Description}
 
 \section{Product Perspective}
 
@@ -7,8 +7,8 @@ A user is represented within the application by his password and his e-mail.
 Some important informations about him are held by the following parameters:
 \begin{itemize}
 \item \textit{travelPass}: indicates if the user has a pass for public transportation;
-\item \textit{hasBike};
-\item \textit{hasCar}.
+\item \textit{hasBike}: indicates if the user has his own car;
+\item \textit{hasCar}: indicates if the user has his own bicycle.
 \end{itemize}
 
 \subsection{Appointment Model} \label{subsect:appointmentmodel}
@@ -32,7 +32,7 @@ The life cycle of an appointment can be represented by the following statechart:
 \end{center}
 \end{figure}
 
-A newly-created appointment is \textbf{Unscheduled}. It could remain \textbf{Unscheduled} either when edited or there isn't a possible arrangement when a schedule is performed. Otherwise it becomes \textbf{Scheduled} if there's a feasible way to arrange it. When a scheduled appointment is edited all the appointments in that schedule return to be \textbf{Unscheduled}, because it's possible that they bring to a different schedule. When a scheduled appointment is fullfilled it becomes \textbf{Archived} and stored in the schedule history. If this last one is a recurrent appointment it must be reinsert in the list of unscheduled appointment so it will become \textbf{Unscheduled} again. The user can cancel an appointment in every moment. 
+A newly-created appointment is \textbf{Unscheduled}. It could remain \textbf{Unscheduled} either when edited or there isn't a possible arrangement when a schedule is performed. Otherwise it becomes \textbf{Scheduled} if there's a feasible way to arrange it. When a scheduled appointment is edited all the appointments in that schedule return to be \textbf{Unscheduled}, because they can possibly cause a different schedule. When a scheduled appointment is fullfilled it becomes \textbf{Archived} and stored in the schedule history. If this last one is a recurrent appointment it must be reinserted in the list of unscheduled appointments so it will become \textbf{Unscheduled} again. The user can cancel an appointment in every moment. 
 
 \subsection{Schedule Model} \label{subsect:schmodel}
 A schedule is a subset of Appointments of a  given day, ordered by the scheduler following the criteria described below.
@@ -51,7 +51,7 @@ In the first case the schedule is \textbf{saved} in the second one the schedule 
 
  
 \subsubsection{The optimization criteria} \label{subsubsect:optcriteria} 
-The criteria that can be chosen with priority for a schedule by the user  for the optimization are the following:
+Prioritizing criteria for the schedule optimization that can be chosen by the user are the following:
 \begin{itemize}
 \item \textit{Minimize carbon footprint}: the scheduler will try to minimize the amount of kilometers travelled in polluting means;
 \item \textit{Minimize money spent}: the scheduler will try to avoid expensive means and to exploit the public ones (especially if the user has a pass) or going by bike or on foot;
@@ -63,15 +63,15 @@ Constraints are impositions on some parameters managed by the system during the 
 
 \subsubsection{Constraints on schedule} 
 \begin{itemize}
-\item \textit{Maximum travelling distance with a specific travel mean}: the user can set a maximum amount of km to travel with a travel mean;
+\item \textit{Maximum travelling distance with a specific travel mean}: the user can set a maximum amount of km to travel with a specific travel mean;
 \item\textit{ Travel means time slots}: user can specify a time interval in which a travel mean can be used;
-\item \textit{User can deactivate a particular travel means};
-\item \textit{User can select which travel means uses under certain weather condition}.
+\item \textit{User can deactivate a particular travel mean};
+\item \textit{User can select which travel mean he uses under certain weather condition}.
 \end{itemize}
 
 \subsubsection{Constraints on appointment} \label{subsubsect:constronappoint}
 \begin{itemize}
-\item \textit{User can deactivate a particular travel means}.
+\item \textit{User can deactivate a particular travel mean}.
 \end{itemize}
 
 \subsection{Class Diagram}
@@ -88,7 +88,7 @@ The following requirements are derived in order to fullfill the specified goals.
 \\
 
 
-Requirments for \goalref{goal:G1}:
+Requirements for \goalref{goal:G1}:
 
 \begin{enumerate}
 
@@ -103,7 +103,7 @@ Requirements for \goalref{goal:G2}:
 \item The system S.B.A to store an appointment in his memory;
 
 
-Requirments for \goalref{goal:G3}:
+Requirements for \goalref{goal:G3}:
 
 \item The system should let the user change the parameters and the constraints of an inserted appointment; 
 
@@ -155,7 +155,7 @@ Requirements for \goalref{goal:G8}:
 
 \item The system should offer to the user a way to link all his travel service accounts into the Travlendar+ account;
 
-\item The system S.B.A to book a travel mean through external API offered by third part application in which the user is signed
+\item The system S.B.A to book a travel mean through external API offered by third party application in which the user is signed
 \\
 
 Requirements for \goalref{goal:G9}:
@@ -164,16 +164,16 @@ Requirements for \goalref{goal:G9}:
 
 \item The stystem S.B.A to retrive the travel option from an external API \textbf{(questa che già si è detta ma serve anche per questo goal come facciamo?)}
 
-\item The S.B.A to retrive the length of a path from an external API  
+\item The S.B.A to retrieve the length of a path from an external API  
 
 
-Requirments for \goalref{goal:G10}:
+Requirements for \goalref{goal:G10}:
 
 \item The system S.B.A to retrive the position of the user from his GPS
 
 \item The system S.B.A. to retrive from an external API the directions to give to the user for reach the next appointment;
 
-Requirments for \goalref{goal:g11}:
+Requirements for \goalref{goal:g11}:
 
 \item The system should be able to send the password of a user to his e-mail
 
@@ -184,14 +184,14 @@ Requirments for \goalref{goal:g11}:
 
 
 \subsection{User characteristics}
-Users can use our system when they want something that let them able to schedule theire meetings according to theire necessities and constraints. Necessary conditions for the users in order to use the system are: 
+Users can use our system when they want something that allows them to schedule their meetings according to their necessities and constraints. Necessary conditions for the users in order to use the system are: 
 
 \begin{itemize}
-\item He must have an \textbf{(specificare meglio in seguito in quale dispositivo occorre farla girare)} connected to the internet in which run the application
+\item He must have an \textbf{(specificare meglio in seguito in quale dispositivo occorre farla girare)} connected to the internet in which the application runs
 \end{itemize}
 
-This is the only requirement that is needed. Anyway additional characteristics of the user lead to the exploitment of  all the system features. In fact some of them are guaranteed only after having submitted to the application some information.
-In this sense, wellcomed user's characteristics are:
+This is the only requirement that is needed. Anyway additional characteristics of the user lead to the exploitment of all the system features. In fact some of them are guaranteed only after having submitted some information to the application.
+In this sense, welcomed user's characteristics are:
 
 \begin{itemize}
 \item The ownership of some travel means
@@ -199,7 +199,7 @@ In this sense, wellcomed user's characteristics are:
 \item The registration to sharing services
 \end{itemize}
 
-Beside these, an obviously tacit assumption that is made it's that the user has an age in which is able to move where he wants with autonomy.
+Beside these, an obvious tacit assumption is that the user has a valid age to move where he wants with autonomy.
 
 
 \subsection{ Assumptions, dependencies and constraints}
@@ -222,9 +222,9 @@ Beside these, an obviously tacit assumption that is made it's that the user has 
 \begin{itemize}
 \item retrieve all travel options and travel option data
 \item signed user to book and pay for all travel services
-\item retrive information about weather forecast
-\item retrive a graphical representation of a path
-\item retrive the lenght of a path
+\item retrieve information about weather forecast
+\item retrieve a graphical representation of a path
+\item retrieve the lenght of a path
 \end{itemize}
 
 \item The device on which the application runs is connected to the internet;

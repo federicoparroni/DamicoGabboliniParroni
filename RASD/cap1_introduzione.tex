@@ -18,29 +18,39 @@ The main goals the app must fulfill are:
 %\item Create a system with a \textbf{graphic} user interface, in order to simplify input/output interactions with the user. \label{goal:G8}
 %\end{enumerate}
 
-\item The system should be able to interact with the user 
- \label{goal:G1}
+\item The system should be able to interact with the user;
+\label{goal:G1}
 
-\item Allow the user to insert an appointments according to his necessities and his preferences;  \label{goal:G2}
+\item Allow the user to insert an appointment according to his necessities and his preferences;
+\label{goal:G2}
 
-\item The system S.P.W. to modify an inserted appointment; \label{goal:G3} 
+\item The system S.P.W. to modify an inserted appointment;
+\label{goal:G3} 
 
-\item The system S.P.W. to create a valid schedule of the user appointments when requested \textbf{fare ref alla def} \label{goal:G4}
+\item The system S.P.W. to create a valid schedule of the user appointments when requested \textbf{fare ref alla def};
+\label{goal:G4}
 
-\item The system should let the user create multiple valid schedule and decide which one is chosen for the current day 
- \label{goal:G5}
+\item The system should let the user create valid multiple schedules and decide which one is chosen the current day;
+\label{goal:G5}
 
-\item The system should offer the possibility to create a new account \label{goal:G6}
+\item The system should offer the possibility to create a new account;
+\label{goal:G6}
 
-\item The system should be able to handle a login phase \label{goal:G7}
+\item The system should be able to handle a login phase;
+\label{goal:G7}
 
-\item The system S.B.A to book the travel means involved in the current schedule under user approval \label{goal:G8} 
+\item The system S.B.A to book the travel means involved in the current schedule under user approval;
+\label{goal:G8} 
 
-\item The system S.B.A to display the scheduling result \textbf{(fare riferimento alla definizione)} \label{goal:G9}
+%\item The system should offer a GUI that handles all the interactions with the user. \label{goal:G6}
 
-\item The system S.B.A. to display in real time user position and the directions to be followed in order to arrive to the next appointment on a map dinamically updated \label{G10}
+\item The system S.B.A to display the scheduling result \textbf{(fare riferimento alla definizione)};
+\label{goal:G9}
 
-\item The system should give to the signed user the possibility to recover their e-mail or password. \label{G11}
+\item The system S.B.A. to display in real time user position and the directions to be followed in order to arrive to the next appointment on a dinamically updated map; \label{G10}
+
+\item The system should give to the signed user the possibility to recover their e-mail or password.
+\label{G11}
 
 \end{enumerate}
 
@@ -54,14 +64,14 @@ User can receive an appointment on a certain date, time and location (over a reg
 User can have his own travel means and a pass for public transportation. 
 The travel means considered in this scenario can be grouped in three categories: public, shared or private.
 \begin{itemize}
-\item Public travel means: these include trains, buses, underground, taxis, trams. They have to be taken in their \textbf{appositi} stops. User must have a valid ticket in order to get on a public travel means (except for taxis, that pick up the user wherever he wants upon a call and do not require any ticket); 
+\item Public travel means: these include trains, buses, underground, taxis, trams. They have to be taken in their designated stops. User must have a valid ticket in order to get on a public travel means (except for taxis, that pick up the user wherever he wants upon a call and do not require any ticket); 
 \item Shared travel means: these include car and bike. They are located in specific places and require a reservation in order to be used by the user;
 \item Private travel means: vehicles owned by the user. They can be cars, bikes, motorbikes.
 \end{itemize}
 
-Weather conditions can change during the day affecting usable travel means.
+Weather conditions can change during the day affecting travel means choice.
 At the beginning of the day, or on demand, user can request a schedule of his daily appointments, following some criteria evaluated according to their assigned priority and satisfying some constraints imposed by the user.
-When a new appointment is received, user creates a new item in the application and saves it in the appointment list. User can request a reschedule to the application due to unexpected changes of his plan (e.g. a cancelled appointment).
+When a new appointment is received, user creates a new item in the application and saves it in the appointment list. User can request the application to reschedule the appointments because of unexpected changes of his plan (e.g. a cancelled appointment).
 
 \subsection{World Phenomena}
 \begin{itemize}
@@ -75,7 +85,7 @@ When a new appointment is received, user creates a new item in the application a
 \subsection{Shared Phenomena}
 \begin{itemize}
 \item Shared travel mean moves;
-\item Shared travel mean its not available anymore;
+\item Shared travel mean is not available anymore;
 \item Wheather condition changes;
 \item Public travel means reach a stop-place;
 \item Public travel means are late; 
@@ -119,7 +129,7 @@ travel option data: additional information about a travel option:
 \item Carbon emission;
 \end{itemize}
 
-Schedule: a set of time-ordered and not overlapping appointments where their starting times are fixed and they're linked each other by a path travelled with a specific transportation mean
+Schedule: a set of time-ordered and not overlapping appointments where their starting times are fixed and they're linked to each other by a path covered with a specific transportation mean
 
 Valid Schedule: a Schedule which:
 \begin{itemize}
@@ -138,8 +148,8 @@ Scheduling result: the set of:
 \item Length of the path expressed in KM
 \item Length of relative path 
 \item Carbon footprint emission
-\item Exstimated travel time of each relative path
-\item Total exstimated travel time
+\item Estimated travel duration of each relative path
+\item Total estimated travel time
 \end{itemize}
 
 current appointment: an appointment which has startingTime >= currentTime and data=currentDate, where currentTime and  currentDate are the actual time reference of the system;
@@ -149,13 +159,14 @@ variables are italic
 states are bold
 
 abbr:
-GPS: global positioning system
-GUI: graphic user interface
-ETA: estimated time of arrival
+GPS: Global Positioning System
+GUI: Graphical User Interface
+ETA: Estimated Time of Arrival
 S.P.W.: should provide a way
 S.B.A.: should be able 
-API: application programming interface
+API: Application Programming Interface
 CRUD: create/read/update/delete
+URL: Uniform Resource Locator
 
 %\reqref{req:R1}
 %\goalref{goal:G1}
