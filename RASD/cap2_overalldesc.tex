@@ -46,7 +46,7 @@ A schedule is characterized by the following variables:
 
 \includegraphics[width=\textwidth, keepaspectratio]{"images/stateChartSchedule1".png}
 
-When a schedule is requested by the user it is \textbf{New}, this last can be either validated or refused by the scheduler according to the definition of valid schedule \textbf{fare riferimento alla def}.
+When a schedule is requested by the user it can be either validated or refused by the scheduler according to the definition of valid schedule \textbf{fare riferimento alla def}.
 In the first case the schedule is \textbf{saved} in the second one the schedule is \textbf{discarded} and a warning to the user is sent. In order to start a schedule the user must accept one of them from the saved ones, after that the schedule is \textbf{running}.If the user edits one of the appointments belonging to the running schedule, this one is not more valid and become \textbf{discarded}.when a schedile is fullfilled by the user this last is \textbf{archived} by the system.
 
  
@@ -112,9 +112,11 @@ Requirements for \goalref{goal:G3}:
 Requirements for \goalref{goal:G4}:
 
 
-\item Allow the user to set the parameters of the schedule (\ref{subsect:schmodel}), or to accept the default values;
+\item Allow the user to set the constraints of the schedule (\textbf{riferimento ai constraint dello schedule}), or to accept the default values;
  
-\item Allow the user to select the optimization criteria (\ref{subsubsect:optcriteria}) for the schedule;
+\item Allow the user to set the optimization criteria (\ref{subsubsect:optcriteria}) for the schedule;
+
+\item Allow the user to set the variables for the schedule;
 
 \item The system S.B.A. to gather information from external APIs about: 
 \begin{itemize}
@@ -175,13 +177,11 @@ Requirements for \goalref{goal:G10}:
 
 Requirements for \goalref{goal:g11}:
 
-\item The system should be able to send the password of a user to his e-mail
+\item The system should be able to recover an e-mail address from the user;
 
-\item The system should be able to display a user e-mail given his password 
-
+\item The system should be able to send the password of a user to his e-mail given the e-mail.
 
 \end{enumerate}
-
 
 \subsection{User characteristics}
 Users can use our system when they want something that allows them to schedule their meetings according to their necessities and constraints. Necessary conditions for the users in order to use the system are: 

@@ -87,7 +87,7 @@ Giovanni has scheduled his appointments but at lunch time his son called him bec
 \item The system checks the user identity and provides to the user the main application page (\textbf{reference to the main application page})
 \end{enumerate} \\ \hline
 
-\textbf{Output Condition:} The user submits the form after having filled it with a matching e-mail and password. \\ \hline
+\textbf{Output Condition:} The user is logged-in to the system. \\ \hline
 
 \textbf{Exceptions:} The user submits the form after having filled it with a wrong email or password. \\ \hline
 
@@ -126,7 +126,7 @@ Giovanni has scheduled his appointments but at lunch time his son called him bec
 \item The system sends a confirmation to the user.
 \end{enumerate}	\\ \hline
 
-\textbf{Output Condition:} The user submit the form after filling it with all the parameters needed. Constraints fields could also be left blank (they are optional); \\ \hline
+\textbf{Output Condition:} The user has created a new appointment; \\ \hline
 
 \textbf{Exceptions:}
 \begin{enumerate}
@@ -209,7 +209,7 @@ that were specified yet by the user;
 \item The system set the appointment as Unscheduled with the new parameters (referring to statechart in figure ..); \label{fig:stchartApp})
 \item The system sends a confirmation to the user.
 \end{enumerate}	\\ \hline
-\textbf{Output Condition:} The user submits the form after having filled it with all the parameters he wanted to modidy. The fields about constraints could also be left blank (they are optional) \\ \hline
+\textbf{Output Condition:}  The user has modified an appointment; \\ \hline
 \textbf{Exceptions:}
 \begin{enumerate}
 \item Some fields of the form referring to parameters are left blank;
@@ -238,38 +238,89 @@ that were specified yet by the user;
 \textbf{Actors:} User, External API \\ \hline
 \textbf{Goals:} (\textbf{goal che permette di fare uno scheduling degli appuntamenti dell'utente})\\ \hline
 \textbf{Input Condition: The user is logged-in to the system (\textbf{in futuro mettere che l'actor è un logged user e togliere questo, se ci piace di più}} \\ \hline
+
 \textbf{Event Flow:}
 \begin{enumerate}
 \item The user wants to schedule his appointments;
-\item The user selects the current appointments to schedule of the current day;
-\item The system provides to the user the schedule form with all the parameters and optimization criteria (with reference to (\textbf{parametri dello schedule}
-and 
-\textbf{opt criteria dello schedule}} 
-that were specified yet by the user; 
+\item The user requests a schedule by mean of selecting the appointments to schedule of the current day;
+\item The system provides to the user the schedule form with all the parameters, optimization criteria (with reference to (\textbf{parametri dello schedule} and \textbf{opt criteria dello schedule}) and the constraints (\textbf{riferimento ai constraints sullo schedule}.
 \item The user fills up the fields of the form;
-\item The user submit the form to the system;
-\item The user retrieves information from external APIs about travel options and related travel option data, weather forecast and strike days
+\item The user submits the form to the system;
+\item The system retrieves information from external APIs about; travel options and related travel option data, weather forecast and strike days;
+\item The system retrieves about the Travel Option Data of the newly created Schedule
+\item The system stores the Schedule, together with his travel option data
 
-
-\item The system set the appointment as Unscheduled with the new parameters (referring to statechart in figure ..); \label{fig:stchartApp})
-\item The system sends a confirmation to the user.
+(\textbf{link alla definizione}) and stores it as Saved (\textbf{fare riferimento allo state chart}) with the appointment selected by the user.
 \end{enumerate}	\\ \hline
-\textbf{Output Condition:} The user submits the form after having filled it with all the parameters he wanted to modidy. The fields about constraints could also be left blank (they are optional) \\ \hline
+
+\textbf{Output Condition:} The user has created a valid schedule of his appointments; \\ \hline
+
 \textbf{Exceptions:}
 \begin{enumerate}
-\item Some fields of the form referring to parameters are left blank;
-\item The \textit{location} field doesn't belong to the domain area of the application (\textbf{riferimento alla domain assumption della regione})
+\item Some fields of the form referring to schedule variables and optimization criteria are left blank. The parameters of schedule constraints could also be left blank since they will assume default values;
+\item It's not possible to list the appointments as a Valid Schedule, so the schedule is Discarded \textbf{(riferimento allo statechart)}
 \end{enumerate} \\ \hline
 \textbf{Mapping on Requirements:}
 \begin{itemize}
-\item Events 3 through 5 are granted by \textbf{(the requirement that says that the system should let the user change the parameters and the constraints of an inserted appointment)}
-\item Event 6 is granted by (\textbf{requirement che il sistema è in grado di memorizzare un appointment modificato}
+\item Events 2 through 5 are granted by \textbf{(the requirement that says that the user can set the opt criteria, constraints, variables and  of the schedules)};
+\item Event 6 and 7 is granted by (\textbf{the requirement that says that we can retrieve info from APIs});
+\item Event 8 is granted by (\textbf{the requirement that says that is possible to store a schedule}, (\textbf{requirement che il sistema è in grado di ottimizzare in base a quanto gli dico}) 
 \end{itemize}  \\ \hline
 
 \end{longtable}
 
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=450pt, keepaspectratio]{"images/SequenceDiagramSchedule".png}
+\caption{Schedule appointents sequence diagram}
+\label{img:seqDiagrAppEditing00}
+\end{center}
+\end{figure}
+
+
+\subsubsection{Recover credentials}\label{usecase:recovercredentials}
+\begin{longtable}{|p{14cm}|} \hline
+\textbf{Name:} Schedule appointments \\ \hline
+\textbf{Actors:} User, External Email Service \\ \hline
+\textbf{Goals:} (\textbf{goal che permette di recuperare le credenziali dell'utente})\\ \hline
+\textbf{(\textbf{in futuro mettere che l'actor è un registered user e togliere questo, se ci piace di più}} \\ \hline
+
+\textbf{Event Flow:}
+\begin{enumerate}
+\item The user wants to recover his passoword;
+\item The user requests to recover his passoword;
+\item The system provides to the user the schedule form with his e-mail;
+\item The user fills up the field of the form;
+\item The user submits the form to the system;
+\item The system sends the e-mail to the user with his password.
+\end{enumerate}
+\\ \hline
+
+\textbf{Output Condition:} The user has recovered his password; \\ \hline
+
+\textbf{Exceptions:}
+\begin{enumerate}
+\item The form it's left blank;
+\item An invalid address is given;
+\end{enumerate} \\ \hline
+
+\textbf{Mapping on Requirements:}
+\begin{itemize}
+\item Actions 2 through 4 granted by requirement (\textbf{the system should be able to recover email address from the user}
+\item Action 5 granted by the other requirement
+\end{itemize}  \\ \hline
+
+\end{longtable}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=450pt, keepaspectratio]{"images/PasswordRecoverySequenceDiagram".png}
+\caption{Password recovery sequence diagram}
+\label{img:seqDiagrPasswordRecovery}
+\end{center}
+\end{figure}
+
+
 
 \subsection{Definition of use case diagrams}
-eventuali informzioni che specificano meglio come leggere i deagrammi che si producono
-
-
+In these diagrams we assume that the user has ran the application. In particular, if the actor is a \textit{Registered User} or an \textit{Enternal User} then we assume that the user is facing the login page (\textbf{riferimento alla login page}. On the other hand, if the actor is a \textit{Logged User} then is assumed that it is on the home page (\textbf{riferimento alla home page}.
