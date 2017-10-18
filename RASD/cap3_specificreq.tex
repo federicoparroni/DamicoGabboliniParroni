@@ -9,24 +9,49 @@ The user can interact with the application through several graphical interfaces:
 \item \textbf{Registration/login interface}: allows the user to insert credentials in order to registering or logging into the system;
 \begin{figure}[H]
 \begin{center}
-\includegraphics[width=250pt, keepaspectratio]{"images/interfaces/login interface".jpg}
+\includegraphics[width=250pt, keepaspectratio]{"images/interfaces/login".jpg}
 \caption{Registration/login interface}
 \end{center}
 \end{figure}
 \item \textbf{User account interface}: user can specify his profile characteristics, such as his passes, car and/or bike ownership;
 \begin{figure}[H]
 \begin{center}
-\includegraphics[width=250pt, keepaspectratio]{"images/interfaces/useraccount interface".jpg}
+\includegraphics[width=250pt, keepaspectratio]{"images/interfaces/userprofile".jpg}
 \caption{User account interface}
 \end{center}
 \end{figure}
+\item \textbf{Home interface}: shows currently running schedule and displays some navigation links to other interfaces;
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=250pt, keepaspectratio]{"images/interfaces/"home".jpg}
+\caption{Home interface}
+\end{center}
+\end{figure}
 \item \textbf{Appointment CRUD interface}: allows creating, showing and editing appointment parameters and related constraints;
-\item \textbf{Non-scheduled appointments interface}: provides a list of all inserted appointments, but not scheduled yet (includes the possibility to delete an item of the list);
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=250pt, keepaspectratio]{"images/interfaces/appointment".jpg}
+\caption{Appointment CRUD interface}
+\end{center}
+\end{figure}
+\item \textbf{Appointments interface}: provides a list of all inserted appointments, with the possibility to filter between non-scheduled/scheduled ones (includes the possibility to delete an item of the list);
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=250pt, keepaspectratio]{"images/interfaces/"appointments".jpg}
+\caption{Appointments list interface}
+\end{center}
+\end{figure}
 \item \textbf{Schedule interface}: user can set parameters, contraints, optimization criteria and request a schedule creation for a given date;
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=250pt, keepaspectratio]{"images/interfaces/"schedule".jpg}
+\caption{Schedule interface}
+\end{center}
+\end{figure}
 \item \textbf{Schedules result interface}: shows the computation of the requested schedules for a given date and asks the user to select one, then waits for confirmation for that;
 \item \textbf{Schedule progress interface}: permits to keep track of the completeness percentage, indicating the directions to be followed by the user in a map, in order to arrive to the next appointments;
 \item \textbf{Tickets/rides reservation interface}: allows user to buy tickets for public travel means and/or reserve a ride for the shared travel means;
-\item \textbf{Appointments history interface}: shows a list of archived appointments;
+%\item \textbf{Appointments history interface}: shows a list of archived appointments;
 \end{enumerate}
 
 \subsection{Hardware interfaces}
@@ -39,17 +64,20 @@ Hardware interfaces are physical linking across which two or more separate compo
 %\end{itemize}
 
 \subsection{Software interfaces}
-Software interfaces are logical linking across which two or more separate applications running on a system exchange information. 
+Software interfaces are logical linking across which two or more separate applications running on a system exchange information. The most relevant software interface in our system is API. APIs are sets of subroutine definitions, protocols and clearly defined methods of communication, allowing data exchanging and service requests. There are several kinds of these:
 \begin{itemize}
-\item API: information can be exchanged through HTTP request/response;
+\item \textbf{Operating System APIs}: specify interface between applications and OS, permitting to access low level routines calls (for instance, to communicate with memory or with an internal device)\textbf{(!)}
+\item \textbf{Remote APIs}: DBMS expose a set of standards that the API user can adopt in order to manage the database data. SQL is the standard language for storing, manipulating and retrieving data in this context;
+\item \textbf{Web API}: information can be exchanged through the internet by encapsulating it in HTTP request/response. Weather forecast, travel services, mapping systems offer this typology of API.
 \end{itemize}
 
 \subsection{Communications interfaces}
 Communication interfaces allows two different architectures of the system to exchange information through communication channel. These non-homogeneous components of the system can communicate thanks to the following software interfaces and protocols:
 \begin{itemize}
-\item Cellular connectivity: mobile devices can connect to the internet thanks to LTE standard;
-\item GPS: cellular can retrieve his coordinates position through NMEA protocol;
-\item QRCode: present in most of the shared means, allows to quickly identify the nearby transportation, associating that to an URL;
+\item \textbf{Cellular connectivity}: mobile devices can connect to the internet thanks to LTE standard;
+\item \textbf{GPS}: cellular can retrieve his coordinates position through NMEA protocol;
+\item \textbf{QRCode}: associates a matrix of bits to an URL. QRCodes are present in most of the shared means, semplifying the booking of that.
+%identify the nearby transportation
 \end{itemize}
 
 
