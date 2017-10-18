@@ -244,7 +244,7 @@ that were specified yet by the user;
 \item The user selects the current appointments to schedule of the current day;
 \item The system provides to the user the schedule form with all the parameters and optimization criteria (with reference to (\textbf{parametri dello schedule}
 and 
-\textbf{opt criteria dello schedule}} 
+\textbf{opt criteria dello schedule}
 that were specified yet by the user; 
 \item The user fills up the fields of the form;
 \item The user submit the form to the system;
@@ -268,6 +268,164 @@ that were specified yet by the user;
 
 \end{longtable}
 
+\subsubsection{User registration} \label{usecase:User registration}
+
+\begin{longtable}{|p{14cm}|} \hline
+
+\textbf{Name:} User registration \\ \hline
+
+\textbf{Actors:} User, external e-mail service \\ \hline
+
+\textbf{Goals:} \goalref{goal:G5} \\ \hline
+
+\textbf{Input Condition:} \\ \hline
+
+\textbf{Event Flow:}
+
+\begin{enumerate}
+\item The user wants to register to the system, so he runs the application;
+\item The system display the login/registration page
+\item The user fills the form (the form is present on the first page that the application display after the startup)
+\item The user submit the filled form to the system
+\item The system send a confirmation e-mail to the user;
+\item The system display a message in which the user is informed that he will recieve a confirmation e-mail;
+\item The user confirm the registration by clicking a link in the received e-mail;
+\item A confirmation message is sent to the application;
+\item A registration completed message is sent to the user by the system. 
+\end{enumerate}	\\ \hline
+
+\textbf{Output Condition:} The registration is confirmed to the system; \\ \hline
+
+\textbf{Exceptions:}
+
+\begin{enumerate}
+\item The e-mail given by the user is fake 
+\item The user makes a typo during the insertion of his e-mail
+\end{enumerate} \\ \hline
+
+\textbf{Mapping on Requirements:}
+
+\begin{itemize}
+\item Events 1 through 3 are granted by R12;(AGGIUNGERE I RIFERIMENTI)
+\item Evens 4 through 6 are granted by R13. (AGGIUNGERE I RIFERIMENTI)
+\end{itemize}  \\ \hline
+
+\end{longtable}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=400pt, keepaspectratio]{"images/RegistrationSequenceDiagram".png}
+\caption{Registration sequence diagram}
+\label{img:seqDiagrAppEditing00}
+\end{center}
+\end{figure}
+
+\subsubsection{Booking phase} \label{usecase:Booking Phase}
+
+\begin{longtable}{|p{14cm}|} \hline
+
+\textbf{Name:}Booking phase \\ \hline
+
+\textbf{Actors:} User, external apis \\ \hline
+
+\textbf{Goals:} FARE RIFERIMENTO AL GOAL CORRETTO \\ \hline
+
+\textbf{Input Condition:}
+
+\begin{itemize}
+\item The user must be logged in to the system;
+\item The user must have selected a schedule to be run;
+\item The user must have linked to the system his external accounts;(FARE RIFERIMENTO ALLA SEZIONE DOVE SI PARLA DI QUESTA COSA)
+\item The user would like to buy the tickets for the travel means involved in the running schedule.
+\end{itemize}
+ \\ \hline
+
+\textbf{Event Flow:}
+
+\begin{enumerate}
+\item The System, after the user have selected a schedule, asks to the user if he want to buy the ticket for the running schedule;
+\item The User confirm to the system his intention;
+\item The System perform a call to the travel means APIs for buying the ticket;
+\item The APIs send back a confirmation message of the purchase;
+\item The system send a confirmation message to the user.
+\end{enumerate}	\\ \hline
+
+\textbf{Output Condition:} The User recieve the confirmation message; \\ \hline
+
+\textbf{Exceptions:}
+
+\begin{enumerate}
+\item The user doesn't have enough money in his card to complete the transaction;
+\item there aren't free sits in one of the selected travel means; 
+\end{enumerate} \\ \hline
+
+\textbf{Mapping on Requirements:}
+
+%\begin{itemize}
+Events 3 through 5 granted by R17;(AGGIUNGERE I RIFERIMENTI) \\ \hline
+%\end{itemize}  \\ \hline
+
+\end{longtable}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=400pt, keepaspectratio]{"images/BookingPhaseSequenceDiagram".png}
+\caption{Booking phase sequence diagram}
+\label{img:seqDiagrAppEditing00}
+\end{center}
+\end{figure}
+
+\subsubsection{Dynamic Directions} \label{usecase:Dynamic Directions}
+
+\begin{longtable}{|p{14cm}|} \hline
+
+\textbf{Name:}Dynamic Directions\\ \hline
+
+\textbf{Actors:} User,external apis,GPS \\ \hline
+
+\textbf{Goals:} FARE RIFERIMENTO AL GOAL CORRETTO \\ \hline
+
+\textbf{Input Condition:}
+
+\begin{itemize}
+\item The user must be logged in to the system;
+\item The user must have a running schedule;
+\end{itemize}
+ \\ \hline
+
+\textbf{Event Flow:}
+
+\begin{enumerate}
+\item The user requests the Directions for the travel to the system;
+\item The system retrieves the user position from his GPS;
+\item The system retrives from external APIs the directions to give to the user based on his position;
+\item The system display to the user the updated map and the directions that him must follow in order to arrive to the next appointment
+\item user doesn't need more directions so he closes the dynamic map.
+\end{enumerate}	\\ \hline
+
+\textbf{Output Condition:} The User is satisfied with the information gathered until this moment so he decides to close the dynamic map; \\ \hline
+
+%\textbf{Exceptions:}
+%
+%\begin{enumerate}
+%\item 
+%\end{enumerate} \\ \hline
+
+\textbf{Mapping on Requirements:}
+
+%\begin{itemize}
+Events 3 through 5 granted by R17;(AGGIUNGERE I RIFERIMENTI) \\\\ \hline
+%\end{itemize}  \\ \hline
+
+\end{longtable}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=400pt, keepaspectratio]{"images/DynamicDirectionsSequenceDiagram".png}
+\caption{Booking phase sequence diagram}
+\label{img:seqDiagrAppEditing00}
+\end{center}
+\end{figure}
 
 \subsection{Definition of use case diagrams}
 eventuali informzioni che specificano meglio come leggere i deagrammi che si producono
