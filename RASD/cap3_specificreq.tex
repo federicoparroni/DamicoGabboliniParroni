@@ -77,9 +77,19 @@ Communication interfaces allows two different architectures of the system to exc
 
 \section{Functional requirements}
 \subsection{Scenarios}
+
 Here are some scenarios that describe the usage of the system.
+
 \subsubsection{Scenario 1} \label{scenario:1}
 Giovanni will start the fourth year of his Master's degree. Surfing the internet, he finds out that his lesson schedule for the first semester it has been published. Giovanni decides to fill in the application with his new appointments related to lessons attendance. In fact he knows where to go, at which time and day and for which amount of time. Since he knows that these events will going to happen for 3 months, he sets them as recurrent.
+
+\subsubsection{Scenario 2} \label{scenario:2}
+\textbf{da rileggere scritta veloce}
+Giovanni want to start training but he doesn't know what are the best hours in which he can run in accord to his appointments, he know only that he can run between 5 and 7 pm, for 45 minutes. he can insert this last appointment in the application whitout specify the exactly starting hour and the system will give him the best hours in which he can run
+
+\subsubsection{Scenario 3} \label{scenario:3}
+\textbf{da rileggere scritta veloce}
+Giovanni has scheduled his appointments but at lunch time his son called him because he needed a ride for go back to home. Giovanni decided to help his son and so he brought him home. now the current running schedule is not more valid so he request to the system a reschedule of his appointment according to his position and the hour of day in which he is.  
 
 \subsection{Use cases}
 
@@ -88,12 +98,11 @@ Giovanni will start the fourth year of his Master's degree. Surfing the internet
 
 \textbf{Name:} User log-in \\ \hline
 \textbf{Actors:} User \\ \hline
-\textbf{Goals}: \goalref{goal:G9} \\ \hline
+\textbf{Goals}: (\textbf{Goal del login} \\ \hline
 \textbf{Input Condition:} The user is registered to the system \\ \hline
 \textbf{Event Flow:} 
 \begin{enumerate}
 \item The user needs to log-in the application, so he runs it;
-\item The user requests to log-in to the system;
 \item The system provides to the user a form to fill;
 \item The user fills up the form with the his e-mail and his password (as said in \ref{subsect:usermodel})
 \item The user submits the form to the system;
@@ -106,23 +115,31 @@ Giovanni will start the fourth year of his Master's degree. Surfing the internet
 
 \textbf{Mapping on requirements:}
 \begin{itemize}
-\item Events from 3 through 5 granted by \reqref{req:R10};
-\item Event 6 grandet by \reqref{req:R9};
+\item Events from 3 through 5 granted by (\textbf{requirement che può recuperare informazioni dell'utente riguardo i dati della registrazione});
+\item Event 6 grandet by (\textbf{requirement che il sistema può controllare se l'identità di un utente è giusta};
 \end{itemize} \\ \hline
 
 \end{tabular}
 
+\includegraphics[width=400pt, keepaspectratio]{"images/SequenceDiagramLogIn".png}
+
 \subsubsection{Appointment creation} \label{usecase:appcreation}
 
-\begin{tabular}{|p{14cm}|} \hline
+\begin{longtable}{|p{14cm}|} \hline
 \textbf{Name:} Appointment creation \\ \hline
 \textbf{Actors:} User \\ \hline
 \textbf{Goals:} \goalref{goal:G1} \\ \hline
-\textbf{Input Condition: The user is registered to the system} \\ \hline
+\textbf{Input Condition:} 
+\begin{itemize}
+\item The user is registered to the system 
+\item The user is logged in to the systems 
+\end{itemize}
+\\ \hline
 \textbf{Event Flow:}
 \begin{enumerate}
-\item The user wants to add a new appointment to his schedule, so he runs the application;
-\item The user logs-in in the application (\textbf{ref to the log-in use case});
+\item The user wants to add a new appointment to his schedule;
+\item The user requests the appointments page
+\item The system provides the appointments page
 \item The user requests the creation of a new appointment to the application;
 \item The system provides to the user a form to fill;
 \item The user fills up the form with the parameters (specified in \ref{subsect:appointmentmodel}) and constraints (specified in \ref{subsubsect:constronappoint} about the new appointment;
@@ -130,7 +147,9 @@ Giovanni will start the fourth year of his Master's degree. Surfing the internet
 \item The system allocates the new appointment as Unscheduled (referring to statechart in figure; \label{fig:stchartApp})
 \item The system sends a confirmation to the user.
 \end{enumerate}	\\ \hline
+
 \textbf{Output Condition:} The user submit the form after filling it with all the parameters needed. Constraints fields could also be left blank (they are optional); \\ \hline
+
 \textbf{Exceptions:}
 \begin{enumerate}
 \item Some fields of the form referring to parameters are left blank;
@@ -138,15 +157,16 @@ Giovanni will start the fourth year of his Master's degree. Surfing the internet
 \end{enumerate} \\ \hline
 \textbf{Mapping on Requirements:}
 \begin{itemize}
-\item Events 4 through 7 are granted by \reqref{req:R2}
-\item Event 7 is granted by \reqref{req:R1}
+\item Events 4 through 7 are granted by (\textbf{requirement che il sistema può recuperare informazioni riguardanti un appointment})
+\item Event 7 is granted by (\textbf{requirement che il sistema è in grado di memorizzare un appointment}
 \end{itemize}  \\ \hline
 
-\end{tabular}
+
+\end{longtable}
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[width=400pt, keepaspectratio]{"images/seqDiagramAppointmentCreation".png}
+\includegraphics[width=400pt, keepaspectratio]{"images/sequenceDiagramAppointmentCreation".png}
 \caption{Appointment creation sequence diagram}
 \label{img:seqDiagrAppCreation}
 \end{center}
@@ -154,5 +174,124 @@ Giovanni will start the fourth year of his Master's degree. Surfing the internet
 
 In the sequence diagram there's the assumption that the log-in proceeds successfully. The log-in procedure referenced is the one explained in (\textbf{use case del log-in}.)
 
+\subsubsection{ScheduleSelection}
+\begin{longtable}{|p{14cm}|} \hline
+\textbf{Name:} Multiple Schedules creation \\ \hline
+\textbf{Actors:} User \\ \hline
+\textbf{Goals:} \textbf{aggiungere rif al goal} \\ \hline
+\textbf{Input Condition:} 
+\begin{itemize}
+\item The user is registered to the system 
+\item The user is logged in to the systems 
+\end{itemize}
+\\ \hline
+\textbf{Event Flow:}
+\begin{enumerate}
+\item The user wants to compare multiple schedules;
+\item The user requests the schedules page;
+\item The system provides the schedules page;
+\item The user selects a schedule to be run;
+\item The system display the mainpage with the schedule results (fare riferimento alla definizione)
+\end{enumerate}	\\ \hline
+\textbf{Output Condition:} The user selects a schedule to be run \\ \hline
+\textbf{Exceptions:}
+\\ \hline
+\textbf{Mapping on Requirements:}
+\begin{itemize}
+\item Events are granted by the requirment R10 \textbf{(mettere riferimenti)}
+\end{itemize}  \\ \hline
+
+\end{longtable}
+\label{usecase:ScheduleSelection}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=400pt, keepaspectratio]{"images/ScheduleSelectionSequenceDiagram".png}
+\caption{Appointment creation sequence diagram}
+\label{img:ScheduleSelection}
+\end{center}
+\end{figure}
+
+\subsubsection{Appointment editing}\label{usecase:appediting}
+\begin{longtable}{|p{14cm}|} \hline
+\textbf{Name:} Appointment editing \\ \hline
+\textbf{Actors:} User \\ \hline
+\textbf{Goals:} (\textbf{goal che l'utente può modicare un appointment})\\ \hline
+\textbf{Input Condition: The user is logged-in to the system} \\ \hline
+\textbf{Event Flow:}
+\begin{enumerate}
+\item The user wants to modify an appointment of his schedule;
+\item The user selects the appointment to modify;
+\item The system provides to the user the appointment form with all the parameters and constraints (with reference to %\ref{subsect:appointmentmodel 
+and 
+%\ref{subsect:appointmentmodel}} 
+that were specified yet by the user; 
+\item The user edits the fields of the form;
+\item The user submit the form to the system;
+\item The system set the appointment as Unscheduled with the new parameters (referring to statechart in figure ..); \label{fig:stchartApp})
+\item The system sends a confirmation to the user.
+\end{enumerate}	\\ \hline
+\textbf{Output Condition:} The user submits the form after having filled it with all the parameters he wanted to modidy. The fields about constraints could also be left blank (they are optional) \\ \hline
+\textbf{Exceptions:}
+\begin{enumerate}
+\item Some fields of the form referring to parameters are left blank;
+\item The \textit{location} field doesn't belong to the domain area of the application (\textbf{riferimento alla domain assumption della regione})
+\end{enumerate} \\ \hline
+\textbf{Mapping on Requirements:}
+\begin{itemize}
+\item Events 3 through 5 are granted by \textbf{(the requirement that says that the system should let the user change the parameters and the constraints of an inserted appointment)}
+\item Event 6 is granted by (\textbf{requirement che il sistema è in grado di memorizzare un appointment modificato}
+\end{itemize}  \\ \hline
+
+\end{longtable}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=400pt, keepaspectratio]{"images/seqDiagramAppointmentEditing".png}
+\caption{Appointment editing sequence diagram}
+\label{img:seqDiagrAppEditing00}
+\end{center}
+\end{figure}
+
+
+\subsubsection{Schedule appointments}\label{usecase:scheduleappointments}
+\begin{longtable}{|p{14cm}|} \hline
+\textbf{Name:} Schedule appointments \\ \hline
+\textbf{Actors:} User, External API \\ \hline
+\textbf{Goals:} (\textbf{goal che permette di fare uno scheduling degli appuntamenti dell'utente})\\ \hline
+\textbf{Input Condition: The user is logged-in to the system (\textbf{in futuro mettere che l'actor è un logged user e togliere questo, se ci piace di più}} \\ \hline
+\textbf{Event Flow:}
+\begin{enumerate}
+\item The user wants to schedule his appointments;
+\item The user selects the current appointments to schedule of the current day;
+\item The system provides to the user the schedule form with all the parameters and optimization criteria (with reference to (\textbf{parametri dello schedule}
+and 
+\textbf{opt criteria dello schedule}} 
+that were specified yet by the user; 
+\item The user fills up the fields of the form;
+\item The user submit the form to the system;
+\item The user retrieves information from external APIs about travel options and related travel option data, weather forecast and strike days
+
+
+\item The system set the appointment as Unscheduled with the new parameters (referring to statechart in figure ..); \label{fig:stchartApp})
+\item The system sends a confirmation to the user.
+\end{enumerate}	\\ \hline
+\textbf{Output Condition:} The user submits the form after having filled it with all the parameters he wanted to modidy. The fields about constraints could also be left blank (they are optional) \\ \hline
+\textbf{Exceptions:}
+\begin{enumerate}
+\item Some fields of the form referring to parameters are left blank;
+\item The \textit{location} field doesn't belong to the domain area of the application (\textbf{riferimento alla domain assumption della regione})
+\end{enumerate} \\ \hline
+\textbf{Mapping on Requirements:}
+\begin{itemize}
+\item Events 3 through 5 are granted by \textbf{(the requirement that says that the system should let the user change the parameters and the constraints of an inserted appointment)}
+\item Event 6 is granted by (\textbf{requirement che il sistema è in grado di memorizzare un appointment modificato}
+\end{itemize}  \\ \hline
+
+\end{longtable}
+
+
 \subsection{Definition of use case diagrams}
 eventuali informzioni che specificano meglio come leggere i deagrammi che si producono
+
+
