@@ -8,7 +8,8 @@ Some important informations about him are held by the following parameters:
 \begin{itemize}
 \item \textit{travelPass}: indicates if the user has a pass for public transportation;
 \item \textit{hasBike}: indicates if the user has his own car;
-\item \textit{hasCar}: indicates if the user has his own bicycle.
+\item \textit{hasCar}: indicates if the user has his own bicycle;
+\item \textit{externalTravelServicesAccounts}: \textbf{(fare rif alla definizione)};
 \end{itemize}
 
 \subsection{Appointment Model} \label{subsect:appointmentmodel}
@@ -20,7 +21,7 @@ An appointment is represented within the application by a set of parameters:
 %In particular: \begin{equation}timeInterval.start + duration \leq timeInterval.end \label{eqn:constrOnTimeInterval} \end{equation}
 \item \textit{location}: identifies the coordinates of the place where the appointment will be held;
 \item \textit{recurrent}: specifies if the appointment will be repeated over a fixed period of time;
-\item \textit{peopleTravelling}: represents a variation occourring when the user picks up or leaves off someone.
+\item \textit{peopleTravelling}: represents a variation of people occourring when the user picks up or leaves off someone.
 \end{itemize}
 
 The life cycle of an appointment can be represented by the following statechart:
@@ -47,7 +48,7 @@ A schedule is characterized by the following variables:
 \includegraphics[width=\textwidth, keepaspectratio]{"images/stateChartSchedule1".png}
 
 When a schedule is requested by the user it can be either validated or refused by the scheduler according to the definition of valid schedule \textbf{fare riferimento alla def}.
-In the first case the schedule is \textbf{saved} in the second one the schedule is \textbf{discarded} and a warning to the user is sent. In order to start a schedule the user must accept one of them from the saved ones, after that the schedule is \textbf{running}.If the user edits one of the appointments belonging to the running schedule, this one is not more valid and become \textbf{discarded}.when a schedile is fullfilled by the user this last is \textbf{archived} by the system.
+In the first case the schedule is \textbf{saved} in the second one the schedule is \textbf{discarded} and a warning to the user is sent. In order to start a schedule the user must accept one of them from the saved ones, after that the schedule is \textbf{running}.If the user edits one of the appointments belonging to the running schedule, this one is not more valid and become \textbf{discarded}. When a schedile is fullfilled by the user this last is \textbf{archived} by the system.
 
  
 \subsubsection{The optimization criteria} \label{subsubsect:optcriteria} 
@@ -68,6 +69,8 @@ Constraints are impositions on some parameters managed by the system during the 
 \item \textit{User can deactivate a particular travel mean};
 \item \textit{User can select which travel mean he uses under certain weather condition}.
 \end{itemize}
+
+The system checks the availability of shared travel means 15 minutes before the beginning of an appointment and notifies the user only if taking that mean will provide a better solution according to the optimization criteria selected.
 
 \subsubsection{Constraints on appointment} \label{subsubsect:constronappoint}
 \begin{itemize}
@@ -136,17 +139,17 @@ Requirements for \goalref{goal:G4}:
 
 \item The system S.B.A to store valid schedules requested by the user
 
+\item The user can specify his parameters (\textbf{ref a usermodel})
 
-Requirments for \goalref{goal:G5}:
+Requirements for \goalref{goal:G5}:
 
 \item The system should let the user accept a schedule from the saved ones 
 
 Requirements for \goalref{goal:G6}:
 
-\item The system S.B.A to handle a registration phase in which the user will provide an e-mail and a password
+\item The system S.B.A to handle a registration phase in which the user will provide an e-mail and a password;
 
-\item The system S.B.A. to verify the e-mail given by the user by sending a confirmation e-mail to his address
-
+\item The system S.B.A. to verify the e-mail given by the user by sending a confirmation e-mail to his address;
 
 Requirements for \goalref{goal:G9}:
 \item The system S.B.A to recognize a registered user given an e-mail and a password \label{req:R9}
@@ -177,11 +180,17 @@ Requirements for \goalref{goal:G10}:
 
 %\item The system S.B.A. to retrive from an external API the Graphical representation of the path that will be travelled by the user
 
-Requirements for \goalref{goal:g11}:
+Requirements for \goalref{goal:g99}:
 
 \item The system should be able to recover an e-mail address from the user;
 
 \item The system should be able to send the password of a user to his e-mail given the e-mail.
+
+Requirements for \goalref{goal:G100}
+
+\item The system should be able to send notifications to the user;
+
+\item The system should be able to retrieve information about the availablity of shared travel means from external APIs without the user request 
 
 \end{enumerate}
 
@@ -234,6 +243,10 @@ Beside these, an obvious tacit assumption is that the user has a valid age to mo
 \item The user has a GPS active in every moment;
 
 \item Every user has at least one personal e-mail;
+
+\item Shared travel means are only cars and bikes;
+
+\item Shared travel means can be booked for the next 15 minutes;
 
 \end{itemize}
 
