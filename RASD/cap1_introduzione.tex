@@ -27,7 +27,7 @@ The main goals the app must fulfill are:
 \item The system should give to the signed user the possibility to recover his password.
 \label{G9}
 
-\item Allow the user to insert an appointment according to his necessities and his preferences;
+\item The system should allow the user to insert an appointment according to his necessities and his preferences;
 \label{goal:G1}
 
 \item The system S.P.W. to modify an inserted appointment;
@@ -44,6 +44,8 @@ The main goals the app must fulfill are:
 
 \item The system S.B.A. to display in real time user position and the directions to be followed in order to arrive to the next appointment on a dinamically updated map; \label{G8}
 
+\item The system S.B.A. to notify the user when a shared travel mean is available and it would optmize the current schedule; \label{G10}
+
 \end{enumerate}
 
 
@@ -56,14 +58,17 @@ User can receive an appointment on a certain date, time and location (over a reg
 User can have his own travel means and a pass for public transportation. 
 The travel means considered in this scenario can be grouped in three categories: public, shared or private.
 \begin{itemize}
-\item Public travel means: these include trains, buses, underground, taxis, trams. They have to be taken in their designated stops. User must have a valid ticket in order to get on a public travel means (except for taxis, that pick up the user wherever he wants upon a call and do not require any ticket); 
-\item Shared travel means: these include car and bike. They are located in specific places and require a reservation in order to be used by the user;
+\item Public travel means: these include trains, buses, underground, taxis, trams. They have to be taken in their designated stops. User must have a valid ticket in order to get on a public travel means (except for taxis, that pick up the user wherever he wants upon a call and do not require any ticket);
+
+\item Shared travel means: these include cars and bikes. They are located in specific places and require a reservation at least 15 minutes in advantage in order to be used by the user;
+
 \item Private travel means: vehicles owned by the user. They can be cars, bikes, motorbikes. Also walking is considered to be a (very special) private travel mean.
 \end{itemize}
 
 Weather conditions can change during the day affecting travel means choice.
 At the beginning of the day, or on demand, user can request a schedule of his daily appointments, following some criteria evaluated according to their assigned priority and satisfying some constraints imposed by the user.
 When a new appointment is received, user creates a new item in the application and saves it in the appointment list. User can request the application to reschedule the appointments because of unexpected changes of his plan (e.g. a cancelled appointment).
+User can choose whether to take or not a shared travel mean when the application notify him of its availability.
 
 \subsection{World Phenomena}
 \begin{itemize}
@@ -146,6 +151,9 @@ A Valid Schedule is a Schedule which:
 \end{itemize}
 \end{definition}
 
+\begin{definition}
+A travel service account is an external account of the user which permits the booking and the payment of a specific travel mean;
+\end{definition}
 
 \begin{definition}
 A Relative Path is a  portion of a path travelled by the same travel means.

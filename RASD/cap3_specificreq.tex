@@ -112,7 +112,7 @@ Giovanni has scheduled his appointments but at lunch time his son called him bec
 
 \textbf{Name:} User log-in \\ \hline
 
-\textbf{Actors:} User \\ \hline
+\textbf{Actors:} Registered User \\ \hline
 
 \textbf{Goals}: (\textbf{Goal del login} \\ \hline
 
@@ -147,7 +147,7 @@ Giovanni has scheduled his appointments but at lunch time his son called him bec
 
 \begin{longtable}{|p{14cm}|} \hline
 \textbf{Name:} Appointment creation \\ \hline
-\textbf{Actors:} User \\ \hline
+\textbf{Actors:} Logged User \\ \hline
 \textbf{Goals:} \goalref{goal:G1} \\ \hline
 \textbf{Input Condition:} 
 \begin{itemize}
@@ -194,10 +194,10 @@ Giovanni has scheduled his appointments but at lunch time his son called him bec
 
 In the sequence diagram there's the assumption that the log-in proceeds successfully. The log-in procedure referenced is the one explained in (\textbf{use case del log-in}.)
 
-\subsubsection{ScheduleSelection}
+\subsubsection{Schedule selection}
 \begin{longtable}{|p{14cm}|} \hline
 \textbf{Name:} Multiple Schedules creation \\ \hline
-\textbf{Actors:} User \\ \hline
+\textbf{Actors:} Logged User \\ \hline
 \textbf{Goals:} \textbf{aggiungere rif al goal} \\ \hline
 \textbf{Input Condition:} 
 \begin{itemize}
@@ -235,7 +235,7 @@ In the sequence diagram there's the assumption that the log-in proceeds successf
 \subsubsection{Appointment editing}\label{usecase:appediting}
 \begin{longtable}{|p{14cm}|} \hline
 \textbf{Name:} Appointment editing \\ \hline
-\textbf{Actors:} User \\ \hline
+\textbf{Actors:} Logged User \\ \hline
 \textbf{Goals:} (\textbf{goal che l'utente può modicare un appointment})\\ \hline
 \textbf{Input Condition: The user is logged-in to the system} \\ \hline
 \textbf{Event Flow:}
@@ -277,7 +277,7 @@ that were specified yet by the user;
 \subsubsection{Schedule appointments}\label{usecase:scheduleappointments}
 \begin{longtable}{|p{14cm}|} \hline
 \textbf{Name:} Schedule appointments \\ \hline
-\textbf{Actors:} User, External API \\ \hline
+\textbf{Actors:} Logged User, External API \\ \hline
 \textbf{Goals:} (\textbf{goal che permette di fare uno scheduling degli appuntamenti dell'utente})\\ \hline
 \textbf{Input Condition: The user is logged-in to the system (\textbf{in futuro mettere che l'actor è un logged user e togliere questo, se ci piace di più}} \\ \hline
 
@@ -326,7 +326,7 @@ that were specified yet by the user;
 
 \textbf{Name:} User registration \\ \hline
 
-\textbf{Actors:} User, external e-mail service \\ \hline
+\textbf{Actors:} External User, external e-mail service \\ \hline
 
 \textbf{Goals:} \goalref{goal:G5} \\ \hline
 
@@ -343,7 +343,8 @@ that were specified yet by the user;
 \item The system display a message in which the user is informed that he will recieve a confirmation e-mail;
 \item The user confirm the registration by clicking a link in the received e-mail;
 \item A confirmation message is sent to the application;
-\item A registration completed message is sent to the user by the system. 
+\item The user is redirected in his profile page inside the application;
+\item The user specifies his parameters;
 \end{enumerate}	\\ \hline
 
 \textbf{Output Condition:} The registration is confirmed to the system; \\ \hline
@@ -378,7 +379,7 @@ that were specified yet by the user;
 
 \textbf{Name:}Booking phase \\ \hline
 
-\textbf{Actors:} User, external apis \\ \hline
+\textbf{Actors:} Logged User, External APIs \\ \hline
 
 \textbf{Goals:} FARE RIFERIMENTO AL GOAL CORRETTO \\ \hline
 
@@ -427,13 +428,13 @@ Events 3 through 5 granted by R17;(AGGIUNGERE I RIFERIMENTI) \\ \hline
 \end{center}
 \end{figure}
 
-\subsubsection{Dynamic Directions} \label{usecase:Dynamic Directions}
+\subsubsection{Dynamic directions} \label{usecase:Dynamic Directions}
 
 \begin{longtable}{|p{14cm}|} \hline
 
 \textbf{Name:}Dynamic Directions\\ \hline
 
-\textbf{Actors:} User,external apis,GPS \\ \hline
+\textbf{Actors:} Logged User, External APIs, GPS \\ \hline
 
 \textbf{Goals:} FARE RIFERIMENTO AL GOAL CORRETTO \\ \hline
 
@@ -478,11 +479,12 @@ Events 3 through 5 granted by R17;(AGGIUNGERE I RIFERIMENTI) \\\\ \hline
 \end{center}
 \end{figure}
 
+In this sequence diagram the loop of the actions described in the rectangle continues until the dynamicMap is closed (closeDynamicMap).
 
 \subsubsection{Recover credentials}\label{usecase:recovercredentials}
 \begin{longtable}{|p{14cm}|} \hline
 \textbf{Name:} Schedule appointments \\ \hline
-\textbf{Actors:} User, External Email Service \\ \hline
+\textbf{Actors:} Registered User, External Email Service \\ \hline
 \textbf{Goals:} (\textbf{goal che permette di recuperare le credenziali dell'utente})\\ \hline
 \textbf{(\textbf{in futuro mettere che l'actor è un registered user e togliere questo, se ci piace di più}} \\ \hline
 
