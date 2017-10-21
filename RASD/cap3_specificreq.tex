@@ -527,3 +527,95 @@ In this sequence diagram the loop of the actions described in the rectangle cont
 
 \subsection{Definition of use case diagrams}
 In these diagrams we assume that the user has ran the application. In particular, if the actor is a \textit{Registered User} or an \textit{Enternal User} then we assume that the user is facing the login page (\textbf{riferimento alla login page}. On the other hand, if the actor is a \textit{Logged User} then is assumed that it is on the home page (\textbf{riferimento alla home page}.
+
+\section{Performance Requirements}
+The user must be notified in real time when a shared travel mean can be booked in order to provide a better mobility option,
+since these kind of transportation can remain available for a limited amount of time.
+
+Other performance requirements can't be easily expressed because they depends heavily on external services and on the device in which the application is run. For example the time needed to create a schedule is influenced by the promptness of the APIs.
+
+Anyway an upper bound of 5 seconds for the creation of a schedule is given. Moreover, the position of the user during the progress of a schedule must be track with a maximum delay of 100ms.
+
+\section{Design Constraints}
+
+\subsection{Standard compliance}
+Our system conforms to OAuth2 \footnote{Open Authentication, an industry-standard protocol for authorization. It focuses on client developer simplicity while providing specific authorization flows for web applications, desktop applications, mobile phones, and living room devices.} to handle the registration and login process. 
+Moreover, HTTPS \footnote{HTTPS is a communications protocol for secure communication over a computer network. The main motivation for HTTPS is authentication of the visited website and protection of the privacy and integrity of the exchanged data.} protocol is used to guarantee secure treatment of user's sensitive data.
+
+\subsection{Hardware limitations}
+The bottleneck on the performance of the system is represented by the network infrastructure capability. In particular the most affected activity is the schedule computation.
+\subsubsection{Analysis}
+We can assume that the upload and download speeds of the APIs server is respectively 50Mbit/s and 150Mbit/s per client and that a request and a response weights are 20KB and 180KB.
+We can consider 2 cases:
+\begin{itemize}
+\item 10Mbit/s and 5Mbit/s download and upload speeds respectively of the client;
+\item 100Mbit/s and 50Mbit/s download and upload speeds respectively of the client.
+\end{itemize}
+
+\begin{table}[htbp]
+  \centering
+    \begin{tabular}{|r|r|r|r|r|}
+    \hline
+    \multicolumn{1}{|l|}{\textbf{No. Appointments}} & \multicolumn{1}{l|}{\textbf{No. APIs calls}} & \multicolumn{1}{l|}{\textbf{Request [MB]}} & \multicolumn{1}{l|}{\textbf{Response [MB]}} & \multicolumn{1}{l|}{\textbf{Tot [sec]}} \\ \hline
+    %\midrule
+    5 (2)    & 4   & 0.625 & 5.625 & 0.687 \\ \hline
+    %\midrule
+    10 (4)   & 28 & 4.375 & 39.375 & 4.812 \\ \hline
+    %\midrule
+    15 (7)   & 5047 & 788.6 & 7097.3 & 867.453 \\ \hline
+    %\bottomrule
+    \end{tabular}%
+    \caption{Total times in the case of 10Mbit/s download speed and 5Mbit/s upload speed}
+  \label{tab:addlabel}%
+\end{table}%
+
+\begin{table}[htbp]
+  \centering
+    \begin{tabular}{|r|r|r|r|r|}
+    \hline
+    \multicolumn{1}{|l|}{\textbf{No. Appointments}} & \multicolumn{1}{l|}{\textbf{No. APIs calls}} & \multicolumn{1}{l|}{\textbf{Request [MB]}} & \multicolumn{1}{l|}{\textbf{Response [MB]}} & \multicolumn{1}{l|}{\textbf{Tot [sec]}} \\ \hline
+    %\midrule
+    5 (2)    & 4   & 0.625 & 5.625 & 0.125 \\ \hline
+    %\midrule
+    10 (4)   & 28 & 4.375 & 39.375 & 0.875 \\ \hline
+    %\midrule
+    15 (7)   & 5047 & 788.6 & 7097.3 & 157.719 \\ \hline
+    %\bottomrule
+    \end{tabular}%
+    \caption{Total times in the case of 100Mbit/s download speed and 50Mbit/s upload speed.}
+  \label{tab:addlabel}%
+\end{table}%
+
+In the first column the numbers between brackets rempresent the number $n$ of appointments with variable starting time, so that can be arranged differently relative to each other, changing their order in the schedule. Then the number of calls to External APIs that should be done is calculated, in case of a brute-force approach in the scheduling algorithm. Therefore the number of calls is proportional to $n!$.
+Finally the total amount of time is calculated considering the previous assumptions.
+
+We can realize that the number of calls to external APIs should be minimized in order to fullfill the requirement on performance expressed in (\textbf{riferimento ai performance requirements}).
+
+\subsection{Any other constraint}
+
+
+\section{Software System Attributes}
+
+\subsection{Reliability}
+The system should guarantee that from the data retrieved is always constructed the most convenient valid schedules, according to user preferences and constraints, if it exists.
+
+\subsection{Availability}
+The system should be accessible 24 hours per day and should be available 99,9\% of the time (up to 8,76 hours per year of downtime). Anyway the availability of the features involving the use of external services can't be direct controlled. In particular the availability of the feature $j$ is given by:
+
+\begin{equation}
+A_j = a_0 \prod_{i=1}^n a_i 
+\end{equation} 
+
+where each $a_i$ represent the availability of the external service $i$ used and $a_0$ is the availability of the application.
+
+\subsection{Security}
+The identity of the user must be verified through a login phase.
+User's characteristics must be protected during transmission from client to server throughout the registration.
+
+\subsection{Maintainability}
+The system should be open to modifications.
+In particular the application should be able to consider new travel means, new scheduling optimization criteria and new constraints.
+Moreover, also the GUI should be easily editable, so that can adapt to new operating systems.
+
+\subsection{Portability}
+The system should be adaptable to run in all the devices (\textbf{link alla definizione}) considered.
