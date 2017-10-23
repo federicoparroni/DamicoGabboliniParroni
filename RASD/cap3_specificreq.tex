@@ -523,7 +523,36 @@ In this sequence diagram the loop of the actions described in the rectangle cont
 \end{center}
 \end{figure}
 
+\subsubsection{Notify Shared Means}\label{usecase:Notify Shared Means}
+\begin{longtable}{|p{14cm}|} \hline
+\textbf{Name:} Notify Shared Means \\ \hline
+\textbf{Actors:} Registered User, External Api \\ \hline
+\textbf{Goals:} (\textbf{goal di notificare all'utente la possibilità di prendere i mezzi condivisi})\\ \hline
 
+\textbf{Event Flow:}
+\begin{enumerate}
+\item The system requests information to an external API about Shared Travel Means;
+\item The external API service respond to the system with the information requested;
+\item The system with the gathered information computes if there is a better path for the user according to the chosen constraints and optimization criteria;
+\item if the path is found by the system is sent a notification to the user;
+\end{enumerate}
+\\ \hline
+
+\textbf{Output Condition:} a better path is found; \\ \hline
+
+\textbf{Exceptions:}
+%\begin{enumerate}
+%\end{enumerate} \\ \hline
+
+\textbf{Mapping on Requirements:}
+\begin{itemize}
+\item Actions 1 and 2 are granted by R28 \textbf{FARE RIFERIMENTO}
+\item Actions 4 is granted by R27 \textbf{FARE RIFERIMENTO}
+\end{itemize}  \\ \hline
+
+\end{longtable}
+
+\textbf{AGGIUNGERE IMMAGINE GIA FATTA}
 
 \subsection{Definition of use case diagrams}
 In these diagrams we assume that the user has ran the application. In particular, if the actor is a \textit{Registered User} or an \textit{Enternal User} then we assume that the user is facing the login page (\textbf{riferimento alla login page}. On the other hand, if the actor is a \textit{Logged User} then is assumed that it is on the home page (\textbf{riferimento alla home page}.
