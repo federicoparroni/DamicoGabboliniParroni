@@ -2,70 +2,94 @@ module Travlendar
 
 open util/integer as Integer
 open util/boolean as boolean
-open util/ordering[DateTime] as DTO
+open util/ordering[Date] as DO
 open util/ordering[Time] as TO
 
-sig DateTime{}
+sig Date{}
 
 sig Time{}
 
 sig Schedule{
+	date: one Date,
 	wakeUpTime: one Time,
-	appointmentList: some Appointment,
 	scheduledAppointmentList: some ScheduledAppointment,
 	startingLocation: one Coordinates
 }
+fact AppointmentListCoherence {
+	all s : Schedule | scheduledAppointmentList.schedule	// all scheduled appointments must have itself as schedule
+}
+
+sig Appointment{
+	date: one Date,
+	startingTime: lone Time,
+	timeSlot: lone TimeSlot,
+	location: one Coordinates,
+	numberInvolvedPeople: one Int,
+	constraints: some Constraint
+}
+{	numberInvolvedPeople >= 0
+	startingTime = none => timeSlot != none
+	timeSlot = none => startingTime != none
+	startingTime in TO/nexts[timeSlot.start] and startingTime in TO/prevs[timeSlot.end]	// startingTime and timeSlot are exclusive
+}
+
+sig ScheduledAppointment{
+	schedule: one Schedule,
+	date: one Date,
+	appointment: one Appointment,
+	startingTravelTime: one Time,
+	ETA: one Time,
+	endingTime: one Time,
+	location: one Coordinates
+}
+{	startingTravelTime in TO/prevs[endingTime]
+	ETA in TO/nexts[startingTravelTime] and ETA in TO/prevs[endingTime] // ETA must be between starting and ending times
+	date = schedule.date																				// ScheduleAppointmentsDateCoherence
+	startingTravelTime in TO/prevs[schedule.wakeUpTime]							// all appointments begin after the schedule wakeup time
+}
+
+
+// if two scheduled appointments are relative to the same appointment then they must belong to different schedules
+fact AppointmentOnMultipleSchedules {
+	all s1,s2 : ScheduledAppointment | s1 != s2 and s1.appointment = s2.appointment implies s1.schedule != s2.schedule
+}
+
+pred NoOverlappingScheduledAppointment {
+	all s1,s2 : ScheduledAppointment |  s1.schedule = s2.schedule and s1 != s2 implies s1.endingTime in TO/prevs[s2.startingTravelTime] - s2.startingTravelTime
+	or s2.endingTime in TO/prevs[s1.startingTravelTime] - s1.startingTravelTime
+} 
+
+// Starting time of a scheduled appointment must conincide with the starting time of the non-scheduled appointment if timeSlot is not specified
+fact StartingTimeCoherence{
+	all s : ScheduledAppointment | s.appointment.timeSlot = none implies s.startingTravelTime = s.appointment.startingTime
+}
+
+
 
 sig Path{
 	lenght: one Int,
 	source: one ScheduledAppointment,
 	dest: one ScheduledAppointment
 }
-{lenght >= 0}
+{
+	lenght >= 0
+	source != dest
+}
 
 abstract sig Constraint{
 	travelMean: one TravelMean,
-	maxTravelDistance: one Int
+	maxTravelDistance: one Int // with travel mean above
 }
-{maxTravelDistance >= 0}
+{maxTravelDistance >= 0} //if 0 deactivates travel mean
 
 sig ConstraintOnAppointment extends Constraint{
 }
 
 sig ConstraintOnSchedule extends Constraint{
-	weather: some Weather,
-	timeSlot: one TimeSlot
+	weather: some Weather, // in which travel mean can be used
+	timeSlot: one TimeSlot // in which travel mean can be used
 }
 
-sig Appointment{
-	schedule: one Schedule,
-	startingTime: one DateTime,
-	timeSlot: lone TimeSlot,
-	location: one Coordinates,
-	numberInvolvedPeople: one Int,
-	constraints: some Constraint
-}
-{numberInvolvedPeople >= 0}
-
-sig ScheduledAppointment{
-	schedule: one Schedule,
-	appointment: one Appointment,
-	startingTravelTime: one DateTime,
-	ETA: one DateTime,
-	endingTime: one DateTime, 
-	location: one Coordinates
-}
-{startingTravelTime in DTO/prevs[endingTime]
-ETA in DTO/nexts[startingTravelTime] and ETA in DTO/prevs[endingTime] }
-
-// if two scheduled appointments have are relative to the same appointment then they must belong to different schedules
-fact AppointmentOnMultipleSchedules {
-	all s1,s2 : ScheduledAppointment | s1 != s2 and s1.appointment = s2.appointment implies s1.schedule != s2.schedule
-}
-
-pred NoOverlappingScheduledAppointment {
-	all s1,s2 : ScheduledAppointment | s1 != s2 implies  s1.endingTime != s2.startingTravelTime and (s1.endingTime in DTO/prevs[s2.startingTravelTime] or s2.endingTime in DTO/prevs[s1.startingTravelTime])
-} 
 
 sig TimeSlot{
 	start: one Time,
@@ -110,7 +134,6 @@ sig Walking extends PrivateTravelMean{}
 
 
 
-
 sig Gps{}
 
 sig User{}
@@ -121,6 +144,6 @@ sig SchedulePlan{}
 pred show(){}
 
 
-run { show and NoOverlappingScheduledAppointment }  for 3 but 40 DateTime, 6 int, exactly 3 ScheduledAppointment 
+run { show and NoOverlappingScheduledAppointment } for 3 but 5 Date, 15 Time, 1 Constraint, 6 int, exactly 3 ScheduledAppointment, 3 Appointment
 
 
