@@ -13,6 +13,7 @@ The user can interact with the application through several graphical interfaces:
 \caption{Registration/login interface}
 \end{center}
 \end{figure}
+
 \item \textbf{User account interface}: user can specify his profile characteristics, such as his passes, car and/or bike ownership;
 \begin{figure}[H]
 \begin{center}
@@ -20,6 +21,7 @@ The user can interact with the application through several graphical interfaces:
 \caption{User account interface}
 \end{center}
 \end{figure}
+
 \item \textbf{Home interface}: shows currently running schedule and displays some navigation links to other interfaces;
 \begin{figure}[H]
 \begin{center}
@@ -27,6 +29,7 @@ The user can interact with the application through several graphical interfaces:
 \caption{Home interface}
 \end{center}
 \end{figure}
+
 \item \textbf{Appointment CRUD interface}: allows creating, showing and editing appointment parameters and related constraints;
 \begin{figure}[H]
 \begin{center}
@@ -34,6 +37,7 @@ The user can interact with the application through several graphical interfaces:
 \caption{Appointment CRUD interface}
 \end{center}
 \end{figure}
+
 \item \textbf{Appointments list interface}: provides a list of all inserted appointments, with the possibility to filter between non-scheduled/scheduled ones (includes the possibility to delete an item of the list);
 \begin{figure}[H]
 \begin{center}
@@ -41,6 +45,7 @@ The user can interact with the application through several graphical interfaces:
 \caption{Appointments list interface}
 \end{center}
 \end{figure}
+
 \item \textbf{Schedules list interface}: display a list of the created schedules
 \begin{figure}[H]
 \begin{center}
@@ -48,6 +53,7 @@ The user can interact with the application through several graphical interfaces:
 \caption{Schedules list interface}
 \end{center}
 \end{figure}
+
 \item \textbf{Schedule interface}: user can set parameters, contraints, optimization criteria and request a schedule creation for a given date;
 \begin{figure}[H]
 \begin{center}
@@ -55,8 +61,23 @@ The user can interact with the application through several graphical interfaces:
 \caption{Schedule interface}
 \end{center}
 \end{figure}
+
 \item \textbf{Schedules result interface}: shows the computation of the requested schedules for a given date and asks the user to select one, then waits for confirmation for that;
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=250pt, keepaspectratio]{"images/interfaces/"schedule results".jpg}
+\caption{Schedules result interface}
+\end{center}
+\end{figure}
+
 \item \textbf{Schedule progress interface}: permits to keep track of the completeness percentage, indicating the directions to be followed by the user in a map, in order to arrive to the next appointments;
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=250pt, keepaspectratio]{"images/interfaces/schedule progress".jpg}
+\caption{Schedule progress interface}
+\end{center}
+\end{figure}
+
 \item \textbf{Tickets/rides reservation interface}: allows user to buy tickets for public travel means and/or reserve a ride for the shared travel means;
 %\item \textbf{Appointments history interface}: shows a list of archived appointments;
 \end{enumerate}
@@ -523,7 +544,36 @@ In this sequence diagram the loop of the actions described in the rectangle cont
 \end{center}
 \end{figure}
 
+\subsubsection{Notify Shared Means}\label{usecase:Notify Shared Means}
+\begin{longtable}{|p{14cm}|} \hline
+\textbf{Name:} Notify Shared Means \\ \hline
+\textbf{Actors:} Registered User, External Api \\ \hline
+\textbf{Goals:} (\textbf{goal di notificare all'utente la possibilità di prendere i mezzi condivisi})\\ \hline
 
+\textbf{Event Flow:}
+\begin{enumerate}
+\item The system requests information to an external API about Shared Travel Means;
+\item The external API service respond to the system with the information requested;
+\item The system with the gathered information computes if there is a better path for the user according to the chosen constraints and optimization criteria;
+\item if the path is found by the system is sent a notification to the user;
+\end{enumerate}
+\\ \hline
+
+\textbf{Output Condition:} a better path is found; \\ \hline
+
+\textbf{Exceptions:}
+%\begin{enumerate}
+%\end{enumerate} \\ \hline
+
+\textbf{Mapping on Requirements:}
+\begin{itemize}
+\item Actions 1 and 2 are granted by R28 \textbf{FARE RIFERIMENTO}
+\item Actions 4 is granted by R27 \textbf{FARE RIFERIMENTO}
+\end{itemize}  \\ \hline
+
+\end{longtable}
+
+\textbf{AGGIUNGERE IMMAGINE GIA FATTA}
 
 \subsection{Definition of use case diagrams}
 In these diagrams we assume that the user has ran the application. In particular, if the actor is a \textit{Registered User} or an \textit{Enternal User} then we assume that the user is facing the login page (\textbf{riferimento alla login page}. On the other hand, if the actor is a \textit{Logged User} then is assumed that it is on the home page (\textbf{riferimento alla home page}.
