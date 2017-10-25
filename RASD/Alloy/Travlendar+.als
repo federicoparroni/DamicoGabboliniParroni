@@ -8,22 +8,10 @@ open util/ordering[ScheduledAppointment] as SAO
 
 ---------------------------------
 sig Date{}
-
-fact NoDateUnlinked {
-	all d : Date | d in Appointment.date or d in Schedule.date
-}
-----------------------------------
-
+---------------------------------
 sig SchedulePlan{}
-
 ---------------------------------
 sig Time{}
-
-fact NoTimeUnlinked {
-	all t : Time | t in (TimeSlot.start + TimeSlot.end + Schedule.wakeUpTime 
-+ Appointment.startingTime + ScheduledAppointment.startingTravelTime + 
-ScheduledAppointment.ETA + ScheduledAppointment.endingTime)
-}
 
 --------------------------------
 
@@ -59,6 +47,11 @@ sig Schedule{
 	constraints : set ConstraintOnSchedule
 }
 
+/*
+fact AllAppointmentDateEqualToSchedule {
+	all a : Appointment, s : Schedule, sa : ScheduledAppointment | a = sa.appointment and sa.schedule = s => a.date = s.date
+}
+*/
 
 // there aren't schedules that doesn't have at least one ScheduledAppointment
 fact NoScheduleUnlinked{
@@ -111,7 +104,7 @@ sig ScheduledAppointment{
 }
 {	startingTravelTime in TO/prevs[endingTime]
 	ETA in TO/nexts[startingTravelTime] and ETA in TO/prevs[endingTime] // ETA must be between starting and ending times
-	//date = schedule.date																				// same date as in its schedule
+	date = schedule.date																				// same date as in its schedule
 	date = appointment.date																			// same date as original appointment
 //	location = appointment.location
 	startingTravelTime in TO/nexts[schedule.wakeUpTime]							// all appointments begin after the schedule wakeup time
@@ -120,8 +113,6 @@ sig ScheduledAppointment{
 fact ScheduledAppointmentsOrderingConsistence {
 	all a1,a2 : ScheduledAppointment | a1.schedule = a2.schedule and a1 in SAO/prevs[a2] => a1.startingTravelTime in TO/prevs[a2.startingTravelTime]
 }
-
-
 
 // if two scheduled appointments are relative to the same appointment then they must belong to different schedules
 fact AppointmentOnMultipleSchedules {
@@ -132,7 +123,6 @@ fact AppointmentOnMultipleSchedules {
 fact StartingTimeCoherence{
 	all s : ScheduledAppointment | s.appointment.timeSlot = none implies s.startingTravelTime = s.appointment.startingTime
 }
-
 
 pred NoOverlappingScheduledAppointment {
 	all s1,s2 : ScheduledAppointment |  s1.schedule = s2.schedule and s1 != s2 implies s1.endingTime in TO/prevs[s2.startingTravelTime] - s2.startingTravelTime
@@ -263,6 +253,11 @@ assert apptScheduleSameDate {
 	all a : ScheduledAppointment, s : Schedule | a.schedule = s => a.date = s.date
 }
 //check apptScheduleSameDate for 10
+
+assert appointmentDateNotEqualToItsScheduledAppt {
+	all a : ScheduledAppointment | a.date = a.appointment.date
+}
+check appointmentDateNotEqualToItsScheduledAppt for 5
 
 pred b {	some s1,s2:ScheduledAppointment | s1 != s2 and s1.schedule = s2.schedule}
 
