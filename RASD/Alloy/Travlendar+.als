@@ -47,12 +47,6 @@ sig Schedule{
 	constraints : set ConstraintOnSchedule
 }
 
-/*
-fact AllAppointmentDateEqualToSchedule {
-	all a : Appointment, s : Schedule, sa : ScheduledAppointment | a = sa.appointment and sa.schedule = s => a.date = s.date
-}
-*/
-
 // there aren't schedules that doesn't have at least one ScheduledAppointment
 fact NoScheduleUnlinked{
 	all s:Schedule | s in ScheduledAppointment.schedule  
@@ -76,10 +70,9 @@ sig Appointment{
 	date: one Date,
 	startingTime: lone Time,
 	timeSlot: lone TimeSlot,
-	numberInvolvedPeople: one Int, // AGGIUNGERE I VARI VINCOLI RIGUARDANTI CIò
 	constraints: set ConstraintOnAppointment
 }
-{	numberInvolvedPeople >= 0
+{	
 	startingTime = none => timeSlot != none
 	timeSlot = none => startingTime != none
 	startingTime in TO/nexts[timeSlot.start] and startingTime in TO/prevs[timeSlot.end]	// startingTime and timeSlot are exclusive
@@ -99,14 +92,15 @@ sig ScheduledAppointment{
 	appointment: one Appointment,
 	startingTravelTime: one Time,
 	ETA: one Time,
-	endingTime: one Time
-//	location: one Coordinates
+	endingTime: one Time,
+	numberOfInvolvedPeople: one Int
 }
 {	startingTravelTime in TO/prevs[endingTime]
 	ETA in TO/nexts[startingTravelTime] and ETA in TO/prevs[endingTime] // ETA must be between starting and ending times
 	date = schedule.date																				// same date as in its schedule
 	date = appointment.date																			// same date as original appointment
 //	location = appointment.location
+	numberOfInvolvedPeople >= 0
 	startingTravelTime in TO/nexts[schedule.wakeUpTime]							// all appointments begin after the schedule wakeup time
 }
 
@@ -124,10 +118,20 @@ fact StartingTimeCoherence{
 	all s : ScheduledAppointment | s.appointment.timeSlot = none implies s.startingTravelTime = s.appointment.startingTime
 }
 
-pred NoOverlappingScheduledAppointment {
+fact numberOfPeopleInvolvedCoherentWithSeats{
+	no p : Path | p.travelMean.seats < p.source.numberOfInvolvedPeople
+}
+
+/*pred NoOverlappingScheduledAppointment {
 	all s1,s2 : ScheduledAppointment |  s1.schedule = s2.schedule and s1 != s2 implies s1.endingTime in TO/prevs[s2.startingTravelTime] - s2.startingTravelTime
 	or s2.endingTime in TO/prevs[s1.startingTravelTime] - s1.startingTravelTime
-} 
+}*/ 
+
+pred NoOverlappingScheduledAppointmentInSchedule (s : Schedule) {
+	all s1,s2 : ScheduledAppointment |  s1.schedule = s and  s2.schedule = s and s1 != s2 implies s1.endingTime in TO/prevs[s2.startingTravelTime] - s2.startingTravelTime
+	or s2.endingTime in TO/prevs[s1.startingTravelTime] - s1.startingTravelTime
+}
+
 ----------------------------------------------------
 //OGNI TANTO LI FAVEDERE OGNI TANTO NO NON SO IL PERCHE
 sig Path{
@@ -145,6 +149,10 @@ sig Path{
 //no path linking to scheduled appointment belonging to different user (EDO PENSO VADA)
 fact SchedulePathBelongingConsistency{ 
 	all p:Path | p.source.appointment.user = p.dest.appointment.user
+}
+
+fact {
+	all s : ScheduledAppointment | s in (Path.source + Path.dest)
 }
 
 //no path belonging to a user with a travel mean that he/she doesn't have(EDO NON SO COME SCRIVERE FALSE))
@@ -180,8 +188,23 @@ sig ConstraintOnAppointment extends Constraint{
 {maxTravelDistance = 0}
 
 sig ConstraintOnSchedule extends Constraint{
-	weather: some Weather,	 // in which travel mean can be used
-	timeSlot: one TimeSlot		 // in which travel mean can be used
+	weather: set Weather,
+	timeSlot: lone TimeSlot,		 
+	strikeDate: lone Date  
+}
+// in which travel mean can't be used
+
+//PARTE DEL PRED CHE SERVE PER VEDERE SE ESISTE UN VALID SCHEDULE 
+//CHE SODDISFA DELLE CONSTRAINTS. IL PROBLEMA E' DIVISO IN PIU' PARTI
+
+/*pred existsScheduleWhichSatisfiesConstraint (c : ConstraintOnSchedule){
+	some s : schedule |  all p:Path | (p.source + p.dest).schedule = s | 
+	p.travelMean != c.travelMean or
+	(p.travelMean = c.travelMean and 
+}*/
+
+fun pathOfSchedule [s : Schedule] : set Path {
+	(Path.source + Path.dest).s
 }
 
 ----------------------------------------------------
@@ -191,13 +214,6 @@ sig ConstraintOnSchedule extends Constraint{
 	//latitude: one Int
 //}
 //{longitude >= 0 latitude >= 0}
-
-
-// METTERE CHE NON CI DEVONO ESSERE CONSTRAINTS SCOLLEGATE
-// FACT 1 no Time unlinked
-// FACT 2 no Coordinates unlinked
-// FACT 3 no date unlinked
-
 
 -------------------------------------------------
 abstract sig Weather{} // METTERE UNIQUE
@@ -214,24 +230,45 @@ fact NoWeatherUnlinked {
 
 //sig OptimizingCriteria{}
 ------------------------------------------------
-abstract sig TravelMean{}
-abstract sig PublicTravelMean extends TravelMean{}
-abstract sig SharedTravelMean extends TravelMean{
+abstract sig TravelMean{ 
+	seats: one Int
 }
+//100 seats encode an unbounded number of seats
+
+abstract sig PublicTravelMean extends TravelMean{}
+abstract sig SharedTravelMean extends TravelMean{}
 abstract sig PrivateTravelMean extends TravelMean{}
 
-sig Train extends PublicTravelMean{}
-sig Bus extends PublicTravelMean{}
-sig Tram extends PublicTravelMean{}
-sig Taxi extends PublicTravelMean{}
-sig Underground extends PublicTravelMean{}
-
-sig CarSharing extends SharedTravelMean{}
-sig BikeSharing extends SharedTravelMean{}
-
-sig Bike extends PrivateTravelMean{}
-sig Car extends PrivateTravelMean{}
-sig Walking extends PrivateTravelMean{}
+sig Train extends PublicTravelMean{}{
+	seats=100
+}
+sig Bus extends PublicTravelMean{}{
+	seats=100
+}
+sig Tram extends PublicTravelMean{}{
+	seats=100
+}
+sig Taxi extends PublicTravelMean{}{
+	seats=3
+}
+sig Underground extends PublicTravelMean{}{
+	seats=100
+}
+sig CarSharing extends SharedTravelMean{}{
+	seats=5
+}
+sig BikeSharing extends SharedTravelMean{}{
+	seats=1
+}
+sig Bike extends PrivateTravelMean{}{
+	seats=1
+}
+sig Car extends PrivateTravelMean{}{
+	seats=5
+}
+sig Walking extends PrivateTravelMean{}{
+	seats=100
+}
 -------------------------------------------------
 
 assert EveryAppoinmentScheduleInItsDay {
@@ -258,6 +295,12 @@ assert appointmentDateNotEqualToItsScheduledAppt {
 	all a : ScheduledAppointment | a.date = a.appointment.date
 }
 check appointmentDateNotEqualToItsScheduledAppt for 5
+
+//source and dest of each path must refer to the same schedule
+assert sourceDestOfPathCoherence{
+	all p:Path | p.dest.schedule = p.source.schedule
+}
+check sourceDestOfPathCoherence for 10
 
 pred b {	some s1,s2:ScheduledAppointment | s1 != s2 and s1.schedule = s2.schedule}
 
