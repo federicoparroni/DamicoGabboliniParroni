@@ -98,7 +98,8 @@ sig ScheduledAppointment{
 	startingTravelTime: one Time,
 	ETA: one Time,
 	endingTime: one Time,
-	numberOfInvolvedPeople: one Int
+	numberOfInvolvedPeople: one Int,
+	weather: one Weather
 }
 {	startingTravelTime in TO/prevs[endingTime]
 	ETA in TO/nexts[startingTravelTime] and ETA in TO/prevs[endingTime] // ETA must be between starting and ending times
@@ -194,25 +195,53 @@ sig ConstraintOnAppointment extends Constraint{
 
 sig ConstraintOnSchedule extends Constraint{
 	weather: set Weather,
-	timeSlot: lone TimeSlot,		 
-	strikeDate: lone Date  
+	timeSlot: lone TimeSlot,	 
+	strikeDate: lone Bool
+}{
+	weather != none => maxTravelDistance = 0
+	weather != none => (timeSlot .start = timeSlot.end) //scrivere elemento nullo
 }
 // in which travel mean can't be used
 
 //PARTE DEL PRED CHE SERVE PER VEDERE SE ESISTE UN VALID SCHEDULE 
 //CHE SODDISFA DELLE CONSTRAINTS. IL PROBLEMA E' DIVISO IN PIU' PARTI
 
-/*pred existsScheduleWhichSatisfiesConstraint (c : ConstraintOnSchedule){
-	some s : schedule |  all p:Path | (p.source + p.dest).schedule = s | 
-	p.travelMean != c.travelMean or
-	(p.travelMean = c.travelMean and 
+/*fun distanceTravelledWithMeanInSchedule [s : Schedule, t: TravelMean] : Int {
+	//all p:Path | doesPathBelongToSchedule[s, p]
+	//let m = p:Path|doesPathBelongToSchedule[s, p] 
+	x: some e | 
+	sum p:(| doesPathBelongToSchedule[s, p]) | p.length 
 }*/
 
-/*
-fun pathOfSchedule [s : Schedule] : set Path {
-	(Path.source + Path.dest).s
+//da aggiungere la distanza
+pred doesConstraintSatisfySchedule (c : ConstraintOnSchedule){
+	some s : Schedule |  all p:Path |
+	doesPathBelongToSchedule[s, p] and
+	p.travelMean  != c.travelMean or (p.travelMean = c.travelMean 
+						   and s.appointments.weather not in c.weather 
+						   and ((c.timeSlot.start = c.timeSlot.end) 
+							or (s.appointments.ETA in TO/prevs[c.timeSlot.start]
+							or s.appointments.startingTravelTime in TO/nexts[c.timeSlot.end] ))
+						   and (c.strikeDate in True implies p.travelMean not in PublicTravelMean)
+						    
+						   )
 }
-*/
+
+pred validSchedule {
+	some s: Schedule | all c:ConstraintOnSchedule | c in s.constraints and doesConstraintSatisfySchedule[c]
+}
+
+/*
+//retrieves all the paths of each schedule
+fun pathOfSchedule [s : Schedule] : set Path {
+	set Path | (Path.dest + Path.source).appointments  in s
+}*/
+
+//used to find all the paths of a schedule
+pred doesPathBelongToSchedule [s:Schedule, p:Path] {
+	some sa:ScheduledAppointment | sa in (Path.source + Path.dest) and sa.schedule=s
+}
+
 ----------------------------------------------------
 
 //sig Coordinates{
@@ -222,6 +251,13 @@ fun pathOfSchedule [s : Schedule] : set Path {
 //{longitude >= 0 latitude >= 0}
 
 -------------------------------------------------
+/*
+*********************************
+METTERE SU RELAZIONE 
+********************************
+*/
+
+
 abstract sig Weather{} // METTERE UNIQUE
 
 sig Sunny extends Weather{}
@@ -318,7 +354,7 @@ pred b { some s1,s2:ScheduledAppointment | s1 != s2 and s1.schedule = s2.schedul
 
 pred show(){}
 
-run { show and b } for
+run { show and validSchedule} for
 5
 but 15 Time, 4 Int
 
