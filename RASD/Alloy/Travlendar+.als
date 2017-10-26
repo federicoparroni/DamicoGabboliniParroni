@@ -322,28 +322,29 @@ sig Walking extends PrivateTravelMean{}{
 assert ScheduledAppointmentAndScheduleBiunivocity {
 	all a : ScheduledAppointment | all s : Schedule | a.schedule = s => a in s.appointments
 }
-//check ScheduledAppointmentAndScheduleBiunivocity for 8
+check ScheduledAppointmentAndScheduleBiunivocity for 8
 // funziona perchè fact con doppia implicazione
 
+// if a scheduled appointment is in a schedule, they must have the same date
 assert EveryAppoinmentScheduleInItsDay {
-	all s : Schedule, a : ScheduledAppointment | s.date = a.date => a.schedule = s
+	all s : Schedule, a : ScheduledAppointment | a.schedule = s => s.date = a.date
 }
-//check EveryAppoinmentScheduleInItsDay for 6
+check EveryAppoinmentScheduleInItsDay for 6
 -----------------------------------------------------
 assert ScheduleOwnedByOnlyOneUser{
 	all s1,s2:ScheduledAppointment | s1.schedule = s2.schedule implies s1.appointment.user = s2.appointment.user
 }
-//check ScheduleOwnedByOnlyOneUser for 10 //(è stupida perche c'è un fact che dice quasi la stessa cosa)
+check ScheduleOwnedByOnlyOneUser for 10 //(è stupida perche c'è un fact che dice quasi la stessa cosa)
 ------------------------------------------------------
 assert PathCoherence{
 	all p:Path | p.dest = SAO/next[p.source]
 }
-//check PathCoherence for 10
+check PathCoherence for 10
 ---------------------------------------
 assert apptScheduleSameDate {
 	all a : ScheduledAppointment, s : Schedule | a.schedule = s => a.date = s.date
 }
-//check apptScheduleSameDate for 10
+check apptScheduleSameDate for 10
 
 assert appointmentDateNotEqualToItsScheduledAppt {
 	all a : ScheduledAppointment | a.date = a.appointment.date
@@ -385,8 +386,10 @@ modifyAppointmentIsCorrect : check {
 pred show(){}
 
 run { show and validSchedule} for
-5
-but 15 Time, 4 Int
+6
+but
+//15 Time,
+4 Int
 
 //3 but 15 Time, 10 Constraint, 6 int, 
 //exactly 3 ScheduledAppointment, 3 Appointment, 3 OptimizingCriteria, exactly 15 Path
