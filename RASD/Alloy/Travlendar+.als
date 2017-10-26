@@ -42,9 +42,14 @@ fact NoUserUnlinked {
 ---------------------------------
 sig Schedule{
 	date: one Date,
+	appointments: some ScheduledAppointment,
 	wakeUpTime: one Time,
 	optimizingCriteria: one OptimizingCriteria,
 	constraints : set ConstraintOnSchedule
+}
+// all appointment of a schedule must have it as schedule
+fact {
+	all a : ScheduledAppointment, s : Schedule | a in s.appointments <=> a.schedule = s
 }
 
 // there aren't schedules that doesn't have at least one ScheduledAppointment
@@ -203,10 +208,11 @@ sig ConstraintOnSchedule extends Constraint{
 	(p.travelMean = c.travelMean and 
 }*/
 
+/*
 fun pathOfSchedule [s : Schedule] : set Path {
 	(Path.source + Path.dest).s
 }
-
+*/
 ----------------------------------------------------
 
 //sig Coordinates{
@@ -271,6 +277,12 @@ sig Walking extends PrivateTravelMean{}{
 }
 -------------------------------------------------
 
+assert ScheduledAppointmentAndScheduleBiunivocity {
+	all a : ScheduledAppointment | all s : Schedule | a.schedule = s => a in s.appointments
+}
+check ScheduledAppointmentAndScheduleBiunivocity for 8
+// funziona perchè fact con doppia implicazione
+
 assert EveryAppoinmentScheduleInItsDay {
 	all s : Schedule, a : ScheduledAppointment | s.date = a.date => a.schedule = s
 }
@@ -302,13 +314,13 @@ assert sourceDestOfPathCoherence{
 }
 check sourceDestOfPathCoherence for 10
 
-pred b {	some s1,s2:ScheduledAppointment | s1 != s2 and s1.schedule = s2.schedule}
+pred b { some s1,s2:ScheduledAppointment | s1 != s2 and s1.schedule = s2.schedule}
 
 pred show(){}
 
 run { show and b } for
-3
-but 15 Time, 3 Int
+5
+but 15 Time, 4 Int
 
 //3 but 15 Time, 10 Constraint, 6 int, 
 //exactly 3 ScheduledAppointment, 3 Appointment, 3 OptimizingCriteria, exactly 15 Path
