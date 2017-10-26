@@ -223,12 +223,22 @@ pred doesConstraintSatisfySchedule (c : ConstraintOnSchedule){
 							or (s.appointments.ETA in TO/prevs[c.timeSlot.start]
 							or s.appointments.startingTravelTime in TO/nexts[c.timeSlot.end] ))
 						   and (c.strikeDate in True implies p.travelMean not in PublicTravelMean)
-						    
 						   )
 }
 
+pred doesConstraintSatisfyAppointment(c : ConstraintOnAppointment){
+	some s: Schedule | all sa:ScheduledAppointment, a: Appointment, p: Path | sa in s.appointments and sa.appointment = a and p.dest=sa => 
+	p.travelMean != c.travelMean
+}
+
 pred validSchedule {
-	some s: Schedule | all c:ConstraintOnSchedule | c in s.constraints and doesConstraintSatisfySchedule[c]
+	some s: Schedule | all cs:ConstraintOnSchedule, ca:ConstraintOnAppointment  | 
+	cs in s.constraints and ca in s.appointments.appointment.constraints and 
+	doesConstraintSatisfySchedule[cs] and doesConstraintSatisfyAppointment[ca] and NoOverlappingScheduledAppointmentInSchedule[s]
+}
+
+pred doesPathBelongToSchedule [s:Schedule, p:Path] {
+	some sa:ScheduledAppointment | sa in (Path.source + Path.dest) and sa.schedule=s
 }
 
 /*
@@ -238,9 +248,6 @@ fun pathOfSchedule [s : Schedule] : set Path {
 }*/
 
 //used to find all the paths of a schedule
-pred doesPathBelongToSchedule [s:Schedule, p:Path] {
-	some sa:ScheduledAppointment | sa in (Path.source + Path.dest) and sa.schedule=s
-}
 
 ----------------------------------------------------
 
