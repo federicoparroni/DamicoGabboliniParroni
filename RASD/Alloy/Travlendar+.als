@@ -213,12 +213,9 @@ sig ConstraintOnSchedule extends Constraint{
 //PARTE DEL PRED CHE SERVE PER VEDERE SE ESISTE UN VALID SCHEDULE 
 //CHE SODDISFA DELLE CONSTRAINTS. IL PROBLEMA E' DIVISO IN PIU' PARTI
 
-/*fun distanceTravelledWithMeanInSchedule [s : Schedule, t: TravelMean] : Int {
-	//all p:Path | doesPathBelongToSchedule[s, p]
-	//let m = p:Path|doesPathBelongToSchedule[s, p] 
-	x: some e | 
-	sum p:(| doesPathBelongToSchedule[s, p]) | p.length 
-}*/
+fun distanceTravelledWithMeanInSchedule [s : Schedule, t: TravelMean] : Int {
+	sum e :  (pathOfSchedule[s])&(travelMean.t) | e.lenght
+}
 
 //da aggiungere la distanza
 pred doesConstraintSatisfySchedule (c : ConstraintOnSchedule){
@@ -230,6 +227,7 @@ pred doesConstraintSatisfySchedule (c : ConstraintOnSchedule){
 							or (s.appointments.ETA in TO/prevs[c.timeSlot.start]
 							or s.appointments.startingTravelTime in TO/nexts[c.timeSlot.end] ))
 						   and (c.strikeDate in True implies p.travelMean not in PublicTravelMean)
+						   and (distanceTravelledWithMeanInSchedule[s,c.travelMean] < c.maxTravelDistance )
 						   )
 }
 
@@ -248,11 +246,12 @@ pred doesPathBelongToSchedule [s:Schedule, p:Path] {
 	some sa:ScheduledAppointment | sa in (Path.source + Path.dest) and sa.schedule=s
 }
 
-/*
+
 //retrieves all the paths of each schedule
 fun pathOfSchedule [s : Schedule] : set Path {
-	set Path | (Path.dest + Path.source).appointments  in s
-}*/
+	//set Path | (Path.dest + Path.source).appointments  in s
+	(source+dest).(s.appointments)
+}
 
 //used to find all the paths of a schedule
 
