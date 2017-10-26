@@ -125,6 +125,7 @@ fact StartingTimeCoherence{
 	all s : ScheduledAppointment | s.appointment.timeSlot = none implies s.startingTravelTime = s.appointment.startingTime
 }
 
+// The number of involved people in each travel is coherent with the number of seats of each travel mean used for it
 fact numberOfPeopleInvolvedCoherentWithSeats{
 	no p : Path | p.travelMean.seats < p.source.numberOfInvolvedPeople
 }
@@ -263,14 +264,6 @@ fun pathOfSchedule [s : Schedule] : set Path {
 //}
 //{longitude >= 0 latitude >= 0}
 
--------------------------------------------------
-/*
-*********************************
-METTERE SU RELAZIONE 
-********************************
-*/
-
-
 abstract sig Weather{} // METTERE UNIQUE
 
 sig Sunny extends Weather{}
@@ -279,9 +272,9 @@ sig Rainy extends Weather{}
 sig Foggy extends Weather{}
 sig Cloudy extends Weather{}
 
-fact NoWeatherUnlinked {
+/*fact NoWeatherUnlinked {
 	all w : Weather | w in ConstraintOnSchedule.weather 
-}
+}*/
 
 //sig OptimizingCriteria{}
 ------------------------------------------------
@@ -329,7 +322,7 @@ sig Walking extends PrivateTravelMean{}{
 assert ScheduledAppointmentAndScheduleBiunivocity {
 	all a : ScheduledAppointment | all s : Schedule | a.schedule = s => a in s.appointments
 }
-check ScheduledAppointmentAndScheduleBiunivocity for 8
+//check ScheduledAppointmentAndScheduleBiunivocity for 8
 // funziona perchè fact con doppia implicazione
 
 assert EveryAppoinmentScheduleInItsDay {
@@ -364,6 +357,8 @@ assert sourceDestOfPathCoherence{
 check sourceDestOfPathCoherence for 10
 
 pred b { some s1,s2:ScheduledAppointment | s1 != s2 and s1.schedule = s2.schedule}
+
+
 
 pred show(){}
 
