@@ -45,9 +45,9 @@ sig Schedule{
 	appointments: some ScheduledAppointment,
 	wakeUpTime: one Time,
 	optimizingCriteria: one OptimizingCriteria,
-	constraints : set ConstraintOnSchedule
+	constraints : set ConstraintOnSchedule,
+	initialNumberOfPeopleInvolved : one Int
 }
-// all appointment of a schedule must have it as schedule
 fact {
 	all a : ScheduledAppointment, s : Schedule | a in s.appointments <=> a.schedule = s
 }
@@ -75,7 +75,8 @@ sig Appointment{
 	date: one Date,
 	startingTime: lone Time,
 	timeSlot: lone TimeSlot,
-	constraints: set ConstraintOnAppointment
+	constraints: set ConstraintOnAppointment,
+	variationNumberInvolvedPeople: one Int
 }
 {	
 	startingTime = none => timeSlot != none
@@ -126,6 +127,11 @@ fact StartingTimeCoherence{
 
 fact numberOfPeopleInvolvedCoherentWithSeats{
 	no p : Path | p.travelMean.seats < p.source.numberOfInvolvedPeople
+}
+
+fact coherenceOnNumberOfInvolvedPeople{
+	all sa:ScheduledAppointment, a:Appointment, s:Schedule | sa in s.appointments and a in sa.appointment =>
+	sa.numberOfInvolvedPeople = add[s.initialNumberOfPeopleInvolved, sum e : SAO/prevs[sa] | e.appointment.variationNumberInvolvedPeople]
 }
 
 /*pred NoOverlappingScheduledAppointment {
