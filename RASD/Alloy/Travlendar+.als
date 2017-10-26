@@ -87,7 +87,7 @@ sig Appointment{
 
 // all appointments must be schedule into some scheduledAppointment
 fact AppointmentAssociationCoherence {
-		all a : Appointment | a in ScheduledAppointment.appointment
+	all a : Appointment | a in ScheduledAppointment.appointment
 } // controllare operatore ESISTE
 
 ----------------------------------------
@@ -358,7 +358,29 @@ check sourceDestOfPathCoherence for 10
 
 pred b { some s1,s2:ScheduledAppointment | s1 != s2 and s1.schedule = s2.schedule}
 
+pred insertNewAppointment[u,u' : User, a' : Appointment]{
+	//precondition
+	all a : Appointment | a.user = u and a'.user != a.user
+	//postcondition
+	user.u' = user.u + a'
+}
 
+insertNewAppointmentIsCorrect : check {
+	all u,u' : User, a,a' : Appointment | a.user = u and a'.user != a.user and insertNewAppointment[u,u',a'] 
+	=> a' not in user.u and a' in user.u'
+} for 5
+
+pred modifyAppointment[a,a' : Appointment, u : User]{
+	//precondition
+	a in user.u and a' not in user.u
+	//postcondition
+	a' in user.u and a not in user.u
+}
+
+modifyAppointmentIsCorrect : check {
+	all u : User, a,a' : Appointment | a in user.u and a' not in user.u and modifyAppointment[a,a',u]
+	=> a' in user.u and a not in user.u
+} for 5
 
 pred show(){}
 
