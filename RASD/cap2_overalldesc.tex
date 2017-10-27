@@ -89,106 +89,103 @@ The system checks the availability of shared travel means 15 minutes before the 
 
 The following requirements are derived in order to fullfill the specified goals.\\
 
-Requirements for \goalref{goal:G1}:
-
-\begin{enumerate}
-
-\renewcommand\labelenumi{\textbf{R\theenumi}}
+%Requirements for \goalref{goal:G1}:
 
 Requirements for \goalref{goal:G2}:
-
+\begin{enumerate}
+\renewcommand\labelenumi{\textbf{R\theenumi}}
 \item The system S.B.A. to retrieve information from the user about his appointments; \label{req:R1}
-
 \item The system S.B.A to store an appointment in his memory;
-
+\end{enumerate}
 
 Requirements for \goalref{goal:G3}:
-
+\begin{enumerate}[resume]
+\renewcommand\labelenumi{\textbf{R\theenumi}}
 \item The system should let the user change the parameters and the constraints of an inserted appointment; 
-
 \item The system S.B.A to rewrite the appointment in his memory with his new parameters;
+\end{enumerate}
 
 Requirements for \goalref{goal:G4}:
-
-
+\begin{enumerate}[resume]
+\renewcommand\labelenumi{\textbf{R\theenumi}}
 \item Allow the user to set the constraints of the schedule (\textbf{riferimento ai constraint dello schedule}), or to accept the default values;
- 
 \item Allow the user to set the optimization criteria (\ref{subsubsect:optcriteria}) for the schedule;
-
 \item Allow the user to set the variables for the schedule;
-
 \item The system S.B.A. to gather information from external APIs about: 
-\begin{itemize}
-\item travel options with related travel option data; 
-\item weather forecast;
-\item strike days;
-\end{itemize}
-
+	\begin{itemize}
+		\item travel options with related travel option data; 
+		\item weather forecast;
+		\item strike days;
+	\end{itemize}
 \item The system S.B.A. to select the best travel option according to the optimization criteria taking into account:
-\begin{itemize}
-\item user constraint
-\item user parameters \textbf{(aggiungere riferimento a user model)}
-\item travel option data 
-\item weather forecast
-\item information about strike day
+	\begin{itemize}
+		\item user constraint
+		\item user parameters \textbf{(aggiungere riferimento a user model)}
+		\item travel option data 
+		\item weather forecast
+		\item information about strike day
 \end{itemize}
-
 \item The system S.B.A to store valid schedules requested by the user
-
 \item The user can specify his parameters (\textbf{ref a usermodel})
+\end{enumerate}
 
 Requirements for \goalref{goal:G5}:
-
-\item The system should let the user accept a schedule from the saved ones 
+\begin{enumerate}[resume]
+\renewcommand\labelenumi{\textbf{R\theenumi}}
+\item The system should let the user accept a schedule from the saved ones
+\end{enumerate}
 
 Requirements for \goalref{goal:G6}:
-
+\begin{enumerate}[resume]
+\renewcommand\labelenumi{\textbf{R\theenumi}}
 \item The system S.B.A to handle a registration phase in which the user will provide an e-mail and a password;
-
 \item The system S.B.A. to verify the e-mail given by the user by sending a confirmation e-mail to his address;
+\end{enumerate}
 
 Requirements for \goalref{goal:G9}:
+\begin{enumerate}[resume]
+\renewcommand\labelenumi{\textbf{R\theenumi}}
 \item The system S.B.A to recognize a registered user given an e-mail and a password \label{req:R9}
-
 \item The system S.B.A. to retrieve information from the user about his registration informations, i.e. his e-mail and password (\textbf{da verificare se serve o meno}); \label{req:R10}
+\end{enumerate}
 
-Requirements for \goalref{goal:G8}: 
-
+Requirements for \goalref{goal:G8}:
+\begin{enumerate}[resume]
+\renewcommand\labelenumi{\textbf{R\theenumi}}
 \item The system should offer to the user a way to link all his travel service accounts into the Travlendar+ account;
-
 \item The system S.B.A to book a travel mean through external API offered by third party application in which the user is signed
-\\
+\end{enumerate}
 
 Requirements for \goalref{goal:G9}:
-
-\item The system S.B.A to retrive the graphical representation of a path from an external API 
-
-\item The stystem S.B.A to retrive the travel option from an external API \textbf{(questa che già si è detta ma serve anche per questo goal come facciamo?)}
-
+\begin{enumerate}[resume]
+\renewcommand\labelenumi{\textbf{R\theenumi}}
+\item The system S.B.A to retrive the graphical representation of a path from an external API;
+\item The stystem S.B.A to retrive the travel option from an external API \textbf{(questa che gia si è detta ma serve anche per questo goal come facciamo?)}
 \item The S.B.A to retrieve the length of a path from an external API  
-
+\end{enumerate}
 
 Requirements for \goalref{goal:G10}:
-
+\begin{enumerate}[resume]
+\renewcommand\labelenumi{\textbf{R\theenumi}}
 \item The system S.B.A to retrive the position of the user from his GPS
-
 \item The system S.B.A. to retrive from an external API the directions to give to the user for reach the next appointment;
-
 %\item The system S.B.A. to retrive from an external API the Graphical representation of the path that will be travelled by the user
+\end{enumerate}
 
 Requirements for \goalref{goal:g99}:
-
+\begin{enumerate}[resume]
+\renewcommand\labelenumi{\textbf{R\theenumi}}
 \item The system should be able to recover an e-mail address from the user;
-
 \item The system should be able to send the password of a user to his e-mail given the e-mail.
-
-Requirements for \goalref{goal:G100}
-
-\item The system should be able to send notifications to the user;
-
-\item The system should be able to retrieve information about the availablity of shared travel means from external APIs without the user request 
-
 \end{enumerate}
+
+Requirements for \goalref{goal:G100}:
+\begin{enumerate}[resume]
+\renewcommand\labelenumi{\textbf{R\theenumi}}
+\item The system should be able to send notifications to the user;
+\item The system should be able to retrieve information about the availablity of shared travel means from external APIs without the user request 
+\end{enumerate}
+
 
 \subsection{User characteristics}
 Users can use our system when they want something that allows them to schedule their meetings according to their necessities and constraints. Necessary conditions for the users in order to use the system are: 
