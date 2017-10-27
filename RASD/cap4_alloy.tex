@@ -1,3 +1,6 @@
+\chapter{Alloy analysis}
+
+\begin{lstlisting}
 module Travlendar
 
 open util/integer as Integer
@@ -367,3 +370,5 @@ ModifyAppointmentIsCorrect : check {
 pred show(){}
 
 run { show and validSchedule} for 7 but 4 Int
+
+\end{lstlisting}

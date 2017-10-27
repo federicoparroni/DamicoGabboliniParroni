@@ -36,6 +36,24 @@
 \newcommand{\reqref}[1]{\textbf{R\ref{#1}}}
 \newcommand{\goalref}[1]{\textbf{G\ref{#1}}}
 
+\definecolor{darkgreen}{rgb}{0,0.6,0}
+\lstset{frame=tb,
+  language=Java,
+  morekeywords={module, open, integer, ordering, as, sig, one, some, set, not, in, all, no, none, and, or, fact, pred, fun, implies, sum, check, run, but},
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{darkgreen},
+  %stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
 
 \begin{document} %Inizio Documento
 
@@ -101,6 +119,7 @@
 \input{cap1_introduzione}
 \input{cap2_overalldesc}
 \input{cap3_specificreq}
+\input{cap4_alloy}
 
 
 %%APPENDICI==============================================
