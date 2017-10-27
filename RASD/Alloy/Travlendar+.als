@@ -2,7 +2,6 @@ module Travlendar
 
 open util/integer as Intege
 open util/boolean as boolean
-
 // impose ordering among relations
 open util/ordering[Date] as DO 
 open util/ordering[Time] as TO
@@ -10,7 +9,10 @@ open util/ordering[ScheduledAppointment] as SAO
 
 -----------------------------------------------
 sig Date{}
-
+/*{
+	this in (Appointment.date+Schedule.date+ScheduledAppointment.date)
+}
+*/
 -----------------------------------------------
 sig Time{}
 
@@ -21,32 +23,26 @@ sig TimeSlot{
 }
 
 -----------------------------------------------
-sig OptimizingCriteria{}
+sig OptimizingCriteria{}{
+	this in Schedule.optimizingCriteria
+}
 
 -----------------------------------------------
 sig User{
 	hasCar: one Bool,
 	hasBike: one Bool,
 	hasPass: one Bool
-}
-
-fact NoUserUnlinked {
-	all u : User | u in Appointment.user 
+}{
+	this in Appointment.user
 }
 
 -----------------------------------------------
 sig Schedule{
 	date: one Date,
-	appointments: some ScheduledAppointment,
 	wakeUpTime: one Time,
 	optimizingCriteria: one OptimizingCriteria,
 	constraints : set ConstraintOnSchedule,
 	initialNumberOfPeopleInvolved : one Int
-}
-
-//if a Schedule has a reference to a ScheduledAppointment then trasposed relation should hold
-fact ScheduleCoherenceWithScheduledAppointment{
-	appointments = ~(schedule)
 }
 
 // there aren't schedules that doesn't have at least one ScheduledAppointment
@@ -135,8 +131,9 @@ fact numberOfPeopleInvolvedCoherentWithSeats{
 // The selected travel mean for a path can provide enough seats for the people involved in the appointment
 fact coherenceOnNumberOfInvolvedPeople{
 	all sa:ScheduledAppointment, a:Appointment, s:Schedule | 
-	sa in s.appointments and a in sa.appointment =>
-	sa.numberOfInvolvedPeople = add[s.initialNumberOfPeopleInvolved, sum e : SAO/prevs[sa] | e.appointment.variationNumberInvolvedPeople]
+	sa in schedule.s and a in sa.appointment =>
+	sa.numberOfInvolvedPeople = add[s.initialNumberOfPeopleInvolved,
+		sum e : SAO/prevs[sa] | e.appointment.variationNumberInvolvedPeople]
 }
 
 ----------------------------------------------------
@@ -255,7 +252,7 @@ sig Walking extends PrivateTravelMean{}{
 -----------------------------------------------
 // if a schedule appointment is on a schedule, it must be in the list of scheduled appointments of that schedule
 ScheduledAppointmentAndScheduleBiunivocity : check{
-	all a : ScheduledAppointment | all s : Schedule | a.schedule = s => a in s.appointments
+	all a : ScheduledAppointment | all s : Schedule | a.schedule = s => a in schedule.s
 } for 8
 -----------------------------------------------------
 // if a scheduled appointment is in a schedule, they must have the same date
@@ -286,13 +283,13 @@ PathOrderConsistency : check {
 /* if two appointments belong to different user then they should belong to different 
     schedule since a schedule belongs to only one user */ 
 TwoAppointmentsWithSameUserNoInSameSchedule : check {
-	all a,a':Appointment | a.user != a'.user => appointments.appointment.a & appointments.appointment.a' = none
+	all a,a':Appointment | a.user != a'.user => appointment.a.schedule != appointment.a'.schedule
 } for 8
 -----------------------------------------------------
 
 // return all the paths of the specified schedule
 fun pathOfSchedule [s : Schedule] : set Path {
-	(source+dest).(s.appointments)
+	(source+dest).(schedule.s)
 }
 
 // return the total distance travelled in the specified schedule with a specific travel mean
@@ -310,10 +307,10 @@ pred doesConstraintSatisfySchedule (c : ConstraintOnSchedule){
 	some s : Schedule |  all p:Path |
 	doesPathBelongToSchedule[s, p] and
 	p.travelMean  != c.travelMean or (p.travelMean = c.travelMean 
-					and s.appointments.weather not in c.weather 
+					and (schedule.s).weather not in c.weather 
 					and ((c.timeSlot.start = c.timeSlot.end) 
-						or (s.appointments.ETA in TO/prevs[c.timeSlot.start]
-						or s.appointments.startingTravelTime in TO/nexts[c.timeSlot.end] ))
+						or ((schedule.s).ETA in TO/prevs[c.timeSlot.start]
+						or (schedule.s).startingTravelTime in TO/nexts[c.timeSlot.end] ))
 					and (c.strikeDate in True implies p.travelMean not in PublicTravelMean)
 					and (distanceTravelledWithMeanInSchedule[s,c.travelMean] < c.maxTravelDistance )
 				)
@@ -322,7 +319,7 @@ pred doesConstraintSatisfySchedule (c : ConstraintOnSchedule){
 // checks if a scheduled appointment satisfying the specified constraint exists
 pred doesConstraintSatisfiesAppointment(c : ConstraintOnAppointment){
 	some s: Schedule | all sa:ScheduledAppointment, a: Appointment, p: Path |
-		sa in s.appointments and sa.appointment = a and p.dest=sa
+		sa in schedule.s and sa.appointment = a and p.dest=sa
 		=> p.travelMean != c.travelMean
 }
 
@@ -335,14 +332,14 @@ pred NoOverlappingScheduledAppointmentInSchedule (s : Schedule) {
 // checks if a valid schedule exists (see def. on RASD document)
 pred validSchedule {
 	some s: Schedule | all cs:ConstraintOnSchedule, ca:ConstraintOnAppointment  | 
-	cs in s.constraints and ca in s.appointments.appointment.constraints
+	cs in s.constraints and ca in (schedule.s).appointment.constraints
 	and doesConstraintSatisfySchedule[cs] and doesConstraintSatisfiesAppointment[ca]
 	and NoOverlappingScheduledAppointmentInSchedule[s]
 }
 -----------------------------------------------------
 
 // new appointment insertion action
-pred insertNewAppointment[u,u' : User, a' : Appointment]{
+pred InsertNewAppointment[u,u' : User, a' : Appointment]{
 	//precondition
 	all a : Appointment | a.user = u and a'.user != a.user
 	//postcondition
@@ -350,14 +347,14 @@ pred insertNewAppointment[u,u' : User, a' : Appointment]{
 }
 
 // checks if the insertion of a new appointment is correct
-insertNewAppointmentIsCorrect : check {
-	all u,u' : User, a,a' : Appointment | a.user = u and a'.user != a.user and insertNewAppointment[u,u',a'] 
+InsertNewAppointmentIsCorrect : check {
+	all u,u' : User, a,a' : Appointment | a.user = u and a'.user != a.user and InsertNewAppointment[u,u',a'] 
 	=> a' not in user.u and a' in user.u'
 } for 8
 -----------------------------------------------------
 
 // editing appointment action
-pred modifyAppointment[a,a' : Appointment, u : User]{
+pred ModifyAppointment[a,a' : Appointment, u : User]{
 	//precondition
 	a in user.u and a' not in user.u
 	//postcondition
@@ -365,12 +362,12 @@ pred modifyAppointment[a,a' : Appointment, u : User]{
 }
 
 // checks if the modification of a new appointment is correct
-modifyAppointmentIsCorrect : check {
-	all u : User, a,a' : Appointment | a in user.u and a' not in user.u and modifyAppointment[a,a',u]
+ModifyAppointmentIsCorrect : check {
+	all u : User, a,a' : Appointment | a in user.u and a' not in user.u and ModifyAppointment[a,a',u]
 	=> a' in user.u and a not in user.u
 } for 8
 
 
 pred show(){}
 
-run { show and validSchedule} for 6 but 4 Int
+run { show and validSchedule} for 7 but 4 Int
