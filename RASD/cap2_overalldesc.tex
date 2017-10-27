@@ -9,15 +9,15 @@ Some important informations about him are held by the following parameters:
 \item \textit{travelPass}: indicates if the user has a pass for public transportation;
 \item \textit{hasBike}: indicates if the user has his own car;
 \item \textit{hasCar}: indicates if the user has his own bicycle;
-\item \textit{externalTravelServicesAccounts}: \textbf{(fare rif alla definizione)};
+\item \textit{externalTravelServicesAccounts} (\ref{def:travelServiceAccount});
 \end{itemize}
 
 \subsection{Appointment Model} \label{subsect:appointmentmodel}
 An appointment is represented within the application by a set of parameters:
 \begin{itemize}
-\item \textit{duration}: the time extension of the appointment
+\item \textit{duration}: the time extension of the appointment;
 \item \textit{date}: the day in which the appointment is held;
-\item \textit{startingTime} or \textit{timeInterval}: the first should be given if the starting hour is well-known (deterministic), otherwise a time interval in which the appointment will be held it's provided. 
+\item \textit{startingTime} or \textit{timeInterval}: the first should be given if the starting hour is well-known (deterministic), otherwise a time interval in which the appointment will be held it's provided;
 %In particular: \begin{equation}timeInterval.start + duration \leq timeInterval.end \label{eqn:constrOnTimeInterval} \end{equation}
 \item \textit{location}: identifies the coordinates of the place where the appointment will be held;
 \item \textit{recurrent}: specifies if the appointment will be repeated over a fixed period of time;
@@ -36,26 +36,26 @@ The life cycle of an appointment can be represented by the following statechart:
 A newly-created appointment is \textbf{Unscheduled}. It could remain \textbf{Unscheduled} either when edited or there isn't a possible arrangement when a schedule is performed. Otherwise it becomes \textbf{Scheduled} if there's a feasible way to arrange it. When a scheduled appointment is edited all the appointments in that schedule return to be \textbf{Unscheduled}, because they can possibly cause a different schedule. When a scheduled appointment is fullfilled it becomes \textbf{Archived} and stored in the schedule history. If this last one is a recurrent appointment it must be reinserted in the list of unscheduled appointments so it will become \textbf{Unscheduled} again. The user can cancel an appointment in every moment. 
 
 \subsection{Schedule Model} \label{subsect:schmodel}
-A schedule is a subset of Appointments of a  given day, ordered by the scheduler following the criteria described below.
+A schedule is a set of Appointments of a  given day, ordered by the scheduler following the criteria described below.
 A schedule is characterized by the following variables:
 \begin{itemize}
 \item \textit{date};
 \item \textit{startingPosition}: is the starting location of the user (e.g. user's home);
-\item \textit{startingNumberOfPeople}: the number of people that must reach the first appointment.
+\item \textit{startingNumberOfPeople}: the number of people that must reach the first appointment;
 \item \textit{wakeUpTime}: it is the starting time from which the schedule should start arranging appointments.
 \end{itemize}
 
 \includegraphics[width=\textwidth, keepaspectratio]{"images/stateChartSchedule1".png}
 
-When a schedule is requested by the user it can be either validated or refused by the scheduler according to the definition of valid schedule \textbf{fare riferimento alla def}.
+When a schedule is requested by the user it can be either validated or refused by the scheduler according to the definition of valid schedule (\ref{def:validSchedule}).
 In the first case the schedule is \textbf{saved} in the second one the schedule is \textbf{discarded} and a warning to the user is sent. In order to start a schedule the user must accept one of them from the saved ones, after that the schedule is \textbf{running}.If the user edits one of the appointments belonging to the running schedule, this one is not more valid and become \textbf{discarded}. When a schedile is fullfilled by the user this last is \textbf{archived} by the system.
 
  
 \subsubsection{The optimization criteria} \label{subsubsect:optcriteria} 
-Prioritizing criteria for the schedule optimization that can be chosen by the user are the following:
+Criteria for the schedule optimization that can be chosen by the user. These are the following:
 \begin{itemize}
-\item \textit{Minimize carbon footprint}: the scheduler will try to minimize the amount of kilometers travelled in polluting means;
-\item \textit{Minimize money spent}: the scheduler will try to avoid expensive means and to exploit the public ones (especially if the user has a pass) or going by bike or on foot;
+\item \textit{Minimize carbon footprint}: the scheduler will try to minimize the emission of polluting gases;
+\item \textit{Minimize money spent}: the scheduler will try to avoid expensive means and to exploit the cheap ones so that the amount of money used will be minimun;
 \item \textit{Minimize travelling time}: the scheduler will compute the quickest possible path reaching all the appointments locations.
 \end{itemize}
 
@@ -80,26 +80,22 @@ The system checks the availability of shared travel means 15 minutes before the 
 \subsection{Class Diagram}
 \begin{figure}[H]
 \begin{center}
-\includegraphics[width=\textwidth, keepaspectratio]{"images/classDiagram".png}
+\includegraphics[width=450pt, keepaspectratio]{"images/classDiagram".png}
 \caption{System Class Diagram}
 \end{center}
 \end{figure}
 
 \section{Product Functions}
 
-The following requirements are derived in order to fullfill the specified goals.
-\\
-
+The following requirements are derived in order to fullfill the specified goals.\\
 
 Requirements for \goalref{goal:G1}:
 
 \begin{enumerate}
 
-\item The system should offer a GUI that handles All the interactions with the user.
+\renewcommand\labelenumi{\textbf{R\theenumi}}
 
 Requirements for \goalref{goal:G2}:
-
-\renewcommand\labelenumi{\textbf{R\theenumi}}
 
 \item The system S.B.A. to retrieve information from the user about his appointments; \label{req:R1}
 
@@ -216,6 +212,8 @@ Beside these, an obvious tacit assumption is that the user has a valid age to mo
 \subsection{ Assumptions, dependencies and constraints}
 
 \begin{itemize}
+
+\item Shared Travel Means require a reservation at least 15 minutes in advantage in order to be used by the user;
 
 \item The system should be able to retrieve information about public travel means. In particular:
 \begin{itemize}
