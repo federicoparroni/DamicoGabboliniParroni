@@ -650,13 +650,20 @@ We can realize that the number of calls to external APIs should be minimized in 
 The system should guarantee that from the data retrieved is always constructed the most convenient valid schedules, according to user preferences and constraints, if it exists.
 
 \subsection{Availability}
-The system should be accessible 24 hours per day and should be available 99,9\% of the time (up to 8,76 hours per year of downtime). Anyway the availability of the features involving the use of external services can't be direct controlled. In particular the availability of the feature $j$ is given by:
+The system should be accessible 24 hours per day and should be available 99,9\% of the time (up to 8,76 hours per year of downtime). Anyway the availability of the features involving the use of external services can't be directly controlled. In particular the availability of the feature $j$ is given by:
 
 \begin{equation}
 A_j = a_0 \prod_{i=1}^n a_i 
 \end{equation} 
 
-where each $a_i$ represent the availability of the external service $i$ used and $a_0$ is the availability of the application.
+where each $a_i$ represent the availability of the external service $i$ used and $a_0$ is the availability of the application. For instance, in the case of a schedule creation:
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth, keepaspectratio]{"images/availability diagram".jpg}
+\caption{A failure in one of the chain of request to the APIs causes the entire process to break down}
+\end{center}
+\end{figure}
 
 \subsection{Security}
 The identity of the user must be verified through a login phase.
