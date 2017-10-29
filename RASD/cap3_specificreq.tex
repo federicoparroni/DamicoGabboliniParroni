@@ -175,8 +175,9 @@ John is ready to start is daily tasks in fact he has already scheduled his appoi
 \textbf{Mapping on Requirements:}
 
 \begin{itemize}
-\item Events 1 through 3 are granted by R12;(AGGIUNGERE I RIFERIMENTI)
-\item Evens 4 through 6 are granted by R13. (AGGIUNGERE I RIFERIMENTI)
+\item Events 1 through 3 are granted by \reqref{req:R1};
+\item Evens 4 through 9 are granted by \reqref{req:R2};
+\item Event 10 is granted by \reqref{req:R13}. 
 \end{itemize}  \\ \hline
 
 \end{longtable}
@@ -197,7 +198,7 @@ John is ready to start is daily tasks in fact he has already scheduled his appoi
 
 \textbf{Actors:} Registered User \\ \hline
 
-\textbf{Goals}: (\textbf{Goal del login} \\ \hline
+\textbf{Goals}: \goalref{goal:G2}\\ \hline
 
 \textbf{Input Condition:} The user is registered to the system \\ \hline
 
@@ -206,9 +207,9 @@ John is ready to start is daily tasks in fact he has already scheduled his appoi
 \begin{enumerate}
 \item The user needs to log-in the application, so he runs it;
 \item The system provides to the user a form to fill;
-\item The user fills up the form with the his e-mail and his password (as said in \ref{subsect:usermodel})
+\item The user fills up the form with the his e-mail and his password; (as said in \ref{subsect:usermodel})
 \item The user submits the form to the system;
-\item The system checks the user identity and provides to the user the main application page (\textbf{reference to the main application page})
+\item The system checks the user identity and provides to the user the main application page .
 \end{enumerate} \\ \hline
 
 \textbf{Output Condition:} The user is logged-in to the system. \\ \hline
@@ -218,24 +219,67 @@ John is ready to start is daily tasks in fact he has already scheduled his appoi
 \textbf{Mapping on requirements:}
 
 \begin{itemize}
-\item Events from 3 through 5 granted by (\textbf{requirement che può recuperare informazioni dell'utente riguardo i dati della registrazione});
-\item Event 6 grandet by (\textbf{requirement che il sistema può controllare se l'identità di un utente è giusta};
+\item Events from 3 through 5 granted by \reqref{req:R5};
+\item Event 6 grandet by \reqref{req:R4};
 \end{itemize} \\ \hline
 
 \end{tabular}
 
 \includegraphics[width=400pt, keepaspectratio]{"images/LogInSequenceDiagram".png}
+%\caption{Log-in sequence diagram}
+
+\subsubsection{Recover credentials}\label{usecase:recovercredentials}
+\begin{longtable}{|p{14cm}|} \hline
+\textbf{Name:} Schedule appointments \\ \hline
+\textbf{Actors:} Registered User, External Email Service \\ \hline
+\textbf{Goals:} \goalref{goal:G3} \\ \hline
+\textbf{Input Condition:} The user is registered to the system \\ \hline
+
+\textbf{Event Flow:}
+\begin{enumerate}
+\item The user wants to recover his passoword;
+\item The user requests to recover his passoword;
+\item The system provides to the user the schedule form with his e-mail;
+\item The user fills up the field of the form;
+\item The user submits the form to the system;
+\item The system sends the e-mail to the user with his password.
+\end{enumerate}
+\\ \hline
+
+\textbf{Output Condition:} The user has recovered his password; \\ \hline
+
+\textbf{Exceptions:}
+\begin{enumerate}
+\item The form it's left blank;
+\item An invalid address is given;
+\end{enumerate} \\ \hline
+
+\textbf{Mapping on Requirements:}
+\begin{itemize}
+\item Actions 2 through 5 granted by requirement \reqref{req:R7}
+\item Action 6 granted by requirement \reqref{req:R6}
+\end{itemize}  \\ \hline
+
+\end{longtable}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=450pt, keepaspectratio]{"images/PasswordRecoverySequenceDiagram".png}
+\caption{Password recovery sequence diagram}
+\label{img:seqDiagrPasswordRecovery}
+\end{center}
+\end{figure}
 
 \subsubsection{Appointment creation} \label{usecase:appcreation}
 
 \begin{longtable}{|p{14cm}|} \hline
 \textbf{Name:} Appointment creation \\ \hline
 \textbf{Actors:} Logged User \\ \hline
-\textbf{Goals:} \goalref{goal:G1} \\ \hline
+\textbf{Goals:} \goalref{goal:G4} \\ \hline
 \textbf{Input Condition:} 
 \begin{itemize}
 \item The user is registered to the system 
-\item The user is logged in to the systems 
+\item The user is logged into the systems 
 \end{itemize}
 \\ \hline
 \textbf{Event Flow:}
@@ -255,13 +299,12 @@ John is ready to start is daily tasks in fact he has already scheduled his appoi
 
 \textbf{Exceptions:}
 \begin{enumerate}
-\item Some fields of the form referring to parameters are left blank;
-\item The \textit{location} field doesn't belong to the domain area of the application (\textbf{riferimento alla domain assumption della regione})
+\item Some fields of the form referring to parameters are left blank.
 \end{enumerate} \\ \hline
 \textbf{Mapping on Requirements:}
 \begin{itemize}
-\item Events 4 through 7 are granted by (\textbf{requirement che il sistema può recuperare informazioni riguardanti un appointment})
-\item Event 7 is granted by (\textbf{requirement che il sistema è in grado di memorizzare un appointment}
+\item Events 4 through 7 are granted by \reqref{req:R8}
+\item Event 8 is granted by \reqref{req:R9}
 \end{itemize}  \\ \hline
 
 
@@ -275,75 +318,32 @@ John is ready to start is daily tasks in fact he has already scheduled his appoi
 \end{center}
 \end{figure}
 
-In the sequence diagram there's the assumption that the log-in proceeds successfully. The log-in procedure referenced is the one explained in (\textbf{use case del log-in}.)
-
-\subsubsection{Schedule selection}
-\begin{longtable}{|p{14cm}|} \hline
-\textbf{Name:} Multiple Schedules creation \\ \hline
-\textbf{Actors:} Logged User \\ \hline
-\textbf{Goals:} \textbf{aggiungere rif al goal} \\ \hline
-\textbf{Input Condition:} 
-\begin{itemize}
-\item The user is registered to the system 
-\item The user is logged in to the systems 
-\end{itemize}
-\\ \hline
-\textbf{Event Flow:}
-\begin{enumerate}
-\item The user wants to compare multiple schedules;
-\item The user requests the schedules page;
-\item The system provides the schedules page;
-\item The user selects a schedule to be run;
-\item The system display the mainpage with the schedule results (fare riferimento alla definizione)
-\end{enumerate}	\\ \hline
-\textbf{Output Condition:} The user selects a schedule to be run \\ \hline
-\textbf{Exceptions:}
-\\ \hline
-\textbf{Mapping on Requirements:}
-\begin{itemize}
-\item Events are granted by the requirment R10 \textbf{(mettere riferimenti)}
-\end{itemize}  \\ \hline
-
-\end{longtable}
-\label{usecase:ScheduleSelection}
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[width=400pt, keepaspectratio]{"images/ScheduleSelectionSequenceDiagram".png}
-\caption{Appointment creation sequence diagram}
-\label{img:ScheduleSelection}
-\end{center}
-\end{figure}
-
 \subsubsection{Appointment editing}\label{usecase:appediting}
 \begin{longtable}{|p{14cm}|} \hline
 \textbf{Name:} Appointment editing \\ \hline
 \textbf{Actors:} Logged User \\ \hline
-\textbf{Goals:} (\textbf{goal che l'utente può modicare un appointment})\\ \hline
+\textbf{Goals:} (\goalref{goal:G5})\\ \hline
 \textbf{Input Condition: The user is logged-in to the system} \\ \hline
 \textbf{Event Flow:}
 \begin{enumerate}
 \item The user wants to modify an appointment of his schedule;
 \item The user selects the appointment to modify;
-\item The system provides to the user the appointment form with all the parameters and constraints (with reference to %\ref{subsect:appointmentmodel 
-and 
-%\ref{subsect:appointmentmodel}} 
+\item The system provides to the user the appointment form with all the parameters and constraints;
 that were specified yet by the user; 
 \item The user edits the fields of the form;
 \item The user submit the form to the system;
-\item The system set the appointment as Unscheduled with the new parameters (referring to statechart in figure ..); \label{fig:stchartApp})
+\item The system set the appointment as Unscheduled with the new parameters (referring to statechart in figure \ref{fig:stchartApp});
 \item The system sends a confirmation to the user.
 \end{enumerate}	\\ \hline
 \textbf{Output Condition:}  The user has modified an appointment; \\ \hline
 \textbf{Exceptions:}
 \begin{enumerate}
-\item Some fields of the form referring to parameters are left blank;
-\item The \textit{location} field doesn't belong to the domain area of the application (\textbf{riferimento alla domain assumption della regione})
+\item Some fields of the form referring to parameters are left blank.
 \end{enumerate} \\ \hline
 \textbf{Mapping on Requirements:}
 \begin{itemize}
-\item Events 3 through 5 are granted by \textbf{(the requirement that says that the system should let the user change the parameters and the constraints of an inserted appointment)}
-\item Event 6 is granted by (\textbf{requirement che il sistema è in grado di memorizzare un appointment modificato}
+\item Events 3 through 5 are granted by \reqref{req:R10}
+\item Event 6 is granted by \reqref{req:R11}
 \end{itemize}  \\ \hline
 
 \end{longtable}
@@ -356,26 +356,23 @@ that were specified yet by the user;
 \end{center}
 \end{figure}
 
-
 \subsubsection{Schedule appointments}\label{usecase:scheduleappointments}
 \begin{longtable}{|p{14cm}|} \hline
 \textbf{Name:} Schedule appointments \\ \hline
 \textbf{Actors:} Logged User, External API \\ \hline
-\textbf{Goals:} (\textbf{goal che permette di fare uno scheduling degli appuntamenti dell'utente})\\ \hline
-\textbf{Input Condition: The user is logged-in to the system (\textbf{in futuro mettere che l'actor è un logged user e togliere questo, se ci piace di più}} \\ \hline
+\textbf{Goals:} \goalref{goal:G6} \\ \hline
+\textbf{Input Condition:} The user is logged-in to the system \\ \hline
 
 \textbf{Event Flow:}
 \begin{enumerate}
 \item The user wants to schedule his appointments;
-\item The user requests a schedule by mean of selecting the appointments to schedule of the current day;
-\item The system provides to the user the schedule form with all the parameters, optimization criteria (with reference to (\textbf{parametri dello schedule} and \textbf{opt criteria dello schedule}) and the constraints (\textbf{riferimento ai constraints sullo schedule}.
+\item The user requests the creation of a new schedule for the current day;
+\item The system provides to the user the schedule form with all the parameters, optimization criteria and the constraints;
 \item The user fills up the fields of the form;
 \item The user submits the form to the system;
 \item The system retrieves information from external APIs about; travel options and related travel option data, weather forecast and strike days;
 \item The system retrieves about the Travel Option Data of the newly created Schedule
-\item The system stores the Schedule, together with his travel option data
-
-(\textbf{link alla definizione}) and stores it as Saved (\textbf{fare riferimento allo state chart}) with the appointment selected by the user.
+\item The system stores the Schedule, together with his travel option data and stores it as Saved (\ref{fig:stchartApp}) with the appointment selected by the user.
 \end{enumerate}	\\ \hline
 
 \textbf{Output Condition:} The user has created a valid schedule of his appointments; \\ \hline
@@ -383,13 +380,13 @@ that were specified yet by the user;
 \textbf{Exceptions:}
 \begin{enumerate}
 \item Some fields of the form referring to schedule variables and optimization criteria are left blank. The parameters of schedule constraints could also be left blank since they will assume default values;
-\item It's not possible to list the appointments as a Valid Schedule, so the schedule is Discarded \textbf{(riferimento allo statechart)}
+\item It's not possible to list the appointments as a Valid Schedule, so the schedule is Discarded (\ref{fig:stchartApp})
 \end{enumerate} \\ \hline
 \textbf{Mapping on Requirements:}
 \begin{itemize}
-\item Events 2 through 5 are granted by \textbf{(the requirement that says that the user can set the opt criteria, constraints, variables and  of the schedules)};
-\item Event 6 and 7 is granted by (\textbf{the requirement that says that we can retrieve info from APIs});
-\item Event 8 is granted by (\textbf{the requirement that says that is possible to store a schedule}, (\textbf{requirement che il sistema è in grado di ottimizzare in base a quanto gli dico}) 
+\item Events 3 through 5 are granted by \reqref{req:R12} through \reqref{req:R14};
+\item Event 6 and 7 is granted by \reqref{req:R15};
+\item Event 8 is granted by \reqref{req:R16} and \reqref{req:R17}.
 \end{itemize}  \\ \hline
 
 \end{longtable}
@@ -403,6 +400,43 @@ that were specified yet by the user;
 \end{center}
 \end{figure}
 
+\subsubsection{Schedule selection}
+\begin{longtable}{|p{14cm}|} \hline
+\textbf{Name:} Multiple Schedules creation \\ \hline
+\textbf{Actors:} Logged User \\ \hline
+\textbf{Goals:} \goalref{goal:G7} \\ \hline
+\textbf{Input Condition:} 
+\begin{itemize}
+\item The user is registered to the system; 
+\item The user is logged in to the systems. 
+\end{itemize}
+\\ \hline
+\textbf{Event Flow:}
+\begin{enumerate}
+\item The user wants to compare multiple schedules;
+\item The user requests the schedules page;
+\item The system provides the schedules page;
+\item The user selects a schedule to be run;
+\item The system display the mainpage with the schedule results (\ref{def:schedulingResult}).
+\end{enumerate}	\\ \hline
+\textbf{Output Condition:} The user selects a schedule to be run \\ \hline
+\textbf{Exceptions:}
+\\ \hline
+\textbf{Mapping on Requirements:}
+\begin{itemize}
+\item Events are granted by the requirment \reqref{req:R18}
+\end{itemize}  \\ \hline
+
+\end{longtable}
+\label{usecase:ScheduleSelection}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=400pt, keepaspectratio]{"images/ScheduleSelectionSequenceDiagram".png}
+\caption{Schedule selection sequence diagram}
+\label{img:ScheduleSelection}
+\end{center}
+\end{figure}
 
 
 \subsubsection{Booking phase} \label{usecase:Booking Phase}
@@ -413,14 +447,14 @@ that were specified yet by the user;
 
 \textbf{Actors:} Logged User, External APIs \\ \hline
 
-\textbf{Goals:} FARE RIFERIMENTO AL GOAL CORRETTO \\ \hline
+\textbf{Goals:} \goalref{goal:G8} \\ \hline
 
 \textbf{Input Condition:}
 
 \begin{itemize}
 \item The user must be logged in to the system;
 \item The user must have selected a schedule to be run;
-\item The user must have linked to the system his external accounts;(FARE RIFERIMENTO ALLA SEZIONE DOVE SI PARLA DI QUESTA COSA)
+\item The user must have linked to the system his external accounts;
 \item The user would like to buy the tickets for the travel means involved in the running schedule.
 \end{itemize}
  \\ \hline
@@ -447,7 +481,7 @@ that were specified yet by the user;
 \textbf{Mapping on Requirements:}
 
 %\begin{itemize}
-Events 3 through 5 granted by R17;(AGGIUNGERE I RIFERIMENTI) \\ \hline
+Events 3 through 5 granted by \reqref{req:R19}; \\ \hline
 %\end{itemize}  \\ \hline
 
 \end{longtable}
@@ -460,6 +494,7 @@ Events 3 through 5 granted by R17;(AGGIUNGERE I RIFERIMENTI) \\ \hline
 \end{center}
 \end{figure}
 
+
 \subsubsection{Dynamic directions} \label{usecase:Dynamic Directions}
 
 \begin{longtable}{|p{14cm}|} \hline
@@ -468,7 +503,7 @@ Events 3 through 5 granted by R17;(AGGIUNGERE I RIFERIMENTI) \\ \hline
 
 \textbf{Actors:} Logged User, External APIs, GPS \\ \hline
 
-\textbf{Goals:} FARE RIFERIMENTO AL GOAL CORRETTO \\ \hline
+\textbf{Goals:} \goalref{goal:G9} \\ \hline
 
 \textbf{Input Condition:}
 
@@ -485,7 +520,7 @@ Events 3 through 5 granted by R17;(AGGIUNGERE I RIFERIMENTI) \\ \hline
 \item The system retrieves the user position from his GPS;
 \item The system retrives from external APIs the directions to give to the user based on his position;
 \item The system display to the user the updated map and the directions that him must follow in order to arrive to the next appointment
-\item user doesn't need more directions so he closes the dynamic map.
+\item User doesn't need more directions so he closes the dynamic map.
 \end{enumerate}	\\ \hline
 
 \textbf{Output Condition:} The User is satisfied with the information gathered until this moment so he decides to close the dynamic map; \\ \hline
@@ -498,68 +533,29 @@ Events 3 through 5 granted by R17;(AGGIUNGERE I RIFERIMENTI) \\ \hline
 
 \textbf{Mapping on Requirements:}
 
-%\begin{itemize}
-Events 3 through 5 granted by R17;(AGGIUNGERE I RIFERIMENTI) \\\\ \hline
-%\end{itemize}  \\ \hline
-
-\end{longtable}
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[width=400pt, keepaspectratio]{"images/DynamicDirectionsSequenceDiagram".png}
-\caption{Booking phase sequence diagram}
-\end{center}
-\end{figure}
-
-In this sequence diagram the loop of the actions described in the rectangle continues until the dynamicMap is closed (closeDynamicMap).
-
-\subsubsection{Recover credentials}\label{usecase:recovercredentials}
-\begin{longtable}{|p{14cm}|} \hline
-\textbf{Name:} Schedule appointments \\ \hline
-\textbf{Actors:} Registered User, External Email Service \\ \hline
-\textbf{Goals:} (\textbf{goal che permette di recuperare le credenziali dell'utente})\\ \hline
-\textbf{(\textbf{in futuro mettere che l'actor è un registered user e togliere questo, se ci piace di più}} \\ \hline
-
-\textbf{Event Flow:}
-\begin{enumerate}
-\item The user wants to recover his passoword;
-\item The user requests to recover his passoword;
-\item The system provides to the user the schedule form with his e-mail;
-\item The user fills up the field of the form;
-\item The user submits the form to the system;
-\item The system sends the e-mail to the user with his password.
-\end{enumerate}
-\\ \hline
-
-\textbf{Output Condition:} The user has recovered his password; \\ \hline
-
-\textbf{Exceptions:}
-\begin{enumerate}
-\item The form it's left blank;
-\item An invalid address is given;
-\end{enumerate} \\ \hline
-
-\textbf{Mapping on Requirements:}
 \begin{itemize}
-\item Actions 2 through 4 granted by requirement (\textbf{the system should be able to recover email address from the user}
-\item Action 5 granted by the other requirement
+	\item Events 2 granted by \reqref{req:R20}
+	\item Event 3 granted by \reqref{req:R21}
+	\item Event 4 granted by \reqref{req:R22}
 \end{itemize}  \\ \hline
 
 \end{longtable}
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[width=450pt, keepaspectratio]{"images/PasswordRecoverySequenceDiagram".png}
-\caption{Password recovery sequence diagram}
-\label{img:seqDiagrPasswordRecovery}
+\includegraphics[width=400pt, keepaspectratio]{"images/DynamicDirectionsSequenceDiagram".png}
+\caption{Dynamic directions sequence diagram}
 \end{center}
 \end{figure}
+
+In this sequence diagram the loop of the actions described in the rectangle continues until the dynamicMap is closed (closeDynamicMap).
+
 
 \subsubsection{Notify Shared Means}\label{usecase:Notify Shared Means}
 \begin{longtable}{|p{14cm}|} \hline
 \textbf{Name:} Notify Shared Means \\ \hline
 \textbf{Actors:} Registered User, External Api \\ \hline
-\textbf{Goals:} (\textbf{goal di notificare all'utente la possibilità di prendere i mezzi condivisi})\\ \hline
+\textbf{Goals:} \goalref{goal:G10} \\ \hline
 
 \textbf{Event Flow:}
 \begin{enumerate}
@@ -578,13 +574,18 @@ In this sequence diagram the loop of the actions described in the rectangle cont
 
 \textbf{Mapping on Requirements:}
 \begin{itemize}
-\item Actions 1 and 2 are granted by R28 \textbf{FARE RIFERIMENTO}
-\item Actions 4 is granted by R27 \textbf{FARE RIFERIMENTO}
+\item Actions 1 and 2 are granted by \reqref{req:R24}
+\item Actions 4 is granted by \reqref{req:R23}
 \end{itemize}  \\ \hline
 
 \end{longtable}
 
-\textbf{AGGIUNGERE IMMAGINE GIA FATTA}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=400pt, keepaspectratio]{"images/NotifySharedMeansSequenceDiagram".png}
+\caption{Notify Shared Means sequence diagram}
+\end{center}
+\end{figure}
 
 \subsection{Use Case Diagram}
 
@@ -597,9 +598,9 @@ In this sequence diagram the loop of the actions described in the rectangle cont
 \end{figure}
 
 \subsection{Notes on diagrams}
-In these diagrams we assume that the user has ran the application. In particular, if the actor is a \textit{Registered User} or an \textit{Enternal User} then we assume that the user is facing the login page (\textbf{riferimento alla login page}. On the other hand, if the actor is a \textit{Logged User} then is assumed that it is on the home page (\textbf{riferimento alla home page}.
+In these diagrams we assume that the user has ran the application. In particular, if the actor is a \textit{Registered User} or an \textit{Enternal User} then we assume that the user is facing the login page. On the other hand, if the actor is a \textit{Logged User} then is assumed that it is on the home page.
 
-\section{Performance Requirements}
+\section{Performance Requirements} \label{\sec:performanceRequirements}
 The user must be notified in real time when a shared travel mean can be booked in order to provide a better mobility option,
 since these kind of transportation can remain available for a limited amount of time.
 
@@ -660,10 +661,7 @@ We can consider 2 cases:
 In the first column the numbers between brackets rempresent the number $n$ of appointments with variable starting time, so that can be arranged differently relative to each other, changing their order in the schedule. Then the number of calls to External APIs that should be done is calculated, in case of a brute-force approach in the scheduling algorithm. Therefore the number of calls is proportional to $n!$.
 Finally the total amount of time is calculated considering the previous assumptions.
 
-We can realize that the number of calls to external APIs should be minimized in order to fullfill the requirement on performance expressed in (\textbf{riferimento ai performance requirements}).
-
-\subsection{Any other constraint}
-
+We can realize that the number of calls to external APIs should be minimized in order to fullfill the requirement on performance expressed in \ref{\sec:performanceRequirements}.
 
 \section{Software System Attributes}
 
