@@ -76,8 +76,8 @@ sig Appointment{
 }
 {	
 	// startingTime and timeSlot are mutually exclusive
-	startingTime = none => timeSlot != none
-	timeSlot = none => startingTime != none
+	startingTime = none <=> timeSlot != none
+	timeSlot = none <=> startingTime != none
 }
 
 // all appointments must be scheduled into some ScheduledAppointment
@@ -381,6 +381,25 @@ ModifyAppointmentIsCorrect : check {
 
 pred show(){}
 
-run { show and validSchedule} for 7
+run { show and validSchedule} for 6
+
 
 \end{lstlisting}
+
+\subsection{Generated World}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[height=\textheight, keepaspectratio]{"images/generatedWorld".png}
+\caption{Generated world}
+\end{center}
+\end{figure}
+
+
+\subsection{Execution Results}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth, keepaspectratio]{"images/alloyResult".jpg}
+\caption{Execution results}
+\end{center}
+\end{figure}
+

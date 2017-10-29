@@ -73,8 +73,8 @@ sig Appointment{
 }
 {	
 	// startingTime and timeSlot are mutually exclusive
-	startingTime = none => timeSlot != none
-	timeSlot = none => startingTime != none
+	startingTime = none <=> timeSlot != none
+	timeSlot = none <=> startingTime != none
 }
 
 // all appointments must be scheduled into some ScheduledAppointment
@@ -378,4 +378,4 @@ ModifyAppointmentIsCorrect : check {
 
 pred show(){}
 
-run { show and validSchedule} for 7
+run { show and validSchedule} for 6
