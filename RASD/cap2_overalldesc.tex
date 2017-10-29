@@ -60,9 +60,9 @@ Criteria for the schedule optimization that can be chosen by the user. These are
 \end{itemize}
 
 \subsection{Constraints}
-Constraints are impositions on some parameters managed by the system during the process of scheduling the appointments. We can distinguish between constraints on schedule and contraints on the single appointment. These can be selected by the user when he inserts an appointment or when he requests a schedule, otherwise the constraints are initialized to default values. 
+Constraints are impositions on some parameters managed by the system during the process of scheduling the appointments. We can distinguish between constraints on schedule and contraints on the single appointment. These can be selected by the user when he inserts an appointment or when he requests a schedule. 
 
-\subsubsection{Constraints on schedule} 
+\subsubsection{Constraints on schedule} \label{subsect:constraintSchedule}
 \begin{itemize}
 \item \textit{Maximum travelling distance with a specific travel mean}: the user can set a maximum amount of km to travel with a specific travel mean;
 \item\textit{ Travel means time slots}: user can specify a time interval in which a travel mean can be used;
@@ -89,106 +89,105 @@ The system checks the availability of shared travel means 15 minutes before the 
 
 The following requirements are derived in order to fullfill the specified goals.\\
 
-%Requirements for \goalref{goal:G1}:
+Requirements for \goalref{goal:G1}:
+\begin{enumerate}%[resume]
+\renewcommand\labelenumi{\textbf{R\theenumi}}
+\item The system S.B.A to handle a registration phase in which the user will provide an e-mail and a password; \label{req:R1}
+\item The system S.B.A. to verify the e-mail given by the user by sending a confirmation e-mail to his address; \label{req:R2}
+\item  The system should let the user to specify his parameters ;
+\end{enumerate} \label{req:R3}
 
 Requirements for \goalref{goal:G2}:
-\begin{enumerate}
+\begin{enumerate}[resume]
 \renewcommand\labelenumi{\textbf{R\theenumi}}
-\item The system S.B.A. to retrieve information from the user about his appointments; \label{req:R1}
-\item The system S.B.A to store an appointment in his memory;
+\item The system S.B.A to recognize a registered user given an e-mail and a password \label{req:R4}
+\item The system S.B.A. to retrieve information from the user about his registration informations, i.e. his e-mail and password; \label{req:R5}
 \end{enumerate}
 
 Requirements for \goalref{goal:G3}:
 \begin{enumerate}[resume]
 \renewcommand\labelenumi{\textbf{R\theenumi}}
-\item The system should let the user change the parameters and the constraints of an inserted appointment; 
-\item The system S.B.A to rewrite the appointment in his memory with his new parameters;
+\item The system should be able to retrieve an e-mail address from the user; \label{req:R6}
+\item The system should be able to send the password of a user to his e-mail given it. \label{req:R7}
 \end{enumerate}
 
 Requirements for \goalref{goal:G4}:
 \begin{enumerate}[resume]
 \renewcommand\labelenumi{\textbf{R\theenumi}}
-\item Allow the user to set the constraints of the schedule (\textbf{riferimento ai constraint dello schedule}), or to accept the default values;
-\item Allow the user to set the optimization criteria (\ref{subsubsect:optcriteria}) for the schedule;
-\item Allow the user to set the variables for the schedule;
-\item The system S.B.A. to gather information from external APIs about: 
-	\begin{itemize}
-		\item travel options with related travel option data; 
-		\item weather forecast;
-		\item strike days;
-	\end{itemize}
-\item The system S.B.A. to select the best travel option according to the optimization criteria taking into account:
-	\begin{itemize}
-		\item user constraint
-		\item user parameters \textbf{(aggiungere riferimento a user model)}
-		\item travel option data 
-		\item weather forecast
-		\item information about strike day
-\end{itemize}
-\item The system S.B.A to store valid schedules requested by the user
-\item The user can specify his parameters (\textbf{ref a usermodel})
+\item The system S.B.A. to retrieve information from the user about his appointments \label{req:R8}
+\item The system S.B.A. to store an appointment in his memory. \label{req:R9}
 \end{enumerate}
 
 Requirements for \goalref{goal:G5}:
 \begin{enumerate}[resume]
 \renewcommand\labelenumi{\textbf{R\theenumi}}
-\item The system should let the user accept a schedule from the saved ones
+\item The system should let the user change the parameters and the constraints of an inserted appointment; \label{req:R10}
+\item The system S.B.A to rewrite the appointment in his memory with his new parameters. \label{req:R11}
 \end{enumerate}
 
 Requirements for \goalref{goal:G6}:
 \begin{enumerate}[resume]
 \renewcommand\labelenumi{\textbf{R\theenumi}}
-\item The system S.B.A to handle a registration phase in which the user will provide an e-mail and a password;
-\item The system S.B.A. to verify the e-mail given by the user by sending a confirmation e-mail to his address;
+\item Allow the user to set the constraints of the schedule (\ref{subsect:constraintSchedule}); \label{req:R12}
+\item Allow the user to set the optimization criteria (\ref{subsubsect:optcriteria}) for the schedule; \label{req:R13}
+\item Allow the user to set the variables \footnote{The starting postion of the user can also be retrieved by mean of GPS, without specifing in manually} for the schedule (\ref{subsect:schmodel});   \label{req:R14}
+\item The system S.B.A. to gather information from external APIs about: 
+	\begin{itemize}
+		\item travel options (\ref{def:travelOption}) with related travel option data (\ref{def:travelOptionData}); 
+		\item weather forecast;
+		\item strike days;
+		\item delays.
+	\end{itemize} \label{req:R15}
+\item The system S.B.A. to select the best travel option according to the optimization criteria taking into account:
+	\begin{itemize}
+		\item user constraint;
+		\item user parameters;
+		\item travel option data; 
+		\item weather forecast;
+		\item information about strike day;
+		\item information about delays.
+\end{itemize} \label{req:R16}
+\item The system S.B.A to store valid schedules requested by the user. \label{req:R17} 
 \end{enumerate}
 
-Requirements for \goalref{goal:G9}:
+Requirements for \goalref{goal:G7}:
 \begin{enumerate}[resume]
 \renewcommand\labelenumi{\textbf{R\theenumi}}
-\item The system S.B.A to recognize a registered user given an e-mail and a password \label{req:R9}
-\item The system S.B.A. to retrieve information from the user about his registration informations, i.e. his e-mail and password (\textbf{da verificare se serve o meno}); \label{req:R10}
+\item The system should let the user accept a schedule from the saved ones \label{req:R18}
 \end{enumerate}
 
 Requirements for \goalref{goal:G8}:
 \begin{enumerate}[resume]
 \renewcommand\labelenumi{\textbf{R\theenumi}}
-\item The system should offer to the user a way to link all his travel service accounts into the Travlendar+ account;
-\item The system S.B.A to book a travel mean through external API offered by third party application in which the user is signed
+\item The system S.B.A to book a travel mean through external API offered by third part application in which the user is signed. \label{req:R19}
 \end{enumerate}
 
 Requirements for \goalref{goal:G9}:
 \begin{enumerate}[resume]
 \renewcommand\labelenumi{\textbf{R\theenumi}}
-\item The system S.B.A to retrive the graphical representation of a path from an external API;
-\item The stystem S.B.A to retrive the travel option from an external API \textbf{(questa che gia si è detta ma serve anche per questo goal come facciamo?)}
-\item The S.B.A to retrieve the length of a path from an external API  
+\item The system S.B.A to retrive the position of the user from his GPS; \label{req:R20}
+\item The system S.B.A. to retrive from an external API the directions to give to the user for reach the next appointment; \label{req:R21}
+\item The system S.B.A. to retrive from an external API the Graphical representation of the path that will be travelled by the user. \label{req:R22}
 \end{enumerate}
+
+%Requirements for \goalref{goal:G9}:
+%\begin{enumerate}[resume]
+%\renewcommand\labelenumi{\textbf{R\theenumi}}
+%\item The system S.B.A to retrive the graphical representation of a path from an external API;
+%\item The stystem S.B.A to retrive the travel option from an external API \textbf{(questa che gia si è detta ma serve anche per questo goal come facciamo?)}
+%\item The S.B.A to retrieve the length of a path from an external API  
+%\end{enumerate}
 
 Requirements for \goalref{goal:G10}:
 \begin{enumerate}[resume]
 \renewcommand\labelenumi{\textbf{R\theenumi}}
-\item The system S.B.A to retrive the position of the user from his GPS
-\item The system S.B.A. to retrive from an external API the directions to give to the user for reach the next appointment;
-%\item The system S.B.A. to retrive from an external API the Graphical representation of the path that will be travelled by the user
-\end{enumerate}
-
-Requirements for \goalref{goal:g99}:
-\begin{enumerate}[resume]
-\renewcommand\labelenumi{\textbf{R\theenumi}}
-\item The system should be able to recover an e-mail address from the user;
-\item The system should be able to send the password of a user to his e-mail given the e-mail.
-\end{enumerate}
-
-Requirements for \goalref{goal:G100}:
-\begin{enumerate}[resume]
-\renewcommand\labelenumi{\textbf{R\theenumi}}
-\item The system should be able to send notifications to the user;
-\item The system should be able to retrieve information about the availablity of shared travel means from external APIs without the user request 
+\item The system should be able to send notifications to the user; \label{req:R23}
+\item The system should be able to retrieve information about the availablity of shared travel means from external APIs without the user request \label{req:R24}.
 \end{enumerate}
 
 
 \subsection{User characteristics}
-Users can use our system when they want something that allows them to schedule their meetings according to their necessities and constraints. Necessary conditions for the users in order to use the system are: 
+Users can use the system when they want something that allows them to schedule their meetings according to their necessities and constraints. Necessary conditions for a users in order to use the system are: 
 
 \begin{itemize}
 \item He must have a device connected to the internet in which the application runs
@@ -210,30 +209,23 @@ Beside these, an obvious tacit assumption is that the user has a valid age to mo
 
 \begin{itemize}
 
-\item Shared Travel Means require a reservation at least 15 minutes in advantage in order to be used by the user;
-
-\item The system should be able to retrieve information about public travel means. In particular:
-\begin{itemize}
-\item information about delays;
-\item information on possible strike days.
-\end{itemize}
-
-\item The system should be able to retrieve information about shared means. In particular:
-\begin{itemize}
-\item position of the available ones;
-\item prices per time unit;
-\end{itemize}
-
 \item There exist external APIs that allow to:
 \begin{itemize}
-\item retrieve all travel options and travel option data
-\item signed user to book and pay for all travel services
-\item retrieve information about weather forecast
-\item retrieve a graphical representation of a path
-\item retrieve the lenght of a path
+\item retrieve all travel options and travel option data;
+\item signed user to book and pay for all travel services;
+\item retrieve information about weather forecast;
+\item retrieve informations about strike days;
+\item retrieve informations about delays;
+\item retrieve informations about the position of shared travel means.
 \end{itemize}
 
+\item Shared Travel Means can be reserved at most 15 minutes in advantage in order to be used by the user;
+
 \item The device on which the application runs is connected to the internet;
+
+\item A strike day involves all the public travel means. These can't be used for the entire day;
+
+\item A public travel pass is valid for all public travel means;
 
 \item The user has a GPS active in every moment;
 
@@ -241,7 +233,7 @@ Beside these, an obvious tacit assumption is that the user has a valid age to mo
 
 \item Shared travel means are only cars and bikes;
 
-\item Shared travel means can be booked for the next 15 minutes (\textbf{dire due parole su questa assunzione che è abbanstanza forte});
+%\item Shared travel means can be booked for the next 15 minutes (\textbf{dire due parole su questa assunzione che è abbanstanza forte});
 
 \end{itemize}
 
