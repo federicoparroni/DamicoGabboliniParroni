@@ -90,8 +90,7 @@ sig ScheduledAppointment{
 	weather: one Weather
 }
 {	startingTravelTime in TO/prevs[endingTime]
-	// ETA must be between starting and ending times
-	ETA in TO/nexts[startingTravelTime] and ETA in TO/prevs[endingTime] 
+	ETA in TO/nexts[startingTravelTime] and ETA in TO/prevs[endingTime]		// ETA must be between starting and ending times
 	date = schedule.date																				
 	date = appointment.date																			
 	numberOfInvolvedPeople >= 0
@@ -179,8 +178,7 @@ sig ConstraintOnAppointment extends Constraint{
 
 sig ConstraintOnSchedule extends Constraint{
 	weather: set Weather, 
-	timeSlot: lone TimeSlot,	 
-	strikeDate: lone Bool
+	timeSlot: lone TimeSlot
 	// in which travel mean can't be used
 }{
 	weather != none => maxTravelDistance = 0
@@ -190,7 +188,11 @@ sig ConstraintOnSchedule extends Constraint{
 fact NoConstraintUnlinked{
 	all c : Constraint | c in Appointment.constraints or c in Schedule.constraints
 }
-
+-----------------------------------------------
+sig StrikeDay {
+	strikeDate: one Date,
+	strikingTravelMeans: some PublicTravelMean
+}
 -----------------------------------------------
 abstract sig Weather{} 
 
@@ -300,14 +302,14 @@ pred doesPathBelongToSchedule [s:Schedule, p:Path] {
 
 // checks if a schedule satisfying the specified constraint exists
 pred doesConstraintSatisfySchedule (c : ConstraintOnSchedule){
-	some s : Schedule |  all p:Path |
+	some s : Schedule | all p:Path, st:StrikeDay |
 	doesPathBelongToSchedule[s, p] and
 	p.travelMean  != c.travelMean or (p.travelMean = c.travelMean 
 					and (schedule.s).weather not in c.weather 
 					and ((c.timeSlot.start = c.timeSlot.end) 
 						or ((schedule.s).ETA in TO/prevs[c.timeSlot.start]
 						or (schedule.s).startingTravelTime in TO/nexts[c.timeSlot.end] ))
-					and (c.strikeDate in True implies p.travelMean not in PublicTravelMean)
+					and (s.date = st.strikeDate implies p.travelMean not in st.strikingTravelMeans)
 					and (distanceTravelledWithMeanInSchedule[s,c.travelMean] < c.maxTravelDistance )
 				)
 }
