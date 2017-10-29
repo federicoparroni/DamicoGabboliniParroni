@@ -12,6 +12,9 @@ sig Date{}
 -----------------------------------------------
 sig Time{}
 
+pred TimeIsBetween[t:Time, t1:Time, t2:Time] {
+	t in TO/nexts[t1] and t in TO/prevs[t2]
+}
 -----------------------------------------------
 sig TimeSlot{
 	start: one Time,
@@ -39,6 +42,8 @@ sig Schedule{
 	optimizingCriteria: one OptimizingCriteria,
 	constraints : set ConstraintOnSchedule,
 	initialNumberOfPeopleInvolved : one Int
+}{
+	initialNumberOfPeopleInvolved >= 1
 }
 
 // there aren't schedules that doesn't have at least one ScheduledAppointment
@@ -70,7 +75,6 @@ sig Appointment{
 	// startingTime and timeSlot are mutually exclusive
 	startingTime = none => timeSlot != none
 	timeSlot = none => startingTime != none
-	startingTime in TO/nexts[timeSlot.start] and startingTime in TO/prevs[timeSlot.end]
 }
 
 // all appointments must be scheduled into some ScheduledAppointment
@@ -90,7 +94,8 @@ sig ScheduledAppointment{
 	weather: one Weather
 }
 {	startingTravelTime in TO/prevs[endingTime]
-	ETA in TO/nexts[startingTravelTime] and ETA in TO/prevs[endingTime]		// ETA must be between starting and ending times
+//	ETA in TO/nexts[startingTravelTime] and ETA in TO/prevs[endingTime]		// ETA must be between starting and ending times
+	TimeIsBetween[ETA, startingTravelTime, endingTime]
 	date = schedule.date																				
 	date = appointment.date																			
 	numberOfInvolvedPeople >= 0
@@ -191,6 +196,7 @@ fact NoConstraintUnlinked{
 -----------------------------------------------
 sig StrikeDay {
 	strikeDate: one Date,
+	strikingTimeSlot: one TimeSlot,
 	strikingTravelMeans: some PublicTravelMean
 }
 -----------------------------------------------
@@ -309,7 +315,11 @@ pred doesConstraintSatisfySchedule (c : ConstraintOnSchedule){
 					and ((c.timeSlot.start = c.timeSlot.end) 
 						or ((schedule.s).ETA in TO/prevs[c.timeSlot.start]
 						or (schedule.s).startingTravelTime in TO/nexts[c.timeSlot.end] ))
-					and (s.date = st.strikeDate implies p.travelMean not in st.strikingTravelMeans)
+					and (s.date = st.strikeDate and (
+								TimeIsBetween[p.source.startingTravelTime, st.strikingTimeSlot.start, st.strikingTimeSlot.end] or
+								TimeIsBetween[p.source.ETA, st.strikingTimeSlot.start, st.strikingTimeSlot.end]
+							)
+								implies p.travelMean not in st.strikingTravelMeans)
 					and (distanceTravelledWithMeanInSchedule[s,c.travelMean] < c.maxTravelDistance )
 				)
 }
@@ -368,4 +378,4 @@ ModifyAppointmentIsCorrect : check {
 
 pred show(){}
 
-run { show and validSchedule} for 7 but 4 Int
+run { show and validSchedule} for 7
