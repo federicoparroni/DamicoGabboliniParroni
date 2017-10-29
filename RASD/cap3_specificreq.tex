@@ -548,7 +548,14 @@ Events 3 through 5 granted by \reqref{req:R19}; \\ \hline
 \end{center}
 \end{figure}
 
-In this sequence diagram the loop of the actions described in the rectangle continues until the dynamicMap is closed (closeDynamicMap).
+In this sequence diagram the loop of the actions described in the rectangle continues until the dynamicMap is closed, as shown in the activity diagram above.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=150pt, keepaspectratio]{"images/activityDiagramMaps".png}
+\caption{Dynamic directions activity diagram}
+\end{center}
+\end{figure}
 
 
 \subsubsection{Notify Shared Means}\label{usecase:Notify Shared Means}
@@ -598,9 +605,9 @@ In this sequence diagram the loop of the actions described in the rectangle cont
 \end{figure}
 
 \subsection{Notes on diagrams}
-In these diagrams we assume that the user has ran the application. In particular, if the actor is a \textit{Registered User} or an \textit{Enternal User} then we assume that the user is facing the login page. On the other hand, if the actor is a \textit{Logged User} then is assumed that it is on the home page.
+In these diagrams we assume that the user has ran the application, but when necessary this action is explicitly specified. In particular, if the actor is a \textit{Registered User} or an \textit{External User} then we assume that the user is facing the login page. On the other hand, if the actor is a \textit{Logged User} then is assumed that it is on the home page.
 
-\section{Performance Requirements} \label{\sec:performanceRequirements}
+\section{Performance Requirements} \label{sec:performanceRequirements}
 The user must be notified in real time when a shared travel mean can be booked in order to provide a better mobility option,
 since these kind of transportation can remain available for a limited amount of time.
 
@@ -661,7 +668,7 @@ We can consider 2 cases:
 In the first column the numbers between brackets rempresent the number $n$ of appointments with variable starting time, so that can be arranged differently relative to each other, changing their order in the schedule. Then the number of calls to External APIs that should be done is calculated, in case of a brute-force approach in the scheduling algorithm. Therefore the number of calls is proportional to $n!$.
 Finally the total amount of time is calculated considering the previous assumptions.
 
-We can realize that the number of calls to external APIs should be minimized in order to fullfill the requirement on performance expressed in \ref{\sec:performanceRequirements}.
+We can realize that the number of calls to external APIs should be minimized in order to fullfill the requirement on performance expressed in \ref{sec:performanceRequirements}.
 
 \section{Software System Attributes}
 
@@ -693,4 +700,4 @@ In particular the application should be able to consider new travel means, new s
 Moreover, also the GUI should be easily editable, so that can adapt to new operating systems.
 
 \subsection{Portability}
-The system should be adaptable to run in all the devices (\textbf{link alla definizione}) considered.
+The system should be adaptable to run in all the devices (\ref{def:device}) considered.
