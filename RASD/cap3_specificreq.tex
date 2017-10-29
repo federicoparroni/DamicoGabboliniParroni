@@ -14,7 +14,7 @@ The user can interact with the application through several graphical interfaces:
 \end{center}
 \end{figure}
 
-\item \textbf{User account interface}: user can specify his profile characteristics, such as his passes, car and/or bike ownership;
+\item \textbf{User account interface}: user can specify his characteristics 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=250pt, keepaspectratio]{"images/interfaces/userprofile".jpg}
@@ -65,7 +65,7 @@ The user can interact with the application through several graphical interfaces:
 \item \textbf{Schedules result interface}: shows the computation of the requested schedules for a given date and asks the user to select one, then waits for confirmation for that;
 \begin{figure}[H]
 \begin{center}
-\includegraphics[width=250pt, keepaspectratio]{"images/interfaces/"schedule results".jpg}
+\includegraphics[width=250pt, keepaspectratio]{"images/interfaces/"scheduleresults".jpg}
 \caption{Schedules result interface}
 \end{center}
 \end{figure}
@@ -82,6 +82,9 @@ The user can interact with the application through several graphical interfaces:
 %\item \textbf{Appointments history interface}: shows a list of archived appointments;
 \end{enumerate}
 
+\subsubsection{Notes on User Interfaces}
+The interfaces displayed before have been created through the IDE Xcode. In this way, if the application will be implemented, the GUI will look like exactly as shown above.
+
 \subsection{Hardware interfaces}
 Hardware interfaces are physical linking across which two or more separate components of a system exchange information. A hardware interface is described by the mechanical and electrical signals at the interface and the protocol for sequencing them. There are no interesting hardware interfaces in our scope.
 %Our system relies on the following hardware interfaces:
@@ -94,7 +97,7 @@ Hardware interfaces are physical linking across which two or more separate compo
 \subsection{Software interfaces}
 Software interfaces are logical linking across which two or more separate applications running on a system exchange information. The most relevant software interface in our system is API. APIs are sets of subroutine definitions, protocols and clearly defined methods of communication, allowing data exchanging and service requests. There are several kinds of these:
 \begin{itemize}
-\item \textbf{Operating System APIs}: specify interface between applications and OS, permitting to access low level routines calls (for instance, to communicate with memory or with an internal device)\textbf{(!)}
+\item \textbf{Operating System APIs}: specify interface between applications and OS, permitting to access low level routines calls (for instance, to communicate with memory or with an internal device)
 \item \textbf{Remote APIs}: DBMS expose a set of standards that the API user can adopt in order to manage the database data. SQL is the standard language for storing, manipulating and retrieving data in this context;
 \item \textbf{Web API}: information can be exchanged through the internet by encapsulating it in HTTP request/response. Weather forecast, travel services, mapping systems offer this typology of API.
 \end{itemize}
@@ -115,17 +118,76 @@ Communication interfaces allows two different architectures of the system to exc
 Here are some scenarios that describe the usage of the system.
 
 \subsubsection{Scenario 1} \label{scenario:1}
-Giovanni will start the fourth year of his Master's degree. Surfing the internet, he finds out that his lesson schedule for the first semester it has been published. Giovanni decides to fill in the application with his new appointments related to lessons attendance. In fact he knows where to go, at which time and day and for which amount of time. Since he knows that these events will going to happen for 3 months, he sets them as recurrent.
+Luana has some problems in scheduling his daily appointments in fact she is always late. One of her friend told her that has been released a new application Travlendar+ that can be useful for scheduling appointments. Luana decides to download it and then she registers herself to the system by submitting his e-mail and a password. After the e-mail confirmation she inserts in the system her user parameters.
+
 
 \subsubsection{Scenario 2} \label{scenario:2}
-\textbf{da rileggere scritta veloce}
-Giovanni want to start training but he doesn't know what are the best hours in which he can run in accord to his appointments, he know only that he can run between 5 and 7 pm, for 45 minutes. he can insert this last appointment in the application whitout specify the exactly starting hour and the system will give him the best hours in which he can run
+Giovanni will start the fourth year of his Master's degree. Surfing the internet, he finds out that his lesson schedule for the first semester has been published. Giovanni decides to fill in the application with his new appointments related to lessons attendance. In fact he knows where to go, at which time and day and for which amount of time. Since he knows that these events will going to happen for 3 months, he sets them as recurrent.
 
 \subsubsection{Scenario 3} \label{scenario:3}
-\textbf{da rileggere scritta veloce}
-Giovanni has scheduled his appointments but at lunch time his son called him because he needed a ride for go back to home. Giovanni decided to help his son and so he brought him home. now the current running schedule is not more valid so he request to the system a reschedule of his appointment according to his position and the hour of day in which he is.  
+Edoardo wants to start training but he doesn't know what are the best hours in which he can run in accord to his appointments, he know only that he can run between 5 and 7 pm, for 45 minutes. he can insert this last appointment in the application whitout specify the exactly starting hour and the system will schedule it at best.
+
+\subsubsection{Scenario 4} \label{scenario:4}
+Federico has scheduled his appointments but at lunch time his son called him because he needed a ride for go back to home. Federico decided to help his son and so he brought him home. now the current running schedule is not more valid so he request to the system a reschedule of his appointment according to his position.  
+
+
+\subsubsection{Scenario 5} \label{scenario:5}
+John is ready to start is daily tasks in fact he has already scheduled his appointments through Travlenddar+ application. 15 minutes before the schedule starting time he recieves a notification by the application saying that there is a possible rearregment of his appointments by using shared travel means that can improve the optimization criteria selected by him. so he decides to accepts this new schedule.
 
 \subsection{Use cases}
+
+\subsubsection{User registration} \label{usecase:User registration}
+
+\begin{longtable}{|p{14cm}|} \hline
+
+\textbf{Name:} User registration \\ \hline
+
+\textbf{Actors:} External User, external e-mail service \\ \hline
+
+\textbf{Goals:} \goalref{goal:G1} \\ \hline
+
+\textbf{Input Condition:} \\ \hline
+
+\textbf{Event Flow:}
+
+\begin{enumerate}
+\item The user wants to register to the system, so he runs the application;
+\item The system display the login/registration page;
+\item The user fills the form (the form is present on the first page that the application display after the startup);
+\item The user submit the filled form to the system;
+\item The system send a confirmation e-mail to the user;
+\item The system display a message in which the user is informed that he will recieve a confirmation e-mail;
+\item The user confirm the registration by clicking a link in the received e-mail;
+\item A confirmation message is sent to the application;
+\item The user is redirected in his profile page inside the application;
+\item The user specifies his parameters.
+\end{enumerate}	\\ \hline
+
+\textbf{Output Condition:} The registration is confirmed to the system; \\ \hline
+
+\textbf{Exceptions:}
+
+\begin{enumerate}
+\item The e-mail given by the user is fake 
+\item The user makes a typo during the insertion of his e-mail
+\end{enumerate} \\ \hline
+
+\textbf{Mapping on Requirements:}
+
+\begin{itemize}
+\item Events 1 through 3 are granted by R12;(AGGIUNGERE I RIFERIMENTI)
+\item Evens 4 through 6 are granted by R13. (AGGIUNGERE I RIFERIMENTI)
+\end{itemize}  \\ \hline
+
+\end{longtable}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=400pt, keepaspectratio]{"images/RegistrationSequenceDiagram".png}
+\caption{Registration sequence diagram}
+\label{img:seqDiagrAppEditing00}
+\end{center}
+\end{figure}
 
 \subsubsection{User log-in}
 
@@ -341,58 +403,7 @@ that were specified yet by the user;
 \end{center}
 \end{figure}
 
-\subsubsection{User registration} \label{usecase:User registration}
 
-\begin{longtable}{|p{14cm}|} \hline
-
-\textbf{Name:} User registration \\ \hline
-
-\textbf{Actors:} External User, external e-mail service \\ \hline
-
-\textbf{Goals:} \goalref{goal:G5} \\ \hline
-
-\textbf{Input Condition:} \\ \hline
-
-\textbf{Event Flow:}
-
-\begin{enumerate}
-\item The user wants to register to the system, so he runs the application;
-\item The system display the login/registration page
-\item The user fills the form (the form is present on the first page that the application display after the startup)
-\item The user submit the filled form to the system
-\item The system send a confirmation e-mail to the user;
-\item The system display a message in which the user is informed that he will recieve a confirmation e-mail;
-\item The user confirm the registration by clicking a link in the received e-mail;
-\item A confirmation message is sent to the application;
-\item The user is redirected in his profile page inside the application;
-\item The user specifies his parameters;
-\end{enumerate}	\\ \hline
-
-\textbf{Output Condition:} The registration is confirmed to the system; \\ \hline
-
-\textbf{Exceptions:}
-
-\begin{enumerate}
-\item The e-mail given by the user is fake 
-\item The user makes a typo during the insertion of his e-mail
-\end{enumerate} \\ \hline
-
-\textbf{Mapping on Requirements:}
-
-\begin{itemize}
-\item Events 1 through 3 are granted by R12;(AGGIUNGERE I RIFERIMENTI)
-\item Evens 4 through 6 are granted by R13. (AGGIUNGERE I RIFERIMENTI)
-\end{itemize}  \\ \hline
-
-\end{longtable}
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[width=400pt, keepaspectratio]{"images/RegistrationSequenceDiagram".png}
-\caption{Registration sequence diagram}
-\label{img:seqDiagrAppEditing00}
-\end{center}
-\end{figure}
 
 \subsubsection{Booking phase} \label{usecase:Booking Phase}
 
