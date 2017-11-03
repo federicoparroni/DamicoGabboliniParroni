@@ -1,0 +1,24 @@
+\chapter{Architectural Design}
+
+\section{Overview}
+Travlendar+ has a multi-tier architecture. User can interact  directly with both version of the application: desktop and mobile. The schedule computation is performed locally on the device in which the application runs by querying the external APIs:
+
+\begin{itemize}
+\item Mapping Service API
+\item Travel Means APIs
+\item Wheather Forecasts APIs
+\end{itemize}
+
+For the last two ones, the communication happens through different interfaces (wrappers), in order to improve the capability of the system to be expanded. In this way we provide a common pattern for the data acquired from the APIs, so that new ones can be easily included without the need of drastic changes on the central core.
+
+\section{Component View}
+
+\section{Deployment View} 
+
+\section{Runtime View}
+
+\section{Component Interfaces}
+
+\section{Selected architectural styles and patterns}
+
+\section{Other Design Decisions}
