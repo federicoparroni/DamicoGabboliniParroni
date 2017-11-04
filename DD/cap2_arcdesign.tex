@@ -1,6 +1,7 @@
 \chapter{Architectural Design}
 
 \section{Overview}
+
 Travlendar+ has a multi-tier architecture.
 
 \begin{figure}[H]
@@ -9,8 +10,8 @@ Travlendar+ has a multi-tier architecture.
 \caption{High level components}
 \end{center}
 \end{figure}
-
-User can interact  directly with both version of the application: desktop and mobile. The schedule computation is performed locally on the device in which the application runs by querying the external APIs:
+ 
+User can interact directly with both version of the application: desktop and mobile, both laying on their respective OS APIs. The schedule computation is performed locally on the device in which the application runs by querying the GPS of the device and the external APIs:
 
 \begin{itemize}
 \item Mapping Service API
@@ -19,8 +20,45 @@ User can interact  directly with both version of the application: desktop and mo
 \end{itemize}
 
 For the last two ones, the communication happens through different interfaces (wrappers), in order to improve the capability of the system to be expanded. In this way we provide a common pattern for the data acquired from the APIs, so that new ones can be easily included without the need of drastic changes on the central core.
+In the architecture there are two more components: the Application server, that offers authentication and sinchronization services and the Database used to grant the durability of the data. At the end of the registration phase a new record is allocated in the Database and it will be used for check the identity of a user during the login phase. The Database also stores the user data (\ref{def:userdata}) so that they can be sinchronized in all the devices in which the user is logged in. 
+
+\textbf{INSERIRE FOTO STACK PARRO}
+
+The figure above represents the stack architecture of our application and shows the hierarchy of the layers. Each level can communicate with the upper and lower layer.
 
 \section{Component View}
+
+\textbf{INSERIRE IMMAGINE}
+
+The application \footnote{in the image is reported only the mobile version of the application since the desktop version is identical to it, with the only difference that it can't exploit GPS services, so for mantaining the graphic clear only one of the two is reported.}
+includes several components: 
+\begin{itemize}
+
+\item Identity Manager: it requests a service to the authentication provider either for the login or the registration of a user. 
+%using the API offered by the OS it can communicate with the authentication manager that can write into the Database.
+
+\item Appointment Manager: handles all the operations affecting appointment like modification, deletion and creation.
+ 
+\item Scheduler: it computes and saves the schedules of the user.
+
+\item Schedule Manager: handles all the operations affecting the schedule like showing and selecting the schedule to be run, notifying the user if a better schedule involving shared means has been found, buying the ticket for the means within the schedule. 
+
+\item Runtime Schedule Manager: Shows the directions and the progress of the running schedule.
+
+\item Synchronization Manager: it requests a synchronization to the Synchronization provider when needed.  
+
+\end{itemize}
+
+The application Server is composed by the following two components:
+\begin{itemize}
+
+\item Authentication Provider: it handles the registration and the login phase of the user. 
+
+\item Synchronization Provider: it has the purpose of synchronizing the user data (\ref{def:userdata}) in the database when something is changed.
+ 
+\end{itemize}
+
+The four components representing a service (wheather forecast, shared travel mean, public travel mean and the taxi service) aren't included in the system because they are external services but they have been represented since our system is using the interfaces exposed from them.
 
 \section{Deployment View} 
 
