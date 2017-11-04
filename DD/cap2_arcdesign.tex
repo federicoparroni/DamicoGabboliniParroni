@@ -1,7 +1,16 @@
 \chapter{Architectural Design}
 
 \section{Overview}
-Travlendar+ has a multi-tier architecture. User can interact  directly with both version of the application: desktop and mobile. The schedule computation is performed locally on the device in which the application runs by querying the external APIs:
+Travlendar+ has a multi-tier architecture.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth, keepaspectratio]{"image/components".png}
+\caption{High level components}
+\end{center}
+\end{figure}
+
+User can interact  directly with both version of the application: desktop and mobile. The schedule computation is performed locally on the device in which the application runs by querying the external APIs:
 
 \begin{itemize}
 \item Mapping Service API
