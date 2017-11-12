@@ -9,9 +9,10 @@ import it.polimi.gabdampar.travlendarapp.controller.TravelMean.TravelMean;
  */
 
 public class TravelOptionData {
-    int price, time, carbonEmission;
-    HashMap<TravelMean, Integer> distanceTravelledWithMean;
+    int price, carbonEmission; //in euros, in mg/m3
+    long duration; //in ms
+    HashMap<TravelMean, Integer> distanceTravelledWithMean; //in kms
 
-    // to-do: add directions
+    // to-do: add directions. to decide how to reprsent that directions, in a textual-parsed form or with the json file
 
 }
