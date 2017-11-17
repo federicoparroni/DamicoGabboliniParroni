@@ -1,0 +1,243 @@
+\chapter{Requirement Traceability}
+In each section section we will describe how the requirements of each goal are mapped in the design elements described above.
+
+\section{Goal 1}
+
+\begin{itemize}
+
+\item \textit{The system S.B.A to handle a registration phase in 
+which the user will provide an e-mail and a password}
+
+\begin{itemize}
+\item Login Interface
+\item Identity Manager
+\item Authentication Provider
+\item Database
+\end{itemize}
+
+\item \textit{The system S.B.A. to verify the e-mail given by the user by sending a confirmation e-mail to his address}
+
+\begin{itemize}
+\item Login Interface
+\item Identity Manager
+\item Authentication Provider
+\item Database
+\end{itemize}
+
+\item \textit{The system should let the user to specify his parameters}
+
+\begin{itemize}
+\item User Account Interface
+\end{itemize}
+
+\end{itemize} 
+
+
+\section{Goal 2}
+
+\begin{itemize}
+
+\item \textit{The system S.B.A to recognize a registered user given an e-mail and a password}
+
+\begin{itemize}
+\item Login Interface
+\item Identity Manager
+\item Authentication Provider
+\item Database
+\end{itemize}
+
+\item \textit{The system S.B.A. to retrieve information from the user about his registration informations, i.e. his e-mail and password}
+
+\begin{itemize}
+\item Login Interface
+\item Identity Manager
+\item Authentication Provider
+\item Database
+\end{itemize}
+
+\end{itemize}
+
+\section{Goal 3}
+
+\begin{itemize}
+
+\item \textit{The system should be able to retrieve an e-mail address from the user}
+
+\begin{itemize}
+\item Login Interface
+\end{itemize}
+
+\item \textit{ The system should be able to send the password of a user to his e-mail given it}
+
+\begin{itemize}
+\item Authentication Provider
+\item Database
+\end{itemize}
+
+\end{itemize}
+
+
+\section{Goal 4}
+
+\begin{itemize}
+
+\item \textit{The system S.B.A. to retrieve information from the user about his appointments}
+
+\begin{itemize}
+\item Appointment CRUD interface.  \textbf{agg alle def}
+\end{itemize}
+
+\item \textit{The system S.B.A. to store an appointment in his memory}
+
+\begin{itemize}
+\item Appointment Manager
+\end{itemize}
+
+\end{itemize}
+
+
+\section{Goal 5}
+
+\begin{itemize}
+
+\item \textit{The system should let the user change the parameters and the constraints of an inserted appointment}
+
+\begin{itemize}
+\item Appointment CRUD interface.  \textbf{agg alle def}
+\item Appointment Manager
+\end{itemize}
+
+\item \textit{The system S.B.A to rewrite the appointment in his memory with his new parameters}
+
+\begin{itemize}
+\item Appointment Manager
+\end{itemize}
+
+\end{itemize}
+
+
+\section{Goal 6}
+
+\begin{itemize}
+
+\item \textit{ Allow the user to set the constraints of the schedule}
+\begin{itemize}
+\item Schedule Interface
+\end{itemize}
+
+\item \textit{Allow the user to set the optimization criteria for the schedule}
+\begin{itemize}
+\item Schedule Interface
+\end{itemize}
+
+\item \textit{Allow the user to set the variables for the schedule}
+\begin{itemize}
+\item Schedule Interface
+\end{itemize}
+
+\item \textit{The system S.B.A. to gather information from external APIs about: 
+	\begin{itemize}
+		\item travel options with related travel option data; 
+		\item weather forecast;
+		\item strike days;
+		\item delays.
+	\end{itemize}}
+
+\begin{itemize}
+\item Mapping Service API Wrapper
+\item Travel Mean API Wrapper
+\item Weather Forecast API Wrapper
+\end{itemize}
+
+\item \textit{The system S.B.A. to select the best travel option according to the optimization criteria taking into account:
+	\begin{itemize}
+		\item user constraint;
+		\item user parameters;
+		\item travel option data; 
+		\item weather forecast;
+		\item information about strike day;
+		\item information about delays.
+	\end{itemize}}
+
+\begin{itemize}
+\item Scheduler
+\end{itemize}
+
+\item \textit{ The system S.B.A to store valid schedules requested by the user}
+\begin{itemize}
+\item Schedule Manager
+\end{itemize}
+
+\end{itemize}
+
+
+\section{Goal 7}
+
+\begin{itemize}
+
+\item \textit{The system should let the user accept a schedule from the saved ones}
+\begin{itemize}
+\item Schedule List Interface
+\item Schedule Manager
+\end{itemize}
+
+\end{itemize}
+
+\section{Goal 8}
+
+\begin{itemize}
+
+\item \textit{The system S.B.A to book a travel mean through external API offered by third part application in which the user is signed}
+\begin{itemize}
+\item Schedule Manager
+\item Travel Mean API Wrapper
+\end{itemize}
+
+\end{itemize}
+
+
+\section{Goal 9}
+
+\begin{itemize}
+
+\item \textit{The system S.B.A to retrive the position of the user from his GPS}
+
+\begin{itemize}
+\item GPSAPI
+\item Runtime Schedule Manager
+\end{itemize}
+
+\item \textit{ The system S.B.A. to retrive from an external API the directions to give to the user for reach the next appointment}
+
+\begin{itemize}
+\item Mapping Service API Wrapper
+\item Runtime Schedule Manager
+\end{itemize}
+
+\item \textit{The system S.B.A. to retrive from an external API the Graphical representation of the path that will be travelled by the user}
+
+\begin{itemize}
+\item Mapping Service API Wrapper
+\item Runtime Schedule Manager
+\end{itemize}
+
+\end{itemize}
+
+\section{Goal 10}
+
+\begin{itemize}
+
+\item \textit{The system should be able to send notifications to the user}
+\begin{itemize}
+\item Schedule Manager
+\end{itemize}
+
+\item \textit{The system should be able to retrieve information about the availablity of shared travel means from external APIs without the user request}
+\begin{itemize}
+\item Mapping Service API Wrapper
+\item Schedule Manager
+\end{itemize}
+
+\end{itemize}
+
+

@@ -6,6 +6,6 @@ import it.polimi.gabdampar.travlendarapp.model.Area;
  * Created by federico on 09/11/17.
  */
 
-public class TravelMean {
+public abstract class TravelMean {
     Area area;
 }

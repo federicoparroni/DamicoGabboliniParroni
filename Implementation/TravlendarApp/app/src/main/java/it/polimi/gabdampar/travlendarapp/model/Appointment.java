@@ -5,4 +5,5 @@ package it.polimi.gabdampar.travlendarapp.model;
  */
 
 public class Appointment {
+
 }

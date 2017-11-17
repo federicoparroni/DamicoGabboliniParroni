@@ -8,13 +8,8 @@ import java.util.List;
  * Created by federico on 09/11/17.
  */
 
-public class PrivateTravelMean extends TravelMean {
-    public TravelOptionData getTravelOptionData(List<Constraint> constr, Appointment end, Appointment start){
-        return null;
-    }
+public abstract class PrivateTravelMean extends TravelMean {
+    public abstract TravelOptionData getTravelOptionData(List<Constraint> constr, Appointment end, Appointment start) throws UnsupportedOperationException;
 
-    public int getRidePrice(ScheduledAppointment sapp){
-        return -1;
-    }
-
+    public abstract int getRidePrice(ScheduledAppointment sapp) throws UnsupportedOperationException;
 }
