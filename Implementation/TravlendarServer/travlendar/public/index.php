@@ -26,6 +26,8 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 $storage = new Storage\Pdo($pdo);
 
+//$config['storage'] = $storage;
+
 // create OAuth Storage inside the database
 /* $storage = new PdoStorage($pdo);
 foreach (explode(';', $storage->getBuildSql()) as $statement) {
@@ -37,10 +39,12 @@ $server = new OAuth2\Server(
     $storage,
     [
         'access_lifetime' => 3600,
+        'allow_implicit' => true
     ],
     [
         new GrantType\ClientCredentials($storage),
-        new GrantType\AuthorizationCode($storage),
+        new GrantType\UserCredentials($storage),    // authenticate with username and password
+        //new GrantType\AuthorizationCode($storage),
     ]
 );
 
@@ -48,9 +52,6 @@ $app = new \Slim\App(["settings" => $config]);
 
 // DEPENDENCIES
 $container = $app->getContainer();
-$container['user_repository'] = function ($c) {
-    return [ "user1", "user2", "user3" ];  //new FileRepository(__DIR__ . '/books.json');
-};
 
 $container['db'] = function ($c) {
     $db = $c['settings']['db'];
@@ -66,9 +67,13 @@ $renderer = new Views\PhpRenderer( __DIR__ . '/vendor/chadicus/slim-oauth2-route
 // add authorization methods
 $app->map(['GET', 'POST'], Routes\Authorize::ROUTE, new Routes\Authorize($server, $renderer))->setName('authorize');
 $app->post(Routes\Token::ROUTE, new Routes\Token($server))->setName('token');
-$app->map(['GET', 'POST'], Routes\ReceiveCode::ROUTE, new Routes\ReceiveCode($renderer))->setName('receive-code');
+//$app->map(['GET', 'POST'], Routes\ReceiveCode::ROUTE, new Routes\ReceiveCode($renderer))->setName('receive-code');
 
 $authorization = new Middleware\Authorization($server, $app->getContainer());
+
+
+
+
 
 // ROUTES
 $app->get('/hello/{name}', function (Request $request, Response $response) {
@@ -79,20 +84,25 @@ $app->get('/hello/{name}', function (Request $request, Response $response) {
 });
 
 $app->group('/api', function () use ($app) {
-    $app->post('/login', function (Request $request, Response $response) {
-        $data = $request->getParsedBody();
-        $email = filter_var($data['email'], FILTER_SANITIZE_STRING);
-        $password = filter_var($data['password'], FILTER_SANITIZE_STRING);
-    
-        //$print = print_r($data);
-        //$response->getBody()->write("$print");
-        $response->getBody()->write("email: $email,\npassword: $password");
-        return $response;
+
+    $app->post('/register', function ($request, $response) {
+        return \App\Controllers\AuthenticationController::Register($request, $response, $this->db);
     });
-    $app->get('/register', function ($request, $response) {
-        return $response->getBody()->write(time());
+
+    $app->post('/profile', function (Request $request, Response $response) {
+        return \App\Controllers\AuthenticationController::Profile($request, $response, $this->db);
     });
-});
+
+    $app->get('/test', function ($request, $response) {
+        /* return $response->withJson(array(   'success' => true, 
+                            'data' => (object) [
+                                        'id' => $userId
+                                    ]
+                ), 200); */
+        return $response->withJson(array( 'success' => true, 'message' => 'You\'re authorized to access this API!' ), 201);            
+    });
+
+})->add($authorization);
 
 $app->get('/api/getUser', function ($request, $response) {
     return $response->withJson($this->user_repository, 200);
