@@ -1,0 +1,27 @@
+\chapter{Algorithmic Design}
+In this chapter are given the guidelines on how to implement the most important functionalities that the components of the system will offer. The pseudocode of the relevant method is shown. 
+
+\section{Login}
+The Login involves the application the application server and the database. The last one is located outside the application server. 
+To login in to the application the following steps must be done:
+\begin{enumerate}
+\item the user presses the Login button in the Login view;
+\item the Identity manager (Login method) sends a request to the Application Server for authentication
+\item A query on the database is performed to check the validity of the user credential and a response to the client is returned;
+\end{enumerate}
+
+Login(username, password)
+	response = SendRequest("api/login", username, password)
+	if response.isValid 
+		token = response.GetToken
+		Show(HomeView)
+	else
+		Show(ErrorMessage , "Invalid Credentials")
+
+LoginRequest(username, password)
+	result = database.query(username, password)
+	if result == 1
+		SendAuthenticationResponse (token)
+	else
+		sendAuthenticationError(error code)
+		
