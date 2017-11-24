@@ -10,6 +10,8 @@ To login in to the application the following steps must be done:
 \item A query on the database is performed to check the validity of the user credential and a response to the client is returned;
 \end{enumerate}
 
+\begin{lstlisting}
+//client side
 Login(username, password)
 	response = SendRequest("api/login", username, password)
 	if response.isValid 
@@ -18,10 +20,193 @@ Login(username, password)
 	else
 		Show(ErrorMessage , "Invalid Credentials")
 
+//server side
 LoginRequest(username, password)
 	result = database.query(username, password)
 	if result == 1
 		SendAuthenticationResponse (token)
 	else
 		sendAuthenticationError(error code)
+\end{lstlisting}
+
+\section{CreateSchedule}
+\textbf{correggere formula}
+The process of computing a schedule is composed by the following steps:
+
+\begin{enumerate}
+\item Create the predecessor matrix (P) in which every cell (i,j) contains:
+\begin{equation}
+    P_(ij)=
+    \begin{cases}
+      1, & if Appointment_i must precede Appointment_j \\
+      0, & if Appointment_i must follows Appointment_j \\
+      -1, & if Appointment_i can be scheduled both before or after appointment_j
+    \end{cases}
+  \end{equation}
+\item Compute all the possible ordered arrangements of appointments with respect to the predecessor matrix
+\item For each appointment in each arrangement, set the starting time according to travel time. This is estimated considering the euclidean distance and heuristics on the kind of travel mean between every pair of consecutive appointments in the arrangement, considering the bestTravelMean(\textbf{fare def});
+\item Check the feasibility of the arrangements and discard the ones which have overlapping appointments;
+\item Choose the most convenient one, according to the optimization criteria.
+\item Call mapping service Api to fix the effective routes between the appointments
+\end{enumerate}
+
+\begin{lstlisting}
+ComputeSchedule(wakeUpTime, startingLocation, appts, constraints, optCriteria)
+	p=CalculatePredecessorMatrix(appts)
+	a=CalculateArrangements(appts, p, 0, 1)
+	SetStartingTime(a, startingTime, startingLocation, constraint, optCriteria)
+	s=ChooseBestSchedule(a)
+	MappingServiceRequest(s)
+	return s
+
+CalculatePredecessorMatrix(appts)
+	p=new Matrix[appt.size,appt.size]
+	for(i=0 .. appts.size)
+		for(j=i+1 .. appts.size)
+			a1=appts[i]
+			a2=appts[j]
+			if a1.deterministic && a2.deterministic
+				if a1.startingTime < a2.startingTime
+					pred[i,j]=1
+				else
+					pred[i,j]=0
+			elseif a1.deterministic && !a2.deterministic
+				if a1.startingTime < a2.timeSlot.start
+					pred[i,j]=1
+				elseif a1.endingTime > a2.timeSlot.end
+					pred[i,j]=0
+				else
+					pred[i,j]=-1
+			elseif !a1.deterministic && a2.deterministic
+					if a1.timeslot.end < a2.endingTime
+						pred[i,j]=1
+					elseif a1.timeSlot.start > a2.startingTime
+						pred[i,j]=0
+					else
+						pred[i,j]=-1
+			elseif !a1.deterministic && !a2.deterministic
+					if a1.timeSlot.end < a2.timeSlot.start
+						pred[i,j]=1
+					elseif a1.timeSlot.start > a2.timeSlot.end
+						pred[i,j]=0
+					else
+						pred[i,j]=-1
+	return p
+		
+		
+CalculateArrangements(appts, p, curri, currj)
+	arrangement=new List	
+	for(i=curri .. appts.size-1)
+		for(j=currj-1 .. appts.size)
+			if p[i,j]==-1
+				p0=p
+				p0[i,j]=0
+				CalculateArrangements(appts, p0, i, j)
+				
+				p1=p
+				p1[i,j]=1
+				CalculateArrangements(appts, p1, i, j)
+				
+				return
+				
+	a=ConvertPredMatrixToList(appts,p)
+	arrangement.addLast(a)
+	return arrangement
+
+		 
+ConvertPredMatrixToList(appts, p)
+//converts a "-1 free" predecessor matrix to an ordered list of appointments
+
+
+SetStartingTime(a, startingTime, startingLocation, constraint, optCriteria)
+	for(arr in a)
+		dummyStartingAppt = new appointment(startingTime, startingLocation, duration=0)
+		arr.addFirst(dummyStartingAppt)
+		for(i=1 .. arr.size)
+			appt1=arr[i-1]
+			appt2=arr[i]
+			travelMean=getBestTravelMean(appt1, appt2, constraint, optCriteria)
+			travelTime=travelMean.estimateTime(appt1, appt2)
+			if appt2.deterministic 
+				appt2.startingTravelTime = appt2.startingTime-travelTime
+				appt2.travelMean=travelMean
+				if appt1.endingTime > appt2.startingTravelTime
+					error("schedule not feasible")
+			else
+				appt2.startingTravelTime = max(appt1.endingTime,appt2.timeSlot.start-travelTime)
+				appt2.travelMean=travelMean
+				if appt2.startingTravelTime > appt2.timeSlot.end
+					error("schedule not feasible")
+					
+					
+getBestTravelMean(appt1, appt2, constraint, optCriteria)
+	l=getNotConstrainedTravelMeans(constraint)
+	for(t in l)
+		switch optCriteria
+			case "MoneySpent"
+				t.cost=estimateMoney(t, appt1, appt2)
+			case "Time"
+				t.cost=estimateTime(t, appt1, appt2)
+			case "CarbonFootprint"
+				t.cost=estimateCarbon(t, appt1, appt2)
+	sortByCriteria(l, optCriteria)
+	return l
+	
+ChooseBestSchedule(a)
+	best=a[0]
+	for(i = 0 .. a.size)
+		sum=0
+		for(appt in a[i])
+			sum+=appt.travelMean.cost
+		a[i].totalCost=sum
+		if sum<a[0].totalCost
+			best=a[i]
+	return best
+	
+MappingServiceRequest(s)
+	for (i=0 .. s.size-1)
+		response=MappingServiceRequest(s[i], s[i+1])
+		s[i].path=response.path
+		s[i].startingTime=response.startingTime
+
+\end{lstlisting}
+
+\section{Registration}
+The Registration involves the application the application server and the database. The last one is located outside the application server. 
+To register in to the application the following steps must be done:
+\begin{enumerate}
+\item The user presses the Registration button in the Login view;
+\item The Identity manager (Registration method) sends a request to the Application Server for authentication
+\item A query on the database is performed to check the presence of the user credential and a confirmation email is sent
+\item The user confirms the email by clicking on the designated link
+\item The user's state on the database becomes confirmed
+\end{enumerate}
+
+\begin{lstlisting}
+//client side
+Register(username, password)
+	response = SendRequest("api/registration", username, password)
+	if !response.valid
+		Show(ErrorMessage , "User Already Registered")
+		
+
+	
+//server side
+RegistrationRequest(username, password)
+	result = database.query(username, password)
+	if result == 0
+		database.insertTuple(username, password)
+		sendEmail(username)
+	else
+		sendAuthenticationError(error code)
+		
+EmailConfirmationRequest(username)
+	result = database.modifyTuple(username, confirmed=true)
+\end{lstlisting}
+
+
+
+
+
+
 		
