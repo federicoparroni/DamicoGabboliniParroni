@@ -11,7 +11,7 @@ import it.polimi.gabdampar.travlendarapp.model.TravelOptionData;
  * Created by gabbo on 12/11/2017.
  */
 
-public class MappingServiceAPI implements IMappingServiceAPI {
+public class MappingServiceAPI implements IMappingServiceAPIWrapper {
 
     public List<TravelOptionData> getTravelOptionData(List<Constraint> constr, Appointment end, Appointment start){
         return new ArrayList<TravelOptionData>();

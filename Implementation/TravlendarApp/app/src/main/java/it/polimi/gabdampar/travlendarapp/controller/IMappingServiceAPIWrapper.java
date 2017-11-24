@@ -10,7 +10,7 @@ import it.polimi.gabdampar.travlendarapp.model.TravelOptionData;
  * Created by gabbo on 12/11/2017.
  */
 
-public interface IMappingServiceAPI {
+public interface IMappingServiceAPIWrapper {
 
     /*
     given a set of constraints (that can be just on appointment, so can be specified whether a travelmean is deactivated or not in a timeslot

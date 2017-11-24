@@ -19,7 +19,7 @@ User can interact directly with both version of the application: desktop and mob
 \item Wheather Forecasts APIs
 \end{itemize}
 
-For the last two ones, the communication happens through different interfaces (wrappers), in order to improve the capability of the system to be expanded. In this way we provide a common pattern for the data acquired from the APIs, so that new ones can be easily included without the need of drastic changes on the central core.
+The communication between these components happens through different interfaces (wrappers), in order to improve the capability of the system to be expanded. In this way we provide a common pattern for the data acquired from the APIs, so that new ones can be easily included without the need of drastic changes on the central core.
 In the architecture there are two more components: the Application server, that offers authentication and sinchronization services and the Database used to grant the durability of the data. At the end of the registration phase a new record is allocated in the Database and it will be used for check the identity of a user during the login phase. The Database also stores the user data (\ref{def:userdata}) so that they can be sinchronized in all the devices in which the user is logged in. 
 
 \textbf{INSERIRE FOTO STACK PARRO}
@@ -49,9 +49,15 @@ includes several components:
 
 \item Schedule Manager: handles all the operations affecting the schedule like showing and selecting the schedule to be run, notifying the user if a better schedule involving shared means has been found, buying the ticket for the means within the schedule. 
 
-\item Runtime Schedule Manager: Shows the directions and the progress of the running schedule.
+\item Runtime Schedule Manager: shows the directions and the progress of the running schedule.
 
-\item Synchronization Manager: it requests a synchronization to the Synchronization provider when needed.  
+\item Synchronization Manager: it requests a synchronization to the Synchronization provider when needed.
+
+\item Mapping Service API Wrapper: manipulates data retrieved from a mapping service (e.g. Google Maps)in a format recognized by the application.
+
+\item Travel Mean API Wrapper: manipulates data retrieved from a travel mean API service (e.g. Mobike, ATM, etc) in a format recognized by the application.
+
+\item Weather Forecast API Wrapper: manipulates data retrieved from a weather forecast API service (e.g. Dark Sky) in a format recognized by the application.
 
 \end{itemize}
 
@@ -64,7 +70,7 @@ The application Server is composed by the following two components:
  
 \end{itemize}
 
-The four components representing a service (wheather forecast, shared travel mean, public travel mean and the taxi service) aren't included in the system because they are external services but they have been represented since our system is using the interfaces exposed from them.
+The three components representing services (Wheather Forecast API, Travel Mean API, Mapping Service API) aren't included in the system because they are external services but they have been represented since our system is using the interfaces exposed from them.
 
 \section{Deployment View}
 
@@ -127,16 +133,35 @@ The four components representing a service (wheather forecast, shared travel mea
 \end{center}
 \end{figure}
 
+\subsection{Note on Runtime Views}
+In tbe diagrams the interaction involving Application Server, Application and API wrappers since they are not informative to show the behaviour of the application.
+
+above only the interactions between internal components are shown.
+
 \section{Component Interfaces}
 
 \section{Selected architectural styles and patterns}
+
+\subsection{Selected design patterns}
+
 \begin{itemize}
-\item MVC
-\item Adapter
-\item Client Server
-\item OAuth
-\item Restful API
-\item Singleton
+\item MVC: all the classes of the application will adopt this pattern
+\item Adapter: API wrappers will adopt this pattern
+\item Client-Server: the application  running on a device represents the client part, reqesting services to the Travlendar server
+\item OAuth: standard adopted by the exposed APIs of the server, in order to get authorization to make request from different clients
+\item Restful API: a particular kind of APIs that encapsulate the request/response body in a JSON string
+\item Singleton: restricts the instantiation of a class to one object. This is useful when exactly one object is needed to coordinate actions across the system. Some classes of our system can be built on this pattern, like the Travel Mean.
 \end{itemize}
 
 \section{Other Design Decisions}
+
+\subsection{API Wrappers Class Diagrams}
+
+
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth, keepaspectratio ,origin=c]{"image/WrapperUMLDiagram".png}
+\caption{API wrapper class diagram}
+\end{center}
+\end{figure}
