@@ -207,9 +207,11 @@ John is ready to start is daily tasks in fact he has already scheduled his appoi
 \begin{enumerate}
 \item The user needs to log-in the application, so he runs it;
 \item The system provides to the user a form to fill;
-\item The user fills up the form with the his e-mail and his password; (as said in \ref{subsect:usermodel})
+\item The user fills up the form with his e-mail and his password; (as said in \ref{subsect:usermodel})
 \item The user submits the form to the system;
-\item The system checks the user identity and provides to the user the main application page .
+\item The system checks the user identity
+\item The system synchronize the data;
+\item The system provides to the user the main application page .
 \end{enumerate} \\ \hline
 
 \textbf{Output Condition:} The user is logged-in to the system. \\ \hline
@@ -220,7 +222,8 @@ John is ready to start is daily tasks in fact he has already scheduled his appoi
 
 \begin{itemize}
 \item Events from 3 through 5 granted by \reqref{req:R5};
-\item Event 6 grandet by \reqref{req:R4};
+\item Event 6 granted by \reqref{req:R30};
+\item Event 7 granted by \reqref{req:R6};
 \end{itemize} \\ \hline
 
 \end{tabular}
