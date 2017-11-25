@@ -22,7 +22,12 @@ User can interact directly with both version of the application: desktop and mob
 The communication between these components happens through different interfaces (wrappers), in order to improve the capability of the system to be expanded. In this way we provide a common pattern for the data acquired from the APIs, so that new ones can be easily included without the need of drastic changes on the central core.
 In the architecture there are two more components: the Application server, that offers authentication and sinchronization services and the Database used to grant the durability of the data. At the end of the registration phase a new record is allocated in the Database and it will be used for check the identity of a user during the login phase. The Database also stores the user data (\ref{def:userdata}) so that they can be sinchronized in all the devices in which the user is logged in. 
 
-\textbf{INSERIRE FOTO STACK PARRO}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=200pt, keepaspectratio]{"image/TierStack".png}
+\caption{System stack}
+\end{center}
+\end{figure}
 
 The figure above represents the stack architecture of our application and shows the hierarchy of the layers. Each level can communicate with the upper and lower layer.
 
@@ -30,7 +35,7 @@ The figure above represents the stack architecture of our application and shows 
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[width=\textwidth, keepaspectratio]{"image/ComponentDiagram".png}
+\includegraphics[width=\textwidth, keepaspectratio, angle=90, origin=c]{"image/ComponentDiagram".png}
 \caption{Component diagram}
 \end{center}
 \end{figure}
@@ -92,6 +97,34 @@ The three components representing services (Wheather Forecast API, Travel Mean A
 
 \begin{figure}[H]
 \begin{center}
+\includegraphics[width=\textwidth, keepaspectratio, angle=90,origin=c]{"image/RuntimeViews/AppointmentCreating".png}
+\caption{Appointment creation runtime view}
+\end{center}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth, keepaspectratio, angle=90,origin=c]{"image/RuntimeViews/AppointmentEditing".png}
+\caption{Appointment editing runtime view}
+\end{center}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth, keepaspectratio, angle=90,origin=c]{"image/RuntimeViews/DynamicDirections".png}
+\caption{Dynamic directions runtime view}
+\end{center}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth, keepaspectratio, angle=90,origin=c]{"image/RuntimeViews/Registration".png}
+\caption{Registration runtime view}
+\end{center}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
 \includegraphics[width=710pt, keepaspectratio, angle=90,origin=c]{"image/RuntimeViews/ScheduleAppointments".png}
 \caption{Schedule appointments runtime view}
 \end{center}
@@ -139,10 +172,15 @@ In tbe diagrams the interaction involving Application Server, Application and AP
 above only the interactions between internal components are shown.
 
 \section{Component Interfaces}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[height=230pt, keepaspectratio, angle=90,origin=c]{image/InterfacesDiagrams".png}
+\caption{Schedule selection runtime view}
+\end{center}
+\end{figure}
+
 
 \section{Selected architectural styles and patterns}
-
-\subsection{Selected design patterns}
 
 \begin{itemize}
 \item MVC: all the classes of the application will adopt this pattern
@@ -153,15 +191,16 @@ above only the interactions between internal components are shown.
 \item Singleton: restricts the instantiation of a class to one object. This is useful when exactly one object is needed to coordinate actions across the system. Some classes of our system can be built on this pattern, like the Travel Mean.
 \end{itemize}
 
-\section{Other Design Decisions}
 
-\subsection{API Wrappers Class Diagrams}
-
-
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[width=\textwidth, keepaspectratio ,origin=c]{"image/WrapperUMLDiagram".png}
-\caption{API wrapper class diagram}
-\end{center}
-\end{figure}
+%\section{Other Design Decisions}
+%
+%\subsection{API Wrappers Class Diagrams}
+%
+%
+%
+%\begin{figure}[H]
+%\begin{center}
+%\includegraphics[width=\textwidth, keepaspectratio ,origin=c]{"image/WrapperUMLDiagram".png}
+%\caption{API wrapper class diagram}
+%\end{center}
+%\end{figure}

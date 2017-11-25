@@ -2,17 +2,25 @@
 \chapter{Introduction}
 
 \section{Purpose}
+The purpose of this document is to provide more technical details than the RASD about Travelendar+ system. This document is addressed to developers and aims to identify:
+\begin{itemize}
+\item The high level architecture
+\item The design patterns
+\item The main components and their interfaces provided one for another
+\item The Runtime behavior
+\end{itemize}
 
 \section{Scope}
 
 Travlendar+ is an application that aims to ease the management of the daily appointments of a registered user by providing a desired schedule for those. 
 The application runs within the context of a restricted geographic area and thus should consider only the travel means available in this scope.
-The application is able to interact with different data sources, in particular Travel Means APIs \textbf{FARE DEFINIZIONE} and User device GPS, and to arrange the appointments by exploiting these information.
+The application is able to interact with different data sources, in particular Travel Means APIs and User device GPS, and to arrange the appointments by exploiting these information.
 Once the schedule is computed, the application gives to the user the possibility to buy tickets for the involved travel means, then he/she can run it and follow directions provided by the application. 
 
 \section{Definitions, Acronyms, Synonims}
 
-\subsection{Synonims}
+
+%\subsection{Synonims}
 %Are synonims:
 %\begin{itemize}
 %\item Appointment and meeting;
@@ -24,11 +32,11 @@ Once the schedule is computed, the application gives to the user the possibility
 \newtheorem{definition}{Definition}[section]
  
 \begin{definition} \label{def:userdata}
-the user data include:
+The user data include:
 \begin{itemize}
-\item schedules;
-\item appointments;
-\item user parameters.
+\item Schedules;
+\item Appointments;
+\item User parameters.
 \end{itemize}
 
 \end{definition}
@@ -120,7 +128,25 @@ A Schedule is a set of time-ordered and not overlapping appointments where their
 
 \section{Revision history}
 
+\section{Reference Documents}
+RASD document
+
 \section{Document structure}
+\begin{itemize}
+\item Introduction: this section introduces the design document. It contains a justification of his utility
+\item Architecture Design: this section is divided into different parts:
+\begin{enumerate}
+\item Overview: this section explains the division in tiers of our application and lists further details that were not specified in the RASD.
+\item Components View: this sections gives a global view of the components of the application, other than a brief description, and describes how they communicate
+\item Deployment view: this section shows the components that must be deployed to have the application running correctly
+\item Runtime view: sequence diagrams are represented in this section to show how the components interact and collaborate during the fullfilling of a specific task. Each task is associated to each goal specified on the RASD document
+\item Component interfaces: the interfaces between the components are presented in this section
+\item Selected architectural styles and patterns : this section explains the architectural and design choices taken during the creation of the application
+\end{enumerate}
+\item Algorithms Design: this section describes the most important algorithmic parts. Pseudo code is used in order to hide unnecessary implementation details and abstract from a specific programming language
+\item Requirements Traceability: this section aims to explain how the decisions taken in the RASD are linked to design elements
+\end{itemize}
+
 
 
  

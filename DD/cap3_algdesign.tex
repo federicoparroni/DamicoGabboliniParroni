@@ -36,7 +36,7 @@ The process of computing a schedule is composed by the following steps:
 \begin{enumerate}
 \item Create the predecessor matrix (P) in which every cell (i,j) contains:
 \begin{equation}
-    P_(ij)=
+    P_{ij}=
     \begin{cases}
       1, & if Appointment_i must precede Appointment_j \\
       0, & if Appointment_i must follows Appointment_j \\
@@ -205,6 +205,48 @@ EmailConfirmationRequest(username)
 \end{lstlisting}
 
 
+\section{Synchronize}
+The synchronization in our system is the process that aims to keep the data consistent and updated between different devices. For example, when a user inserts an appointment on one of his devices, then the changes must be propagated to all his other devices, once the login is performed. 
+The Synchronization involves the application, the application server and the database. The last one is located outside the application server. To sinchronize data across multiple devices two actions must be carried out:
+\begin{itemize}
+\item Upload of local data on the database when a single change on the  client's local data occours(Synchronize Upwards);
+\item Download of data from the database, if an update is necessary, when login is performed(Synchronize Downwards).
+\end{itemize}
+
+\begin{lstlisting}
+//client background processes
+
+SynchronizeUpwards(changedData)
+	update = false
+	while !update
+		response = SendRequest("api/sync/up", token, changedData)
+		if response	 
+			update = true
+			
+SynchronizeDownwards()
+	newData=SendRequest("api/sync/down", token)
+	localData=newData
+		
+		
+//server side
+
+SynchUpwardsRequest(token, changedData)
+	userID = database.getUser(token)
+	if changedData.action == insert
+		//changedData is a newly inserted element
+		database.insert(changedData, userID)
+	else if changedData.action == edit
+		database.update(changedData, userID)
+	else
+		database.delete(changedData, userID)
+	sendResponse("syncresult", true)
+	
+SynchUpwardsRequest(token, changedData)
+	userID = database.getUser(token)
+	data=database.getUserData(userID)
+	sendResponse(data)
+
+\end{lstlisting}
 
 
 
