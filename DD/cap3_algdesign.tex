@@ -30,21 +30,22 @@ LoginRequest(username, password)
 \end{lstlisting}
 
 \section{CreateSchedule}
-\textbf{correggere formula}
 The process of computing a schedule is composed by the following steps:
 
 \begin{enumerate}
 \item Create the predecessor matrix (P) in which every cell (i,j) contains:
-\begin{equation}
+
+\[
     P_{ij}=
     \begin{cases}
-      1, & if Appointment_i must precede Appointment_j \\
-      0, & if Appointment_i must follows Appointment_j \\
-      -1, & if Appointment_i can be scheduled both before or after appointment_j
+      1, &\text{if $Appointment_i$ must precede $Appointment_j$} \\
+      0, &\text{if $Appointment_i$ must follows $Appointment_j$} \\
+      -1, &\text{if $Appointment_i$ can be scheduled both before or after $appointment_j$}
     \end{cases}
-  \end{equation}
+\]
+
 \item Compute all the possible ordered arrangements of appointments with respect to the predecessor matrix
-\item For each appointment in each arrangement, set the starting time according to travel time. This is estimated considering the euclidean distance and heuristics on the kind of travel mean between every pair of consecutive appointments in the arrangement, considering the bestTravelMean(\textbf{fare def});
+\item For each appointment in each arrangement, set the starting time according to travel time. This is estimated considering the euclidean distance and heuristics on the kind of travel mean between every pair of consecutive appointments in the arrangement, considering the bestTravelMean; \ref{def:bestTravelMean}
 \item Check the feasibility of the arrangements and discard the ones which have overlapping appointments;
 \item Choose the most convenient one, according to the optimization criteria.
 \item Call mapping service Api to fix the effective routes between the appointments
