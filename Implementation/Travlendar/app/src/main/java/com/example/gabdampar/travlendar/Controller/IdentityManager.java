@@ -1,15 +1,11 @@
-package com.example.gabdampar.travlendar;
+package com.example.gabdampar.travlendar.Controller;
 
-import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 
 import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 
 
 import org.json.JSONException;
@@ -22,8 +18,10 @@ import java.util.TimerTask;
  * Created by gabdampar on 16/11/2017.
  */
 
+/*
+// IdentityManager offers methods to register, authenticate via bearer token and refresh it after expiration
+*/
 public class IdentityManager implements Response.Listener<JSONObject>, Response.ErrorListener {
-
     private static String baseUrl = "http://travlendar.000webhostapp.com/travlendar/public";
 
     private String email = "";
@@ -34,10 +32,11 @@ public class IdentityManager implements Response.Listener<JSONObject>, Response.
     private static String client_id = "travlendar";
     private static String client_secret = "travlendar";
 
+    // used to schedule the token refreshing
     private static Timer t = new Timer();
 
+    // singleton
     private static IdentityManager instance;
-
     public static IdentityManager GetInstance() {
         if(instance == null) {
             instance = new IdentityManager();
@@ -45,15 +44,17 @@ public class IdentityManager implements Response.Listener<JSONObject>, Response.
         return instance;
     }
 
+    // Request a token to authenticate for future requests
     public void Login(String email, String password, Response.Listener onResponse, Response.ErrorListener onError)  {
-        //if(!IdentityManager.instance.email.isEmpty() && !IdentityManager.instance.password.isEmpty()) {
+        // TO-DO: should check whether online or not
+        if(!IdentityManager.instance.email.isEmpty() && !IdentityManager.instance.password.isEmpty()) {
             IdentityManager.instance.email = email;
             IdentityManager.instance.password = password;
 
             IdentityManager.TokenRequest(onResponse, onError);
-        //} else {
+        } else {
             Log.d("EmptyCredentials", "Email o password missing");
-        //}
+        }
     }
 
     public void SetUserSession(String email, String password, final String token, int tokenDuration) {
@@ -76,7 +77,7 @@ public class IdentityManager implements Response.Listener<JSONObject>, Response.
     }
 
     private static void TokenRequest(Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
-        String json = String.format("{\"grant_type\": \"password\", \"username\": \"%s\", \"password\": \"%s\", \"client_id\": \"travlendar\", \"client_secret\": \"travlendar\" }", IdentityManager.instance.email, IdentityManager.instance.password);
+        String json = String.format("{\"grant_type\": \"password\", \"username\": \"%s\", \"password\": \"%s\", \"client_id\": \"%s\", \"client_secret\": \"%s\" }", IdentityManager.instance.email, IdentityManager.instance.password, IdentityManager.client_id, IdentityManager.client_secret);
         try {
             JsonObjectRequest loginRequest = new JsonObjectRequest(baseUrl.concat("/token"),
                     new JSONObject(json), listener, errorListener);
