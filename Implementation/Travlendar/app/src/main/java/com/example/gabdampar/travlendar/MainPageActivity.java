@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import com.example.gabdampar.travlendar.Controller.MappingServiceAPIWrapper;
+
 
 import com.example.gabdampar.travlendar.R;
 
@@ -13,6 +15,8 @@ public class MainPageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_page);
+
+        MappingServiceAPIWrapper.getInstance().prova();
     }
 
     //called when appointments Button is clicked
