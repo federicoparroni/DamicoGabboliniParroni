@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -14,37 +15,106 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 /**
- * Created by Edoardo D'Amico on 16/11/2017.
+ * Created by gabdampar on 16/11/2017.
  */
 
-public class IdentityManager  {
+public class IdentityManager implements Response.Listener<JSONObject>, Response.ErrorListener {
 
-    private Intent intent;
-
-    private String email;
-    private String password;
     private static String baseUrl = "http://travlendar.000webhostapp.com/travlendar/public";
 
+    private String email = "";
+    private String password = "";
+    private String token = "";
+    private String refreshToken = "";
 
-    public static void Login(String email, String password,Context context, Response.Listener onResponse, Response.ErrorListener onError)  {
-        RequestQueue queue = Volley.newRequestQueue(context); //NON SO SE è MEGLIO INSTANZIARLA NELLA LOGIN ACTIVITY E PASSARLA COME PARAMETRO FORSE SI
+    private static String client_id = "travlendar";
+    private static String client_secret = "travlendar";
 
+    private static Timer t = new Timer();
+
+    private static IdentityManager instance;
+
+    public static IdentityManager GetInstance() {
+        if(instance == null) {
+            instance = new IdentityManager();
+        }
+        return instance;
+    }
+
+    public void Login(String email, String password, Response.Listener onResponse, Response.ErrorListener onError)  {
+        //if(!IdentityManager.instance.email.isEmpty() && !IdentityManager.instance.password.isEmpty()) {
+            IdentityManager.instance.email = email;
+            IdentityManager.instance.password = password;
+
+            IdentityManager.TokenRequest(onResponse, onError);
+        //} else {
+            Log.d("EmptyCredentials", "Email o password missing");
+        //}
+    }
+
+    public void SetUserSession(String email, String password, final String token, int tokenDuration) {
+        IdentityManager.instance.email = email;
+        IdentityManager.instance.password = password;
+
+        IdentityManager.instance.token = token;
+        IdentityManager.instance.RefreshToken(tokenDuration);
+    }
+
+    private void RefreshToken(int tokenDuration) {
+        t.cancel();
+        t.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                // TO-DO: call refresh token API
+                IdentityManager.TokenRequest(IdentityManager.instance, IdentityManager.instance);
+            }
+        },tokenDuration * 1000 - 10);
+    }
+
+    private static void TokenRequest(Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
+        String json = String.format("{\"grant_type\": \"password\", \"username\": \"%s\", \"password\": \"%s\", \"client_id\": \"travlendar\", \"client_secret\": \"travlendar\" }", IdentityManager.instance.email, IdentityManager.instance.password);
         try {
-            JsonObjectRequest LoginRequest = new JsonObjectRequest(baseUrl.concat("/token"),
-                    new JSONObject(String.format("{\"grant_type\": \"password\", \"username\": \"%s\", \"password\": \"%s\", \"client_id\": \"travlendar\", \"client_secret\": \"travlendar\" }",email,password)),
-                    onResponse,onError);
-            // adding the Login request to the queue of the request
-            queue.add(LoginRequest);
+            JsonObjectRequest loginRequest = new JsonObjectRequest(baseUrl.concat("/token"),
+                    new JSONObject(json), listener, errorListener);
+            loginRequest.setRetryPolicy(new DefaultRetryPolicy(
+                    15000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
-        }catch(JSONException e){
-            Log.d("error","error in Json Fomrat");
+            // adding the Login request to the queue of the request
+            NetworkManager.GetQueue().add(loginRequest);
+        } catch (JSONException e) {
+            Log.d("JSONError","Error in creating json object request");
         }
     }
 
 
-    public static void Register(String email, String password){
+
+
+    @Override
+    public void onResponse(JSONObject response) {
+        try {
+            IdentityManager.instance.token = response.getString("access_token");
+        } catch (JSONException e) {
+            Log.d("JSONError","Error in getting token from response");
+        }
+        try {
+            IdentityManager.instance.RefreshToken(response.getInt("expires_in"));
+        } catch (JSONException e) {
+            Log.d("JSONError","Error in getting token expiration from response");
+        }
+    }
+
+    private static void Register(String email, String password){
         //chiama database e aggiunge agli utenti l'utente identificato dall'email inserita e dalla password
+
+    }
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        Log.d("RequestError", error.toString());
     }
 
 }
