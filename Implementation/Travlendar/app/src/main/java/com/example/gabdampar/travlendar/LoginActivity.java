@@ -12,7 +12,8 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
-import com.example.gabdampar.travlendar.R;
+import com.example.gabdampar.travlendar.Controller.IdentityManager;
+import com.example.gabdampar.travlendar.Controller.NetworkManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;

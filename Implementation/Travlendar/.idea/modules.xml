@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Travlendar.iml" filepath="$PROJECT_DIR$/Travlendar.iml" />
+      <module fileurl="file://C:\Users\gabbo\Desktop\DamicoGabboliniParroni\Implementation\Travlendar\Travlendar.iml" filepath="C:\Users\gabbo\Desktop\DamicoGabboliniParroni\Implementation\Travlendar\Travlendar.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://C:\Users\gabbo\Desktop\DamicoGabboliniParroni\Implementation\Travlendar\app\app.iml" filepath="C:\Users\gabbo\Desktop\DamicoGabboliniParroni\Implementation\Travlendar\app\app.iml" />
     </modules>
   </component>
 </project>
