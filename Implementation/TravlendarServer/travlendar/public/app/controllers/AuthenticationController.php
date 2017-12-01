@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+use OAuth2\Storage;
+
 class AuthenticationController
 {
     /**

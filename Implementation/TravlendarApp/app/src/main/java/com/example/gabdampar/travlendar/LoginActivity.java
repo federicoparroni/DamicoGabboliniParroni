@@ -6,78 +6,90 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
-import com.example.gabdampar.travlendar.R;
+import com.example.gabdampar.travlendar.Controller.IdentityManager;
+import com.example.gabdampar.travlendar.Controller.NetworkManager;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity implements Response.Listener<JSONObject>, Response.ErrorListener {
 
-    // Instantiate the RequestQueue.
-    //RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+    EditText emailField;
+    EditText passwordField;
+    ProgressBar bar;
 
+    String email;
+    String password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Instantiate the Network manager
+        NetworkManager.SetContext(getApplicationContext());
+
         setContentView(R.layout.activity_login);
+        emailField = findViewById(R.id.emailText);
+        passwordField = findViewById(R.id.passwordText);
+        bar = findViewById(R.id.progressBarLogin);
+
     }
 
     //called when the user click on the login button
     public void LoginAttempt(View view) {
+        bar.setVisibility(View.VISIBLE);
 
-        findViewById(R.id.progressBarLogin).setVisibility(View.VISIBLE);
+        email = emailField.getText().toString();
+        password = passwordField.getText().toString();
 
-        EditText email = (EditText) findViewById(R.id.emailText);
-        EditText password = (EditText) findViewById(R.id.passwordText);
-
-        // se il login va a buon fine devo passare alla main view
-        final Intent intent = new Intent(this, MainPageActivity.class);
-        IdentityManager.Login(email.getText().toString(),password.getText().toString(),getApplicationContext(),
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        // ON RESPONSE
-                        Log.d("DIOBELLO1", response.toString());
-                        getApplicationContext().startActivity(intent);
-
-                        findViewById(R.id.progressBarLogin).setVisibility(View.INVISIBLE);
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // ON ERROR RESPONSE
-                        Log.d("DIOBELLO2", error.toString());
-
-                        findViewById(R.id.progressBarLogin).setVisibility(View.INVISIBLE);
-
-                        Toast toast = Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_LONG);
-                        toast.show();
-                    }
-                });
+        IdentityManager.GetInstance().Login(email, password, this, this);
     }
 
-    // called when the user click on the registration Button
-    public void RegistrationAttempt(View view){
-
-        EditText email = (EditText) findViewById(R.id.emailText);
-        EditText password = (EditText) findViewById(R.id.passwordText);
-
-        //IdentityManager.Register(email.getText().toString(),password.getText().toString());
-    }
 
     //these two methods must be implemented due to the implements of the interface
     public void onResponse(JSONObject response) {
         // ON RESPONSE
+        bar.setVisibility(View.INVISIBLE);
+
+        try {
+            String token = response.getString("access_token");
+            try {
+                int token_expir = response.getInt("expires_in");
+                //IdentityManager.GetInstance().SetUserSession(email, password, token, token_expir);
+
+                // if login was ok, show main view
+                final Intent intent = new Intent(this, MainPageActivity.class);
+                getApplicationContext().startActivity(intent);
+
+            } catch (JSONException e) {
+                Log.d("JSONError","Error in getting token expiration from response");
+            }
+        } catch (JSONException e) {
+            Log.d("JSONError","Error in getting token from response");
+        }
+
+    }
+
+    // called when the user click on the registration Button
+    public void RegistrationAttempt(View view){
+        email = emailField.getText().toString();
+        password = passwordField.getText().toString();
+
+        //IdentityManager.Register(email.getText().toString(),password.getText().toString());
     }
 
     public void onErrorResponse(VolleyError error) {
         // ON ERROR RESPONSE
+        bar.setVisibility(View.INVISIBLE);
 
+        Toast toast = Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_LONG);
+        toast.show();
     }
 
 }
