@@ -1,33 +1,37 @@
-package com.example.gabdampar.travlendar.Controller;
-
 /**
- * Created by Chiara on 30/11/2017.
+ * Created by gabdampar on 30/11/2017.
  */
+
+package com.example.gabdampar.travlendar.Controller;
 
 import com.example.gabdampar.travlendar.Model.Appointment;
 import com.example.gabdampar.travlendar.Model.ConstraintOnSchedule;
 import com.example.gabdampar.travlendar.Model.OptCriteria;
+import com.example.gabdampar.travlendar.Model.Schedule;
+import com.example.gabdampar.travlendar.Model.ScheduledAppointment;
+import com.example.gabdampar.travlendar.Model.TravelMean;
+import com.here.android.mpa.common.GeoCoordinate;
+
+import org.joda.time.LocalTime;
 
 import java.util.ArrayList;
-import java.util.Date;
-
 
 public class Scheduler {
 
-    private Date wakeupTime;
-    private GeoCoordinates startingLocation;
+    private LocalTime wakeupTime;
+    private GeoCoordinate startingLocation;
     private ArrayList<Appointment> appts;
     private ArrayList<ConstraintOnSchedule> constraints;
     private OptCriteria criteria;
 
     byte[][] pred;
-    float[][] dist;
+    double[][] dist;
     private ArrayList<Schedule> schedules = new ArrayList<Schedule>();
 
     ArrayList<Schedule> possibleSchedules = new ArrayList<Schedule>();
 
 
-    public Scheduler(Date wakeupTime, GeoCoordinates location, ArrayList<Appointment> appts, ArrayList<ConstraintOnSchedule> constraints, OptCriteria c) {
+    public Scheduler(LocalTime wakeupTime, GeoCoordinate location, ArrayList<Appointment> appts, ArrayList<ConstraintOnSchedule> constraints, OptCriteria c) {
         this.wakeupTime = wakeupTime;
         this.startingLocation = location;
         this.appts = appts;
@@ -54,7 +58,7 @@ public class Scheduler {
 
     void CalculatePredecessorsAndDistanceMatrix(ArrayList<Appointment> apps) {
         pred = new byte[apps.size()][apps.size()];
-        dist = new float[apps.size()][apps.size()];
+        dist = new double[apps.size()][apps.size()];
 
         for(int i=0; i < apps.size()-1; i++) {
             for(int j=i+1; j < apps.size(); j++) {
@@ -62,27 +66,27 @@ public class Scheduler {
                 Appointment a2 = apps.get(j);
 
                 if(a1.isDeterministic() && a2.isDeterministic()) {
-                    if(a1.startingTime.before(a2.startingTime)) pred[i][j] = 1;
+                    if(a1.startingTime.isBefore(a2.startingTime)) pred[i][j] = 1;
                     else pred[i][j] = 0;
                 } else
                 if(a1.isDeterministic() && !a2.isDeterministic()) {
-                    if(a1.startingTime.before(a2.timeSlot.startingTime)) pred[i][j] = 1;
-                    else if(a1.endingTime().after(a2.timeSlot.endingTime)) pred[i][j] = 0;
+                    if(a1.startingTime.isBefore(a2.timeSlot.startingTime)) pred[i][j] = 1;
+                    else if(a1.endingTime().isAfter(a2.timeSlot.endingTime)) pred[i][j] = 0;
                     else pred[i][j] = 2;
                 } else
                 if(!a1.isDeterministic() && a2.isDeterministic()) {
-                    if(a1.timeSlot.endingTime.before(a2.endingTime())) pred[i][j] = 1;
-                    else if(a1.timeSlot.startingTime.after(a2.startingTime)) pred[i][j] = 0;
+                    if(a1.timeSlot.endingTime.isAfter(a2.endingTime())) pred[i][j] = 1;
+                    else if(a1.timeSlot.startingTime.isAfter(a2.startingTime)) pred[i][j] = 0;
                     else pred[i][j] = 2;
                 } else
                 if(!a1.isDeterministic() && !a2.isDeterministic()) {
-                    if(a1.timeSlot.endingTime.before(a2.timeSlot.startingTime)) pred[i][j] = 1;
-                    else if(a1.timeSlot.startingTime.after(a2.timeSlot.endingTime)) pred[i][j] = 0;
+                    if(a1.timeSlot.endingTime.isAfter(a2.timeSlot.startingTime)) pred[i][j] = 1;
+                    else if(a1.timeSlot.startingTime.isAfter(a2.timeSlot.endingTime)) pred[i][j] = 0;
                     else pred[i][j] = 2;
                 }
 
                 // distance
-                dist[i][j] = Coordinates.GetDistance(a1.coords, a2.coords);
+                dist[i][j] = a1.coords.distanceTo(a2.coords);
 
             }
         }
