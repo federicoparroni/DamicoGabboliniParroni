@@ -48,8 +48,8 @@
             android:label="Select a travel mean to deactivate"/>
 
 
-        <activity android:name=".AppointmentsListActivity" android:label="pippo" />
-        <activity android:name=".AppointmentCreationActivity" android:label="pluto" />
+
+
 
         <meta-data android:name="com.here.android.maps.appid"
             android:value="{4ZsNqHnXTbI1K8TwWa8N}"/>
