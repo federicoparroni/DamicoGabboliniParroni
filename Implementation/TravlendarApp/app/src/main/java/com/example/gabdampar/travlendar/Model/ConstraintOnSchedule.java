@@ -1,11 +1,10 @@
-package com.example.gabdampar.travlendar.Model;
-
 /**
  * Created by gabdampar on 30/11/2017.
  */
 
-import java.util.ArrayList;
+package com.example.gabdampar.travlendar.Model;
 
+import java.util.ArrayList;
 
 public class ConstraintOnSchedule extends Constraint {
 

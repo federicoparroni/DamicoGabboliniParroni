@@ -48,9 +48,6 @@
             android:label="Select a travel mean to deactivate"/>
 
 
-
-
-
         <meta-data android:name="com.here.android.maps.appid"
             android:value="{4ZsNqHnXTbI1K8TwWa8N}"/>
         <meta-data android:name="com.here.android.maps.apptoken"

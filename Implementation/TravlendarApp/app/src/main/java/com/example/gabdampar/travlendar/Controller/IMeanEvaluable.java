@@ -1,9 +1,10 @@
-package com.example.gabdampar.travlendar.Controller;
-
 /**
  * Created by gabdampar on 30/11/2017.
  */
 
+package com.example.gabdampar.travlendar.Controller;
+
+import com.example.gabdampar.travlendar.Model.Appointment;
 
 /*
 // Provides methods to evaluate travelling costs from appt 1 to appt 2

@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
 
-import com.example.gabdampar.travlendar.R;
-
 public class AppointmentCreationActivity extends AppCompatActivity {
 
     CheckBox checkBoxStartingTime;

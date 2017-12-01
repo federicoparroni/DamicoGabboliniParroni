@@ -1,19 +1,19 @@
-package com.example.gabdampar.travlendar.Model;
-
 /**
  * Created by gabdampar on 30/11/2017.
  */
 
-import java.util.Date;
+package com.example.gabdampar.travlendar.Model;
+
+import org.joda.time.DateTime;
 
 
 public class TimeSlot {
 
-    public Date startingTime;
-    public Date endingTime;
+    public DateTime startingTime;
+    public DateTime endingTime;
 
-    public TimeSlot(Date starting, Date ending) {
-        if(starting.before(ending)) {
+    public TimeSlot(DateTime starting, DateTime ending) {
+        if(starting.isBefore(ending)) {
             this.startingTime = starting;
             this.endingTime = ending;
         } else {
@@ -23,7 +23,7 @@ public class TimeSlot {
     }
 
     public static boolean AreOverlapped(TimeSlot t1, TimeSlot t2) {
-        return (t1.endingTime.after(t2.startingTime)) || (t2.endingTime.after(t1.startingTime));
+        return (t1.endingTime.isAfter(t2.startingTime)) || (t2.endingTime.isAfter(t1.startingTime));
     }
 
 }
