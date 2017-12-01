@@ -18,6 +18,6 @@ public class AppointmentsListActivity extends AppCompatActivity {
     //Method activation on the click of the new Button
     public void AppointmentInsertionRequest(View view){
         Intent intent = new Intent(this, AppointmentCreationActivity.class);
-        startActivity(intent);
+        getApplicationContext().startActivity(intent);
     }
 }
