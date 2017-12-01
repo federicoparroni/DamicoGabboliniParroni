@@ -20,7 +20,7 @@ public class MainPageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_page);
 
-        MappingServiceAPIWrapper.getInstance().prova();
+        //MappingServiceAPIWrapper.getInstance().prova();
     }
 
     //called when appointments Button is clicked

@@ -21,6 +21,15 @@ android {
             dirs 'libs'
         }
     }
+
+    splits {
+        abi{
+            enable true
+            reset()
+            include 'x86', 'armeabi-v7a'
+            universalApk false
+        }
+    }
 }
 
 dependencies {
