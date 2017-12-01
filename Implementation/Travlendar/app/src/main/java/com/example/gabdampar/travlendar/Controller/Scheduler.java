@@ -7,6 +7,7 @@ package com.example.gabdampar.travlendar.Controller;
 import com.example.gabdampar.travlendar.Model.Appointment;
 import com.example.gabdampar.travlendar.Model.ConstraintOnSchedule;
 import com.example.gabdampar.travlendar.Model.OptCriteria;
+import com.here.android.mpa.common.GeoCoordinate;
 
 import java.util.ArrayList;
 import java.util.Date;

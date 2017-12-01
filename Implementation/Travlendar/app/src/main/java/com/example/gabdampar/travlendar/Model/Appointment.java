@@ -4,6 +4,8 @@ package com.example.gabdampar.travlendar.Model;
  * Created by gabdampar on 30/11/2017.
  */
 
+import com.here.android.mpa.common.GeoCoordinate;
+
 import java.util.Date;
 
 public class Appointment {
@@ -34,7 +36,7 @@ public class Appointment {
     }
 
     public Date endingTime() {
-        return Date2.Add(startingTime, duration);
+    //    return Date2.Add(startingTime, duration);
     }
 
     public String toString() {
