@@ -1,12 +1,12 @@
+/**
+ * Created by gabdampar on 30/11/2017.
+ */
+
 package com.example.gabdampar.travlendar.Controller;
 
 import android.content.Context;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
-
-/**
- * Created by gabdampar on 30/11/2017.
- */
 
 /*
 // Singleton class that offers a centralized request queue

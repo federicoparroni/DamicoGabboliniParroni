@@ -1,21 +1,28 @@
-package com.example.gabdampar.travlendar.Model;
-
 /**
  * Created by gabdampar on 30/11/2017.
  */
 
-import java.util.Date;
+package com.example.gabdampar.travlendar.Model;
+
+import com.here.android.mpa.common.GeoCoordinate;
+
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
+
 
 public class Appointment {
 
     public String name;
-    public Date startingTime = null;
+    public LocalDate date;
+    public LocalTime startingTime = null;
     public TimeSlot timeSlot = null;
-    public int duration;
+    public int duration;    // seconds
+    public int involvedPeople = 0;
     public GeoCoordinate coords;
 
 
-    public Appointment(String n, Date startingTime, int duration, GeoCoordinate coord) {
+    public Appointment(String n, LocalDate date, LocalTime startingTime, int duration, GeoCoordinate coord) {
         this.name = n;
         this.startingTime = startingTime;
         this.duration = duration;
@@ -33,8 +40,8 @@ public class Appointment {
         return timeSlot == null;
     }
 
-    public Date endingTime() {
-        return Date2.Add(startingTime, duration);
+    public LocalTime endingTime() {
+        return startingTime.plusSeconds(duration);
     }
 
     public String toString() {

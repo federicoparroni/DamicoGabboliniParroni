@@ -1,3 +1,7 @@
+/**
+ * Created by gabdampar on 26/11/2017.
+ */
+
 package com.example.gabdampar.travlendar.Controller;
 
 import android.util.Log;
@@ -13,10 +17,6 @@ import org.json.JSONObject;
 
 import java.util.Timer;
 import java.util.TimerTask;
-
-/**
- * Created by gabdampar on 16/11/2017.
- */
 
 /*
 // IdentityManager offers methods to register, authenticate via bearer token and refresh it after expiration
@@ -47,14 +47,14 @@ public class IdentityManager implements Response.Listener<JSONObject>, Response.
     // Request a token to authenticate for future requests
     public void Login(String email, String password, Response.Listener onResponse, Response.ErrorListener onError)  {
         // TO-DO: should check whether online or not
-        if(!IdentityManager.instance.email.isEmpty() && !IdentityManager.instance.password.isEmpty()) {
+        //if(!IdentityManager.instance.email.isEmpty() && !IdentityManager.instance.password.isEmpty()) {
             IdentityManager.instance.email = email;
             IdentityManager.instance.password = password;
 
             IdentityManager.TokenRequest(onResponse, onError);
-        } else {
-            Log.d("EmptyCredentials", "Email o password missing");
-        }
+//        } else {
+//            Log.d("EmptyCredentials", "Email o password missing");
+//        }
     }
 
     public void SetUserSession(String email, String password, final String token, int tokenDuration) {
