@@ -4,6 +4,8 @@
 
 package com.example.gabdampar.travlendar.Model;
 
+import com.example.gabdampar.travlendar.Model.travelMean.TravelMean;
+
 import org.joda.time.LocalTime;
 
 public class ScheduledAppointment {

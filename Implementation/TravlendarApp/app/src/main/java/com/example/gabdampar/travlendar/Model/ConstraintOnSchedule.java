@@ -4,6 +4,8 @@
 
 package com.example.gabdampar.travlendar.Model;
 
+import com.example.gabdampar.travlendar.Model.travelMean.TravelMean;
+
 import java.util.ArrayList;
 
 public class ConstraintOnSchedule extends Constraint {

@@ -6,10 +6,14 @@ package com.example.gabdampar.travlendar.Controller;
 
 import com.example.gabdampar.travlendar.Model.Appointment;
 import com.example.gabdampar.travlendar.Model.ConstraintOnSchedule;
+import com.example.gabdampar.travlendar.Model.DateManager;
 import com.example.gabdampar.travlendar.Model.OptCriteria;
 import com.example.gabdampar.travlendar.Model.Schedule;
 import com.example.gabdampar.travlendar.Model.ScheduledAppointment;
-import com.example.gabdampar.travlendar.Model.TravelMean;
+import com.example.gabdampar.travlendar.Model.travelMean.privateMeans.Bike;
+import com.example.gabdampar.travlendar.Model.travelMean.publicMeans.Bus;
+import com.example.gabdampar.travlendar.Model.travelMean.privateMeans.Car;
+import com.example.gabdampar.travlendar.Model.travelMean.TravelMean;
 import com.here.android.mpa.common.GeoCoordinate;
 
 import org.joda.time.LocalTime;
@@ -30,7 +34,6 @@ public class Scheduler {
 
     ArrayList<Schedule> possibleSchedules = new ArrayList<Schedule>();
 
-
     public Scheduler(LocalTime wakeupTime, GeoCoordinate location, ArrayList<Appointment> appts, ArrayList<ConstraintOnSchedule> constraints, OptCriteria c) {
         this.wakeupTime = wakeupTime;
         this.startingLocation = location;
@@ -41,18 +44,24 @@ public class Scheduler {
 
 
     public Schedule ComputeSchedule() {
-        // 1-2
-        CalculatePredecessorsAndDistanceMatrix(appts);
-		/* DEBUG */ StampaArray(pred);
+        if(this.appts.size() > 0) {
 
-        // 3
-        CalculateCombinations(appts, pred.clone(), 0, 1);
+            // 1-2
+            CalculatePredecessorsAndDistanceMatrix(appts);
+		/* DEBUG */
+            StampaArray(pred);
 
-        // 4
-        // OrderSchedules();
+            // 3
+            CalculateCombinations(appts, pred.clone(), 0, 1);
 
-        // 5
-        return schedules.get(0);
+            // 4
+            // OrderSchedules();
+
+            // 5
+            return schedules.get(0);
+        } else {
+            throw new IllegalArgumentException("Empty appointment list");
+        }
     }
 
 
@@ -163,43 +172,43 @@ public class Scheduler {
         ArrayList<ScheduledAppointment> scheduledAppts = new ArrayList<ScheduledAppointment>();
 
         // create wakeup dummy appointment
-        Appointment wakeUpAppt = new Appointment("WakeUp", wakeupTime, 0, startingLocation);
+        Appointment wakeUpAppt = new Appointment("WakeUp", appts.get(0).date, wakeupTime, 0, startingLocation);
         scheduledAppts.add(new ScheduledAppointment(wakeUpAppt, wakeupTime, wakeupTime, null));
 
         Appointment firstAppt = arrangement.get(0);
         if(firstAppt.isDeterministic()) {
             TravelMean mean = GetBestTravelMean(wakeUpAppt, firstAppt);
-            int travelTime1 = mean.EstimateTime(wakeUpAppt, firstAppt);
-            Date startingTime1 = Date2.Sub(firstAppt.startingTime, travelTime1);
+            int travelTime1 = (int)mean.EstimateTime(wakeUpAppt, firstAppt);
+            LocalTime startingTime1 = firstAppt.startingTime.minusSeconds(travelTime1);
             scheduledAppts.add(new ScheduledAppointment(firstAppt, startingTime1, firstAppt.startingTime, mean));
 
             // check if feasible
-            if(startingTime1.before(wakeupTime)) return null;
+            if(startingTime1.isBefore(wakeupTime)) return null;
 
         } else {		// first appt is not deterministic
             TravelMean mean = GetBestTravelMean(wakeUpAppt, firstAppt);
-            int travelTime1 = mean.EstimateTime(wakeUpAppt, firstAppt);
+            int travelTime1 = (int)mean.EstimateTime(wakeUpAppt, firstAppt);
 
             if(arrangement.size() == 1) {
-                Date ETA1 = Date2.Sub(firstAppt.timeSlot.endingTime, firstAppt.duration);
-                Date startingTime1 = Date2.Sub(ETA1, travelTime1);
+                LocalTime ETA1 = firstAppt.timeSlot.endingTime.minusSeconds(firstAppt.duration);
+                LocalTime startingTime1 = ETA1.minusSeconds(travelTime1);
                 scheduledAppts.add(new ScheduledAppointment(firstAppt, startingTime1, ETA1, mean));
 
                 //check if feasible
-                if(startingTime1.before(wakeupTime)) return null;
+                if(startingTime1.isBefore(wakeupTime)) return null;
             } else {
                 Appointment secondAppt = arrangement.get(1);
-                int travelTime2 = mean.EstimateTime(firstAppt, secondAppt);
+                int travelTime2 = (int)mean.EstimateTime(firstAppt, secondAppt);
 
-                Date maxEndingTime1 = secondAppt.isDeterministic() ? Date2.Sub(secondAppt.startingTime, travelTime2) :
-                        Date2.Sub(secondAppt.timeSlot.startingTime, travelTime2);
-                Date endingTime1 = Date2.MinDate(firstAppt.timeSlot.endingTime, maxEndingTime1);
-                Date ETA1 = Date2.Sub(endingTime1, firstAppt.duration);
-                Date startingTime1 = Date2.Sub(ETA1, travelTime1);
+                LocalTime maxEndingTime1 = secondAppt.isDeterministic() ? secondAppt.startingTime.minusSeconds(travelTime2) :
+                        secondAppt.timeSlot.startingTime.minusSeconds(travelTime2);
+                LocalTime endingTime1 = DateManager.MinTime(firstAppt.timeSlot.endingTime, maxEndingTime1);
+                LocalTime ETA1 = endingTime1.minusSeconds(firstAppt.duration);
+                LocalTime startingTime1 = ETA1.minusSeconds(travelTime1);
                 ScheduledAppointment firstSchedAppt = new ScheduledAppointment(firstAppt, startingTime1, ETA1, mean);
                 scheduledAppts.add(firstSchedAppt);
                 // check if feasible
-                if(startingTime1.before(wakeupTime) || startingTime1.before(firstAppt.timeSlot.startingTime)) return null;
+                if(startingTime1.isBefore(wakeupTime) || startingTime1.isBefore(firstAppt.timeSlot.startingTime)) return null;
             }
 
         }
@@ -211,25 +220,25 @@ public class Scheduler {
             Appointment appt2 = arrangement.get(i);
 
             TravelMean mean = GetBestTravelMean(appt1.originalAppointment, appt2);
-            int travelTime = mean.EstimateTime(appt1.originalAppointment, appt2);
+            int travelTime = (int)mean.EstimateTime(appt1.originalAppointment, appt2);
 
             if(appt2.isDeterministic()) {
                 // both deterministic, only creates scheduledAppointment with recalculated startingTime and ETA
-                Date fixedStartingTime = Date2.Sub(appt2.startingTime, travelTime);
+                LocalTime fixedStartingTime = appt2.startingTime.minusSeconds(travelTime);
                 scheduledAppts.add(new ScheduledAppointment(appt2, fixedStartingTime, appt2.startingTime, mean));
 
                 // check if overlapping
-                if(appt1.endingTime().after(fixedStartingTime)) return null;
+                if(appt1.endingTime().isAfter(fixedStartingTime)) return null;
 
             } else {
                 // 2nd non deterministic, assing startingTime at max possible
-                Date fixedStartingTime = Date2.MaxDate(appt1.endingTime(),
-                        Date2.Sub(appt2.timeSlot.startingTime, travelTime));
-                Date ETA2 = Date2.Add(fixedStartingTime, travelTime);
+                LocalTime fixedStartingTime = DateManager.MaxTime(appt1.endingTime(),
+                        appt2.timeSlot.startingTime.minusSeconds(travelTime));
+                LocalTime ETA2 = fixedStartingTime.plusSeconds(travelTime);
 
                 scheduledAppts.add(new ScheduledAppointment(appt2, fixedStartingTime, ETA2, mean));
 
-                if(appt2.timeSlot.endingTime.before(Date2.Add(ETA2, appt2.duration))) return null;
+                if(appt2.timeSlot.endingTime.isBefore(ETA2.plusSeconds(appt2.duration))) return null;
             }
 
         }
@@ -248,9 +257,9 @@ public class Scheduler {
             case OPTIMIZE_COST:
                 return Bus.GetInstance();
             default:
-                break;
-        }
+                return null;
 
+        }
     }
 
     //

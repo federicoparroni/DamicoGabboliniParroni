@@ -2,7 +2,7 @@
  * Created by gabdampar on 30/11/2017.
  */
 
-package com.example.gabdampar.travlendar.Model;
+package com.example.gabdampar.travlendar.Model.travelMean;
 
 import com.example.gabdampar.travlendar.Controller.IMeanEvaluable;
 import java.util.ArrayList;
@@ -12,7 +12,9 @@ public abstract class TravelMean implements IMeanEvaluable {
     protected static TravelMean instance;
 
     public int availableSeats;
-    public static ArrayList<TravelMean> Means;
+
+    // provides a list of all instantiated travel means
+    public static ArrayList<TravelMean> MeansCollection;
 
     public static TravelMean GetInstance() {
         throw new IllegalAccessError("Cannot call this method");

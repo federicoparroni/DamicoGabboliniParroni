@@ -5,14 +5,15 @@
 package com.example.gabdampar.travlendar.Model;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalTime;
 
 
 public class TimeSlot {
 
-    public DateTime startingTime;
-    public DateTime endingTime;
+    public LocalTime startingTime;
+    public LocalTime endingTime;
 
-    public TimeSlot(DateTime starting, DateTime ending) {
+    public TimeSlot(LocalTime starting, LocalTime ending) {
         if(starting.isBefore(ending)) {
             this.startingTime = starting;
             this.endingTime = ending;
