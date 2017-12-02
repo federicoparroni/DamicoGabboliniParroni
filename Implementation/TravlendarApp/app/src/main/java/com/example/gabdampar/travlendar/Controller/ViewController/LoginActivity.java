@@ -2,7 +2,7 @@
  * Created by gabdampar on 29/11/2017.
  */
 
-package com.example.gabdampar.travlendar;
+package com.example.gabdampar.travlendar.Controller.ViewController;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +18,7 @@ import com.android.volley.VolleyError;
 
 import com.example.gabdampar.travlendar.Controller.IdentityManager;
 import com.example.gabdampar.travlendar.Controller.NetworkManager;
+import com.example.gabdampar.travlendar.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
