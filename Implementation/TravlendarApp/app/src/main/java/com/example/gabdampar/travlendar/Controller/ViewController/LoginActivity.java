@@ -2,7 +2,7 @@
  * Created by gabdampar on 29/11/2017.
  */
 
-package com.example.gabdampar.travlendar;
+package com.example.gabdampar.travlendar.Controller.ViewController;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -18,9 +18,18 @@ import com.android.volley.VolleyError;
 
 import com.example.gabdampar.travlendar.Controller.IdentityManager;
 import com.example.gabdampar.travlendar.Controller.NetworkManager;
+import com.example.gabdampar.travlendar.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.example.gabdampar.travlendar.Controller.IdentityManager;
+import com.example.gabdampar.travlendar.Controller.MappingServiceAPIWrapper;
+import com.example.gabdampar.travlendar.Controller.NetworkManager;
+import com.here.android.mpa.common.ApplicationContext;
+import com.here.android.mpa.common.MapEngine;
+import com.here.android.mpa.common.OnEngineInitListener;
+
 
 public class LoginActivity extends AppCompatActivity implements Response.Listener<JSONObject>, Response.ErrorListener {
 
@@ -43,6 +52,26 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
         passwordField = findViewById(R.id.passwordText);
         bar = findViewById(R.id.progressBarLogin);
 
+        /**
+         try to use HERE APIs, to move away
+         */
+        MapEngine mapEngine = MapEngine.getInstance();
+        ApplicationContext appContext = new ApplicationContext(this.getApplicationContext());
+        Log.d("checkpoint", "sto per inizializzare");
+        mapEngine.init(appContext, new OnEngineInitListener() {
+            @Override
+            public void onEngineInitializationCompleted(Error error) {
+                Log.d("checkpoint", "sono dentro al metodo");
+                MappingServiceAPIWrapper.getInstance().prova();
+                if (error == OnEngineInitListener.Error.NONE) {
+                    MappingServiceAPIWrapper.getInstance().prova();
+                } else {
+                    Log.d("Initialization error: ", error.getDetails());
+                }
+            }
+        });
+
+
     }
 
     //called when the user click on the login button
@@ -51,8 +80,6 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
 
         email = emailField.getText().toString();
         password = passwordField.getText().toString();
-
-        IdentityManager.GetInstance().Login(email, password, this, this);
     }
 
 

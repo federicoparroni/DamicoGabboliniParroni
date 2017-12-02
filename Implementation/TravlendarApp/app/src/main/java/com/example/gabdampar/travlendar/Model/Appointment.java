@@ -10,7 +10,6 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
-
 public class Appointment {
 
     public String name;

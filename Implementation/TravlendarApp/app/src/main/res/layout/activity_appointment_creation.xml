@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.gabdampar.travlendar.AppointmentCreationActivity">
+    tools:context=".Controller.ViewController.AppointmentCreationActivity">
 
     <ScrollView
         android:layout_width="350dp"
@@ -26,7 +26,7 @@
             android:orientation="vertical">
 
             <EditText
-                android:id="@+id/editText"
+                android:id="@+id/appointmentNameField"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -34,6 +34,7 @@
                 android:inputType="textPersonName" />
 
             <EditText
+                android:id="@+id/locationField"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -70,6 +71,7 @@
             </LinearLayout>
 
             <EditText
+                android:id="@+id/durationField"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -77,6 +79,7 @@
                 android:inputType="textPersonName" />
 
             <EditText
+                android:id="@+id/numberInvolvedPeople"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -84,17 +87,20 @@
                 android:inputType="textPersonName" />
 
             <CheckBox
+                android:id="@+id/isRecurrent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Is Recurrent" />
 
             <Button
+                android:id="@+id/addConstraintButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="OnAddConstraintClick"
                 android:text="Add Constraints" />
 
             <Button
+                android:id="@+id/saveButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="SAVE" />

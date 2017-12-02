@@ -1,6 +1,9 @@
 package com.example.gabdampar.travlendar.Controller;
 
+import com.here.android.mpa.common.ApplicationContext;
 import com.here.android.mpa.common.GeoCoordinate;
+import com.here.android.mpa.common.MapEngine;
+import com.here.android.mpa.common.OnEngineInitListener;
 import com.here.android.mpa.routing.*;
 
 import java.util.List;
@@ -11,13 +14,17 @@ import java.util.List;
  */
 
 public class MappingServiceAPIWrapper {
-    private static final MappingServiceAPIWrapper ourInstance = new MappingServiceAPIWrapper();
+    private static MappingServiceAPIWrapper ourInstance;
 
     public static MappingServiceAPIWrapper getInstance() {
+        if(ourInstance==null){
+            ourInstance=new MappingServiceAPIWrapper();
+        }
         return ourInstance;
     }
 
     private MappingServiceAPIWrapper() {
+
     }
 
     public void prova() {
@@ -37,18 +44,18 @@ public class MappingServiceAPIWrapper {
         router.calculateRoute(routePlan, new RouterListener());
     }
 
-        private final class RouterListener implements CoreRouter.Listener {
+    private final class RouterListener implements CoreRouter.Listener {
 
-            // Method defined in Listener
-            public void onProgress(int percentage) {
-                // Display a message indicating calculation progress
-            }
-
-            // Method defined in Listener
-            public void onCalculateRouteFinished(List<RouteResult> routeResult, RoutingError error) {
-
-            }
+        // Method defined in Listener
+        public void onProgress(int percentage) {
+            // Display a message indicating calculation progress
         }
 
+        // Method defined in Listener
+        public void onCalculateRouteFinished(List<RouteResult> routeResult, RoutingError error) {
+
+        }
     }
+
+}
 
