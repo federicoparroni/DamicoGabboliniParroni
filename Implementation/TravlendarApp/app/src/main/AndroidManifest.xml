@@ -48,13 +48,12 @@
             android:label="Select a travel mean to deactivate"/>
 
 
-        <meta-data android:name="com.here.android.maps.appid"
-            android:value="{4ZsNqHnXTbI1K8TwWa8N}"/>
-        <meta-data android:name="com.here.android.maps.apptoken"
-            android:value="{LtZuq2RLwnNIRI3cvSbuRQ}"/>
-        <!--<meta-data android:name="com.here.android.maps.license.key"
-            android:value="{GUW8Jc8sbeMWH7cpYGX9uXh1Rr4jq6MkZjsdTBmvfaHHqZPVVOnJPconO+s+2g+jWoU9hGco6uVZfMec6/Vn+LcvgaTTbLmReLsn/0eoZz6Lwa1OXooMZYyApqO8VrosB/zoiu4NbY7HWF2OVmsFF6VVwN1aGGIy0sOjnzgXPnI1Hzfa6Pr+cPXcGQnjityJIW/st18LEQOia6TMDFtSQAGKPYINpWWzejzJ/ZIagOTWVMzcOVr15cVuJtVo0d0jBiU4yTDPsHKjFYnER/TcwhXu/e9ZlLbMV9/+CknIup4f8lMU3HkurUSNW9tVsAT58NZ2qc9Qbiosp7a5g7/XTUZeMOm71C8AaOQG0+MtQSpfm90WdcrABtKKbVwRzYDVJ3wKAbpjm7mtnUJpA8u1cclhfSEzDaUgvluHkDoUovw9m6EdBq+MjZZk4HgiUVDfp68eNnmHEhRzzMD9qZAQk9zrx4FcsJKz9mTI0IJMciracAiKRhbx70bhgwZN2vd1FfAvbfoccKbbQ/xoaap92DX1Z1lUMjW67iJ5eRVMFcFVO/ygv20plBaQmqjQ6+IWTNzbpnGFQnsiLA4o5SSyK9/jgkJKpwP3lMvCs7S8F8e0VKR7F2zp930a081RI+D63jJZWsCYFZpdxDTy159hZkdTnwFmIkOrFFW3SSEIGDM=}"/>
-        -->
+        <meta-data android:name="com.here.android.maps.appid" android:value="{srFU7ut6X7HpLdCvy5l1}"/>
+
+        <meta-data android:name="com.here.android.maps.apptoken" android:value="{jJKiy_wrNIGdFcPqFcw_-w}"/>
+
+        <meta-data android:name="com.here.android.maps.license.key" android:value="{GfzKPgVnkz5p9xDU4J7eSUlAvMqH5xYgPD1rqnYlbejwELNYwIYUZnjVGMCUmBnUWn9IClxnHoMudq4zH6PE//YL0aIJI8ePDDYw20HoCnb0MG5zz7jli6YWuuK5DcIYjo9sqwUQ3O9Ah/NaQT26/yWLN+XWlINTKBawhkczflC4V4qFX3cRGnv8dz/WtkQNTLR204COb+82rqjKtL+DTxS1H12XM5vqqaEXOOkoS74d16eag8QFVv1uC14k9XcBpUgr+CPwKxhwC7HRZHJUtavq/fuV5JQrnRFnnIFyXvD6ZY99p+kiZ5TrRbki8lZ5RY5FU+1jL0dWSveBNeQMoq285dH7iXsnXoLEbpoqtVGKyoeuY2OWeKLpg2T+hI9L2nXME1/wdijgFdU3kuH1ynQjZIhceLlK0t73cVCBL23m7O9fsZ66+5gKCYePBa0mZAWCh4V9VX5s92sjUP/2Bu4ZcYZZ47EGhwgRs0OQKnfsUQT9wmtcDZtuIPoeauJkLvNrIToiF0foDjQNva9/Nsaejt1aQxT/AVVmgjXG7GBNoq/9R6E08H8CbRn/lKcdv0kfHp+JLmu2vuZaOi+Dz91YsBb15vPfO+KDjXjri7wz5AuTAAdzVh7DeSWWBRJlpLIouqHPvca7EHgu6dvPABTgUFFp5E/RRZmWFWTQVfI=}"/>
+
 
         <service
             android:name="com.here.android.mpa.service.MapService"
