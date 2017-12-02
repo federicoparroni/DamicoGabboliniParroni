@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/TravlendarApp.iml" filepath="$PROJECT_DIR$/TravlendarApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/darkskyandroidlib/darkskyandroidlib.iml" filepath="$PROJECT_DIR$/darkskyandroidlib/darkskyandroidlib.iml" />
     </modules>
   </component>
 </project>
