@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
             @Override
             public void onEngineInitializationCompleted(Error error) {
                 Log.d("checkpoint", "sono dentro al metodo");
-                MappingServiceAPIWrapper.getInstance().prova();
+                //MappingServiceAPIWrapper.getInstance().prova();
                 if (error == OnEngineInitListener.Error.NONE) {
                     MappingServiceAPIWrapper.getInstance().prova();
                 } else {
@@ -80,6 +80,8 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
 
         email = emailField.getText().toString();
         password = passwordField.getText().toString();
+
+        IdentityManager.GetInstance().Login(email, password, this, this);
     }
 
 
