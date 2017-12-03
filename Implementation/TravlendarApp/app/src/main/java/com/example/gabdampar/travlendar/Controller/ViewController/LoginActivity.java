@@ -57,7 +57,9 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
          */
         MapEngine mapEngine = MapEngine.getInstance();
         ApplicationContext appContext = new ApplicationContext(this.getApplicationContext());
+
         Log.d("checkpoint", "sto per inizializzare");
+
         mapEngine.init(appContext, new OnEngineInitListener() {
             @Override
             public void onEngineInitializationCompleted(Error error) {
@@ -66,7 +68,7 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
                 if (error == OnEngineInitListener.Error.NONE) {
                     MappingServiceAPIWrapper.getInstance().prova();
                 } else {
-                    Log.d("Initialization error: ", error.getDetails());
+                    Log.e("InitializationError", error.getDetails());
                 }
             }
         });

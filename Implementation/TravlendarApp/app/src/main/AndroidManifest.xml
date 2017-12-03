@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.gabdampar.travlendar">
+    package="com.example.gabdampar.travlendar"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 
@@ -49,20 +54,17 @@
 
 
         <meta-data android:name="com.here.android.maps.appid" android:value="{srFU7ut6X7HpLdCvy5l1}"/>
-
         <meta-data android:name="com.here.android.maps.apptoken" android:value="{jJKiy_wrNIGdFcPqFcw_-w}"/>
-
         <meta-data android:name="com.here.android.maps.license.key" android:value="{GfzKPgVnkz5p9xDU4J7eSUlAvMqH5xYgPD1rqnYlbejwELNYwIYUZnjVGMCUmBnUWn9IClxnHoMudq4zH6PE//YL0aIJI8ePDDYw20HoCnb0MG5zz7jli6YWuuK5DcIYjo9sqwUQ3O9Ah/NaQT26/yWLN+XWlINTKBawhkczflC4V4qFX3cRGnv8dz/WtkQNTLR204COb+82rqjKtL+DTxS1H12XM5vqqaEXOOkoS74d16eag8QFVv1uC14k9XcBpUgr+CPwKxhwC7HRZHJUtavq/fuV5JQrnRFnnIFyXvD6ZY99p+kiZ5TrRbki8lZ5RY5FU+1jL0dWSveBNeQMoq285dH7iXsnXoLEbpoqtVGKyoeuY2OWeKLpg2T+hI9L2nXME1/wdijgFdU3kuH1ynQjZIhceLlK0t73cVCBL23m7O9fsZ66+5gKCYePBa0mZAWCh4V9VX5s92sjUP/2Bu4ZcYZZ47EGhwgRs0OQKnfsUQT9wmtcDZtuIPoeauJkLvNrIToiF0foDjQNva9/Nsaejt1aQxT/AVVmgjXG7GBNoq/9R6E08H8CbRn/lKcdv0kfHp+JLmu2vuZaOi+Dz91YsBb15vPfO+KDjXjri7wz5AuTAAdzVh7DeSWWBRJlpLIouqHPvca7EHgu6dvPABTgUFFp5E/RRZmWFWTQVfI=}"/>
 
 
         <service
             android:name="com.here.android.mpa.service.MapService"
+            android:exported="true"
             android:label="HereMapService"
-            android:process="global.Here.Map.Service.v3"
-            android:exported="true" >
+            android:process="global.Here.Map.Service.v3">
             <intent-filter>
-                <action android:name="com.here.android.mpa.service.MapService.v3" >
-                </action>
+                <action android:name="com.here.android.mpa.service.MapService.v3"/>
             </intent-filter>
         </service>
 
