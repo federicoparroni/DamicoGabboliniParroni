@@ -28,7 +28,7 @@ public class Appointment {
         this.coords = coord;
     }
 
-    public Appointment(String n, TimeSlot timeSlot, int duration, GeoCoordinate coord) {
+    public Appointment(String n, LocalDate date,TimeSlot timeSlot, int duration, GeoCoordinate coord) {
         this.name = n;
         this.timeSlot = timeSlot;
         this.duration = duration;

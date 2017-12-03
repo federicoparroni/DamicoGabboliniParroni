@@ -6,10 +6,10 @@ package com.example.gabdampar.travlendar.Model;
 
 public enum Weather {
 
-    SUNNY,
+    CLEAN,
     RAINY,
     CLOUDY,
     SNOWY,
-    FOGGY
-
+    FOGGY,
+    WINDY
 }
