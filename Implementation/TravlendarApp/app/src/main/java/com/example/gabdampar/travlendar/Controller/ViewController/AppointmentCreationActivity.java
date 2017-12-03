@@ -1,5 +1,6 @@
 package com.example.gabdampar.travlendar.Controller.ViewController;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,9 +9,17 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TimePicker;
 
+import com.example.gabdampar.travlendar.Controller.AppointmentManager;
 import com.example.gabdampar.travlendar.Model.Appointment;
+import com.example.gabdampar.travlendar.Model.TimeSlot;
 import com.example.gabdampar.travlendar.R;
+import com.here.android.mpa.common.GeoCoordinate;
+
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
+
 
 public class AppointmentCreationActivity extends AppCompatActivity {
 
@@ -21,13 +30,27 @@ public class AppointmentCreationActivity extends AppCompatActivity {
 
     EditText appointmentNameField;
     EditText locationField;
-    EditText durationField;
+
+    EditText durationHours;
+    EditText durationMinutes;
+    TimePicker durationTimePicker;
+
     EditText numberInvolvedPeople;
 
     DatePicker datePicker;
 
     Button addConstraintButton;
     Button saveButton;
+
+    //New Appointment Field
+
+    public String name;
+    public LocalDate date;
+    public LocalTime startingTime;
+    public TimeSlot timeSlot;
+    public int duration;   // seconds
+    public int involvedPeople;
+    public GeoCoordinate coords;
 
 
     @Override
@@ -40,11 +63,16 @@ public class AppointmentCreationActivity extends AppCompatActivity {
         isRecurrent = findViewById(R.id.isRecurrent);
         appointmentNameField = findViewById(R.id.appointmentNameField);
         locationField = findViewById(R.id.locationField);
-        durationField = findViewById(R.id.durationField);
+        durationTimePicker = findViewById(R.id.durationTimePicker);
         numberInvolvedPeople = findViewById(R.id.numberInvolvedPeople);
         datePicker = findViewById(R.id.datePicker);
         addConstraintButton = findViewById(R.id.addConstraintButton);
         saveButton = findViewById(R.id.saveButton);
+
+        durationTimePicker.setIs24HourView(true);
+        durationTimePicker.setHour(1);
+        durationTimePicker.setMinute(0);
+
     }
 
     // when the user check the startingtime checkbox he will be sent to SettingStartingTimeActivity to set the time
@@ -54,7 +82,8 @@ public class AppointmentCreationActivity extends AppCompatActivity {
             //XOR of timeslot and startingtime
             checkBoxTimeSlot.setClickable(false);
             final Intent intent = new Intent(this, SettingStartingTimeActivity.class);
-            getApplicationContext().startActivity(intent);
+            //launch the activity to retrive the startingTime
+            startActivityForResult(intent,1);
         }else{
             checkBoxTimeSlot.setClickable(true);
         }
@@ -67,7 +96,7 @@ public class AppointmentCreationActivity extends AppCompatActivity {
             //XOR of timeslot and startingtime
             checkBoxStartingTime.setClickable(false);
             final Intent intent = new Intent(this, SettingTimeSlotActivity.class);
-            getApplicationContext().startActivity(intent);
+            startActivityForResult(intent,2);
         }else{
             checkBoxStartingTime.setClickable(true);
         }
@@ -75,22 +104,62 @@ public class AppointmentCreationActivity extends AppCompatActivity {
 
     public void OnAddConstraintClick(View view){
         final Intent intent = new Intent(this, AddConstraintOnAppointmentActivity.class);
-        getApplicationContext().startActivity(intent);
+        startActivityForResult(intent,3);
     }
 
     public void OnSaveCliCk(View view){
+        name = appointmentNameField.getText().toString();
+        //must
+        date = new LocalDate(datePicker.getYear(),datePicker.getMonth(),datePicker.getDayOfMonth()) ;
+        duration = durationTimePicker.getHour()*3600 + durationTimePicker.getHour()*60 ;
+        // TODO: coords = locationField.getCoordinate();
+
+        //the new appointment created
+        Appointment appointment;
+
         //Check if the appointment has a starting time or a time slot
         if(checkBoxStartingTime.isChecked()){
-            // DEVO CONTROLLARE COSA CAMBIA TRA MAX E MIN DATA
-            //Appointment = new Appointment(appointmentNameField.getText(),datePicker.getMaxDate(), )
+            appointment = new Appointment(name,date,startingTime,duration,coords);
         }
         else{
-
+            appointment = new Appointment(name,date,timeSlot,duration,coords);
         }
 
+        AppointmentManager.GetInstance().AddAppointment(appointment);
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //onActivityResult
+        if (requestCode == 1) {
+            if(resultCode == Activity.RESULT_OK){
+                //assignment to the parameter of the new appointment the result
+                startingTime = (LocalTime) data.getExtras().getSerializable("startingTime");
+                timeSlot = null;
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //Write your code if there's no result
+            }
+        }
+        if (requestCode == 2){
+            if(resultCode == Activity.RESULT_OK){
+                Bundle extras = data.getExtras();
+                LocalTime startingTimeSlotTime = (LocalTime)extras.getSerializable("startingTime");
+                LocalTime endingTimeSlotTime = (LocalTime)extras.getSerializable("endingTime");
+                timeSlot = new TimeSlot(startingTimeSlotTime,endingTimeSlotTime);
+                startingTime = null;
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //Write your code if there's no result
+            }
+        }
+        if (requestCode == 3){
+            if(resultCode == Activity.RESULT_OK){
 
-         //LocalTime startingTime, int duration, GeoCoordinate coord
-
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //Write your code if there's no result
+            }
+        }
     }
 }

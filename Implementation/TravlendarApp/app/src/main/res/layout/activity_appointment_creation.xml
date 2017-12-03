@@ -30,6 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:layout_marginTop="25dp"
                 android:hint="Appointment Name"
                 android:inputType="textPersonName" />
 
@@ -38,17 +39,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:layout_marginTop="15dp"
                 android:hint="Location"
                 android:inputType="textPersonName" />
 
             <DatePicker
                 android:id="@+id/datePicker"
+                android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="15dp"
                 android:orientation="horizontal">
 
                 <CheckBox
@@ -70,19 +74,25 @@
                     android:text="TimeSlot" />
             </LinearLayout>
 
-            <EditText
-                android:id="@+id/durationField"
+            <TextView
+                android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Duration"
-                android:inputType="textPersonName" />
+                android:layout_marginTop="15dp"
+                android:text="DURATION" />
+
+            <TimePicker
+                android:id="@+id/durationTimePicker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:timePickerMode="spinner" />
 
             <EditText
                 android:id="@+id/numberInvolvedPeople"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:layout_marginTop="15dp"
                 android:hint="Number Involved People"
                 android:inputType="textPersonName" />
 
@@ -90,12 +100,14 @@
                 android:id="@+id/isRecurrent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
                 android:text="Is Recurrent" />
 
             <Button
                 android:id="@+id/addConstraintButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
                 android:onClick="OnAddConstraintClick"
                 android:text="Add Constraints" />
 
@@ -103,7 +115,11 @@
                 android:id="@+id/saveButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="25dp"
                 android:text="SAVE" />
+
+
         </LinearLayout>
     </ScrollView>
 

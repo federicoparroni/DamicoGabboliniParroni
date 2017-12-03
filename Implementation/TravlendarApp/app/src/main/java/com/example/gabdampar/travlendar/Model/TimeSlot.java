@@ -4,6 +4,9 @@
 
 package com.example.gabdampar.travlendar.Model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 
