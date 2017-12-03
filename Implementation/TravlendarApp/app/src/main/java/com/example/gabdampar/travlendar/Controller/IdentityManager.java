@@ -46,7 +46,7 @@ public class IdentityManager implements Response.Listener<JSONObject>, Response.
 
     // Request a token to authenticate for future requests
     public void Login(String email, String password, Response.Listener onResponse, Response.ErrorListener onError)  {
-        // TO-DO: should check whether online or not
+        // TO-DO: should check wether online or not
         //if(!IdentityManager.instance.email.isEmpty() && !IdentityManager.instance.password.isEmpty()) {
             IdentityManager.instance.email = email;
             IdentityManager.instance.password = password;
@@ -108,7 +108,7 @@ public class IdentityManager implements Response.Listener<JSONObject>, Response.
         }
     }
 
-    private static void Register(String email, String password){
+    public static void Register(String email, String password, Response.Listener onResponse, Response.ErrorListener onError){
         //chiama database e aggiunge agli utenti l'utente identificato dall'email inserita e dalla password
 
     }

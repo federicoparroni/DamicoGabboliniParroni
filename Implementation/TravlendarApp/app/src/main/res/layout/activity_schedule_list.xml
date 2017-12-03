@@ -20,8 +20,8 @@
         app:layout_constraintRight_toRightOf="parent"
         app:menu="@menu/navigation" />
 
-    <ExpandableListView
-        android:id="@+id/schedulesList"
+    <ListView
+        android:id="@+id/scheduleListView"
         android:layout_width="368dp"
         android:layout_height="439dp"
         tools:layout_editor_absoluteX="8dp"

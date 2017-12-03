@@ -4,9 +4,12 @@
 
 package com.example.gabdampar.travlendar.Controller.ViewController;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -31,7 +34,7 @@ import com.here.android.mpa.common.MapEngine;
 import com.here.android.mpa.common.OnEngineInitListener;
 
 
-public class LoginActivity extends AppCompatActivity implements Response.Listener<JSONObject>, Response.ErrorListener {
+public class LoginActivity extends AppCompatActivity implements Response.Listener<JSONObject>, Response.ErrorListener, DialogInterface.OnClickListener {
 
     EditText emailField;
     EditText passwordField;
@@ -112,11 +115,12 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
     }
 
     // called when the user click on the registration Button
-    public void RegistrationAttempt(View view){
+    void RegistrationAttempt(View view){
         email = emailField.getText().toString();
         password = passwordField.getText().toString();
 
-        //IdentityManager.Register(email.getText().toString(),password.getText().toString());
+        // confirm password showing an alert dialog
+        ShowConfirmationPassword();
     }
 
     public void onErrorResponse(VolleyError error) {
@@ -126,5 +130,38 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
         Toast toast = Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_LONG);
         toast.show();
     }
+
+    void ShowConfirmationPassword() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Confirm password:");
+
+        // Set up the input
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        builder.setView(input);
+
+        // Set up the buttons
+        builder.setPositiveButton("OK", this);
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
+    @Override
+    public void onClick(DialogInterface dialog, int which) {
+
+        String passwordConfirm = input.getText().toString();
+        if(password.equals(passwordConfirm)) {
+            IdentityManager.GetInstance().Register(email, password, this, this);
+        } else {
+            Toast.makeText(LoginActivity.this, "Passwords not missing", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
 }
