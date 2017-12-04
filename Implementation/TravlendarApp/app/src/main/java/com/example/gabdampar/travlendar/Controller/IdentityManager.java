@@ -41,7 +41,7 @@ public class IdentityManager implements Response.Listener<JSONObject>, Response.
     private static String client_secret = "travlendar";
 
     // used to schedule the token refreshing
-    private static Timer t = new Timer();
+    private static Timer t;
 
     private Response.Listener onRegistrationResponse = null;
     private Response.ErrorListener onRegistrationError = null;
@@ -105,11 +105,12 @@ public class IdentityManager implements Response.Listener<JSONObject>, Response.
     }
 
     private void RefreshToken(int tokenDuration) {
-        t.cancel();
+        t = new Timer();
         t.schedule(new TimerTask() {
             @Override
             public void run() {
                 // TO-DO: call refresh token API
+                IdentityManager.instance.token = "";
                 IdentityManager.TokenRequest(AuthMethod.PASSWORD, IdentityManager.instance, IdentityManager.instance);
             }
         },tokenDuration * 1000 - 10);

@@ -109,7 +109,7 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
             String token = response.getString("access_token");
             try {
                 int token_expir = response.getInt("expires_in");
-                //IdentityManager.GetInstance().SetUserSession(email, password, token, token_expir);
+                IdentityManager.GetInstance().SetUserSession(email, password, token, token_expir);
 
                 // if login was ok, show main view
                 final Intent intent = new Intent(this, MainPageActivity.class);
