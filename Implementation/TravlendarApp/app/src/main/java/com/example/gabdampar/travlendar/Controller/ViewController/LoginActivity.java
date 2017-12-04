@@ -5,13 +5,19 @@
 package com.example.gabdampar.travlendar.Controller.ViewController;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -32,6 +38,9 @@ import com.example.gabdampar.travlendar.Controller.NetworkManager;
 import com.here.android.mpa.common.ApplicationContext;
 import com.here.android.mpa.common.MapEngine;
 import com.here.android.mpa.common.OnEngineInitListener;
+import com.here.android.mpa.urbanmobility.Alert;
+
+import java.util.regex.Pattern;
 
 
 public class LoginActivity extends AppCompatActivity implements Response.Listener<JSONObject>, Response.ErrorListener, DialogInterface.OnClickListener {
@@ -39,6 +48,8 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
     EditText emailField;
     EditText passwordField;
     ProgressBar bar;
+    Button loginBtn;
+    Button registerBtn;
 
     String email;
     String password;
@@ -54,6 +65,8 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
         emailField = findViewById(R.id.emailText);
         passwordField = findViewById(R.id.passwordText);
         bar = findViewById(R.id.progressBarLogin);
+        loginBtn = findViewById(R.id.login_button);
+        registerBtn = findViewById(R.id.register_button);
 
         /**
          try to use HERE APIs, to move away
@@ -76,12 +89,11 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
             }
         });
 
-
     }
 
     //called when the user click on the login button
     public void LoginAttempt(View view) {
-        bar.setVisibility(View.VISIBLE);
+        SetViewState(false);
 
         email = emailField.getText().toString();
         password = passwordField.getText().toString();
@@ -89,11 +101,9 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
         IdentityManager.GetInstance().Login(email, password, this, this);
     }
 
-
-    //these two methods must be implemented due to the implements of the interface
+    // called when the LOGIN response is returned
     public void onResponse(JSONObject response) {
-        // ON RESPONSE
-        bar.setVisibility(View.INVISIBLE);
+        SetViewState(true);
 
         try {
             String token = response.getString("access_token");
@@ -115,12 +125,21 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
     }
 
     // called when the user click on the registration Button
-    void RegistrationAttempt(View view){
+    public void RegistrationAttempt(View view){
         email = emailField.getText().toString();
         password = passwordField.getText().toString();
 
-        // confirm password showing an alert dialog
-        ShowConfirmationPassword();
+        if(!email.isEmpty() && !password.isEmpty()) {
+            // confirm password showing an alert dialog
+            Pattern pattern = Pattern.compile(getString(R.string.email_regex), Pattern.CASE_INSENSITIVE);
+            if(pattern.matcher(email).matches()) {
+                ShowConfirmationPassword();
+            } else {
+                Toast.makeText(this, "Email is not valid!", Toast.LENGTH_LONG).show();
+            }
+        } else {
+            Toast.makeText(this, "Email or password not valid", Toast.LENGTH_LONG).show();
+        }
     }
 
     public void onErrorResponse(VolleyError error) {
@@ -133,35 +152,46 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
 
     void ShowConfirmationPassword() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Confirm password:");
 
-        // Set up the input
-        final EditText input = new EditText(this);
-        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-        builder.setView(input);
+        // Inflate and set the layout for the dialog, parent is null because its going in the dialog layout
+        LayoutInflater inflater = getLayoutInflater();
+        builder.setTitle("Confirm password:")
+                .setView(inflater.inflate(R.layout.registration_confirm_dialog, null))
+            // Set up the view
+                .setPositiveButton("OK", this)
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
 
-        // Set up the buttons
-        builder.setPositiveButton("OK", this);
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        builder.show();
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
+    // called when user click on the password confirmation dialog OK button
     @Override
     public void onClick(DialogInterface dialog, int which) {
-
-        String passwordConfirm = input.getText().toString();
+        EditText passwordConfirmField = ((AlertDialog) dialog).findViewById(R.id.confirm_password);
+        String passwordConfirm = passwordConfirmField.getText().toString();
         if(password.equals(passwordConfirm)) {
-            IdentityManager.GetInstance().Register(email, password, this, this);
+            IdentityManager.GetInstance().Register(email, password, new Response.Listener() {
+                @Override
+                public void onResponse(Object response) {
+                    Toast.makeText(LoginActivity.this, "Registration successfully done", Toast.LENGTH_SHORT).show();
+                }
+            }, this);
         } else {
-            Toast.makeText(LoginActivity.this, "Passwords not missing", Toast.LENGTH_SHORT).show();
+            Toast.makeText(LoginActivity.this, "Passwords not matching", Toast.LENGTH_SHORT).show();
         }
     }
 
+    // disable buttons and show progress bar while a request is pending
+    public void SetViewState(Boolean active) {
+        loginBtn.setActivated(active);
+        registerBtn.setActivated(active);
+        bar.setVisibility(active ? View.INVISIBLE : View.VISIBLE);
+    }
 
 }

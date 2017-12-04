@@ -23,4 +23,6 @@
     <string name="title_nextSchedules">Current schedules</string>
     <string name="title_pastSchedules">Past schedules</string>
 
+    <string name="email_regex">^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$</string>
+
 </resources>
