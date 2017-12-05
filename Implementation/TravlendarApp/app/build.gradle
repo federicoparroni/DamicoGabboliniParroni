@@ -1,11 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 26 //27
+    buildToolsVersion "27.0.1"
+
     defaultConfig {
         applicationId "com.example.gabdampar.travlendar"
-        minSdkVersion 23
-        targetSdkVersion 26
+        minSdkVersion 23    //16
+        targetSdkVersion 26 // should be 22 to support HERE-SDK :D
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -21,13 +23,12 @@ android {
             dirs 'libs'
         }
     }
-
     splits {
-        abi{
+        abi {
             enable true
             reset()
             include 'x86', 'armeabi-v7a'
-            universalApk false
+            universalApk true
         }
     }
 }
@@ -47,5 +48,5 @@ dependencies {
 
     compile project(':darkskyandroidlib')
 
-    compile(name:'HERE-sdk', ext:'aar')
+    compile(name: 'HERE-sdk', ext: 'aar')
 }
