@@ -26,13 +26,15 @@ public class Appointment {
         this.startingTime = startingTime;
         this.duration = duration;
         this.coords = coord;
+        this.date = date;
     }
 
-    public Appointment(String n, LocalDate date,TimeSlot timeSlot, int duration, GeoCoordinate coord) {
+    public Appointment(String n, LocalDate date, TimeSlot timeSlot, int duration, GeoCoordinate coord) {
         this.name = n;
         this.timeSlot = timeSlot;
         this.duration = duration;
         this.coords = coord;
+        this.date = date;
     }
 
     public boolean isDeterministic() {
@@ -45,6 +47,18 @@ public class Appointment {
 
     public String toString() {
         return this.name;
+    }
+
+    public LocalDate getDate(){
+        return this.date;
+    }
+
+    public TimeSlot getTimeSlot(){
+        return this.timeSlot;
+    }
+
+    public LocalTime getStartingTime(){
+        return this.startingTime;
     }
 
 }

@@ -21,8 +21,9 @@
         android:theme="@style/AppTheme"
         android:hardwareAccelerated="true">
 
-        <activity android:name=".Controller.ViewController.LoginActivity"
 
+
+        <activity android:name=".Controller.ViewController.LoginActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,10 +34,14 @@
         <activity
             android:name=".Controller.ViewController.MainPageActivity"
             android:label="@string/main_page_activity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar" >
+
+
+
+            </activity>
         <activity
             android:name=".Controller.ViewController.AppointmentsListActivity"
-            android:label="pippo" />
+            android:label="Appointments" />
         <activity
             android:name=".Controller.ViewController.AppointmentCreationActivity"
             android:label="Appointment Creation"

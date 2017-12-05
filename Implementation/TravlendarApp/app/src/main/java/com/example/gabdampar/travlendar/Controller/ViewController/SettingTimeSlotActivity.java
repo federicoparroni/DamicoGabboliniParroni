@@ -35,7 +35,6 @@ public class SettingTimeSlotActivity extends AppCompatActivity {
     // method to send back parameter chosen by the user to the AppointmentCreationActivity
     @Override
     public void onBackPressed(){
-        super.onBackPressed();
         //create the object to pass back to the previous view
         LocalTime startingTimeSlotTime = new LocalTime( startingTimeSlotTimeField.getHour(),startingTimeSlotTimeField.getMinute());
         LocalTime endingTimeSlotTime = new LocalTime(endingTimeSlotTimeField.getHour(),endingTimeSlotTimeField.getMinute());
@@ -47,6 +46,7 @@ public class SettingTimeSlotActivity extends AppCompatActivity {
         returnIntent.putExtra("timeSlot",extras);
         setResult(Activity.RESULT_OK, returnIntent);
         finish();
+        super.onBackPressed();
 
     }
 }

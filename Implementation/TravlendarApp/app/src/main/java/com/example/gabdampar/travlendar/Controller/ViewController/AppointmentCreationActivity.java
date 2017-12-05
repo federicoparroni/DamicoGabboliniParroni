@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -109,13 +112,14 @@ public class AppointmentCreationActivity extends AppCompatActivity {
 
     public void OnSaveCliCk(View view){
         name = appointmentNameField.getText().toString();
-        //must
-        date = new LocalDate(datePicker.getYear(),datePicker.getMonth(),datePicker.getDayOfMonth()) ;
+        date = new LocalDate(datePicker.getYear(),datePicker.getMonth()+1,datePicker.getDayOfMonth());
         duration = durationTimePicker.getHour()*3600 + durationTimePicker.getHour()*60 ;
         // TODO: coords = locationField.getCoordinate();
 
         //the new appointment created
         Appointment appointment;
+
+        // TODO: CONTROLLARE CHE L'UTENTE ABBIA INSERITO TUTTI I CAMPI.
 
         //Check if the appointment has a starting time or a time slot
         if(checkBoxStartingTime.isChecked()){
@@ -126,26 +130,30 @@ public class AppointmentCreationActivity extends AppCompatActivity {
         }
 
         AppointmentManager.GetInstance().AddAppointment(appointment);
+        //verifying that the appointment is added to the appointment list
+        Log.e("addAppointmentToTheList",String.valueOf(AppointmentManager.GetInstance().GetAppointmentList().size()));
+
+        super.onBackPressed();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //onActivityResult
         if (requestCode == 1) {
-            if(resultCode == Activity.RESULT_OK){
+            if(resultCode == RESULT_OK){
                 //assignment to the parameter of the new appointment the result
                 startingTime = (LocalTime) data.getExtras().getSerializable("startingTime");
                 timeSlot = null;
             }
-            if (resultCode == Activity.RESULT_CANCELED) {
+            if (resultCode == RESULT_CANCELED) {
                 //Write your code if there's no result
             }
         }
         if (requestCode == 2){
-            if(resultCode == Activity.RESULT_OK){
-                Bundle extras = data.getExtras();
-                LocalTime startingTimeSlotTime = (LocalTime)extras.getSerializable("startingTime");
-                LocalTime endingTimeSlotTime = (LocalTime)extras.getSerializable("endingTime");
+            if(resultCode == RESULT_OK){
+                //Bundle extras = data.getExtras();
+                LocalTime startingTimeSlotTime = (LocalTime) data.getBundleExtra("timeSlot").getSerializable("startingTime");
+                LocalTime endingTimeSlotTime = (LocalTime)data.getBundleExtra("timeSlot").getSerializable("endingTime");
                 timeSlot = new TimeSlot(startingTimeSlotTime,endingTimeSlotTime);
                 startingTime = null;
             }

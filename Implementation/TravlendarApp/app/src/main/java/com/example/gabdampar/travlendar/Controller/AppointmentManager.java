@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class AppointmentManager {
 
-    private static ArrayList<Appointment> apptList = new ArrayList<>();
+    private ArrayList<Appointment> apptList = new ArrayList<>();
 
     // singleton
     private static AppointmentManager instance;
@@ -22,12 +22,17 @@ public class AppointmentManager {
         return instance;
     }
 
-    public static void AddAppointment(Appointment a) {
+    public void AddAppointment(Appointment a) {
         apptList.add(a);
     }
 
-    public static ArrayList<Appointment> GetAppointmentList() {
+    public void RemoveFromList(int position){
+        apptList.remove(position);
+    }
+
+    public ArrayList<Appointment> GetAppointmentList() {
         return apptList;
     }
+
 
 }

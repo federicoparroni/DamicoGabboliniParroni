@@ -18,6 +18,7 @@ import com.android.volley.VolleyError;
 
 import com.example.gabdampar.travlendar.Controller.IdentityManager;
 import com.example.gabdampar.travlendar.Controller.NetworkManager;
+import com.example.gabdampar.travlendar.Controller.Synchronizer;
 import com.example.gabdampar.travlendar.R;
 
 import org.json.JSONException;
@@ -52,10 +53,10 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
         passwordField = findViewById(R.id.passwordText);
         bar = findViewById(R.id.progressBarLogin);
 
-        /**
-         try to use HERE APIs, to move away
-         */
-        MapEngine mapEngine = MapEngine.getInstance();
+
+        //try to use HERE APIs, to move away
+
+        /*MapEngine mapEngine = MapEngine.getInstance();
         ApplicationContext appContext = new ApplicationContext(this.getApplicationContext());
         Log.d("checkpoint", "sto per inizializzare");
         mapEngine.init(appContext, new OnEngineInitListener() {
@@ -69,9 +70,10 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
                     Log.d("Initialization error: ", error.getDetails());
                 }
             }
-        });
+        });*/
 
-
+        //TODO: AGGIUSTARE COORDS (METODO PER FINTO SYNCHRONIZER)
+        //Synchronizer.GetInstance().Synchronize;
     }
 
     //called when the user click on the login button
