@@ -26,13 +26,6 @@ import com.example.gabdampar.travlendar.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.example.gabdampar.travlendar.Controller.IdentityManager;
-import com.example.gabdampar.travlendar.Controller.MappingServiceAPIWrapper;
-import com.example.gabdampar.travlendar.Controller.NetworkManager;
-import com.here.android.mpa.common.ApplicationContext;
-import com.here.android.mpa.common.MapEngine;
-import com.here.android.mpa.common.OnEngineInitListener;
-
 
 public class LoginActivity extends AppCompatActivity implements Response.Listener<JSONObject>, Response.ErrorListener, DialogInterface.OnClickListener {
 
@@ -55,9 +48,10 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
         passwordField = findViewById(R.id.passwordText);
         bar = findViewById(R.id.progressBarLogin);
 
+
         /**
          try to use HERE APIs, to move away
-         */
+
         MapEngine mapEngine = MapEngine.getInstance();
         ApplicationContext appContext = new ApplicationContext(this.getApplicationContext());
 
@@ -74,9 +68,7 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
                     Log.e("InitializationError", error.getDetails());
                 }
             }
-        });
-
-
+        });*/
     }
 
     //called when the user click on the login button
@@ -88,7 +80,6 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
 
         IdentityManager.GetInstance().Login(email, password, this, this);
     }
-
 
     //these two methods must be implemented due to the implements of the interface
     public void onResponse(JSONObject response) {
@@ -155,12 +146,13 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
     @Override
     public void onClick(DialogInterface dialog, int which) {
 
+        /*
         String passwordConfirm = input.getText().toString();
         if(password.equals(passwordConfirm)) {
             IdentityManager.GetInstance().Register(email, password, this, this);
         } else {
             Toast.makeText(LoginActivity.this, "Passwords not missing", Toast.LENGTH_SHORT).show();
-        }
+        }*/
     }
 
 

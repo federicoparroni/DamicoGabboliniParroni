@@ -1,4 +1,4 @@
-package com.example.gabdampar.travlendar.Controller.ViewController;
+package com.example.gabdampar.travlendar.Controller;
 
 import android.util.Log;
 
@@ -82,7 +82,7 @@ class WeatherForecastAPIWrapper {
                         case "partly-cloudy-night":
                             r = Weather.CLOUDY;
                         default:
-                            r = null;
+                            r = Weather.UNKNOWN;
                     }
                     l.add(new TimeWeather(d.getTime(), r));
                 }
