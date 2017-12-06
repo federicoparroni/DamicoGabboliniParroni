@@ -30,4 +30,17 @@ public class TimeSlot {
         return (t1.endingTime.isAfter(t2.startingTime)) || (t2.endingTime.isAfter(t1.startingTime));
     }
 
+    public LocalTime getStartingTime(){
+        return startingTime;
+    }
+
+    public LocalTime getEndingTime(){
+        return endingTime;
+    }
+
+    public String toString(){
+        String timeSlotStringed = this.getStartingTime().toString("HH:mm") + "-" + this.getEndingTime().toString("HH:mm");
+        return  timeSlotStringed;
+    }
+
 }

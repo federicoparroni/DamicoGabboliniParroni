@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.TimePicker;
 
+import com.example.gabdampar.travlendar.Controller.AppointmentManager;
+import com.example.gabdampar.travlendar.Model.Appointment;
 import com.example.gabdampar.travlendar.Model.TimeSlot;
 import com.example.gabdampar.travlendar.R;
 
@@ -21,6 +23,10 @@ public class SettingTimeSlotActivity extends AppCompatActivity {
     TimePicker startingTimeSlotTimeField;
     TimePicker endingTimeSlotTimeField;
 
+    int position;
+    //appointment to be modified
+    Appointment appointment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,12 +36,24 @@ public class SettingTimeSlotActivity extends AppCompatActivity {
 
         startingTimeSlotTimeField.setIs24HourView(true);
         endingTimeSlotTimeField.setIs24HourView(true);
+
+        position = getIntent().getIntExtra("position",-1);
+
+        if(position != -1){
+            appointment = AppointmentManager.GetInstance().GetAppointment(position);
+            if(appointment.getTimeSlot() != null) {
+                startingTimeSlotTimeField.setHour(appointment.getTimeSlot().startingTime.getHourOfDay());
+                startingTimeSlotTimeField.setMinute(appointment.getTimeSlot().startingTime.getMinuteOfHour());
+
+                endingTimeSlotTimeField.setHour(appointment.getTimeSlot().endingTime.getHourOfDay());
+                endingTimeSlotTimeField.setMinute(appointment.getTimeSlot().endingTime.getMinuteOfHour());
+            }
+        }
     }
 
     // method to send back parameter chosen by the user to the AppointmentCreationActivity
     @Override
     public void onBackPressed(){
-        super.onBackPressed();
         //create the object to pass back to the previous view
         LocalTime startingTimeSlotTime = new LocalTime( startingTimeSlotTimeField.getHour(),startingTimeSlotTimeField.getMinute());
         LocalTime endingTimeSlotTime = new LocalTime(endingTimeSlotTimeField.getHour(),endingTimeSlotTimeField.getMinute());
@@ -47,6 +65,7 @@ public class SettingTimeSlotActivity extends AppCompatActivity {
         returnIntent.putExtra("timeSlot",extras);
         setResult(Activity.RESULT_OK, returnIntent);
         finish();
+        super.onBackPressed();
 
     }
 }
