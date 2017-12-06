@@ -90,9 +90,6 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
             }
         });*/
 
-        //TODO: AGGIUSTARE COORDS (METODO PER FINTO SYNCHRONIZER)
-        //Synchronizer.GetInstance().Synchronize;
-
     }
 
     //called when the user click on the login button

@@ -20,6 +20,7 @@ import android.widget.ListView;
 
 import com.example.gabdampar.travlendar.Controller.AppointmentManager;
 import com.example.gabdampar.travlendar.Controller.AppointmentsListViewAdapter;
+import com.example.gabdampar.travlendar.Controller.Synchronizer;
 import com.example.gabdampar.travlendar.Model.Appointment;
 import com.example.gabdampar.travlendar.R;
 
@@ -39,6 +40,9 @@ public class AppointmentsListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_appointments_list);
+
+        //TODO: AGGIUSTARE COORDS (METODO PER FINTO SYNCHRONIZER)
+        Synchronizer.GetInstance().Synchronize();
 
         appointmentListView = findViewById(R.id.appointmentListView);
         appointmentsList = AppointmentManager.GetInstance().GetAppointmentList();
@@ -61,7 +65,7 @@ public class AppointmentsListActivity extends AppCompatActivity {
 
                 builder.setTitle("Appointment Deletion")
                         // Set up the view
-                        .setMessage("do you want to delete this appointment?")
+                        .setMessage("Do you want to delete this appointment?")
                         .setPositiveButton("OK",new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
@@ -88,19 +92,22 @@ public class AppointmentsListActivity extends AppCompatActivity {
         //set onClick of one item of the listView event
         appointmentListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(AppointmentsListActivity.this);
 
                 // Inflate and set the layout for the dialog, parent is null because its going in the dialog layout
                 LayoutInflater inflater = getLayoutInflater();
-                builder.setTitle("Appointment Deletion")
+                builder.setTitle("Appointment details")
                         .setView(inflater.inflate(R.layout.appointment_list_on_click, null))
                         // Set up the view
                         .setPositiveButton("EDIT",new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
+                                Intent editAppointment = new Intent(getApplicationContext(),AppointmentCreationActivity.class);
+                                editAppointment.putExtra("position",i);
+                                startActivity(editAppointment);
                             }
                         })
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -131,8 +138,8 @@ public class AppointmentsListActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.addAppointmentButton:
                 // User chose to add a new appointment
-                Intent intent = new Intent(this, AppointmentCreationActivity.class);
-                startActivity(intent);
+                Intent createAppointment = new Intent(this, AppointmentCreationActivity.class);
+                startActivity(createAppointment);
 
             default:
                 // If we got here, the user's action was not recognized.

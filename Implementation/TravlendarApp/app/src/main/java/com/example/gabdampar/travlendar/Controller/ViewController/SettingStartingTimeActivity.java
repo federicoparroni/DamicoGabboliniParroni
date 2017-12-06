@@ -6,6 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TimePicker;
 
+import com.example.gabdampar.travlendar.Controller.AppointmentManager;
+import com.example.gabdampar.travlendar.Controller.IdentityManager;
+import com.example.gabdampar.travlendar.Model.Appointment;
 import com.example.gabdampar.travlendar.R;
 
 import org.joda.time.LocalTime;
@@ -13,12 +16,26 @@ import org.joda.time.LocalTime;
 public class SettingStartingTimeActivity extends AppCompatActivity {
 
     TimePicker timePiker;
+    int position;
+    //appointment to be modified
+    Appointment appointment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting_starting_time);
+
         timePiker = findViewById(R.id.timePicker);
+
+        position = getIntent().getIntExtra("position",-1);
+
+        if(position != -1){
+            appointment = AppointmentManager.GetInstance().GetAppointment(position);
+            if(appointment.getStartingTime() != null) {
+                timePiker.setHour(appointment.getStartingTime().getHourOfDay());
+                timePiker.setMinute(appointment.getStartingTime().getMinuteOfHour());
+            }
+        }
     }
 
     // method to send back parameter chosen by the user to the AppointmentCreationActivity

@@ -34,5 +34,9 @@ public class AppointmentManager {
         return apptList;
     }
 
+    public Appointment GetAppointment(int position){
+        return apptList.get(position);
+    }
+
 
 }
