@@ -1,6 +1,5 @@
 package com.example.gabdampar.travlendar.Model;
 
-import com.example.gabdampar.travlendar.Model.travelMean.TravelMean;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.model.Bounds;
@@ -15,7 +14,7 @@ public class TravelOptionData {
 
     private double price, carbonEmission;
     private TimeSlot time;
-    private Map<TravelMeanEnum,Double> map;
+    private Map<TravelMeanEnum,Double> meanToKmMap;
     private PolylineOptions polyline;
     private Bounds bounds;
     private String directions;
@@ -42,9 +41,7 @@ public class TravelOptionData {
         this.time = time;
     }
 
-    public void setMap(Map<TravelMeanEnum, Double> map) {
-        this.map = map;
-    }
+    public void setMeanToKmMap(Map<TravelMeanEnum, Double> map) { this.meanToKmMap = map; }
 
     public void setPolyline(PolylineOptions polyline) {
         this.polyline = polyline;
@@ -58,8 +55,8 @@ public class TravelOptionData {
         return time;
     }
 
-    public Map<TravelMeanEnum, Double> getMap() {
-        return map;
+    public Map<TravelMeanEnum, Double> getMeanToKmMap() {
+        return meanToKmMap;
     }
 
     public PolylineOptions getPolyline() {

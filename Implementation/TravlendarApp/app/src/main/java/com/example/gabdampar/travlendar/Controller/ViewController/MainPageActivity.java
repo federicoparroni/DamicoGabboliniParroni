@@ -41,8 +41,13 @@ public class MainPageActivity extends FragmentActivity
         /*MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);*/
 
-        Intent intent = new Intent(this, AppointmentsListActivity.class);
-        startActivity(intent);
+        /*Intent intent = new Intent(this, AppointmentsListActivity.class);
+        startActivity(intent);*/
+
+        ArrayList<TravelMeanEnum> l = new ArrayList<TravelMeanEnum>();
+        l.add(TravelMeanEnum.BUS);
+
+        MappingServiceAPIWrapper.getInstance().getTravelOptionData(l, "Viale delle Rimembranze di Lambrate", "Duomo di Milano", new DateTime(2017,12,6,12,50));
     }
 
     public void ShowSchedulePage(View view) {
@@ -52,10 +57,6 @@ public class MainPageActivity extends FragmentActivity
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        ArrayList<TravelMeanEnum> l = new ArrayList<TravelMeanEnum>();
-        l.add(TravelMeanEnum.BUS);
-
-        MappingServiceAPIWrapper.getInstance().getTravelOptionData(l, "Viale delle Rimembranze di Lambrate", "Duomo di Milano", new DateTime(2017,12,6,12,50));
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(45.4781108,9.2250824), 12.0f));
+        //called when the map is ready
     }
 }
