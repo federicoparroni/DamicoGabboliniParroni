@@ -20,12 +20,16 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.gabdampar.travlendar.Controller.IdentityManager;
+import com.example.gabdampar.travlendar.Controller.MappingServiceAPIWrapper;
 import com.example.gabdampar.travlendar.Controller.NetworkManager;
+import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum;
 import com.example.gabdampar.travlendar.R;
 
+import org.joda.time.DateTime;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 public class LoginActivity extends AppCompatActivity implements Response.Listener<JSONObject>, Response.ErrorListener, DialogInterface.OnClickListener {
@@ -111,6 +115,7 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
 
     // called when the user click on the registration Button
     public void RegistrationAttempt(View view){
+        /*
         email = emailField.getText().toString();
         password = passwordField.getText().toString();
 
@@ -124,7 +129,10 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
             }
         } else {
             Toast.makeText(this, "Email or password not valid", Toast.LENGTH_LONG).show();
-        }
+        }*/
+        ArrayList<TravelMeanEnum> l=new ArrayList<TravelMeanEnum>();
+        l.add(TravelMeanEnum.BUS);
+        MappingServiceAPIWrapper.getInstance().getTravelOptionData(l,"Viale delle Rimembranze di Lambrate", "Duomo di Milano", new DateTime(2017,12, 7, 12, 10, 30));
     }
 
     public void onErrorResponse(VolleyError error) {
