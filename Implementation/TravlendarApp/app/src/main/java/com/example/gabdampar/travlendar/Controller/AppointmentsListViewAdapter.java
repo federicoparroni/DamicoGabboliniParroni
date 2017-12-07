@@ -44,15 +44,14 @@ public class AppointmentsListViewAdapter extends ArrayAdapter<Appointment> {
 
         dateField.setText(appointment.getDate().toString());
 
-
-        //Deterministic Appointment case
+        /** deterministic appointment */
         if(appointment.getTimeSlot() == null) {
             timeField.setText(appointment.getStartingTime().toString("HH:mm"));
         }
-        //Indeterministic Appointment case
-        else{
+        /** non deterministic appointment */
+        else {
             timeField.setText(appointment.getTimeSlot().toString());
-            }
+        }
 
         return convertView;
     }

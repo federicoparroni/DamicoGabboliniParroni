@@ -78,6 +78,17 @@ public class Appointment {
         return this.duration;
     }
 
+    public String getStringDuration() {
+        int hours = (int)Math.floor(duration / 3600);
+        int minutes = (duration / 60) % 60;
+
+        if(hours > 0) {
+            return String.format("%dh %dmin", hours, minutes);
+        } else {
+            return String.format("%dmin", minutes);
+        }
+    }
+
     public void EditAppointment(String n, LocalDate date, LocalTime startingTime,TimeSlot timeSlot,
                                              int duration, GeoCoordinate coord,int involvedPeople,Boolean isRecurrent){
         this.name = n;

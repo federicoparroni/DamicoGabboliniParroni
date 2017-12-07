@@ -46,7 +46,6 @@ public class AppointmentsListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setHasOptionsMenu(true);
 
         //TODO: AGGIUSTARE COORDS (METODO PER FINTO SYNCHRONIZER)
@@ -107,10 +106,7 @@ public class AppointmentsListFragment extends Fragment {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
                 // Inflate and set the layout for the dialog, parent is null because its going in the dialog layout
-
-                //LayoutInflater inflater = getActivity().getLayoutInflater();
                 LayoutInflater inflater = LayoutInflater.from(builder.getContext());
-
                 View inflatedView = inflater.inflate(R.layout.appointment_list_on_click, null);
 
                 builder.setTitle("Appointment details")
@@ -146,8 +142,7 @@ public class AppointmentsListFragment extends Fragment {
 
                 onClickListViewName.setText(clickedAppointment.toString());
                 onClickListViewDate.setText(clickedAppointment.getDate().toString());
-                onClickListViewDuration.setText(String.valueOf(clickedAppointment.getDuration()/60) + ":" +
-                        String.valueOf(clickedAppointment.getDuration()%60));
+                onClickListViewDuration.setText(clickedAppointment.getStringDuration());
                 //TODO:onClickListViewLocation.setText(clickedAppointment.getLocation().toString());
                 if(clickedAppointment.getTimeSlot() == null) {
                     onClickListViewStartingTimeOrTimeSlotField.setText("Starting Time");
