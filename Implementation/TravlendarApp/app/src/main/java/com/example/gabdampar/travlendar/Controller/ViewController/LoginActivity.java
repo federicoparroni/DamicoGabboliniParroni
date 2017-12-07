@@ -115,7 +115,7 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
 
     // called when the user click on the registration Button
     public void RegistrationAttempt(View view){
-        /*
+
         email = emailField.getText().toString();
         password = passwordField.getText().toString();
 
@@ -129,10 +129,7 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
             }
         } else {
             Toast.makeText(this, "Email or password not valid", Toast.LENGTH_LONG).show();
-        }*/
-        ArrayList<TravelMeanEnum> l=new ArrayList<TravelMeanEnum>();
-        l.add(TravelMeanEnum.BUS);
-        MappingServiceAPIWrapper.getInstance().getTravelOptionData(l,"Viale delle Rimembranze di Lambrate", "Duomo di Milano", new DateTime(2017,12, 7, 12, 10, 30));
+        }
     }
 
     public void onErrorResponse(VolleyError error) {
