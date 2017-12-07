@@ -11,6 +11,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -22,6 +23,7 @@ android {
         flatDir {
             dirs 'libs'
         }
+        mavenCentral()
     }
     splits {
         abi {
@@ -48,5 +50,9 @@ dependencies {
 
     compile project(':darkskyandroidlib')
 
-    compile(name: 'HERE-sdk', ext: 'aar')
+    compile(name: 'HERE-sdk', ext: 'aar') //this is for here. in case we wont use just clean
+
+    compile 'com.google.maps:google-maps-services:0.2.5'
+    compile 'com.google.android.gms:play-services-maps:11.6.0'
+    compile 'org.slf4j:slf4j-nop:1.7.25'
 }

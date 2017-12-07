@@ -22,10 +22,15 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBcexenrVZmHweufA6F8SqnhdsF_jLxtoc"/>
         <activity
             android:name=".Controller.ViewController.LoginActivity"
             android:label="@string/app_name">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -33,12 +38,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Controller.ViewController.MainPageActivity"
-            android:label="@string/main_page_activity" >
+            android:name=".Controller.ViewController.Fragment.HomeFragment"
+            android:label="@string/main_page_activity"
+            android:theme="@style/AppTheme.NoActionBar" >
+
         </activity>
+
         <activity
-            android:name=".Controller.ViewController.AppointmentsListActivity"
-            android:label="pippo" />
+            android:name=".Controller.ViewController.Fragment.AppointmentsListFragment"
+            android:label="Appointments" />
+
         <activity
             android:name=".Controller.ViewController.AppointmentCreationActivity"
             android:label="Appointment Creation"
@@ -70,9 +79,9 @@
         </service>
 
         <activity
-            android:name=".Controller.ViewController.ScheduleListActivity"
+            android:name=".Controller.ViewController.Fragment.ScheduleListFragment"
             android:label="@string/title_activity_schedule_list" />
-        <activity android:name=".Controller.ViewController.Fragment.UserProfileActivity" />
+        <activity android:name=".Controller.ViewController.Fragment.UserProfileFragment" />
 
         <activity android:name=".Controller.ViewController.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public abstract class TravelMean implements IMeanEvaluable {
 
     protected static TravelMean instance;
+    public TravelMeanEnum descr;
 
     public int availableSeats;
 

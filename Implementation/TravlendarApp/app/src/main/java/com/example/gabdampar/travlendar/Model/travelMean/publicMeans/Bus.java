@@ -6,8 +6,10 @@ package com.example.gabdampar.travlendar.Model.travelMean.publicMeans;
 
 import com.example.gabdampar.travlendar.Model.Appointment;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMean;
+import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum;
 
 public class Bus extends TravelMean {
+
 
     protected static final float AVG_SPEED = 0.014f;                 // km/h
     protected static final float AVG_CARBON_EMISSION_PER_KM = 150;   // g/km
@@ -21,6 +23,10 @@ public class Bus extends TravelMean {
         return (Bus)instance;
     }
 
+    public Bus(){
+        super();
+        super.descr= TravelMeanEnum.BUS;
+    }
 
     @Override
     public float EstimateTime(Appointment from, Appointment to) {

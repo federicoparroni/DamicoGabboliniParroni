@@ -1,11 +1,10 @@
 package com.example.gabdampar.travlendar.Controller.ViewController;
 
-import android.content.Intent;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -18,7 +17,9 @@ import android.widget.TextView;
 
 import com.example.gabdampar.travlendar.Controller.IdentityManager;
 import com.example.gabdampar.travlendar.Controller.User;
-import com.example.gabdampar.travlendar.Controller.ViewController.Fragment.BlankFragment;
+import com.example.gabdampar.travlendar.Controller.ViewController.Fragment.AppointmentsListFragment;
+import com.example.gabdampar.travlendar.Controller.ViewController.Fragment.HomeFragment;
+import com.example.gabdampar.travlendar.Controller.ViewController.Fragment.ScheduleListFragment;
 import com.example.gabdampar.travlendar.R;
 
 
@@ -30,10 +31,6 @@ public class MainActivity extends AppCompatActivity {
     private ImageView imgNavHeaderBg, imgProfile;
     private TextView txtUsername, txtUserDetails;
     private Toolbar toolbar;
-
-    // urls to load navigation header background image and profile image
-    //private static final String urlNavHeaderBg = "https://api.androidhive.info/images/nav-menu-header-bg.jpg";
-    //private static final String urlProfileImg = "https://lh3.googleusercontent.com/eCtE_G34M9ygdkmOpYvCag1vBARCmZwnVS6rS5t4JLzJ6QgQSBquM0nuTsCpLhYbKljoyS-txg";
 
     // index to identify current nav menu item
     public static int navItemIndex = 0;
@@ -137,7 +134,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Sometimes, with fragment with huge data, screen seems hanging when switching between navigation menus
         // So using runnable, the fragment is loaded with cross fade effect
-        // This effect can be seen in GMail app
         Runnable mPendingRunnable = new Runnable() {
             @Override
             public void run() {
@@ -165,16 +161,15 @@ public class MainActivity extends AppCompatActivity {
     private Fragment getCurrentFragment() {
         switch (navItemIndex) {
             case 0:
-                // home
-                BlankFragment homeFragment = new BlankFragment();
+                HomeFragment homeFragment = new HomeFragment();
                 return homeFragment;
-            /*case 1:
-                PhotosFragment photosFragment = new PhotosFragment();
-                return photosFragment;
+            case 1:
+                AppointmentsListFragment appointmentListFragment = new AppointmentsListFragment();
+                return appointmentListFragment;
             case 2:
-                MoviesFragment moviesFragment = new MoviesFragment();
-                return moviesFragment;
-            case 3:
+                ScheduleListFragment scheduleListFragment = new ScheduleListFragment();
+                return scheduleListFragment;
+            /*case 3:
                 NotificationsFragment notificationsFragment = new NotificationsFragment();
                 return notificationsFragment;
 
@@ -182,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
                 SettingsFragment settingsFragment = new SettingsFragment();
                 return settingsFragment;*/
             default:
-                return new BlankFragment();
+                return new HomeFragment();
         }
     }
 
@@ -210,12 +205,12 @@ public class MainActivity extends AppCompatActivity {
                         CURRENT_TAG = TAG_HOME;
                         break;
                     case R.id.nav_appointments:
-                        startActivity(new Intent(MainActivity.this, AppointmentsListActivity.class));
-                        drawer.closeDrawers();
-                        return true;
+                        navItemIndex = 1;
+                        CURRENT_TAG = TAG_APPOINTMENTS;
+                        break;
                     case R.id.nav_schedules:
-                        startActivity(new Intent(MainActivity.this, ScheduleListActivity.class));
-                        drawer.closeDrawers();
+                        navItemIndex = 2;
+                        CURRENT_TAG = TAG_SCHEDULES;
                         break;
                     case R.id.nav_about_us:
                         // launch new intent instead of loading fragment

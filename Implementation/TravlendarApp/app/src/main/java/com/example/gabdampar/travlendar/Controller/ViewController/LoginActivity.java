@@ -5,18 +5,13 @@
 package com.example.gabdampar.travlendar.Controller.ViewController;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.InputType;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -24,7 +19,6 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-
 import com.example.gabdampar.travlendar.Controller.IdentityManager;
 import com.example.gabdampar.travlendar.Controller.NetworkManager;
 import com.example.gabdampar.travlendar.R;
@@ -32,16 +26,7 @@ import com.example.gabdampar.travlendar.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.example.gabdampar.travlendar.Controller.IdentityManager;
-import com.example.gabdampar.travlendar.Controller.MappingServiceAPIWrapper;
-import com.example.gabdampar.travlendar.Controller.NetworkManager;
-import com.here.android.mpa.common.ApplicationContext;
-import com.here.android.mpa.common.MapEngine;
-import com.here.android.mpa.common.OnEngineInitListener;
-import com.here.android.mpa.urbanmobility.Alert;
-
 import java.util.regex.Pattern;
-
 
 public class LoginActivity extends AppCompatActivity implements Response.Listener<JSONObject>, Response.ErrorListener, DialogInterface.OnClickListener {
 
@@ -68,12 +53,11 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
         loginBtn = findViewById(R.id.login_button);
         registerBtn = findViewById(R.id.register_button);
 
-        /**
-         try to use HERE APIs, to move away
-         */
-        MapEngine mapEngine = MapEngine.getInstance();
-        ApplicationContext appContext = new ApplicationContext(this.getApplicationContext());
 
+        //try to use HERE APIs, to move away
+
+        /*MapEngine mapEngine = MapEngine.getInstance();
+        ApplicationContext appContext = new ApplicationContext(this.getApplicationContext());
         Log.d("checkpoint", "sto per inizializzare");
 
         mapEngine.init(appContext, new OnEngineInitListener() {
@@ -87,8 +71,7 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
                     Log.e("InitializationError", error.getDetails());
                 }
             }
-        });
-
+        });*/
     }
 
     //called when the user click on the login button
@@ -101,6 +84,8 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
         IdentityManager.GetInstance().Login(email, password, this, this);
     }
 
+
+    //these two methods must be implemented due to the implements of the interface
     // called when the LOGIN response is returned
     public void onResponse(JSONObject response) {
         SetViewState(true);
@@ -112,7 +97,7 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
                 IdentityManager.GetInstance().SetUserSession(email, password, token, token_expir);
 
                 // if login was ok, show main view
-                final Intent intent = new Intent(this, MainPageActivity.class);
+                final Intent intent = new Intent(this, MainActivity.class);
                 LoginActivity.this.startActivity(intent);
 
             } catch (JSONException e) {
@@ -173,8 +158,10 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
     // called when user click on the password confirmation dialog OK button
     @Override
     public void onClick(DialogInterface dialog, int which) {
+
         EditText passwordConfirmField = ((AlertDialog) dialog).findViewById(R.id.confirm_password);
         String passwordConfirm = passwordConfirmField.getText().toString();
+
         if(password.equals(passwordConfirm)) {
             IdentityManager.GetInstance().Register(email, password, new Response.Listener() {
                 @Override
@@ -183,7 +170,7 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
                 }
             }, this);
         } else {
-            Toast.makeText(LoginActivity.this, "Passwords not matching", Toast.LENGTH_SHORT).show();
+            Toast.makeText(LoginActivity.this, "Passwords not missing", Toast.LENGTH_SHORT).show();
         }
     }
 

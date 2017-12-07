@@ -11,5 +11,6 @@ public enum Weather {
     CLOUDY,
     SNOWY,
     FOGGY,
-    WINDY
+    WINDY,
+    UNKNOWN
 }

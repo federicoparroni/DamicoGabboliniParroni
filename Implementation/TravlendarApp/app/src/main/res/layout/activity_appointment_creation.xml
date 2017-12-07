@@ -88,13 +88,13 @@
                 android:timePickerMode="spinner" />
 
             <EditText
-                android:id="@+id/numberInvolvedPeople"
+                android:id="@+id/numberInvolvedPeopleField"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:layout_marginTop="15dp"
                 android:hint="Number Involved People"
-                android:inputType="textPersonName" />
+                android:inputType="numberSigned"
+                android:textAlignment="textStart" />
 
             <CheckBox
                 android:id="@+id/isRecurrent"
@@ -115,8 +115,9 @@
                 android:id="@+id/saveButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
                 android:layout_marginBottom="25dp"
+                android:layout_marginTop="15dp"
+                android:onClick="OnSaveCliCk"
                 android:text="SAVE" />
 
 

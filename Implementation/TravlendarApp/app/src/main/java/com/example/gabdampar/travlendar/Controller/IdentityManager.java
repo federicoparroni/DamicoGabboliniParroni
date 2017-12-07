@@ -197,6 +197,7 @@ public class IdentityManager implements Response.Listener<JSONObject>, Response.
                                 callback.UserProfileCallback(user);
                             } catch (JSONException e) {
                                 Log.e("JSONError", "Cannot parse user profile json");
+                                Log.e("JSONError", e.getMessage());
                             }
                         }
                     }, new Response.ErrorListener() {
