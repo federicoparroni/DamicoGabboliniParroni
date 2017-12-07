@@ -13,6 +13,25 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+
+    <string name="title_main_page">Home</string>
+    <string name="openDrawer">open_drawer</string>
+    <string name="closeDrawer">close_drawer</string>
+    <string-array name="main_menu_items_array">
+        <item>Home</item>
+        <item>Appointments</item>
+        <item>Schedules</item>
+    </string-array>
+    <string name="nav_menu_home">Home</string>
+    <string name="nav_menu_appointments">Appointments</string>
+    <string name="nav_menu_schedules">Schedules</string>
+    <string name="nav_menu_about_us">About us</string>
+    <string name="nav_menu_travlendar">Travlendar App</string>
+
+    <string name="action_clear_all">Clear All</string>
+    <string name="action_logout">Logout</string>
+    <string name="action_mark_all_read">Mark All as Read</string>
+
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
 
@@ -23,6 +42,11 @@
     <string name="title_nextSchedules">Current schedules</string>
     <string name="title_pastSchedules">Past schedules</string>
 
+    <string name="profile_image_button_tooltip">Show your profile</string>
+
     <string name="email_regex">^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Home fragment</string>
 
 </resources>

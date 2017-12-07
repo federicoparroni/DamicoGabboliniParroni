@@ -6,24 +6,19 @@ package com.example.gabdampar.travlendar.Controller;
 
 import android.util.Log;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-/*
+/**
 // IdentityManager offers methods to register, authenticate via bearer token and refresh it after expiration
-*/
+**/
 public class IdentityManager implements Response.Listener<JSONObject>, Response.ErrorListener {
     private static String baseUrl = "http://travlendar.000webhostapp.com/travlendar/public";
 
@@ -55,7 +50,10 @@ public class IdentityManager implements Response.Listener<JSONObject>, Response.
         return instance;
     }
 
-
+    /** get token from api by using:
+     * 1. username and password (cached in this instance) in order to auth the user
+     * 2. client_credentials (to allow registration)
+    **/
     private static void TokenRequest(AuthMethod authMode, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         String json = "";
         switch (authMode) {
@@ -81,11 +79,11 @@ public class IdentityManager implements Response.Listener<JSONObject>, Response.
     }
 
 
-    /*==========================================================================================
+    /**==========================================================================================
                                                 LOGIN
-    ========================================================================================= */
+    ==========================================================================================**/
 
-    // Request a token to authenticate for future requests
+    /** Obtain a token by providing email and password */
     public void Login(String email, String password, Response.Listener onResponse, Response.ErrorListener onError)  {
         // TO-DO: should check wether online or not
 
@@ -96,6 +94,7 @@ public class IdentityManager implements Response.Listener<JSONObject>, Response.
 
     }
 
+    /** Auto-refresh token for the provided credentials after expiration */
     public void SetUserSession(String email, String password, final String token, int tokenDuration) {
         IdentityManager.instance.email = email;
         IdentityManager.instance.password = password;
@@ -104,6 +103,7 @@ public class IdentityManager implements Response.Listener<JSONObject>, Response.
         IdentityManager.instance.RefreshToken(tokenDuration);
     }
 
+    /** Set a scheduled task to refresh a token when expired */
     private void RefreshToken(int tokenDuration) {
         t = new Timer();
         t.schedule(new TimerTask() {
@@ -131,9 +131,9 @@ public class IdentityManager implements Response.Listener<JSONObject>, Response.
     }
 
 
-    /*==========================================================================================
+    /**==========================================================================================
                                            REGISTRATION
-    ========================================================================================= */
+    ==========================================================================================**/
 
     public static void Register(String email, String password, Response.Listener onResponse, Response.ErrorListener onError){
         // get token and then register
@@ -163,24 +163,15 @@ public class IdentityManager implements Response.Listener<JSONObject>, Response.
     };
 
     private static void SendRegistrationRequest(final String token) {
-        String json = String.format("{ \"email\": \"%s\", \"password\": \"%s\" }", IdentityManager.instance.email, IdentityManager.instance.password);
+        JSONObject json;
         try {
-            JsonObjectRequest registerRequest = new JsonObjectRequest(baseUrl.concat("/api/register"), new JSONObject(json),
-                            IdentityManager.instance.onRegistrationResponse, IdentityManager.instance.onRegistrationError) {
+            json = new JSONObject(String.format("{ \"email\": \"%s\", \"password\": \"%s\" }", IdentityManager.instance.email, IdentityManager.instance.password));
+            JsonObjectRequest registerRequest = JsonObjectRequestWithAuth.Create(baseUrl.concat("/api/register"), json,
+                            IdentityManager.instance.onRegistrationResponse,
+                            IdentityManager.instance.onRegistrationError,
+                            token);
 
-                @Override   // add header for authentication
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    HashMap<String, String> headers = new HashMap<>();
-                    String headerValue = String.format("Bearer %s", token);
-                    headers.put("Authorization", headerValue);
-                    return headers;
-                }
-            };
-
-            registerRequest.setRetryPolicy(new DefaultRetryPolicy(
-                    15000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-
-            // adding the Login request to the queue of the request
+            NetworkManager.SetRequestTimeout(registerRequest, 15000);
             NetworkManager.GetQueue().add(registerRequest);
         } catch (JSONException e) {
             Log.e("JSONError","Error in creating json object request");
@@ -189,7 +180,45 @@ public class IdentityManager implements Response.Listener<JSONObject>, Response.
     }
 
 
+    /**==========================================================================================
+                                            PROFILE
+     ==========================================================================================**/
+    public static void GetUserProfile(final UserProfileListener callback) {
+        JSONObject json;
+        try {
+            json = new JSONObject(String.format("{ \"email\": \"%s\", \"password\": \"%s\" }", IdentityManager.instance.email, IdentityManager.instance.password));
 
+            JsonObjectRequest profileRequest = JsonObjectRequestWithAuth.Create(baseUrl.concat("/api/user/profile"), json,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                User user = User.ParseUser(response.getJSONObject("user"));
+                                callback.UserProfileCallback(user);
+                            } catch (JSONException e) {
+                                Log.e("JSONError", "Cannot parse user profile json");
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.e("ERROR", "Cannot retrieve user profile");
+                            Log.e("ERROR", error.getMessage());
+                        }
+                    }, IdentityManager.instance.token);
+
+            NetworkManager.SetRequestTimeout(profileRequest, 15000);
+            NetworkManager.GetQueue().add(profileRequest);
+        } catch (JSONException e) {
+            Log.e("JSONError","Error in creating json object request");
+            Log.e("JSONError", e.toString());
+        }
+    }
+
+
+    public interface UserProfileListener {
+        void UserProfileCallback(User user);
+    }
 
 
     @Override

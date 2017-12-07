@@ -113,7 +113,7 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
 
                 // if login was ok, show main view
                 final Intent intent = new Intent(this, MainPageActivity.class);
-                getApplicationContext().startActivity(intent);
+                LoginActivity.this.startActivity(intent);
 
             } catch (JSONException e) {
                 Log.d("JSONError","Error in getting token expiration from response");

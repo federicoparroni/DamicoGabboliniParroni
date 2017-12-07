@@ -5,8 +5,15 @@
 package com.example.gabdampar.travlendar.Controller;
 
 import android.content.Context;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /*
 // Singleton class that offers a centralized request queue
@@ -31,7 +38,15 @@ public class NetworkManager {
         return requestQueue;
     }
 
-    // Checks whether an internet connection is available and the device is connected
+    /** Set json request custom timeout (ms) */
+    public static JsonObjectRequest SetRequestTimeout(JsonObjectRequest request, int timeout) {
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                timeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        return request;
+    }
+
+    /** Checks whether an internet connection is available and the device is connected */
     public static Boolean isOnline() {
         try {
             Process p1 = java.lang.Runtime.getRuntime().exec("ping -c 1 www.google.com");
