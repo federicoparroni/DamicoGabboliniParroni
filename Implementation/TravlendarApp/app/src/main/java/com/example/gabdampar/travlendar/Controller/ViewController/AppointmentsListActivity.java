@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.gabdampar.travlendar.Controller.AppointmentManager;
 import com.example.gabdampar.travlendar.Controller.AppointmentsListViewAdapter;
@@ -97,9 +98,10 @@ public class AppointmentsListActivity extends AppCompatActivity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(AppointmentsListActivity.this);
 
                 // Inflate and set the layout for the dialog, parent is null because its going in the dialog layout
-                LayoutInflater inflater = getLayoutInflater();
+                LayoutInflater inflater = LayoutInflater.from(builder.getContext());
+                View inflatedView = inflater.inflate(R.layout.appointment_list_on_click, null);
                 builder.setTitle("Appointment details")
-                        .setView(inflater.inflate(R.layout.appointment_list_on_click, null))
+                        .setView(inflatedView)
                         // Set up the view
                         .setPositiveButton("EDIT",new DialogInterface.OnClickListener() {
                             @Override
@@ -117,6 +119,30 @@ public class AppointmentsListActivity extends AppCompatActivity {
                             }
                         });
 
+
+                //Fields of the inflated view
+                TextView onClickListViewName = inflatedView.findViewById(R.id.onClickListViewName);
+                TextView onClickListViewDate = inflatedView.findViewById(R.id.onClickListViewDate);
+                TextView onClickListViewDuration = inflatedView.findViewById(R.id.onClickListViewDuration);
+                TextView onClickListViewLocation = inflatedView.findViewById(R.id.onClickListViewLocation);
+                TextView onClickListViewStartingTimeOrTimeSlot = inflatedView.findViewById(R.id.onClickListViewStartingTimeOrTimeSlot);
+                TextView onClickListViewStartingTimeOrTimeSlotField = inflatedView.findViewById(R.id.onClickListViewStartingTimeOrTimeSlotField);
+
+                //The clicked Appointment
+                Appointment clickedAppointment = AppointmentManager.GetInstance().GetAppointment(i);
+
+                onClickListViewName.setText(clickedAppointment.toString());
+                onClickListViewDate.setText(clickedAppointment.getDate().toString());
+                onClickListViewDuration.setText(String.valueOf(clickedAppointment.getDuration()/60) + ":" +
+                        String.valueOf(clickedAppointment.getDuration()%60));
+                //TODO:onClickListViewLocation.setText(clickedAppointment.getLocation().toString());
+                if(clickedAppointment.getTimeSlot() == null) {
+                    onClickListViewStartingTimeOrTimeSlotField.setText("Starting Time");
+                    onClickListViewStartingTimeOrTimeSlot.setText(clickedAppointment.getStartingTime().toString("HH:mm"));
+                }else {
+                    onClickListViewStartingTimeOrTimeSlotField.setText("Time Slot");
+                    onClickListViewStartingTimeOrTimeSlot.setText(clickedAppointment.getTimeSlot().toString());
+                }
                 AlertDialog alert = builder.create();
                 alert.show();
             }
