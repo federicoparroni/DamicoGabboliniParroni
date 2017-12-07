@@ -44,6 +44,7 @@ public class MappingServiceAPIWrapper {
 
     private static MappingServiceAPIWrapper ourInstance;
     private HashMap<TravelMeanEnum,Double> map;
+    private ArrayList<TravelOptionData> ret=new ArrayList<TravelOptionData>();
 
     public static MappingServiceAPIWrapper getInstance() {
         if(ourInstance==null){ ourInstance=new MappingServiceAPIWrapper(); }
@@ -53,7 +54,8 @@ public class MappingServiceAPIWrapper {
     private MappingServiceAPIWrapper() {}
 
     public List<TravelOptionData> getTravelOptionData(List<TravelMeanEnum> admittedMeans, String startingLocation, String endingLocaton, DateTime departureTime){
-        ArrayList<TravelOptionData> r=null;
+
+        ret.clear();
 
         for (TravelMeanEnum t:admittedMeans){
 
@@ -70,7 +72,7 @@ public class MappingServiceAPIWrapper {
             /**
              * TODO: try to cancel this and see if the api code is retrived automatically from the manifest
              */
-            b=b.apiKey("AIzaSyAKHNiq1CYetEyfAgF2-59jzmj4Hk8u7D0");
+            b=b.apiKey("AIzaSyAs4xaJnBh5JEsVm1MmQjg6CpUdwwL_Txk");
 
             DirectionsApiRequest d=DirectionsApi.getDirections(
                     b.build(),
@@ -105,8 +107,9 @@ public class MappingServiceAPIWrapper {
                             n.setDirections(getTextualDirectionsGivenRouteAndUpdateMap(r));
                             n.setTime(new TimeSlot(
                                     r.legs[0].departureTime.toLocalTime(),
-                                    r.legs[r.legs.length-1].departureTime.toLocalTime()));
-                            //po.width(10).color(Color.BLUE);
+                                    r.legs[r.legs.length-1].arrivalTime.toLocalTime()));
+                            n.setMeanToKmMap(map);
+                            ret.add(n);
                         }
                     }
 
@@ -118,17 +121,17 @@ public class MappingServiceAPIWrapper {
             }
             catch (Exception e){}
         }
-        return r;
+        return ret;
     }
 
     private TravelMeanEnum getTravelMeanEnumValueFromGoogleEnum(TravelMode toConvert) {
         TravelMeanEnum r=null;
-        switch (toConvert) {
-            case BICYCLING:
+        switch (toConvert.name()) {
+            case "bicycling":
                 r = TravelMeanEnum.BIKE;
-            case DRIVING:
+            case "driving":
                 r = TravelMeanEnum.CAR;
-            case WALKING:
+            case "walking":
                 r = TravelMeanEnum.WALK;
             default:
                 r = TravelMeanEnum.UNKNOWN;
@@ -164,51 +167,62 @@ public class MappingServiceAPIWrapper {
 
     private String getTextualDirectionsGivenRouteAndUpdateMap(DirectionsRoute r){
         String s = "";
-        for (DirectionsLeg l : r.legs)
-            s+=getTextualDirectionsGivenLegsAndUpdateMap(l);
+        for (int i=0; i<r.legs.length;i++) {
+            DirectionsLeg l = r.legs[i];
+            s += getTextualDirectionsGivenLegsAndUpdateMap(l);
+        }
         return s;
     }
 
     private String getTextualDirectionsGivenLegsAndUpdateMap(DirectionsLeg l){
         String s = "+ Sei in " + l.startAddress + "\n";
-        for(DirectionsStep st : l.steps) {
-            TravelMeanEnum obj;
-            if(st.travelMode!=TravelMode.TRANSIT)
-                obj = getTravelMeanEnumValueFromGoogleEnum(st.travelMode);
-            else
-                obj = getTravelMeanEnumValueFromGoogleEnum(st.transitDetails.line.vehicle.type);
+        if(l.steps != null)
+            for(int i=0; i<l.steps.length; i++){
+                DirectionsStep st = l.steps[i];
+                TravelMeanEnum obj;
+                if(st.travelMode!=TravelMode.TRANSIT)
+                    obj = getTravelMeanEnumValueFromGoogleEnum(st.travelMode);
+                else
+                    obj = getTravelMeanEnumValueFromGoogleEnum(st.transitDetails.line.vehicle.type);
 
-            if (map.containsKey(obj)) {
-                Double old = map.get(obj);
-                map.remove(obj);
-                map.put(obj, old + Double.valueOf(st.distance.inMeters));
+                if (map.containsKey(obj)) {
+                    Double old = map.get(obj);
+                    map.remove(obj);
+                    map.put(obj, old + Double.valueOf(st.distance.inMeters));
+                }
+                else
+                    map.put(getTravelMeanEnumValueFromGoogleEnum(st.travelMode), Double.valueOf(st.distance.inMeters));
+
+                s += getTextualDirectionsGivenStepsAndUpdateMap(st, "++");
             }
-            else
-                map.put(getTravelMeanEnumValueFromGoogleEnum(st.travelMode), Double.valueOf(st.distance.inMeters));
-
-            s += getTextualDirectionsGivenStepsAndUpdateMap(st, "++");
-        }
         return s+"+ Arrivato in: " + l.endAddress + "\n";
     }
 
     private String getTextualDirectionsGivenStepsAndUpdateMap(DirectionsStep st, String token){
         String s = token + " " + parseHTMLInstruction(st.htmlInstructions) + "\n";
-        for(DirectionsStep ds : st.steps) {
-            TravelMeanEnum obj;
-            if (st.travelMode != TravelMode.TRANSIT)
-                obj = getTravelMeanEnumValueFromGoogleEnum(st.travelMode);
-            else
-                obj = getTravelMeanEnumValueFromGoogleEnum(st.transitDetails.line.vehicle.type);
+        if(st.transitDetails!=null){
+            s+= token + "+ Stop at " + st.transitDetails.arrivalStop.name + " after " + String.valueOf(st.transitDetails.numStops) + " stops \n";
+        }
+        if(st.steps != null)
+            for(int i=0; i<st.steps.length; i++) {
+                DirectionsStep  ds = st.steps[i];
+                //udate map
+                TravelMeanEnum obj;
+                if (ds.travelMode != TravelMode.TRANSIT)
+                    obj = getTravelMeanEnumValueFromGoogleEnum(ds.travelMode);
+                else
+                    obj = getTravelMeanEnumValueFromGoogleEnum(ds.transitDetails.line.vehicle.type);
+                if (map.containsKey(obj)) {
+                    Double old = map.get(obj);
+                    map.remove(obj);
+                    map.put(obj, old + Double.valueOf(ds.distance.inMeters));
+                } else
+                    map.put(getTravelMeanEnumValueFromGoogleEnum(ds.travelMode), Double.valueOf(ds.distance.inMeters));
 
-            if (map.containsKey(obj)) {
-                Double old = map.get(obj);
-                map.remove(obj);
-                map.put(obj, old + Double.valueOf(st.distance.inMeters));
-            } else
-                map.put(getTravelMeanEnumValueFromGoogleEnum(st.travelMode), Double.valueOf(st.distance.inMeters));
+                //get recursively textual representation
+                s+= getTextualDirectionsGivenStepsAndUpdateMap(ds, token + "+");
         }
 
-            s+=getTextualDirectionsGivenStepsAndUpdateMap(st, token + "+");
         return s;
     }
 
@@ -217,11 +231,11 @@ public class MappingServiceAPIWrapper {
         String r = "";
         for(int i=0;i<s.length();i++){
             char c = s.charAt(i);
-            if(c == '\\' && consider==true)
+            if(c == '<' && consider==true)
                 consider=false;
             if (consider==true)
                 r+=c;
-            if(c == 'e' && consider==false)
+            if(c == '>' && consider==false)
                 consider=true;
         }
         return r;

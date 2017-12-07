@@ -81,6 +81,7 @@ public class AppointmentCreationActivity extends AppCompatActivity {
         durationTimePicker.setHour(1);
         durationTimePicker.setMinute(0);
 
+
         //setting for the editing
         if(position != -1){
             //appointment to be modified
@@ -103,6 +104,17 @@ public class AppointmentCreationActivity extends AppCompatActivity {
 
             }else{
                 checkBoxTimeSlot.setChecked(true);
+            }
+
+            //xor between starting time and timeslot
+            if (checkBoxStartingTime.isChecked()) {
+                //XOR of timeslot and startingtime
+                checkBoxTimeSlot.setClickable(false);
+            }
+
+            if(checkBoxTimeSlot.isChecked()) {
+                //XOR of timeslot and startingtime
+                checkBoxStartingTime.setClickable(false);
             }
         }
     }

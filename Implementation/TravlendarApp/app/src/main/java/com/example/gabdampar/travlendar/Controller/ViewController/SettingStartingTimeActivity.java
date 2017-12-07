@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TimePicker;
 
 import com.example.gabdampar.travlendar.Controller.AppointmentManager;
@@ -39,9 +40,7 @@ public class SettingStartingTimeActivity extends AppCompatActivity {
     }
 
     // method to send back parameter chosen by the user to the AppointmentCreationActivity
-    @Override
-    public void onBackPressed(){
-
+    public void onSaveButtonPressed(View view){
         //create the object to pass back to the previous view
         LocalTime startingTime = new LocalTime(timePiker.getHour(),timePiker.getMinute());
         //create the intent to be sent back
@@ -49,8 +48,6 @@ public class SettingStartingTimeActivity extends AppCompatActivity {
         returnIntent.putExtra("startingTime",startingTime);
         setResult(RESULT_OK,returnIntent);
         finish();
-        super.onBackPressed();
-
     }
 
 }
