@@ -2,6 +2,7 @@ package com.example.gabdampar.travlendar.Controller.ViewController;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
@@ -10,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -94,12 +96,17 @@ public class MainActivity extends AppCompatActivity {
     private void loadNavHeader() {
         IdentityManager.GetUserProfile(new IdentityManager.UserProfileListener() {
             @Override
-            public void UserProfileCallback(User user) {
-                txtUserDetails.setText(user.email);
-                txtUserDetails.setText("Standard user");
-
+            public void UserProfileCallback(boolean success, User user) {
+                if(success) {
+                    txtUserDetails.setText(user.email);
+                    txtUserDetails.setText("Standard user");
+                } else {
+                    txtUserDetails.setText("null");
+                    txtUserDetails.setText("null");
+                    Log.e("Error", "Cannot load user profile");
             }
-        });
+        }
+    });
 
         // loading header background image
         /*Glide.with(this).load(urlNavHeaderBg)
@@ -212,6 +219,13 @@ public class MainActivity extends AppCompatActivity {
                         navItemIndex = 2;
                         CURRENT_TAG = TAG_SCHEDULES;
                         break;
+                    case R.id.nav_logout:
+                        IdentityManager.Logout();
+                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        intent.putExtra("calling-activity", 1);
+                        startActivity(intent);
+                        return true;
                     case R.id.nav_about_us:
                         // launch new intent instead of loading fragment
                         //startActivity(new Intent(MainActivity.this, AboutUsActivity.class));

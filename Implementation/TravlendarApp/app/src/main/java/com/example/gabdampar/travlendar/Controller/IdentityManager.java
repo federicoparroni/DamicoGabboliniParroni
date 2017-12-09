@@ -10,6 +10,7 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -95,7 +96,7 @@ public class IdentityManager implements Response.Listener<JSONObject>, Response.
     }
 
     /** Auto-refresh token for the provided credentials after expiration */
-    public void SetUserSession(String email, String password, final String token, int tokenDuration) {
+    public void SetUserSession(String email, String password, final String token, long tokenDuration) {
         IdentityManager.instance.email = email;
         IdentityManager.instance.password = password;
 
@@ -104,7 +105,7 @@ public class IdentityManager implements Response.Listener<JSONObject>, Response.
     }
 
     /** Set a scheduled task to refresh a token when expired */
-    private void RefreshToken(int tokenDuration) {
+    private void RefreshToken(long tokenDuration) {
         t = new Timer();
         t.schedule(new TimerTask() {
             @Override
@@ -113,7 +114,7 @@ public class IdentityManager implements Response.Listener<JSONObject>, Response.
                 IdentityManager.instance.token = "";
                 IdentityManager.TokenRequest(AuthMethod.PASSWORD, IdentityManager.instance, IdentityManager.instance);
             }
-        },tokenDuration * 1000 - 10);
+        },tokenDuration - 10);
     }
 
     @Override
@@ -194,7 +195,11 @@ public class IdentityManager implements Response.Listener<JSONObject>, Response.
                         public void onResponse(JSONObject response) {
                             try {
                                 User user = User.ParseUser(response.getJSONObject("user"));
-                                callback.UserProfileCallback(user);
+                                if(user != null) {
+                                    callback.UserProfileCallback(true, user);
+                                } else {
+                                    callback.UserProfileCallback(false, null);
+                                }
                             } catch (JSONException e) {
                                 Log.e("JSONError", "Cannot parse user profile json");
                                 Log.e("JSONError", e.getMessage());
@@ -216,9 +221,21 @@ public class IdentityManager implements Response.Listener<JSONObject>, Response.
         }
     }
 
+    public static void Logout() {
+        IdentityManager.instance.email = "";
+        IdentityManager.instance.password = "";
+        IdentityManager.instance.token = "";
+        IdentityManager.instance.refreshToken = "";
+        if(IdentityManager.instance.t != null) {
+            t.cancel();
+        }
+        IdentityManager.instance.onRegistrationResponse = null;
+        IdentityManager.instance.onRegistrationError = null;
+    }
+
 
     public interface UserProfileListener {
-        void UserProfileCallback(User user);
+        void UserProfileCallback(boolean success, User user);
     }
 
 

@@ -22,6 +22,10 @@
     <item android:title="Other">
         <menu>
             <item
+                android:id="@+id/nav_logout"
+                android:title="@string/nav_menu_logout" />
+                />
+            <item
                 android:id="@+id/nav_about_us"
                 android:title="@string/nav_menu_about_us" />
             <item

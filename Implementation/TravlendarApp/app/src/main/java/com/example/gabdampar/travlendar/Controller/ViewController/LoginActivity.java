@@ -7,14 +7,17 @@ package com.example.gabdampar.travlendar.Controller.ViewController;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -23,6 +26,7 @@ import com.example.gabdampar.travlendar.Controller.IdentityManager;
 import com.example.gabdampar.travlendar.Controller.NetworkManager;
 import com.example.gabdampar.travlendar.R;
 
+import org.joda.time.DateTime;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -35,6 +39,8 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
     ProgressBar bar;
     Button loginBtn;
     Button registerBtn;
+    CheckBox ckRemember;
+    TextView txtForgotPassword;
 
     String email;
     String password;
@@ -52,8 +58,10 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
         bar = findViewById(R.id.progressBarLogin);
         loginBtn = findViewById(R.id.login_button);
         registerBtn = findViewById(R.id.register_button);
+        ckRemember = findViewById(R.id.ck_remember_me);
+        txtForgotPassword = findViewById(R.id.txt_recover_password);
 
-
+        LoadUserPreference();
         //try to use HERE APIs, to move away
 
         /*MapEngine mapEngine = MapEngine.getInstance();
@@ -74,8 +82,17 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
         });*/
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        // if the user has been logged out and redirected to login acivity, clear user session
+        if(intent.getIntExtra("calling-activity", 0) > 0) {
+            ClearUserPreference(true);
+        }
+        super.onNewIntent(intent);
+    }
+
     //called when the user click on the login button
-    public void LoginAttempt(View view) {
+    public void onLoginClick(View view) {
         SetViewState(false);
 
         email = emailField.getText().toString();
@@ -97,8 +114,9 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
                 IdentityManager.GetInstance().SetUserSession(email, password, token, token_expir);
 
                 // if login was ok, show main view
-                final Intent intent = new Intent(this, MainActivity.class);
-                LoginActivity.this.startActivity(intent);
+                DateTime token_expir_date = DateTime.now().plusSeconds(token_expir);
+                SaveUserPreference(token, token_expir_date);
+                StartMainActivity();
 
             } catch (JSONException e) {
                 Log.d("JSONError","Error in getting token expiration from response");
@@ -106,11 +124,16 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
         } catch (JSONException e) {
             Log.d("JSONError","Error in getting token from response");
         }
+    }
 
+    void StartMainActivity() {
+        final Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        LoginActivity.this.startActivity(intent);
     }
 
     // called when the user click on the registration Button
-    public void RegistrationAttempt(View view){
+    public void onRegistrationClick(View view){
         email = emailField.getText().toString();
         password = passwordField.getText().toString();
 
@@ -172,6 +195,50 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
         } else {
             Toast.makeText(LoginActivity.this, "Passwords not missing", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    void LoadUserPreference() {
+        SharedPreferences settings = getSharedPreferences("UserInfo", 0);
+        ckRemember.setChecked( settings.getBoolean("remember", false) );
+        if(ckRemember.isChecked()) {
+            emailField.setText(settings.getString("email", ""));
+            passwordField.setText(settings.getString("password", ""));
+
+            String token = settings.getString("token","");
+            if(!token.isEmpty()) {
+                //check if token has expired
+                DateTime token_expir = new DateTime(settings.getLong("token_exp", Long.MAX_VALUE));
+                if (token_expir.isAfter(DateTime.now().toInstant())) {
+                    // token has not expired and still valid
+                    long tokenRemainingDuration = token_expir.getMillis() - DateTime.now().getMillis();
+                    IdentityManager.GetInstance().SetUserSession(emailField.getText().toString(), passwordField.getText().toString(), token, tokenRemainingDuration);
+                    StartMainActivity();
+                }
+            }
+        }
+    }
+    void SaveUserPreference(String token, DateTime tokenExipirationDate) {
+        SharedPreferences settings = getSharedPreferences("UserInfo", 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean("remember", ckRemember.isChecked());
+        if(ckRemember.isChecked()) {
+            editor.putString("email", email);
+            editor.putString("password", password);
+            editor.putString("token", token);
+            editor.putLong("token_exp", tokenExipirationDate.getMillis());
+        }
+        editor.commit();
+    }
+    void ClearUserPreference(boolean onlyToken) {
+        SharedPreferences settings = getSharedPreferences("UserInfo", 0);
+        SharedPreferences.Editor editor = settings.edit();
+        if(onlyToken) {
+            editor.remove("token");
+            editor.remove("token_exp");
+        } else {
+            editor.clear();
+        }
+        editor.commit();
     }
 
     // disable buttons and show progress bar while a request is pending
