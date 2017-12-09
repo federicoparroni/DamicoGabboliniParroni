@@ -35,7 +35,6 @@ import java.util.List;
 
 import static com.google.maps.model.TravelMode.BICYCLING;
 
-
 /**
  * Created by gabbo on 30/11/2017.
  */
@@ -68,11 +67,7 @@ public class MappingServiceAPIWrapper {
              */
 
             GeoApiContext.Builder b=new GeoApiContext.Builder();
-
-            /**
-             * TODO: try to cancel this and see if the api code is retrived automatically from the manifest
-             */
-            b=b.apiKey("AIzaSyAs4xaJnBh5JEsVm1MmQjg6CpUdwwL_Txk");
+            b.apiKey("AIzaSyAs4xaJnBh5JEsVm1MmQjg6CpUdwwL_Txk");
 
             DirectionsApiRequest d=DirectionsApi.getDirections(
                     b.build(),
@@ -82,14 +77,10 @@ public class MappingServiceAPIWrapper {
             d.alternatives(true);
             d.departureTime(departureTime);
 
-
             /**
              * this in general will become the call for all the public travel means
              */
-            if(t== TravelMeanEnum.BUS){
-                d.mode(TravelMode.TRANSIT);
-                d.transitMode(TransitMode.BUS);
-            }
+            d.mode(TravelMode.TRANSIT);
 
             try{
                 d.setCallback(new PendingResult.Callback<DirectionsResult>() {
@@ -115,7 +106,7 @@ public class MappingServiceAPIWrapper {
 
                     @Override
                     public void onFailure(Throwable e) {
-
+                        e.printStackTrace();
                     }
                 });
             }
@@ -125,43 +116,29 @@ public class MappingServiceAPIWrapper {
     }
 
     private TravelMeanEnum getTravelMeanEnumValueFromGoogleEnum(TravelMode toConvert) {
-        TravelMeanEnum r=null;
-        switch (toConvert.name()) {
-            case "bicycling":
-                r = TravelMeanEnum.BIKE;
-            case "driving":
-                r = TravelMeanEnum.CAR;
-            case "walking":
-                r = TravelMeanEnum.WALK;
-            default:
-                r = TravelMeanEnum.UNKNOWN;
-        }
-        return r;
+        if(toConvert==TravelMode.BICYCLING)
+            return TravelMeanEnum.BIKE;
+        else if(toConvert==TravelMode.DRIVING)
+            return TravelMeanEnum.CAR;
+        else if(toConvert==TravelMode.WALKING);
+            return TravelMeanEnum.WALK;
     }
 
     private TravelMeanEnum getTravelMeanEnumValueFromGoogleEnum(VehicleType toConvert) {
-        TravelMeanEnum r=null;
-        switch (toConvert) {
-            case BUS:
-                r = TravelMeanEnum.BUS;
-            case HEAVY_RAIL:
-                r = TravelMeanEnum.TRAIN;
-            case HIGH_SPEED_TRAIN:
-                r = TravelMeanEnum.TRAIN;
-            case METRO_RAIL:
-                r = TravelMeanEnum.TRAIN;
-            case MONORAIL:
-                r = TravelMeanEnum.TRAIN;
-            case RAIL:
-                r = TravelMeanEnum.TRAIN;
-            case SUBWAY:
-                r = TravelMeanEnum.METRO;
-            case TRAM:
-                r=TravelMeanEnum.TRAM;
-            default:
-                r = TravelMeanEnum.UNKNOWN;
-        }
-        return r;
+        if(toConvert==VehicleType.BUS)
+            return TravelMeanEnum.BUS;
+        else if(toConvert==VehicleType.HEAVY_RAIL
+                ||toConvert==VehicleType.HIGH_SPEED_TRAIN
+                ||toConvert==VehicleType.METRO_RAIL
+                ||toConvert==VehicleType.MONORAIL
+                ||toConvert==VehicleType.RAIL)
+            return TravelMeanEnum.TRAIN;
+        else if(toConvert==VehicleType.SUBWAY)
+            return TravelMeanEnum.METRO;
+        else if(toConvert==VehicleType.TRAM)
+            return TravelMeanEnum.TRAM;
+        else
+            return TravelMeanEnum.UNKNOWN;
     }
 
 
@@ -191,7 +168,7 @@ public class MappingServiceAPIWrapper {
                     map.put(obj, old + Double.valueOf(st.distance.inMeters));
                 }
                 else
-                    map.put(getTravelMeanEnumValueFromGoogleEnum(st.travelMode), Double.valueOf(st.distance.inMeters));
+                    map.put(obj, Double.valueOf(st.distance.inMeters));
 
                 s += getTextualDirectionsGivenStepsAndUpdateMap(st, "++");
             }
@@ -207,7 +184,7 @@ public class MappingServiceAPIWrapper {
             for(int i=0; i<st.steps.length; i++) {
                 DirectionsStep  ds = st.steps[i];
                 //udate map
-                TravelMeanEnum obj;
+                /*TravelMeanEnum obj;
                 if (ds.travelMode != TravelMode.TRANSIT)
                     obj = getTravelMeanEnumValueFromGoogleEnum(ds.travelMode);
                 else
@@ -217,7 +194,7 @@ public class MappingServiceAPIWrapper {
                     map.remove(obj);
                     map.put(obj, old + Double.valueOf(ds.distance.inMeters));
                 } else
-                    map.put(getTravelMeanEnumValueFromGoogleEnum(ds.travelMode), Double.valueOf(ds.distance.inMeters));
+                    map.put(getTravelMeanEnumValueFromGoogleEnum(ds.travelMode), Double.valueOf(ds.distance.inMeters));*/
 
                 //get recursively textual representation
                 s+= getTextualDirectionsGivenStepsAndUpdateMap(ds, token + "+");
@@ -229,15 +206,16 @@ public class MappingServiceAPIWrapper {
     private String parseHTMLInstruction(String s){
         boolean consider = true;
         String r = "";
-        for(int i=0;i<s.length();i++){
-            char c = s.charAt(i);
-            if(c == '<' && consider==true)
-                consider=false;
-            if (consider==true)
-                r+=c;
-            if(c == '>' && consider==false)
-                consider=true;
-        }
+        if(s!=null)
+            for(int i=0;i<s.length();i++){
+                char c = s.charAt(i);
+                if(c == '<' && consider==true)
+                    consider=false;
+                if (consider==true)
+                    r+=c;
+                if(c == '>' && consider==false)
+                    consider=true;
+            }
         return r;
     }
 
