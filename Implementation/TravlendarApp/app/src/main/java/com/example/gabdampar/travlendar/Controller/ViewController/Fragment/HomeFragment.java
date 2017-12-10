@@ -10,17 +10,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.gabdampar.travlendar.Controller.AppointmentManager;
+import com.example.gabdampar.travlendar.Controller.MapUtils;
 import com.example.gabdampar.travlendar.Controller.MappingServiceAPIWrapper;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum;
 import com.example.gabdampar.travlendar.R;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback {
+
+    GoogleMap map;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,19 +38,16 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         // reference ui control here
         // TextField f = view.findViewById(...);
+        MapFragment mapFragment = (MapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+
         return view;
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         //called when the map is ready
-
-        ArrayList<TravelMeanEnum> l = new ArrayList<TravelMeanEnum>();
-        l.add(TravelMeanEnum.BUS);
-
-        MappingServiceAPIWrapper.getInstance().getTravelOptionData(l,
-                "Viale delle Rimembranze di Lambrate",
-                "Duomo di Milano",
-                new DateTime(2017,12,6,12,50));
+        this.map=googleMap;
+        MapUtils.putMapMarkersGivenAppointments(googleMap, AppointmentManager.GetInstance().GetAppointmentList());
     }
 }

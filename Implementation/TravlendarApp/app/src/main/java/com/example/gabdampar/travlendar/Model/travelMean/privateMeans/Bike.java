@@ -4,10 +4,13 @@
 
 package com.example.gabdampar.travlendar.Model.travelMean.privateMeans;
 
+import com.example.gabdampar.travlendar.Controller.MapUtils;
 import com.example.gabdampar.travlendar.Model.Appointment;
 import com.example.gabdampar.travlendar.Model.Schedule;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMean;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum;
+
+import java.util.Map;
 
 public class Bike extends TravelMean {
 
@@ -29,7 +32,7 @@ public class Bike extends TravelMean {
 
     @Override
     public float EstimateTime(Appointment from, Appointment to) {
-        return (float)Math.ceil(from.coords.distanceTo(to.coords)/averageBikeSpeed * 1.2f);
+        return (float)Math.ceil(MapUtils.distance(from.coords, to.coords)/averageBikeSpeed * 1.2f);
     }
 
     @Override

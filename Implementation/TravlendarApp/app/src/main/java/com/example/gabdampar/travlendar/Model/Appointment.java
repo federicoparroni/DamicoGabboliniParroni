@@ -4,7 +4,7 @@
 
 package com.example.gabdampar.travlendar.Model;
 
-import com.here.android.mpa.common.GeoCoordinate;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -18,11 +18,11 @@ public class Appointment {
     public TimeSlot timeSlot = null;
     public int duration;    // seconds
     public int involvedPeople = 0;
-    public GeoCoordinate coords;
+    public LatLng coords;
     public boolean isRecurrent = false;
 
 
-    public Appointment(String n, LocalDate date, LocalTime startingTime, int duration, GeoCoordinate coord) {
+    public Appointment(String n, LocalDate date, LocalTime startingTime, int duration, LatLng coord) {
         this.name = n;
         this.startingTime = startingTime;
         this.duration = duration;
@@ -30,7 +30,7 @@ public class Appointment {
         this.date = date;
     }
 
-    public Appointment(String n, LocalDate date, TimeSlot timeSlot, int duration, GeoCoordinate coord) {
+    public Appointment(String n, LocalDate date, TimeSlot timeSlot, int duration, LatLng coord) {
         this.name = n;
         this.timeSlot = timeSlot;
         this.duration = duration;
@@ -38,7 +38,7 @@ public class Appointment {
         this.date = date;
     }
 
-    public Appointment(String n, LocalDate date,LocalTime startingTime, TimeSlot timeSlot, int duration, GeoCoordinate coord,
+    public Appointment(String n, LocalDate date,LocalTime startingTime, TimeSlot timeSlot, int duration, LatLng coord,
                        int involvedPeople, boolean isRecurrent) {
         this.name = n;
         this.timeSlot = timeSlot;
@@ -90,7 +90,7 @@ public class Appointment {
     }
 
     public void EditAppointment(String n, LocalDate date, LocalTime startingTime,TimeSlot timeSlot,
-                                             int duration, GeoCoordinate coord,int involvedPeople,Boolean isRecurrent){
+                                             int duration, LatLng coord,int involvedPeople,Boolean isRecurrent){
         this.name = n;
         this.startingTime = startingTime;
         this.duration = duration;
@@ -101,4 +101,11 @@ public class Appointment {
         this.involvedPeople = involvedPeople;
     }
 
+    public LatLng getCoords() {
+        return coords;
+    }
+
+    public void setCoords(LatLng coords) {
+        this.coords = coords;
+    }
 }

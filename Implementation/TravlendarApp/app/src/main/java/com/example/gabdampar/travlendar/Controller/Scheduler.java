@@ -14,6 +14,7 @@ import com.example.gabdampar.travlendar.Model.travelMean.privateMeans.Bike;
 import com.example.gabdampar.travlendar.Model.travelMean.publicMeans.Bus;
 import com.example.gabdampar.travlendar.Model.travelMean.privateMeans.Car;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMean;
+import com.google.android.gms.maps.model.LatLng;
 import com.here.android.mpa.common.GeoCoordinate;
 
 import org.joda.time.LocalTime;
@@ -23,7 +24,7 @@ import java.util.ArrayList;
 public class Scheduler {
 
     private LocalTime wakeupTime;
-    private GeoCoordinate startingLocation;
+    private LatLng startingLocation;
     private ArrayList<Appointment> appts;
     private ArrayList<ConstraintOnSchedule> constraints;
     private OptCriteria criteria;
@@ -34,7 +35,7 @@ public class Scheduler {
 
     ArrayList<Schedule> possibleSchedules = new ArrayList<Schedule>();
 
-    public Scheduler(LocalTime wakeupTime, GeoCoordinate location, ArrayList<Appointment> appts, ArrayList<ConstraintOnSchedule> constraints, OptCriteria c) {
+    public Scheduler(LocalTime wakeupTime, LatLng location, ArrayList<Appointment> appts, ArrayList<ConstraintOnSchedule> constraints, OptCriteria c) {
         this.wakeupTime = wakeupTime;
         this.startingLocation = location;
         this.appts = appts;
@@ -95,7 +96,7 @@ public class Scheduler {
                 }
 
                 // distance
-                dist[i][j] = a1.coords.distanceTo(a2.coords);
+                //dist[i][j] = a1.coords.distanceTo(a2.coords);
 
             }
         }

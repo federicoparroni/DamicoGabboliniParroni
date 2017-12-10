@@ -4,6 +4,7 @@
 
 package com.example.gabdampar.travlendar.Model.travelMean.publicMeans;
 
+import com.example.gabdampar.travlendar.Controller.MapUtils;
 import com.example.gabdampar.travlendar.Model.Appointment;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMean;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum;
@@ -30,7 +31,7 @@ public class Bus extends TravelMean {
 
     @Override
     public float EstimateTime(Appointment from, Appointment to) {
-        return (float)( from.coords.distanceTo(to.coords)/AVG_SPEED * 1.2f );
+        return (float)( MapUtils.distance(from.coords, to.coords)/AVG_SPEED * 1.2f );
     }
 
     @Override
@@ -40,7 +41,7 @@ public class Bus extends TravelMean {
 
     @Override
     public float EstimateCarbon(Appointment from, Appointment to) {
-        return (float)( from.coords.distanceTo(to.coords) * AVG_CARBON_EMISSION_PER_KM );
+        return (float)( MapUtils.distance(from.coords, to.coords) * AVG_CARBON_EMISSION_PER_KM );
     }
 
 

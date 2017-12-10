@@ -18,6 +18,7 @@ import com.example.gabdampar.travlendar.Controller.AppointmentManager;
 import com.example.gabdampar.travlendar.Model.Appointment;
 import com.example.gabdampar.travlendar.Model.TimeSlot;
 import com.example.gabdampar.travlendar.R;
+import com.google.android.gms.maps.model.LatLng;
 import com.here.android.mpa.common.GeoCoordinate;
 
 import org.joda.time.LocalDate;
@@ -52,7 +53,7 @@ public class AppointmentCreationActivity extends AppCompatActivity {
     public TimeSlot timeSlot;
     public int duration;   // seconds
     public int involvedPeople;
-    public GeoCoordinate coords;
+    public LatLng coords;
     public Boolean isRecurrent;
 
     //position of the appointment in the list (for the editing)
