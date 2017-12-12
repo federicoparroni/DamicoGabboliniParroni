@@ -34,14 +34,32 @@
                 android:hint="Appointment Name"
                 android:inputType="textPersonName" />
 
-            <EditText
-                android:id="@+id/locationField"
+            <Space
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:layout_marginTop="15dp"
-                android:hint="Location"
-                android:inputType="textPersonName" />
+                android:layout_height="20dp" />
+
+            <fragment
+                android:id="@+id/appointment_map"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="333dp"
+                tools:context="com.greenfeetsurvival.greenfeetaviator.MapsActivity">
+
+                <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/card_view"
+                    android:layout_width="200dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="top"
+                    android:layout_margin="5dp"
+                    card_view:cardCornerRadius="4dp">
+
+                    <fragment
+                        android:id="@+id/place_autocomplete_fragment"
+                        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </android.support.v7.widget.CardView>
+            </fragment>
 
             <DatePicker
                 android:id="@+id/datePicker"
@@ -119,7 +137,6 @@
                 android:layout_marginTop="15dp"
                 android:onClick="OnSaveCliCk"
                 android:text="SAVE" />
-
 
         </LinearLayout>
     </ScrollView>

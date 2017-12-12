@@ -52,6 +52,9 @@ dependencies {
 
     compile(name: 'HERE-sdk', ext: 'aar') //this is for here. in case we wont use just clean
 
+    compile 'com.android.support:cardview-v7:26.1.0' //forse non serve a nulla
+    compile 'com.google.android.gms:play-services-places:11.6.0' //needed for the autocomplete google text
+
     compile 'com.google.maps:google-maps-services:0.2.5'
     compile 'com.google.android.gms:play-services-maps:11.6.0'
     compile 'org.slf4j:slf4j-nop:1.7.25'

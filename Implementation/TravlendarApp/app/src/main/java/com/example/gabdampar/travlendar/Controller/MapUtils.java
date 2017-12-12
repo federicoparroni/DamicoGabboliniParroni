@@ -1,8 +1,11 @@
 package com.example.gabdampar.travlendar.Controller;
 
 import com.example.gabdampar.travlendar.Model.Appointment;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
@@ -17,9 +20,17 @@ public class MapUtils {
                 .title(appointment.toString()));
     }
 
-    public static void putMapMarkersGivenAppointments(GoogleMap map, List<Appointment> appointments){
-        for(Appointment a: appointments)
-            putMapMarkersGivenAppointment(map,a);
+    public static void putMapMarkersGivenAppointmentsAndSetMapZoomToThose(GoogleMap map, List<Appointment> appointments){
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        for(Appointment a: appointments) {
+            MarkerOptions marker = new MarkerOptions().position(a.coords)
+                    .title(a.toString());
+            map.addMarker(marker);
+            builder.include(marker.getPosition());
+        }
+        LatLngBounds bounds = builder.build();
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 200);
+        map.animateCamera(cu);
     }
 
     public static float distance(LatLng start, LatLng end){

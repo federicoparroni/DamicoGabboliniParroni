@@ -18,14 +18,23 @@ import com.example.gabdampar.travlendar.Controller.AppointmentManager;
 import com.example.gabdampar.travlendar.Model.Appointment;
 import com.example.gabdampar.travlendar.Model.TimeSlot;
 import com.example.gabdampar.travlendar.R;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.here.android.mpa.common.GeoCoordinate;
 
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
 
-public class AppointmentCreationActivity extends AppCompatActivity {
+public class AppointmentCreationActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     //Appointment creation activity view elements
     CheckBox checkBoxStartingTime;
@@ -44,6 +53,10 @@ public class AppointmentCreationActivity extends AppCompatActivity {
 
     Button addConstraintButton;
     Button saveButton;
+
+    PlaceAutocompleteFragment autocompleteFragment;
+    SupportMapFragment appointment_map;
+    GoogleMap map;
 
     //Appointment Field
 
@@ -68,7 +81,10 @@ public class AppointmentCreationActivity extends AppCompatActivity {
         checkBoxTimeSlot = findViewById(R.id.checkBoxTimeSlot);
         isRecurrentCheckBox = findViewById(R.id.isRecurrent);
         appointmentNameField = findViewById(R.id.appointmentNameField);
-        locationField = findViewById(R.id.locationField);
+        autocompleteFragment = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+        appointment_map =  (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.appointment_map);
+        appointment_map.getMapAsync(this);
+
         durationTimePicker = findViewById(R.id.durationTimePicker);
         numberInvolvedPeopleField = findViewById(R.id.numberInvolvedPeopleField);
         datePicker = findViewById(R.id.datePicker);
@@ -82,6 +98,21 @@ public class AppointmentCreationActivity extends AppCompatActivity {
         durationTimePicker.setHour(1);
         durationTimePicker.setMinute(0);
 
+        //for the autocomplete fragment
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                map.clear();
+                String placeName = place.getName().toString();
+                LatLng latLng = place.getLatLng();
+                map.addMarker(new MarkerOptions().position(latLng).title(placeName));
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,15));
+            }
+            @Override
+            public void onError(Status status) {
+                // TODO: Handle the error.
+            }
+        });
 
         //setting for the editing
         if(position != -1){
@@ -147,6 +178,11 @@ public class AppointmentCreationActivity extends AppCompatActivity {
         }else{
             checkBoxStartingTime.setClickable(true);
         }
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        map = googleMap;
     }
 
     public void OnAddConstraintClick(View view){
@@ -235,4 +271,5 @@ public class AppointmentCreationActivity extends AppCompatActivity {
             }
         }
     }
+
 }

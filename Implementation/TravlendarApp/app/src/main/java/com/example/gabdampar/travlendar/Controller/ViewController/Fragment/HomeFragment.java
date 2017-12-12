@@ -5,7 +5,11 @@
 package com.example.gabdampar.travlendar.Controller.ViewController.Fragment;
 
 import android.app.Fragment;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,8 +29,9 @@ import org.joda.time.DateTime;
 import java.util.ArrayList;
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback {
-
     GoogleMap map;
+    boolean mLocationPermissionGranted=false;
+    public final static int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION =1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,6 +43,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         // reference ui control here
         // TextField f = view.findViewById(...);
+
         MapFragment mapFragment = (MapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
@@ -47,7 +53,53 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         //called when the map is ready
-        this.map=googleMap;
-        MapUtils.putMapMarkersGivenAppointments(googleMap, AppointmentManager.GetInstance().GetAppointmentList());
+        map=googleMap;
+        MapUtils.putMapMarkersGivenAppointmentsAndSetMapZoomToThose(googleMap, AppointmentManager.GetInstance().GetAppointmentList());
+        askForPermissionAndShowUserPositionOnMap();
+    }
+
+    private void askForPermissionAndShowUserPositionOnMap(){
+        if (mLocationPermissionGranted) {
+            try {
+                map.setMyLocationEnabled(true);
+            }
+            catch (SecurityException e) {e.printStackTrace();}
+        }
+        else {
+            getLocationPermission();
+            askForPermissionAndShowUserPositionOnMap();
+        }
+    }
+
+    private void getLocationPermission() {
+    /*
+     * Request location permission, so that we can get the location of the
+     * device. The result of the permission request is handled by a callback,
+     * onRequestPermissionsResult.
+     */
+        if (ContextCompat.checkSelfPermission(this.getContext(),
+                android.Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            mLocationPermissionGranted = true;
+        } else {
+            ActivityCompat.requestPermissions(this.getActivity(),
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String permissions[],
+                                           @NonNull int[] grantResults) {
+        mLocationPermissionGranted = false;
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    mLocationPermissionGranted = true;
+                }
+            }
+        }
     }
 }
