@@ -7,90 +7,90 @@
     tools:context=".Controller.ViewController.AddConstraintOnAppointmentActivity">
 
     <CheckBox
-        android:id="@+id/checkBox4"
+        android:id="@+id/busCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Bus"
-        app:layout_constraintBottom_toTopOf="@+id/checkBox5"
-        app:layout_constraintStart_toStartOf="@+id/checkBox5"
-        app:layout_constraintTop_toBottomOf="@+id/checkBox11" />
+        app:layout_constraintBottom_toTopOf="@+id/tramCheckBox"
+        app:layout_constraintStart_toStartOf="@+id/tramCheckBox"
+        app:layout_constraintTop_toBottomOf="@+id/trainCheckBox" />
 
     <CheckBox
-        android:id="@+id/checkBox5"
+        android:id="@+id/tramCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Tram"
-        app:layout_constraintBottom_toTopOf="@+id/checkBox6"
-        app:layout_constraintStart_toStartOf="@+id/checkBox6"
-        app:layout_constraintTop_toBottomOf="@+id/checkBox4" />
+        app:layout_constraintBottom_toTopOf="@+id/taxiCheckBox"
+        app:layout_constraintStart_toStartOf="@+id/taxiCheckBox"
+        app:layout_constraintTop_toBottomOf="@+id/busCheckBox" />
 
     <CheckBox
-        android:id="@+id/checkBox6"
+        android:id="@+id/taxiCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Taxi"
-        app:layout_constraintBottom_toTopOf="@+id/checkBox7"
-        app:layout_constraintStart_toStartOf="@+id/checkBox7"
-        app:layout_constraintTop_toBottomOf="@+id/checkBox5" />
+        app:layout_constraintBottom_toTopOf="@+id/undergroundCheckBox"
+        app:layout_constraintStart_toStartOf="@+id/undergroundCheckBox"
+        app:layout_constraintTop_toBottomOf="@+id/tramCheckBox" />
 
     <CheckBox
-        android:id="@+id/checkBox7"
+        android:id="@+id/undergroundCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Underground"
-        app:layout_constraintBottom_toTopOf="@+id/checkBox8"
-        app:layout_constraintStart_toStartOf="@+id/checkBox8"
-        app:layout_constraintTop_toBottomOf="@+id/checkBox6" />
+        app:layout_constraintBottom_toTopOf="@+id/carSharingCheckBox"
+        app:layout_constraintStart_toStartOf="@+id/carSharingCheckBox"
+        app:layout_constraintTop_toBottomOf="@+id/taxiCheckBox" />
 
     <CheckBox
-        android:id="@+id/checkBox8"
+        android:id="@+id/carSharingCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Car Sharing"
-        app:layout_constraintBottom_toTopOf="@+id/checkBox9"
-        app:layout_constraintStart_toStartOf="@+id/checkBox9"
-        app:layout_constraintTop_toBottomOf="@+id/checkBox7" />
+        app:layout_constraintBottom_toTopOf="@+id/bikeSharingCheckBox"
+        app:layout_constraintStart_toStartOf="@+id/bikeSharingCheckBox"
+        app:layout_constraintTop_toBottomOf="@+id/undergroundCheckBox" />
 
     <CheckBox
-        android:id="@+id/checkBox9"
+        android:id="@+id/bikeSharingCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="BikeSharing"
-        app:layout_constraintBottom_toTopOf="@+id/checkBox10"
-        app:layout_constraintStart_toStartOf="@+id/checkBox10"
-        app:layout_constraintTop_toBottomOf="@+id/checkBox8" />
+        app:layout_constraintBottom_toTopOf="@+id/bikeCheckBox"
+        app:layout_constraintStart_toStartOf="@+id/bikeCheckBox"
+        app:layout_constraintTop_toBottomOf="@+id/carSharingCheckBox" />
 
     <CheckBox
-        android:id="@+id/checkBox10"
+        android:id="@+id/bikeCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Bike"
-        app:layout_constraintBottom_toTopOf="@+id/checkBox12"
-        app:layout_constraintStart_toStartOf="@+id/checkBox12"
-        app:layout_constraintTop_toBottomOf="@+id/checkBox9" />
+        app:layout_constraintBottom_toTopOf="@+id/carCheckBox"
+        app:layout_constraintStart_toStartOf="@+id/carCheckBox"
+        app:layout_constraintTop_toBottomOf="@+id/bikeSharingCheckBox" />
 
     <CheckBox
-        android:id="@+id/checkBox11"
+        android:id="@+id/trainCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="Train"
-        app:layout_constraintBottom_toTopOf="@+id/checkBox4"
-        app:layout_constraintStart_toStartOf="@+id/checkBox4"
+        app:layout_constraintBottom_toTopOf="@+id/busCheckBox"
+        app:layout_constraintStart_toStartOf="@+id/busCheckBox"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="spread" />
 
     <CheckBox
-        android:id="@+id/checkBox12"
+        android:id="@+id/carCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Car"
-        app:layout_constraintBottom_toTopOf="@+id/checkBox13"
-        app:layout_constraintStart_toStartOf="@+id/checkBox13"
-        app:layout_constraintTop_toBottomOf="@+id/checkBox10" />
+        app:layout_constraintBottom_toTopOf="@+id/walkingCheckBox"
+        app:layout_constraintStart_toStartOf="@+id/walkingCheckBox"
+        app:layout_constraintTop_toBottomOf="@+id/bikeCheckBox" />
 
     <CheckBox
-        android:id="@+id/checkBox13"
+        android:id="@+id/walkingCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -101,6 +101,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.069"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkBox12" />
+        app:layout_constraintTop_toBottomOf="@+id/carCheckBox" />
 
 </android.support.constraint.ConstraintLayout>

@@ -5,10 +5,11 @@
 package com.example.gabdampar.travlendar.Model;
 
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMean;
+import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum;
 
 public abstract class Constraint {
 
-    public TravelMean mean;
+    public TravelMeanEnum mean;
     public float maxDistance;
 
 }

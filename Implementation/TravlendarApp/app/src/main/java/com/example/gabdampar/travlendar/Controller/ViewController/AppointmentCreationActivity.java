@@ -15,7 +15,9 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 
 import com.example.gabdampar.travlendar.Controller.AppointmentManager;
+import com.example.gabdampar.travlendar.Controller.MapUtils;
 import com.example.gabdampar.travlendar.Model.Appointment;
+import com.example.gabdampar.travlendar.Model.ConstraintOnAppointment;
 import com.example.gabdampar.travlendar.Model.TimeSlot;
 import com.example.gabdampar.travlendar.R;
 import com.google.android.gms.common.api.Status;
@@ -32,6 +34,8 @@ import com.here.android.mpa.common.GeoCoordinate;
 
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
+
+import java.util.ArrayList;
 
 
 public class AppointmentCreationActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -51,7 +55,9 @@ public class AppointmentCreationActivity extends AppCompatActivity implements On
     Button saveButton;
 
     PlaceAutocompleteFragment autocompleteFragment;
+
     SupportMapFragment appointment_map;
+
     GoogleMap map;
 
     //Appointment Field
@@ -64,6 +70,8 @@ public class AppointmentCreationActivity extends AppCompatActivity implements On
     public int involvedPeople;
     public LatLng coords;
     public Boolean isRecurrent;
+    public String location;
+    public ArrayList<ConstraintOnAppointment> constraints;
 
     //position of the appointment in the list (for the editing)
     int position;
@@ -78,6 +86,7 @@ public class AppointmentCreationActivity extends AppCompatActivity implements On
         isRecurrentCheckBox = findViewById(R.id.isRecurrent);
         appointmentNameField = findViewById(R.id.appointmentNameField);
         autocompleteFragment = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+
         appointment_map =  (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.appointment_map);
         appointment_map.getMapAsync(this);
 
@@ -103,48 +112,15 @@ public class AppointmentCreationActivity extends AppCompatActivity implements On
                 LatLng latLng = place.getLatLng();
                 map.addMarker(new MarkerOptions().position(latLng).title(placeName));
                 map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,15));
+
+                coords = place.getLatLng();
+                location = (String) place.getAddress();
             }
             @Override
             public void onError(Status status) {
                 // TODO: Handle the error.
             }
         });
-
-        //setting for the editing
-        if(position != -1){
-            //appointment to be modified
-            Appointment appointment = AppointmentManager.GetInstance().GetAppointment(position);
-
-            appointmentNameField.setText(appointment.toString());
-            //TODO: locationField.setText(appointment.);
-            datePicker.init(appointment.getDate().getYear(),appointment.getDate().getMonthOfYear()-1,
-                    appointment.getDate().getDayOfMonth(),null);
-
-            durationTimePicker.setHour((int) appointment.getDuration()/3600);
-            durationTimePicker.setMinute((appointment.getDuration()/60)%60);
-
-            numberInvolvedPeopleField.setText(String.valueOf(appointment.involvedPeople));
-            isRecurrentCheckBox.setChecked(appointment.isRecurrent);
-
-            //check wheter the appointment is deterministic or not
-            if(appointment.getTimeSlot() == null){
-                checkBoxStartingTime.setChecked(true);
-
-            }else{
-                checkBoxTimeSlot.setChecked(true);
-            }
-
-            //xor between starting time and timeslot
-            if (checkBoxStartingTime.isChecked()) {
-                //XOR of timeslot and startingtime
-                checkBoxTimeSlot.setClickable(false);
-            }
-
-            if(checkBoxTimeSlot.isChecked()) {
-                //XOR of timeslot and startingtime
-                checkBoxStartingTime.setClickable(false);
-            }
-        }
     }
 
     // when the user check the startingtime checkbox he will be sent to SettingStartingTimeActivity to set the time
@@ -179,10 +155,26 @@ public class AppointmentCreationActivity extends AppCompatActivity implements On
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
+
+        //disable the zoom option
+        map.getUiSettings().setZoomGesturesEnabled(false);
+
+        //disable the scroll gesture in the minimap
+        map.getUiSettings().setScrollGesturesEnabled(false);
+
+        //disable the google map button
+        map.getUiSettings().setMapToolbarEnabled(false);
+
+        //setting for the editing
+        if(position != -1){
+            this.initEditAppointment();
+        }
+
     }
 
     public void OnAddConstraintClick(View view){
         final Intent intent = new Intent(this, AddConstraintOnAppointmentActivity.class);
+        intent.putExtra("position",position);
         startActivityForResult(intent,3);
     }
 
@@ -192,7 +184,6 @@ public class AppointmentCreationActivity extends AppCompatActivity implements On
         duration = durationTimePicker.getHour()*3600 + durationTimePicker.getMinute()*60 ;
         involvedPeople= Integer.parseInt(numberInvolvedPeopleField.getText().toString());
         isRecurrent = isRecurrentCheckBox.isChecked();
-        // TODO: coords = locationField.getCoordinate();
 
         //need for know if the appointment is new or is been editing
         //int position = getIntent().getIntExtra("position",-1);
@@ -206,9 +197,9 @@ public class AppointmentCreationActivity extends AppCompatActivity implements On
 
             //Check if the appointment has a starting time or a time slot
             if (checkBoxStartingTime.isChecked()) {
-                appointment = new Appointment(name, date, startingTime,null, duration, coords,involvedPeople,isRecurrent);
+                appointment = new Appointment(name, date, startingTime,null, duration, coords,location,involvedPeople,isRecurrent);
             } else {
-                appointment = new Appointment(name, date,null, timeSlot, duration, coords,involvedPeople,isRecurrent);
+                appointment = new Appointment(name, date,null, timeSlot, duration, coords,location,involvedPeople,isRecurrent);
             }
 
             AppointmentManager.GetInstance().AddAppointment(appointment);
@@ -223,11 +214,11 @@ public class AppointmentCreationActivity extends AppCompatActivity implements On
             if (checkBoxStartingTime.isChecked()) {
                 if (startingTime == null)
                     startingTime = appointment.getStartingTime();
-                appointment.EditAppointment(name, date, startingTime,null, duration, coords,involvedPeople,isRecurrent);
+                appointment.EditAppointment(name, date, startingTime,null, duration, coords, location,involvedPeople,isRecurrent);
             } else {
                 if(timeSlot == null)
                     timeSlot = appointment.getTimeSlot();
-                appointment.EditAppointment(name, date,null,timeSlot, duration, coords,involvedPeople,isRecurrent);
+                appointment.EditAppointment(name, date,null,timeSlot, duration, coords,location, involvedPeople,isRecurrent);
             }
         }
         super.onBackPressed();
@@ -258,13 +249,45 @@ public class AppointmentCreationActivity extends AppCompatActivity implements On
                 //Write your code if there's no result
             }
         }
-        if (requestCode == 3){
-            if(resultCode == Activity.RESULT_OK){
+    }
 
-            }
-            if (resultCode == Activity.RESULT_CANCELED) {
-                //Write your code if there's no result
-            }
+    public void initEditAppointment(){
+        //appointment to be modified
+        Appointment appointment = AppointmentManager.GetInstance().GetAppointment(position);
+
+        appointmentNameField.setText(appointment.toString());
+
+        //init the marker on the postition of the appointment on the map
+        MapUtils.putMapMarkersGivenAppointment(map,appointment);
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(appointment.getCoords(),15));
+        autocompleteFragment.setText(appointment.getLocation());
+
+        datePicker.init(appointment.getDate().getYear(),appointment.getDate().getMonthOfYear()-1,
+                appointment.getDate().getDayOfMonth(),null);
+
+        durationTimePicker.setHour((int) appointment.getDuration()/3600);
+        durationTimePicker.setMinute((appointment.getDuration()/60)%60);
+
+        numberInvolvedPeopleField.setText(String.valueOf(appointment.involvedPeople));
+        isRecurrentCheckBox.setChecked(appointment.isRecurrent);
+
+        //check wheter the appointment is deterministic or not
+        if(appointment.getTimeSlot() == null){
+            checkBoxStartingTime.setChecked(true);
+
+        }else{
+            checkBoxTimeSlot.setChecked(true);
+        }
+
+        //xor between starting time and timeslot
+        if (checkBoxStartingTime.isChecked()) {
+            //XOR of timeslot and startingtime
+            checkBoxTimeSlot.setClickable(false);
+        }
+
+        if(checkBoxTimeSlot.isChecked()) {
+            //XOR of timeslot and startingtime
+            checkBoxStartingTime.setClickable(false);
         }
     }
 

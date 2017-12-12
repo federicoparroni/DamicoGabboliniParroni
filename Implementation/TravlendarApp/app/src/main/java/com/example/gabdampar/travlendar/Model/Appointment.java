@@ -10,6 +10,8 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
+import java.util.ArrayList;
+
 public class Appointment {
 
     public String name;
@@ -20,6 +22,8 @@ public class Appointment {
     public int involvedPeople = 0;
     public LatLng coords;
     public boolean isRecurrent = false;
+    public String location;
+    public ArrayList<ConstraintOnAppointment> constraints;
 
 
     public Appointment(String n, LocalDate date, LocalTime startingTime, int duration, LatLng coord) {
@@ -38,7 +42,7 @@ public class Appointment {
         this.date = date;
     }
 
-    public Appointment(String n, LocalDate date,LocalTime startingTime, TimeSlot timeSlot, int duration, LatLng coord,
+    public Appointment(String n, LocalDate date,LocalTime startingTime, TimeSlot timeSlot, int duration, LatLng coord, String location,
                        int involvedPeople, boolean isRecurrent) {
         this.name = n;
         this.timeSlot = timeSlot;
@@ -48,6 +52,7 @@ public class Appointment {
         this.startingTime = startingTime;
         this.involvedPeople = involvedPeople;
         this.isRecurrent = isRecurrent;
+        this.location = location;
     }
 
     public boolean isDeterministic() {
@@ -90,7 +95,7 @@ public class Appointment {
     }
 
     public void EditAppointment(String n, LocalDate date, LocalTime startingTime,TimeSlot timeSlot,
-                                             int duration, LatLng coord,int involvedPeople,Boolean isRecurrent){
+                                             int duration, LatLng coord, String location, int involvedPeople,Boolean isRecurrent){
         this.name = n;
         this.startingTime = startingTime;
         this.duration = duration;
@@ -99,13 +104,23 @@ public class Appointment {
         this.timeSlot = timeSlot;
         this.isRecurrent = isRecurrent;
         this.involvedPeople = involvedPeople;
+        this.location = location;
     }
 
     public LatLng getCoords() {
         return coords;
     }
 
+    public String getLocation(){
+        return this.location;
+    }
+
     public void setCoords(LatLng coords) {
         this.coords = coords;
     }
+
+    public ArrayList<ConstraintOnAppointment> getConstraint(){
+        return constraints;
+    }
+
 }
