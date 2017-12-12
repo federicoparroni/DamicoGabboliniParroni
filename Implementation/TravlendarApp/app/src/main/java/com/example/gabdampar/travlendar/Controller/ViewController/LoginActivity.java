@@ -4,6 +4,10 @@
 
 package com.example.gabdampar.travlendar.Controller.ViewController;
 
+import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.TimeInterpolator;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,6 +20,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +41,8 @@ import org.joda.time.LocalTime;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.regex.Pattern;
 
 public class LoginActivity extends AppCompatActivity implements Response.Listener<JSONObject>, Response.ErrorListener, DialogInterface.OnClickListener {
@@ -47,6 +54,8 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
     Button registerBtn;
     CheckBox ckRemember;
     TextView txtForgotPassword;
+    PopupImageView imgOK;
+    PopupImageView imgError;
 
     String email;
     String password;
@@ -66,6 +75,11 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
         registerBtn = findViewById(R.id.register_button);
         ckRemember = findViewById(R.id.ck_remember_me);
         txtForgotPassword = findViewById(R.id.txt_recover_password);
+        imgOK = (PopupImageView) findViewById(R.id.img_ok);
+        imgError = (PopupImageView) findViewById(R.id.img_error);
+
+        imgOK.setScaleX(0); imgOK.setScaleY(0);
+        imgError.setScaleX(0); imgError.setScaleY(0);
 
         LoadUserPreference();
         //try to use HERE APIs, to move away
@@ -159,9 +173,16 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
     public void onErrorResponse(VolleyError error) {
         // ON ERROR RESPONSE
         bar.setVisibility(View.INVISIBLE);
-
-        Toast toast = Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_LONG);
-        toast.show();
+        imgError.ShowPopup();
+        if(error.networkResponse != null) {
+            if(error.networkResponse.statusCode == 400 || error.networkResponse.statusCode == 401) {
+                Toast toast = Toast.makeText(getApplicationContext(), "Invalid username or password", Toast.LENGTH_LONG);
+                toast.show();
+            }
+        } else {
+            Toast toast = Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_LONG);
+            toast.show();
+        }
     }
 
     void ShowConfirmationPassword() {
@@ -195,6 +216,7 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
             IdentityManager.GetInstance().Register(email, password, new Response.Listener() {
                 @Override
                 public void onResponse(Object response) {
+                    imgOK.ShowPopup();
                     Toast.makeText(LoginActivity.this, "Registration successfully done", Toast.LENGTH_SHORT).show();
                 }
             }, this);
@@ -204,26 +226,6 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
     }
 
     void LoadUserPreference() {
-        /**
-         * dummy appointments creational part
-         */
-        AppointmentManager.GetInstance().AddAppointment(new Appointment("A", new LocalDate(2017,11,18),
-                new LocalTime(11,30),20*60, new LatLng(45.4372464,9.165939)));
-        AppointmentManager.GetInstance().AddAppointment(new Appointment("B", new LocalDate(2017,11,18),
-                new LocalTime(15,0),15*60, new LatLng(45.4781108,9.2250824)));
-        AppointmentManager.GetInstance().AddAppointment(new Appointment("C", new LocalDate(2017,11,18),
-                new LocalTime(16,0),10*60, new LatLng(45.4641013,9.1897325)));
-        AppointmentManager.GetInstance().AddAppointment(new Appointment("Aaaaaaaaaa", new LocalDate(2017,11,18),
-                new TimeSlot(new LocalTime(13,30),new LocalTime(23,40)),
-                5*60, new LatLng(45.4955892,9.1919801)));
-        /*AppointmentManager.GetInstance().AddAppointment(new Appointment("E", new LocalDate(2017,11,18),
-                new TimeSlot(new LocalTime(10,0),new LocalTime(15,10)),
-                10*60, null));
-        AppointmentManager.GetInstance().AddAppointment(new Appointment("F", new LocalDate(2017,11,18),
-                new  TimeSlot(new LocalTime(14,30),new LocalTime(16,0)),
-                25*60, null));*/
-
-
         SharedPreferences settings = getSharedPreferences("UserInfo", 0);
         ckRemember.setChecked( settings.getBoolean("remember", false) );
         if(ckRemember.isChecked()) {

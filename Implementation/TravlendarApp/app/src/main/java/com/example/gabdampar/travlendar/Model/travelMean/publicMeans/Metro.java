@@ -1,7 +1,3 @@
-/**
- * Created by gabdampar on 02/12/2017.
- */
-
 package com.example.gabdampar.travlendar.Model.travelMean.publicMeans;
 
 import com.example.gabdampar.travlendar.Controller.MapUtils;
@@ -9,31 +5,34 @@ import com.example.gabdampar.travlendar.Model.Appointment;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMean;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum;
 
-public class Bus extends TravelMean {
+/**
+ * Created by federico on 11/12/17.
+ */
 
+public class Metro extends TravelMean {
 
-    protected static final float AVG_SPEED = 0.025f;                 // km/h
-    protected static final float AVG_CARBON_EMISSION_PER_KM = 150;   // g/km
-    protected static final float TICKET_COST = 2;                    // euro
+    protected static final float AVG_SPEED = 0.022f;                 // km/h
+    protected static final float AVG_CARBON_EMISSION_PER_KM = 0;     // g/km
+    protected static final float TICKET_COST = 1.6f;                 // euro
 
     protected static final float AVG_TIME_TO_STOP = 6*60;            // sec
 
-    public static Bus GetInstance() {
-        if(instance == null) {
-            instance = new Bus();
+    public static Metro GetInstance() {
+        if (instance == null) {
+            instance = new Metro();
             TravelMean.MeansCollection.add(instance);
         }
-        return (Bus)instance;
+        return (Metro) instance;
     }
 
-    public Bus(){
+    public Metro() {
         super();
-        super.descr= TravelMeanEnum.BUS;
+        super.descr = TravelMeanEnum.METRO;
     }
 
     @Override
     public float EstimateTime(Appointment from, Appointment to) {
-        return MapUtils.distance(from.coords, to.coords)/AVG_SPEED * 1.2f + AVG_TIME_TO_STOP ;
+        return MapUtils.distance(from.coords, to.coords) / AVG_SPEED * 1.2f + AVG_TIME_TO_STOP ;
     }
 
     @Override

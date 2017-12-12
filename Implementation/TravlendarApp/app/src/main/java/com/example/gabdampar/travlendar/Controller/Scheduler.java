@@ -10,6 +10,7 @@ import com.example.gabdampar.travlendar.Model.DateManager;
 import com.example.gabdampar.travlendar.Model.OptCriteria;
 import com.example.gabdampar.travlendar.Model.Schedule;
 import com.example.gabdampar.travlendar.Model.ScheduledAppointment;
+import com.example.gabdampar.travlendar.Model.TravelOptionData;
 import com.example.gabdampar.travlendar.Model.travelMean.privateMeans.Bike;
 import com.example.gabdampar.travlendar.Model.travelMean.publicMeans.Bus;
 import com.example.gabdampar.travlendar.Model.travelMean.privateMeans.Car;
@@ -20,6 +21,7 @@ import com.here.android.mpa.common.GeoCoordinate;
 import org.joda.time.LocalTime;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Scheduler{
 
@@ -256,6 +258,8 @@ public class Scheduler{
 
         }
     }
+
+
 
     //
     // +++++ AUXILIARY FUNCTIONS +++++

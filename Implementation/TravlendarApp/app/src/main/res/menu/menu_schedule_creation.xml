@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.gabdampar.travlendar.Controller.ViewController.ScheduleCreationActivity">
+
+    <item
+        android:title="New schedule"
+        android:id="@+id/btn_new_schedule"
+        android:icon="@mipmap/ic_plus"
+        android:orderInCategory="100"
+        app:showAsAction="always" />
+</menu>

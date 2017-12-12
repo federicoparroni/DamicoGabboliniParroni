@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.gabdampar.travlendar.Controller.IdentityManager;
+import com.example.gabdampar.travlendar.Controller.Synchronizer;
 import com.example.gabdampar.travlendar.Controller.User;
 import com.example.gabdampar.travlendar.Controller.ViewController.Fragment.AppointmentsListFragment;
 import com.example.gabdampar.travlendar.Controller.ViewController.Fragment.HomeFragment;
@@ -63,6 +64,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Synchronizer.GetInstance().Synchronize();
+
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
