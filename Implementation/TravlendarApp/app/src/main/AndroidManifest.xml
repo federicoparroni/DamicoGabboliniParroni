@@ -16,7 +16,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
-
     <application
         android:allowBackup="true"
         android:hardwareAccelerated="true"
@@ -24,15 +23,14 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAs4xaJnBh5JEsVm1MmQjg6CpUdwwL_Txk"/>
+            android:value="AIzaSyAs4xaJnBh5JEsVm1MmQjg6CpUdwwL_Txk" />
+
         <activity
             android:name=".Controller.ViewController.LoginActivity"
             android:label="@string/app_name">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -42,14 +40,10 @@
         <activity
             android:name=".Controller.ViewController.Fragment.HomeFragment"
             android:label="@string/main_page_activity"
-            android:theme="@style/AppTheme.NoActionBar" >
-
-        </activity>
-
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".Controller.ViewController.Fragment.AppointmentsListFragment"
             android:label="Appointments" />
-
         <activity
             android:name=".Controller.ViewController.AppointmentCreationActivity"
             android:label="Appointment Creation"
@@ -84,11 +78,13 @@
             android:name=".Controller.ViewController.Fragment.ScheduleListFragment"
             android:label="@string/title_activity_schedule_list" />
         <activity android:name=".Controller.ViewController.Fragment.UserProfileFragment" />
-
-        <activity android:name=".Controller.ViewController.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
+        <activity
+            android:name=".Controller.ViewController.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".Controller.ViewController.ScheduleCreationActivity"
+            android:label="@string/title_activity_schedule_creation"
+            />
     </application>
 
 </manifest>

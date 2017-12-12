@@ -42,11 +42,7 @@ public class AppointmentCreationActivity extends AppCompatActivity implements On
     CheckBox isRecurrentCheckBox;
 
     EditText appointmentNameField;
-    EditText locationField;
     EditText numberInvolvedPeopleField;
-    EditText durationHours;
-    EditText durationMinutes;
-
     TimePicker durationTimePicker;
 
     DatePicker datePicker;

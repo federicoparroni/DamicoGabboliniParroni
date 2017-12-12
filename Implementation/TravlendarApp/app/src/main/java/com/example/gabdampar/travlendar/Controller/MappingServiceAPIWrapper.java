@@ -1,6 +1,7 @@
 package com.example.gabdampar.travlendar.Controller;
 
 import android.graphics.Color;
+import android.util.Log;
 
 import com.example.gabdampar.travlendar.Model.TimeSlot;
 import com.example.gabdampar.travlendar.Model.TravelOptionData;
@@ -52,7 +53,7 @@ public class MappingServiceAPIWrapper {
 
     private MappingServiceAPIWrapper() {}
 
-    public List<TravelOptionData> getTravelOptionData(List<TravelMeanEnum> admittedMeans, String startingLocation, String endingLocaton, DateTime departureTime){
+    public void getTravelOptionData(final MappingServiceCallbackListener listener, List<TravelMeanEnum> admittedMeans, String startingLocation, String endingLocaton, DateTime departureTime){
 
         ret.clear();
 
@@ -70,9 +71,9 @@ public class MappingServiceAPIWrapper {
             b.apiKey("AIzaSyAs4xaJnBh5JEsVm1MmQjg6CpUdwwL_Txk");
 
             DirectionsApiRequest d=DirectionsApi.getDirections(
-                    b.build(),
-                    startingLocation,
-                    endingLocaton
+                b.build(),
+                startingLocation,
+                endingLocaton
             );
             d.alternatives(true);
             d.departureTime(departureTime);
@@ -102,6 +103,8 @@ public class MappingServiceAPIWrapper {
                             n.setMeanToKmMap(map);
                             ret.add(n);
                         }
+                        // callback return
+                        listener.MappingServiceCallback(ret);
                     }
 
                     @Override
@@ -110,9 +113,10 @@ public class MappingServiceAPIWrapper {
                     }
                 });
             }
-            catch (Exception e){}
+            catch (Exception e){
+                Log.e("GoogleError", "Error while retrieving mapping service data");
+            }
         }
-        return ret;
     }
 
     private TravelMeanEnum getTravelMeanEnumValueFromGoogleEnum(TravelMode toConvert) {
@@ -255,6 +259,12 @@ public class MappingServiceAPIWrapper {
             poly.add(new LatLng((latitude / 1E5),(longitude / 1E5) ));
         }
         return poly;
+    }
+
+    public interface MappingServiceCallbackListener {
+
+        void MappingServiceCallback(List<TravelOptionData> travelData);
+
     }
 
 }

@@ -49,8 +49,10 @@
     <string name="title_home">Home</string>
 
 
-
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Home fragment</string>
+    <string name="title_activity_schedule_creation">ScheduleCreationActivity</string>
+
+    <string name="action_settings">Settings</string>
 
 </resources>
