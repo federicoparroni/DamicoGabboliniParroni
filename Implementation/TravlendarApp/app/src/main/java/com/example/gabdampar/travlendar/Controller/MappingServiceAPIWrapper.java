@@ -1,7 +1,5 @@
 package com.example.gabdampar.travlendar.Controller;
 
-import android.graphics.Color;
-
 import com.example.gabdampar.travlendar.Model.TimeSlot;
 import com.example.gabdampar.travlendar.Model.TravelOptionData;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMean;
@@ -12,20 +10,14 @@ import com.google.maps.DirectionsApi;
 import com.google.maps.DirectionsApiRequest;
 import com.google.maps.GeoApiContext;
 import com.google.maps.PendingResult;
-import com.google.maps.internal.PolylineEncoding;
 import com.google.maps.model.DirectionsLeg;
 import com.google.maps.model.DirectionsResult;
 import com.google.maps.model.DirectionsRoute;
 import com.google.maps.model.DirectionsStep;
-import com.google.maps.model.EncodedPolyline;
 import com.google.maps.model.TransitMode;
 import com.google.maps.model.TravelMode;
 import com.google.maps.model.VehicleType;
-import com.here.android.mpa.common.ApplicationContext;
-import com.here.android.mpa.common.GeoCoordinate;
-import com.here.android.mpa.common.MapEngine;
-import com.here.android.mpa.common.OnEngineInitListener;
-import com.here.android.mpa.routing.*;
+
 
 import org.joda.time.DateTime;
 
@@ -67,7 +59,7 @@ public class MappingServiceAPIWrapper {
              */
 
             GeoApiContext.Builder b=new GeoApiContext.Builder();
-            b.apiKey("AIzaSyAs4xaJnBh5JEsVm1MmQjg6CpUdwwL_Txk");
+            //b.apiKey("AIzaSyAs4xaJnBh5JEsVm1MmQjg6CpUdwwL_Txk");
 
             DirectionsApiRequest d=DirectionsApi.getDirections(
                     b.build(),
@@ -80,7 +72,9 @@ public class MappingServiceAPIWrapper {
             /**
              * this in general will become the call for all the public travel means
              */
-            d.mode(TravelMode.TRANSIT);
+            d.mode(getGoogleEnumValueFromTravelMeanEnum(t));
+            if(getGoogleEnumValueFromTravelMeanEnum(t)==TravelMode.TRANSIT)
+                d.transitMode(getGoogleVehicleTypeFromTravelMeanEnum(t));
 
             try{
                 d.setCallback(new PendingResult.Callback<DirectionsResult>() {
@@ -124,6 +118,17 @@ public class MappingServiceAPIWrapper {
             return TravelMeanEnum.WALK;
     }
 
+    private TravelMode getGoogleEnumValueFromTravelMeanEnum(TravelMeanEnum toConvert) {
+        if(toConvert==TravelMeanEnum.BIKE)
+            return TravelMode.BICYCLING;
+        else if(toConvert==TravelMeanEnum.CAR)
+            return TravelMode.DRIVING;
+        else if(toConvert==TravelMeanEnum.WALK)
+            return TravelMode.WALKING;
+        else
+            return TravelMode.TRANSIT;
+    }
+
     private TravelMeanEnum getTravelMeanEnumValueFromGoogleEnum(VehicleType toConvert) {
         if(toConvert==VehicleType.BUS)
             return TravelMeanEnum.BUS;
@@ -141,6 +146,18 @@ public class MappingServiceAPIWrapper {
             return TravelMeanEnum.UNKNOWN;
     }
 
+    private TransitMode getGoogleVehicleTypeFromTravelMeanEnum(TravelMeanEnum toConvert){
+        if(toConvert == TravelMeanEnum.BUS)
+            return TransitMode.BUS;
+        else if(toConvert == TravelMeanEnum.METRO)
+            return TransitMode.SUBWAY;
+        else if(toConvert == TravelMeanEnum.TRAIN)
+            return TransitMode.TRAIN;
+        else if (toConvert == TravelMeanEnum.TRAM)
+            return TransitMode.TRAM;
+        else
+            return null;
+    }
 
     private String getTextualDirectionsGivenRouteAndUpdateMap(DirectionsRoute r){
         String s = "";
@@ -177,28 +194,13 @@ public class MappingServiceAPIWrapper {
 
     private String getTextualDirectionsGivenStepsAndUpdateMap(DirectionsStep st, String token){
         String s = token + " " + parseHTMLInstruction(st.htmlInstructions) + "\n";
-        if(st.transitDetails!=null){
+        if(st.transitDetails!=null)
             s+= token + "+ Stop at " + st.transitDetails.arrivalStop.name + " after " + String.valueOf(st.transitDetails.numStops) + " stops \n";
-        }
         if(st.steps != null)
             for(int i=0; i<st.steps.length; i++) {
                 DirectionsStep  ds = st.steps[i];
-                //udate map
-                /*TravelMeanEnum obj;
-                if (ds.travelMode != TravelMode.TRANSIT)
-                    obj = getTravelMeanEnumValueFromGoogleEnum(ds.travelMode);
-                else
-                    obj = getTravelMeanEnumValueFromGoogleEnum(ds.transitDetails.line.vehicle.type);
-                if (map.containsKey(obj)) {
-                    Double old = map.get(obj);
-                    map.remove(obj);
-                    map.put(obj, old + Double.valueOf(ds.distance.inMeters));
-                } else
-                    map.put(getTravelMeanEnumValueFromGoogleEnum(ds.travelMode), Double.valueOf(ds.distance.inMeters));*/
-
-                //get recursively textual representation
                 s+= getTextualDirectionsGivenStepsAndUpdateMap(ds, token + "+");
-        }
+            }
 
         return s;
     }

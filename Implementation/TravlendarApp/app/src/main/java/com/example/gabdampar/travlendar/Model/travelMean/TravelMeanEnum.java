@@ -10,5 +10,5 @@ public enum TravelMeanEnum {
      * TODO: add other travel means according to the name specified by google
      */
 
-    BUS,TRAM,METRO,BIKE,CAR, WALK,TRAIN, UNKNOWN;
+    BUS,TRAM,METRO,BIKE,CAR,WALK,TRAIN,UNKNOWN;
 }

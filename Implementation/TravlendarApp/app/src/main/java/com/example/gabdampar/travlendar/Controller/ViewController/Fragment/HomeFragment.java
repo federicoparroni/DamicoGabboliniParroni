@@ -55,6 +55,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         //called when the map is ready
         map=googleMap;
         MapUtils.putMapMarkersGivenAppointmentsAndSetMapZoomToThose(googleMap, AppointmentManager.GetInstance().GetAppointmentList());
+        MapUtils.disableNavigationButtons(map);
         askForPermissionAndShowUserPositionOnMap();
     }
 

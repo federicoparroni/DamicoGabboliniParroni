@@ -12,6 +12,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -22,7 +23,11 @@ import com.example.gabdampar.travlendar.Controller.User;
 import com.example.gabdampar.travlendar.Controller.ViewController.Fragment.AppointmentsListFragment;
 import com.example.gabdampar.travlendar.Controller.ViewController.Fragment.HomeFragment;
 import com.example.gabdampar.travlendar.Controller.ViewController.Fragment.ScheduleListFragment;
+import com.example.gabdampar.travlendar.Controller.ViewController.Fragment.UserProfileFragment;
+import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum;
 import com.example.gabdampar.travlendar.R;
+
+import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -41,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG_HOME = "home";
     private static final String TAG_APPOINTMENTS = "appts";
     private static final String TAG_SCHEDULES = "schedules";
+    private static final  String TAG_PROFILE = "profile";
     private static final String TAG_NOTIFICATIONS = "notifications";
 
     public static String CURRENT_TAG = TAG_HOME;
@@ -129,8 +135,6 @@ public class MainActivity extends AppCompatActivity {
      * selected from navigation menu
      */
     private void loadHomeFragment() {
-        // selecting appropriate nav menu item
-        selectNavMenu();
         // set toolbar title
         setToolbarTitle();
 
@@ -176,11 +180,15 @@ public class MainActivity extends AppCompatActivity {
             case 2:
                 ScheduleListFragment scheduleListFragment = new ScheduleListFragment();
                 return scheduleListFragment;
+            case 3:
+                UserProfileFragment userProfileFragment = new UserProfileFragment();
+                return userProfileFragment;
             /*case 3:
                 NotificationsFragment notificationsFragment = new NotificationsFragment();
                 return notificationsFragment;
 
             case 4:
+
                 SettingsFragment settingsFragment = new SettingsFragment();
                 return settingsFragment;*/
             default:
@@ -192,8 +200,14 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(activityTitles[navItemIndex]);
     }
 
-    private void selectNavMenu() {
+    /*private void selectNavMenu() {
         navigationView.getMenu().getItem(navItemIndex).setChecked(true);
+    }*/
+
+    private void cleanMenuItems(){
+        for(int i=0; i<navigationView.getMenu().size(); i++)
+            navigationView.getMenu().getItem(i).setChecked(false);
+
     }
 
     private void setUpNavigationView() {
@@ -203,6 +217,7 @@ public class MainActivity extends AppCompatActivity {
             // This method will trigger on item Click of navigation menu
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
+                cleanMenuItems();
 
                 //Check to see which item was being clicked and perform appropriate action
                 switch (menuItem.getItemId()) {
@@ -210,14 +225,17 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_home:
                         navItemIndex = 0;
                         CURRENT_TAG = TAG_HOME;
+                        menuItem.setChecked(true);
                         break;
                     case R.id.nav_appointments:
                         navItemIndex = 1;
                         CURRENT_TAG = TAG_APPOINTMENTS;
+                        menuItem.setChecked(true);
                         break;
                     case R.id.nav_schedules:
                         navItemIndex = 2;
                         CURRENT_TAG = TAG_SCHEDULES;
+                        menuItem.setChecked(true);
                         break;
                     case R.id.nav_logout:
                         IdentityManager.Logout();
@@ -236,11 +254,14 @@ public class MainActivity extends AppCompatActivity {
                         //startActivity(new Intent(MainActivity.this, PrivacyPolicyActivity.class));
                         drawer.closeDrawers();
                         return true;
+                    case R.id.nav_user_profile:
+                        navItemIndex = 3;
+                        CURRENT_TAG = TAG_PROFILE;
+                        break;
                     default:
                         navItemIndex = 0;
                 }
 
-                menuItem.setChecked(true);
                 loadHomeFragment();
                 return true;
             }
@@ -290,9 +311,9 @@ public class MainActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    /* ===== build right menu in action bar
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    //===== build right menu in action bar
+    //@Override
+    /*public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
 
         // show menu only when home fragment is selected
@@ -307,7 +328,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }*/
 
-    /*
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -315,7 +336,7 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if (id == R.id.action_logout) {
+        /*if (id == R.id.action_logout) {
             Toast.makeText(getApplicationContext(), "Logout user!", Toast.LENGTH_LONG).show();
             return true;
         }
@@ -326,10 +347,16 @@ public class MainActivity extends AppCompatActivity {
 
         if (id == R.id.action_clear_notifications) {
             Toast.makeText(getApplicationContext(), "Clear all notifications!", Toast.LENGTH_LONG).show();
+        }*/
+
+        if(id == R.id.nav_user_profile) {
+            navItemIndex = 3;
+            CURRENT_TAG = TAG_PROFILE;
+            loadHomeFragment();
         }
 
         return super.onOptionsItemSelected(item);
     }
-    */
+
 
 }

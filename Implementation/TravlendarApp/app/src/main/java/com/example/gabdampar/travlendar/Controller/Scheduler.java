@@ -21,7 +21,7 @@ import org.joda.time.LocalTime;
 
 import java.util.ArrayList;
 
-public class Scheduler {
+public class Scheduler{
 
     private LocalTime wakeupTime;
     private LatLng startingLocation;
@@ -64,7 +64,6 @@ public class Scheduler {
             throw new IllegalArgumentException("Empty appointment list");
         }
     }
-
 
     void CalculatePredecessorsAndDistanceMatrix(ArrayList<Appointment> apps) {
         pred = new byte[apps.size()][apps.size()];
@@ -140,10 +139,7 @@ public class Scheduler {
                 }
                 System.out.println("- NON FATTIBILE");
             }
-
         }
-
-
     }
 
 
@@ -246,8 +242,6 @@ public class Scheduler {
 
         return new Schedule(scheduledAppts);
     }
-
-
 
     TravelMean GetBestTravelMean(Appointment a1, Appointment a2) {
         switch (this.criteria) {
