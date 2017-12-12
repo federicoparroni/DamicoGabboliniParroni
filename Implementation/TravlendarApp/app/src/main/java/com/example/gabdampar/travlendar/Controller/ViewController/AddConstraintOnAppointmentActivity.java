@@ -40,7 +40,8 @@ public class AddConstraintOnAppointmentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_constraint_on_appointment);
 
         position = getIntent().getIntExtra("position",-1);
-        appointment = AppointmentManager.GetInstance().GetAppointment(position);
+
+        constraints = new ArrayList<ConstraintOnAppointment>();
 
         trainCheckBox = findViewById(R.id.trainCheckBox);
         carCheckBox = findViewById(R.id.carCheckBox);
@@ -53,6 +54,17 @@ public class AddConstraintOnAppointmentActivity extends AppCompatActivity {
         undergroundCheckBox= findViewById(R.id.undergroundCheckBox);
         bikeCheckBox = findViewById(R.id.bikeCheckBox);
 
+        //check if it is an editing
+        if(position >= 0) {
+            appointment = AppointmentManager.GetInstance().GetAppointment(position);
+            ArrayList<ConstraintOnAppointment> constraintOnAppointments = appointment.getConstraint();
+
+            //scan the arraylist and set the check on the checkbox
+            for (ConstraintOnAppointment c: constraintOnAppointments){
+                setCheckBox(c);
+            }
+
+        }
     }
 
     public void createConstraint (CheckBox checkBox, TravelMeanEnum mean){
@@ -62,26 +74,60 @@ public class AddConstraintOnAppointmentActivity extends AppCompatActivity {
         }
     }
 
-
+    public void setCheckBox(ConstraintOnAppointment constraint){
+        TravelMeanEnum mean = constraint.mean;
+        switch(mean){
+            case TRAIN:
+                trainCheckBox.setChecked(true);
+                break;
+            case CAR:
+                carCheckBox.setChecked(true);
+                break;
+            case BUS:
+                busCheckBox.setChecked(true);
+                break;
+            case TRAM:
+                tramCheckBox.setChecked(true);
+                break;
+            case CAR_SHARING:
+                carSharingCheckBox.setChecked(true);
+                break;
+            case BIKE_SHARING:
+                bikeSharingCheckBox.setChecked(true);
+                break;
+            case TAXI:
+                taxiCheckBox.setChecked(true);
+                break;
+            case WALK:
+                walkingCheckBox.setChecked(true);
+                break;
+            case METRO:
+                undergroundCheckBox.setChecked(true);
+                break;
+            case BIKE:
+                bikeCheckBox.setChecked(true);
+                break;
+        }
+    }
 
     @Override
     public void onBackPressed(){
 
         //create the constraints arraylist to pass back
-        /*createConstraint();
-        createConstraint();
-        createConstraint();
-        createConstraint();
-        createConstraint();
-        createConstraint();
-        createConstraint();
-        createConstraint();
-        createConstraint();
-        createConstraint();*/
+        createConstraint(trainCheckBox,TravelMeanEnum.TRAIN);
+        createConstraint(carCheckBox,TravelMeanEnum.CAR);
+        createConstraint(busCheckBox,TravelMeanEnum.BUS);
+        createConstraint(tramCheckBox,TravelMeanEnum.TRAM);
+        createConstraint(carSharingCheckBox,TravelMeanEnum.CAR_SHARING);
+        createConstraint(bikeSharingCheckBox,TravelMeanEnum.BIKE_SHARING);
+        createConstraint(taxiCheckBox,TravelMeanEnum.TAXI);
+        createConstraint(walkingCheckBox,TravelMeanEnum.WALK);
+        createConstraint(undergroundCheckBox,TravelMeanEnum.METRO);
+        createConstraint(bikeCheckBox,TravelMeanEnum.BIKE);
 
         //Create the Intent to pass back
         Intent returnIntent = new Intent();
-        returnIntent.putExtra("constraints",constraints);
+        returnIntent.putParcelableArrayListExtra("constraints",constraints);
         setResult(Activity.RESULT_OK, returnIntent);
         finish();
 

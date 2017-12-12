@@ -23,7 +23,7 @@ public class Appointment {
     public LatLng coords;
     public boolean isRecurrent = false;
     public String location;
-    public ArrayList<ConstraintOnAppointment> constraints;
+    public ArrayList<ConstraintOnAppointment> constraints = new ArrayList<ConstraintOnAppointment>();
 
 
     public Appointment(String n, LocalDate date, LocalTime startingTime, int duration, LatLng coord) {
@@ -121,6 +121,10 @@ public class Appointment {
 
     public ArrayList<ConstraintOnAppointment> getConstraint(){
         return constraints;
+    }
+
+    public void setConstraint(ArrayList<ConstraintOnAppointment> constraints){
+        this.constraints = constraints;
     }
 
 }

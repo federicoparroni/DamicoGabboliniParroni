@@ -35,6 +35,7 @@ import com.here.android.mpa.common.GeoCoordinate;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
@@ -202,6 +203,9 @@ public class AppointmentCreationActivity extends AppCompatActivity implements On
                 appointment = new Appointment(name, date,null, timeSlot, duration, coords,location,involvedPeople,isRecurrent);
             }
 
+            //add the constraint to the appointment
+            appointment.setConstraint(constraints);
+
             AppointmentManager.GetInstance().AddAppointment(appointment);
             //verifying that the appointment is added to the appointment list
             Log.e("addAppointmentToTheList", String.valueOf(AppointmentManager.GetInstance().GetAppointmentList().size()));
@@ -214,11 +218,20 @@ public class AppointmentCreationActivity extends AppCompatActivity implements On
             if (checkBoxStartingTime.isChecked()) {
                 if (startingTime == null)
                     startingTime = appointment.getStartingTime();
+                if(coords == null)
+                    coords = appointment.getCoords();
                 appointment.EditAppointment(name, date, startingTime,null, duration, coords, location,involvedPeople,isRecurrent);
             } else {
                 if(timeSlot == null)
                     timeSlot = appointment.getTimeSlot();
+                if(coords == null)
+                    coords = appointment.getCoords();
                 appointment.EditAppointment(name, date,null,timeSlot, duration, coords,location, involvedPeople,isRecurrent);
+            }
+
+            //if the constraints has been changed update that ones
+            if(constraints != null){
+                appointment.setConstraint(constraints);
             }
         }
         super.onBackPressed();
@@ -244,6 +257,14 @@ public class AppointmentCreationActivity extends AppCompatActivity implements On
                 LocalTime endingTimeSlotTime = (LocalTime)data.getBundleExtra("timeSlot").getSerializable("endingTime");
                 timeSlot = new TimeSlot(startingTimeSlotTime,endingTimeSlotTime);
                 startingTime = null;
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //Write your code if there's no result
+            }
+        }
+        if (requestCode == 3){
+            if(resultCode == RESULT_OK){
+                constraints = data.getParcelableArrayListExtra("constraints");
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 //Write your code if there's no result
