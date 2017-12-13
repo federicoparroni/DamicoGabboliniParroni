@@ -58,10 +58,10 @@ public class AppointmentsListFragment extends Fragment {
         View fragmentView = inflater.inflate(R.layout.fragment_appointments_list, container, false);
 
         appointmentListView = fragmentView.findViewById(R.id.appointmentListView);
-        appointmentsList = AppointmentManager.GetInstance().GetAppointmentList();
+        appointmentsList = AppointmentManager.GetInstance().apptList;
 
         //adapter of the listView
-        arrayAdapter = new AppointmentsListViewAdapter(getActivity(), R.layout.appointment_list_row, appointmentsList);
+        arrayAdapter = new AppointmentsListViewAdapter(getActivity(), R.layout.row_appointment_list, appointmentsList);
 
         appointmentListView.setAdapter(arrayAdapter);
 
@@ -78,7 +78,7 @@ public class AppointmentsListFragment extends Fragment {
                         .setPositiveButton("OK",new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
-                                AppointmentManager.GetInstance().RemoveFromList(pos);
+                                AppointmentManager.GetInstance().apptList.remove(pos);
                                 //the adapter must redraw the list
                                 appointmentListView.setAdapter(arrayAdapter);
                                 dialog.cancel();
@@ -133,7 +133,6 @@ public class AppointmentsListFragment extends Fragment {
                 TextView onClickListViewName = inflatedView.findViewById(R.id.onClickListViewName);
                 TextView onClickListViewDate = inflatedView.findViewById(R.id.onClickListViewDate);
                 TextView onClickListViewDuration = inflatedView.findViewById(R.id.onClickListViewDuration);
-                TextView onClickListViewLocation = inflatedView.findViewById(R.id.onClickListViewLocation);
                 TextView onClickListViewStartingTimeOrTimeSlot = inflatedView.findViewById(R.id.onClickListViewStartingTimeOrTimeSlot);
                 TextView onClickListViewStartingTimeOrTimeSlotField = inflatedView.findViewById(R.id.onClickListViewStartingTimeOrTimeSlotField);
 

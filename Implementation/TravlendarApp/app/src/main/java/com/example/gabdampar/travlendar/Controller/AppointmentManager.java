@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 public class AppointmentManager {
 
-    private ArrayList<Appointment> apptList = new ArrayList<>();
+    public ArrayList<Appointment> apptList = new ArrayList<>();
 
     // singleton
     private static AppointmentManager instance;
@@ -25,17 +25,6 @@ public class AppointmentManager {
         return instance;
     }
 
-    public void AddAppointment(Appointment a) {
-        apptList.add(a);
-    }
-
-    public void RemoveFromList(int position){
-        apptList.remove(position);
-    }
-
-    public ArrayList<Appointment> GetAppointmentList() {
-        return apptList;
-    }
 
     public Appointment GetAppointment(int position){
         return apptList.get(position);

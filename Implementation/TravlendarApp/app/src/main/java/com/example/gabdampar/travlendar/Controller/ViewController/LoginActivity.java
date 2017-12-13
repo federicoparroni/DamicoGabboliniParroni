@@ -4,15 +4,12 @@
 
 package com.example.gabdampar.travlendar.Controller.ViewController;
 
-import android.animation.Animator;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
-import android.animation.TimeInterpolator;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,29 +17,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.example.gabdampar.travlendar.Controller.AppointmentManager;
 import com.example.gabdampar.travlendar.Controller.IdentityManager;
 import com.example.gabdampar.travlendar.Controller.NetworkManager;
-import com.example.gabdampar.travlendar.Model.Appointment;
-import com.example.gabdampar.travlendar.Model.TimeSlot;
 import com.example.gabdampar.travlendar.R;
-import com.google.android.gms.maps.model.LatLng;
 
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.regex.Pattern;
 
 public class LoginActivity extends AppCompatActivity implements Response.Listener<JSONObject>, Response.ErrorListener, DialogInterface.OnClickListener {
@@ -75,8 +62,8 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
         registerBtn = findViewById(R.id.register_button);
         ckRemember = findViewById(R.id.ck_remember_me);
         txtForgotPassword = findViewById(R.id.txt_recover_password);
-        imgOK = (PopupImageView) findViewById(R.id.img_ok);
-        imgError = (PopupImageView) findViewById(R.id.img_error);
+        imgOK = findViewById(R.id.img_ok);
+        imgError = findViewById(R.id.img_error);
 
         imgOK.setScaleX(0); imgOK.setScaleY(0);
         imgError.setScaleX(0); imgError.setScaleY(0);
@@ -148,7 +135,7 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
 
     void StartMainActivity() {
         final Intent intent = new Intent(this, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);// | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         LoginActivity.this.startActivity(intent);
     }
 
@@ -163,10 +150,10 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
             if(pattern.matcher(email).matches()) {
                 ShowConfirmationPassword();
             } else {
-                Toast.makeText(this, "Email is not valid!", Toast.LENGTH_LONG).show();
+                Snackbar.make(view, "Email is not valid!", Snackbar.LENGTH_LONG).show();
             }
         } else {
-            Toast.makeText(this, "Email or password not valid", Toast.LENGTH_LONG).show();
+            Snackbar.make(view, "Email or password not valid", Snackbar.LENGTH_LONG).show();
         }
     }
 
@@ -176,12 +163,11 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
         imgError.ShowPopup();
         if(error.networkResponse != null) {
             if(error.networkResponse.statusCode == 400 || error.networkResponse.statusCode == 401) {
-                Toast toast = Toast.makeText(getApplicationContext(), "Invalid username or password", Toast.LENGTH_LONG);
-                toast.show();
+                Snackbar.make(findViewById(R.id.progressBarLogin), "Invalid username or password", Snackbar.LENGTH_LONG).show();
             }
         } else {
-            Toast toast = Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_LONG);
-            toast.show();
+            Snackbar.make(findViewById(R.id.progressBarLogin), error.getMessage(), Snackbar.LENGTH_LONG).show();
+            Log.e("ServerError", error.getMessage());
         }
     }
 
@@ -191,8 +177,8 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
         // Inflate and set the layout for the dialog, parent is null because its going in the dialog layout
         LayoutInflater inflater = getLayoutInflater();
         builder.setTitle("Confirm password:")
-                .setView(inflater.inflate(R.layout.registration_confirm_dialog, null))
-            // Set up the view
+                .setView(inflater.inflate(R.layout.dialog_registration_confirm, null))
+                // Set up the view
                 .setPositiveButton("OK", this)
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
@@ -217,11 +203,11 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
                 @Override
                 public void onResponse(Object response) {
                     imgOK.ShowPopup();
-                    Toast.makeText(LoginActivity.this, "Registration successfully done", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(findViewById(R.id.progressBarLogin), "Registration successfully done", Snackbar.LENGTH_LONG).show();
                 }
             }, this);
         } else {
-            Toast.makeText(LoginActivity.this, "Passwords not missing", Toast.LENGTH_SHORT).show();
+            Snackbar.make(findViewById(R.id.progressBarLogin), "Passwords not missing", Snackbar.LENGTH_LONG).show();
         }
     }
 

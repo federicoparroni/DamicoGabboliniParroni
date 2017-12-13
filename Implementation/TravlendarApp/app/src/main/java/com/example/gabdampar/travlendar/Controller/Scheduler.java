@@ -5,31 +5,28 @@
 package com.example.gabdampar.travlendar.Controller;
 
 import com.example.gabdampar.travlendar.Model.Appointment;
+import com.example.gabdampar.travlendar.Model.ConstraintOnAppointment;
 import com.example.gabdampar.travlendar.Model.ConstraintOnSchedule;
-import com.example.gabdampar.travlendar.Model.DateManager;
 import com.example.gabdampar.travlendar.Model.OptCriteria;
 import com.example.gabdampar.travlendar.Model.Schedule;
 import com.example.gabdampar.travlendar.Model.ScheduledAppointment;
-import com.example.gabdampar.travlendar.Model.TravelOptionData;
 import com.example.gabdampar.travlendar.Model.travelMean.privateMeans.Bike;
 import com.example.gabdampar.travlendar.Model.travelMean.publicMeans.Bus;
 import com.example.gabdampar.travlendar.Model.travelMean.privateMeans.Car;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMean;
 import com.google.android.gms.maps.model.LatLng;
-import com.here.android.mpa.common.GeoCoordinate;
 
 import org.joda.time.LocalTime;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Scheduler {
 
-    private LocalTime wakeupTime;
-    private LatLng startingLocation;
-    private ArrayList<Appointment> appts;
-    private ArrayList<ConstraintOnSchedule> constraints;
-    private OptCriteria criteria;
+    public LocalTime wakeupTime;
+    public LatLng startingLocation;
+    public ArrayList<Appointment> appts = new ArrayList<>();
+    public ArrayList<ConstraintOnSchedule> constraints = new ArrayList<>();
+    public OptCriteria criteria;
 
     byte[][] pred;
     double[][] dist;
@@ -37,12 +34,21 @@ public class Scheduler {
 
     ArrayList<Schedule> possibleSchedules = new ArrayList<Schedule>();
 
+    public Scheduler() {
+
+    }
+
     public Scheduler(LocalTime wakeupTime, LatLng location, ArrayList<Appointment> appts, ArrayList<ConstraintOnSchedule> constraints, OptCriteria c) {
         this.wakeupTime = wakeupTime;
         this.startingLocation = location;
         this.appts = appts;
         this.constraints = constraints;
         this.criteria = c;
+    }
+
+    /** check if all parameters have been set */
+    public boolean isConsistent() {
+        return wakeupTime != null && startingLocation != null && criteria != null && appts.size() > 0;
     }
 
 
@@ -252,6 +258,16 @@ public class Scheduler {
 
 
     TravelMean GetBestTravelMean(Appointment a1, Appointment a2) {
+        /** segare i mezzi che vietano le constraint dello schedule */
+        ArrayList<TravelMean> availableMeans = (ArrayList<TravelMean>) TravelMean.MeansCollection.clone();
+        for(ConstraintOnSchedule constraint : constraints) {
+            if(constraint.maxDistance == 0) availableMeans.remove(constraint.mean);
+        }
+        /** segare i mezzi che vietano le constraint che vieta  */
+        /*for(ConstraintOnAppointment c : a2.) {
+            if(constraint.maxDistance == 0) availableMeans.remove(constraint.mean);
+        }*/
+        /** order remainig means */
         switch (this.criteria) {
             case OPTIMIZE_TIME:
                 return Car.GetInstance();
