@@ -22,22 +22,35 @@ import android.widget.TextView;
 
 import com.example.gabdampar.travlendar.Controller.AppointmentManager;
 import com.example.gabdampar.travlendar.Controller.AppointmentsListViewAdapter;
+import com.example.gabdampar.travlendar.Controller.MapUtils;
 import com.example.gabdampar.travlendar.Controller.Synchronizer;
 import com.example.gabdampar.travlendar.Controller.ViewController.AppointmentCreationActivity;
 import com.example.gabdampar.travlendar.Model.Appointment;
 import com.example.gabdampar.travlendar.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 
 import java.util.ArrayList;
 
 
-public class AppointmentsListFragment extends Fragment {
+public class AppointmentsListFragment extends Fragment implements OnMapReadyCallback {
 
     ListView appointmentListView;
     // appointmentList taken from the AppointmentManger
     ArrayList<Appointment> appointmentsList;
 
     // the adapter that will manage the appointmentListView
-    ArrayAdapter<Appointment> arrayAdapter;//DEVO METTERCI QUELLO MIO CUSTOMIZATO
+    ArrayAdapter<Appointment> arrayAdapter;
+
+    //used for the map on the onClick of an appointment
+    MapFragment appointment_map;
+    GoogleMap map;
+
+    //clicked appointment position
+    int pos;
 
     public AppointmentsListFragment() {
         setHasOptionsMenu(true);
@@ -103,11 +116,15 @@ public class AppointmentsListFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
                 // Inflate and set the layout for the dialog, parent is null because its going in the dialog layout
                 LayoutInflater inflater = LayoutInflater.from(builder.getContext());
                 View inflatedView = inflater.inflate(R.layout.appointment_list_on_click, null);
+
+                //for the map in the onClick on an appointment
+                appointment_map = (MapFragment) getFragmentManager().findFragmentById(R.id.appointment_map_on_click);
+                appointment_map.getMapAsync(AppointmentsListFragment.this);
 
                 builder.setTitle("Appointment details")
                         .setView(inflatedView)
@@ -116,6 +133,10 @@ public class AppointmentsListFragment extends Fragment {
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
+
+                                //trick for the fragment nested in another fragment
+                                getFragmentManager().beginTransaction().remove(appointment_map).commit();
+
                                 Intent editAppointment = new Intent(getActivity().getApplicationContext(),AppointmentCreationActivity.class);
                                 editAppointment.putExtra("position",i);
                                 startActivity(editAppointment);
@@ -125,9 +146,11 @@ public class AppointmentsListFragment extends Fragment {
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
+
+                                //trick for the fragment nested in another fragment
+                                getFragmentManager().beginTransaction().remove(appointment_map).commit();
                             }
                         });
-
 
                 //Fields of the inflated view
                 TextView onClickListViewName = inflatedView.findViewById(R.id.onClickListViewName);
@@ -140,10 +163,13 @@ public class AppointmentsListFragment extends Fragment {
                 //The clicked Appointment
                 Appointment clickedAppointment = AppointmentManager.GetInstance().GetAppointment(i);
 
+                //position of the clicked appointment needed for know which appointment has been click from the googleMapCallback
+                pos = i;
+
                 onClickListViewName.setText(clickedAppointment.toString());
                 onClickListViewDate.setText(clickedAppointment.getDate().toString());
                 onClickListViewDuration.setText(clickedAppointment.getStringDuration());
-                //TODO:onClickListViewLocation.setText(clickedAppointment.getLocation().toString());
+                onClickListViewLocation.setText(clickedAppointment.getLocation());
                 if(clickedAppointment.getTimeSlot() == null) {
                     onClickListViewStartingTimeOrTimeSlotField.setText("Starting Time");
                     onClickListViewStartingTimeOrTimeSlot.setText(clickedAppointment.getStartingTime().toString("HH:mm"));
@@ -151,6 +177,7 @@ public class AppointmentsListFragment extends Fragment {
                     onClickListViewStartingTimeOrTimeSlotField.setText("Time Slot");
                     onClickListViewStartingTimeOrTimeSlot.setText(clickedAppointment.getTimeSlot().toString());
                 }
+
                 AlertDialog alert = builder.create();
                 alert.show();
             }
@@ -188,4 +215,22 @@ public class AppointmentsListFragment extends Fragment {
         appointmentListView.setAdapter(arrayAdapter);
     }
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        map = googleMap;
+
+        //disable the zoom option
+        map.getUiSettings().setZoomGesturesEnabled(false);
+
+        //disable the scroll gesture in the minimap
+        map.getUiSettings().setScrollGesturesEnabled(false);
+
+        //disable the google map button
+        map.getUiSettings().setMapToolbarEnabled(false);
+
+        //init the marker on the postition of the appointment on the map
+        MapUtils.putMapMarkersGivenAppointment(map,AppointmentManager.GetInstance().GetAppointment(pos));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(AppointmentManager.GetInstance().GetAppointment(pos).getCoords(),15));
+    }
 }
+
