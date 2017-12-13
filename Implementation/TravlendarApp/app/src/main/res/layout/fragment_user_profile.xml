@@ -6,4 +6,17 @@
     android:layout_height="match_parent"
     tools:context="com.example.gabdampar.travlendar.Controller.ViewController.Fragment.UserProfileFragment">
 
+    <Switch
+        android:id="@+id/switch1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Switch"
+        tools:layout_editor_absoluteX="262dp"
+        tools:layout_editor_absoluteY="136dp" />
+
+    <ListView
+        android:layout_width="344dp"
+        android:layout_height="189dp"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="8dp" />
 </android.support.constraint.ConstraintLayout>

@@ -40,7 +40,7 @@ public class WeatherForecastAPIWrapper {
      requires: time to be formatted like this: YYYY-MM-DDTHH:MM:SS (e.g. 2013-05-06T12:00:00)
      returns: list of Weather for each hour from actual time till the next 48 hours
      */
-    public ArrayList<TimeWeather> getWeather(String time, LatLng coord){
+    public ArrayList<TimeWeather> getWeather(final WeatherForecastAPIWrapperCallBack obj, String time, LatLng coord){
         l.clear();
 
         double lat=coord.lat;
@@ -87,6 +87,7 @@ public class WeatherForecastAPIWrapper {
                         r = Weather.CLOUDY;
                     l.add(new TimeWeather(d.getTime(), r));
                 }
+                obj.onWeatherResults(l);
             }
 
             @Override
@@ -96,6 +97,10 @@ public class WeatherForecastAPIWrapper {
         });
 
         return l;
+    }
+
+    public interface WeatherForecastAPIWrapperCallBack{
+        void onWeatherResults(ArrayList<TimeWeather> weatherConditionList);
     }
 
 }

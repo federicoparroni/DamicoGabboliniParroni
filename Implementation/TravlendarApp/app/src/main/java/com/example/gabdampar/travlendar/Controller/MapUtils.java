@@ -15,9 +15,27 @@ import java.util.List;
  */
 
 public class MapUtils {
+
+    public static void disableNavigationButtons(GoogleMap map){
+        map.getUiSettings().setMapToolbarEnabled(false);
+    }
+
     public static void putMapMarkersGivenAppointment(GoogleMap map, Appointment appointment){
         map.addMarker(new MarkerOptions().position(appointment.coords)
                 .title(appointment.toString()));
+    }
+
+    public static void putMapMarkersGivenAppointmentAndSetZoomOnIt(GoogleMap map, Appointment appointment){
+        map.addMarker(new MarkerOptions().position(appointment.coords)
+                .title(appointment.toString()));
+        CameraUpdate cu = CameraUpdateFactory.newLatLng(appointment.getCoords());
+        map.animateCamera(cu);
+    }
+
+    public static void putMapMarkersGivenAppointments(GoogleMap map, List<Appointment> appointments){
+        for(Appointment a: appointments) {
+            putMapMarkersGivenAppointment(map, a);
+        }
     }
 
     public static void putMapMarkersGivenAppointmentsAndSetMapZoomToThose(GoogleMap map, List<Appointment> appointments){

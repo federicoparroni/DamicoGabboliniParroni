@@ -28,6 +28,7 @@
         <item>Home</item>
         <item>Appointments</item>
         <item>Schedules</item>
+        <item>User Settings</item>
     </string-array>
     <string name="nav_menu_home">Home</string>
     <string name="nav_menu_appointments">Appointments</string>

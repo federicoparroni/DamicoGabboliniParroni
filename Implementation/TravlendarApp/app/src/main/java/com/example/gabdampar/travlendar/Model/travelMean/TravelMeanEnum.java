@@ -9,7 +9,6 @@ public enum TravelMeanEnum {
     /**
      * TODO: add other travel means according to the name specified by google
      */
-
     BUS,
     TRAM,
     METRO,
@@ -17,5 +16,8 @@ public enum TravelMeanEnum {
     CAR,
     WALK,
     TRAIN,
+    BIKE_SHARING,
+    CAR_SHARING,
+    TAXI,
     UNKNOWN
 }

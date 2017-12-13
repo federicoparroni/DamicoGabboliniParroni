@@ -22,6 +22,9 @@
     <item android:title="Other">
         <menu>
             <item
+                android:id="@+id/nav_user_profile"
+                android:title="Profile" />
+            <item
                 android:id="@+id/nav_logout"
                 android:title="@string/nav_menu_logout" />
                 />
