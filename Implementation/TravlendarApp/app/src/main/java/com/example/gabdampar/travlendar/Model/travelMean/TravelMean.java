@@ -21,4 +21,8 @@ public abstract class TravelMean implements IMeanEvaluable {
         throw new IllegalAccessError("Cannot call this method");
     }
 
+    public TravelMean getTravelMean(TravelMeanEnum meanType) {
+        return null;
+    }
+
 }

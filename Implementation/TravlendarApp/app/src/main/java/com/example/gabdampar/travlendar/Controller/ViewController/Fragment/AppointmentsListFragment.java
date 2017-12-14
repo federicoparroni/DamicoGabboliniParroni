@@ -156,6 +156,7 @@ public class AppointmentsListFragment extends Fragment implements OnMapReadyCall
                 TextView onClickListViewName = inflatedView.findViewById(R.id.onClickListViewName);
                 TextView onClickListViewDate = inflatedView.findViewById(R.id.onClickListViewDate);
                 TextView onClickListViewDuration = inflatedView.findViewById(R.id.onClickListViewDuration);
+                TextView onClickListViewLocation = inflatedView.findViewById(R.id.onClickListViewLocation);
                 TextView onClickListViewStartingTimeOrTimeSlot = inflatedView.findViewById(R.id.onClickListViewStartingTimeOrTimeSlot);
                 TextView onClickListViewStartingTimeOrTimeSlotField = inflatedView.findViewById(R.id.onClickListViewStartingTimeOrTimeSlotField);
 
