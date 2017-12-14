@@ -17,6 +17,8 @@ import android.widget.TimePicker;
 
 import com.example.gabdampar.travlendar.Controller.AppointmentManager;
 import com.example.gabdampar.travlendar.Controller.Scheduler;
+import com.example.gabdampar.travlendar.Model.Constraint;
+import com.example.gabdampar.travlendar.Model.ConstraintOnSchedule;
 import com.example.gabdampar.travlendar.Model.OptCriteria;
 import com.example.gabdampar.travlendar.R;
 import com.google.android.gms.common.api.Status;
@@ -143,16 +145,18 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
     /** called when user click on ADD CONSTRAINT */
     public void OnAddConstraintClick(View view) {
         // show dialog to create new constraint
-        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(ScheduleCreationActivity.this);
         builder.setView(R.layout.dialog_constraint_creation).setPositiveButton("Add", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-
+                // create and add new constraint
+                ConstraintOnSchedule c = new ConstraintOnSchedule();
+                //c.mean = ;
             }
         }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-
+                dialogInterface.dismiss();
             }
         });
         builder.create().show();

@@ -2,8 +2,6 @@ package com.example.gabdampar.travlendar.Model;
 
 import org.joda.time.LocalTime;
 
-import java.util.ArrayList;
-
 /**
  * Created by gabbo on 02/12/2017.
  */
