@@ -1,6 +1,15 @@
 <resources>
     <string name="app_name">TravlendarApp</string>
 
+    <!-- user settings -->
+    <string name="has_pass">Pass ownage</string>
+    <string name="has_pass_summary">Do you own a Public Transit pass?</string>
+    <string name="has_bike">Bike ownage</string>
+    <string name="has_bike_summary">Do you own a car?</string>
+    <string name="has_car">Car ownage</string>
+    <string name="has_car_summary">Do you own a car?</string>
+    <string name="user_settings">Settings</string>
+
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password (optional)</string>

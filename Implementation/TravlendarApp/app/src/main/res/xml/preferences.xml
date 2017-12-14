@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/user_settings"
+        android:key="settings">
+        <SwitchPreference
+            android:key="has_car"
+            android:title="@string/has_car"
+            android:summary="@string/has_car_summary"
+            android:defaultValue="false" />
+        <SwitchPreference
+            android:key="has_bike"
+            android:title="@string/has_bike"
+            android:summary="@string/has_bike_summary"
+            android:defaultValue="false" />
+        <SwitchPreference
+            android:key="has_bike"
+            android:title="@string/has_bike"
+            android:summary="@string/has_bike_summary"
+            android:defaultValue="false" />
+    </PreferenceCategory>
+</PreferenceScreen>

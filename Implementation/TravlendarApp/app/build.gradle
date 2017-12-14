@@ -58,6 +58,5 @@ dependencies {
     compile 'com.google.android.gms:play-services-places:11.6.0' //needed for the autocomplete google text
 
     compile 'com.google.maps:google-maps-services:0.2.5'
-    compile 'com.google.android.gms:play-services-maps:11.6.0'
     compile 'org.slf4j:slf4j-nop:1.7.25'
 }
