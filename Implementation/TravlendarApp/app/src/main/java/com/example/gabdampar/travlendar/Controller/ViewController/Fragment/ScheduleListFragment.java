@@ -1,17 +1,30 @@
 package com.example.gabdampar.travlendar.Controller.ViewController.Fragment;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.gabdampar.travlendar.Controller.ViewController.AppointmentCreationActivity;
+import com.example.gabdampar.travlendar.Controller.ViewController.ScheduleCreationActivity;
 import com.example.gabdampar.travlendar.R;
 
+import static android.app.Activity.RESULT_OK;
+
 public class ScheduleListFragment extends Fragment {
+
+    final int SCHEDULE_CREATION_REQUEST = 0;    // request code for startActivityForResult
+
+    public ScheduleListFragment() {
+        setHasOptionsMenu(true);    // to inflate appbar options menu
+    }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -34,6 +47,8 @@ public class ScheduleListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
     }
 
     @Override
@@ -44,6 +59,44 @@ public class ScheduleListFragment extends Fragment {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         return view;
+    }
+
+    //Set the Icon on the action bar for the creation of a new schedule
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_schedule_creation, menu);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.btn_new_schedule:
+                // User chose to add a new appointment
+                Intent intent = new Intent(getActivity(), ScheduleCreationActivity.class);
+                startActivityForResult(intent, SCHEDULE_CREATION_REQUEST);
+
+            default:
+                // If we got here, the user's action was not recognized, invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        switch (requestCode) {
+            case SCHEDULE_CREATION_REQUEST:
+                // Make sure the request was successful
+                if (resultCode == RESULT_OK) {
+                    // The user picked a contact.
+                    // The Intent's data Uri identifies which contact was selected.
+
+                    // refresh schedule list
+                }
+            break;
+        }
+
     }
 
 

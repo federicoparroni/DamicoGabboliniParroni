@@ -4,15 +4,14 @@
 
 package com.example.gabdampar.travlendar.Model;
 
-import com.example.gabdampar.travlendar.Model.travelMean.TravelMean;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum;
 
 import java.util.ArrayList;
 
 public class ConstraintOnSchedule extends Constraint {
 
-    ArrayList<Weather> weather;
-    TimeSlot timeSlot;
+    public ArrayList<Weather> weather;
+    public TimeSlot timeSlot;
 
     public ConstraintOnSchedule(TravelMeanEnum mean, float maxDistance, ArrayList<Weather> weather, TimeSlot timeSlot) {
         this.mean = mean;

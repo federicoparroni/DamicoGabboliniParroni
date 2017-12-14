@@ -16,17 +16,10 @@ import android.view.ViewGroup;
 
 import com.example.gabdampar.travlendar.Controller.AppointmentManager;
 import com.example.gabdampar.travlendar.Controller.MapUtils;
-import com.example.gabdampar.travlendar.Controller.MappingServiceAPIWrapper;
-import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum;
 import com.example.gabdampar.travlendar.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-
-import org.joda.time.DateTime;
-
-import java.util.ArrayList;
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback {
     GoogleMap map;
@@ -54,7 +47,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         //called when the map is ready
         map=googleMap;
-        MapUtils.putMapMarkersGivenAppointmentsAndSetMapZoomToThose(googleMap, AppointmentManager.GetInstance().GetAppointmentList());
+        MapUtils.putMapMarkersGivenAppointmentsAndSetMapZoomToThose(googleMap, AppointmentManager.GetInstance().apptList);
         MapUtils.disableNavigationButtons(map);
         askForPermissionAndShowUserPositionOnMap();
     }

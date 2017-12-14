@@ -2,7 +2,7 @@
  * Created by gabdampar on 02/12/2017.
  */
 
-package com.example.gabdampar.travlendar.Model;
+package com.example.gabdampar.travlendar.Controller;
 
 import org.joda.time.LocalTime;
 

@@ -5,37 +5,45 @@
 package com.example.gabdampar.travlendar.Controller;
 
 import com.example.gabdampar.travlendar.Model.Appointment;
+import com.example.gabdampar.travlendar.Model.ConstraintOnAppointment;
 import com.example.gabdampar.travlendar.Model.ConstraintOnSchedule;
-import com.example.gabdampar.travlendar.Model.DateManager;
 import com.example.gabdampar.travlendar.Model.OptCriteria;
 import com.example.gabdampar.travlendar.Model.Schedule;
 import com.example.gabdampar.travlendar.Model.ScheduledAppointment;
-import com.example.gabdampar.travlendar.Model.TravelOptionData;
+import com.example.gabdampar.travlendar.Model.TimeWeather;
+import com.example.gabdampar.travlendar.Model.TimeWeatherList;
+import com.example.gabdampar.travlendar.Model.travelMean.TravelMeansState;
 import com.example.gabdampar.travlendar.Model.travelMean.privateMeans.Bike;
 import com.example.gabdampar.travlendar.Model.travelMean.publicMeans.Bus;
 import com.example.gabdampar.travlendar.Model.travelMean.privateMeans.Car;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMean;
 import com.google.android.gms.maps.model.LatLng;
-import com.here.android.mpa.common.GeoCoordinate;
 
 import org.joda.time.LocalTime;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-public class Scheduler{
+public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWrapperCallBack {
 
-    private LocalTime wakeupTime;
-    private LatLng startingLocation;
-    private ArrayList<Appointment> appts;
-    private ArrayList<ConstraintOnSchedule> constraints;
-    private OptCriteria criteria;
+    public LocalTime wakeupTime;
+    public LatLng startingLocation;
+    public ArrayList<Appointment> appts = new ArrayList<>();
+    public ArrayList<ConstraintOnSchedule> constraints = new ArrayList<>();
+    public OptCriteria criteria;
+
+    private TimeWeatherList weatherConditions;
 
     byte[][] pred;
     double[][] dist;
     private ArrayList<Schedule> schedules = new ArrayList<Schedule>();
 
     ArrayList<Schedule> possibleSchedules = new ArrayList<Schedule>();
+
+    public Scheduler() {
+
+    }
 
     public Scheduler(LocalTime wakeupTime, LatLng location, ArrayList<Appointment> appts, ArrayList<ConstraintOnSchedule> constraints, OptCriteria c) {
         this.wakeupTime = wakeupTime;
@@ -45,9 +53,17 @@ public class Scheduler{
         this.criteria = c;
     }
 
+    /** check if all parameters have been set */
+    public boolean isConsistent() {
+        return wakeupTime != null && startingLocation != null && criteria != null && appts.size() > 0;
+    }
+
 
     public Schedule ComputeSchedule() {
         if(this.appts.size() > 0) {
+
+            /** call API to optimize time during arragements computation */
+            WeatherForecastAPIWrapper.getInstance().getWeather(this, appts.get(0).date, appts.get(0).coords);
 
             // 1-2
             CalculatePredecessorsAndDistanceMatrix(appts);
@@ -170,13 +186,15 @@ public class Scheduler{
     Schedule GetSchedule(ArrayList<Appointment> arrangement) {
         ArrayList<ScheduledAppointment> scheduledAppts = new ArrayList<ScheduledAppointment>();
 
+        TravelMeansState state = new TravelMeansState(constraints);
+
         // create wakeup dummy appointment
         Appointment wakeUpAppt = new Appointment("WakeUp", appts.get(0).date, wakeupTime, 0, startingLocation);
         scheduledAppts.add(new ScheduledAppointment(wakeUpAppt, wakeupTime, wakeupTime, null));
 
         Appointment firstAppt = arrangement.get(0);
         if(firstAppt.isDeterministic()) {
-            TravelMean mean = GetBestTravelMean(wakeUpAppt, firstAppt);
+            TravelMean mean = GetBestTravelMean(wakeUpAppt, firstAppt, state);
             int travelTime1 = (int)mean.EstimateTime(wakeUpAppt, firstAppt);
             LocalTime startingTime1 = firstAppt.startingTime.minusSeconds(travelTime1);
             scheduledAppts.add(new ScheduledAppointment(firstAppt, startingTime1, firstAppt.startingTime, mean));
@@ -185,7 +203,7 @@ public class Scheduler{
             if(startingTime1.isBefore(wakeupTime)) return null;
 
         } else {		// first appt is not deterministic
-            TravelMean mean = GetBestTravelMean(wakeUpAppt, firstAppt);
+            TravelMean mean = GetBestTravelMean(wakeUpAppt, firstAppt, state);
             int travelTime1 = (int)mean.EstimateTime(wakeUpAppt, firstAppt);
 
             if(arrangement.size() == 1) {
@@ -218,7 +236,7 @@ public class Scheduler{
             ScheduledAppointment appt1 = scheduledAppts.get(i);
             Appointment appt2 = arrangement.get(i);
 
-            TravelMean mean = GetBestTravelMean(appt1.originalAppointment, appt2);
+            TravelMean mean = GetBestTravelMean(appt1.originalAppointment, appt2, state);
             int travelTime = (int)mean.EstimateTime(appt1.originalAppointment, appt2);
 
             if(appt2.isDeterministic()) {
@@ -245,10 +263,30 @@ public class Scheduler{
         return new Schedule(scheduledAppts);
     }
 
-    TravelMean GetBestTravelMean(Appointment a1, Appointment a2) {
+    @Override
+    public void onWeatherResults(TimeWeatherList weatherConditionList) {
+        this.weatherConditions = weatherConditionList;
+    }
+
+    TravelMean GetBestTravelMean(Appointment a1, Appointment a2, TravelMeansState state) {
+        /** segare i mezzi che vietano le constraint dello schedule */
+        ArrayList<TravelMean> availableMeans = (ArrayList<TravelMean>) TravelMean.MeansCollection.clone();
+        for(ConstraintOnSchedule constraint : constraints) {
+            if(constraint.maxDistance == 0 &&
+                    constraint.weather.contains(weatherConditions.getWeatherForTime(a1.endingTime()))
+                    || (constraint.timeSlot.endingTime.isAfter(a1.endingTime()) && constraint.timeSlot.startingTime.isBefore(a2.startingTime))
+                    )
+                availableMeans.remove(constraint.mean);
+        }
+        /** segare i mezzi che vietano le constraint   */
+        for(ConstraintOnAppointment c : a2.getConstraint()) {
+            if(c.maxDistance == 0) availableMeans.remove(c.mean);
+        }
+
+        /** order remainig means */
         switch (this.criteria) {
             case OPTIMIZE_TIME:
-                return Car.GetInstance();
+
             case OPTIMIZE_CARBON:
                 return Bike.GetInstance();
             case OPTIMIZE_COST:
@@ -306,5 +344,6 @@ public class Scheduler{
         System.out.println("---------------------------------");
         System.out.println("");
     }
+
 
 }

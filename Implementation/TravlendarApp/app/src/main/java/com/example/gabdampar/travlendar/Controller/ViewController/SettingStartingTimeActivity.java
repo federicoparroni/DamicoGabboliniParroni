@@ -30,6 +30,7 @@ public class SettingStartingTimeActivity extends AppCompatActivity {
 
         position = getIntent().getIntExtra("position",-1);
 
+        // Check if it is an editing of an exsisting appointment
         if(position != -1){
             appointment = AppointmentManager.GetInstance().GetAppointment(position);
             if(appointment.getStartingTime() != null) {

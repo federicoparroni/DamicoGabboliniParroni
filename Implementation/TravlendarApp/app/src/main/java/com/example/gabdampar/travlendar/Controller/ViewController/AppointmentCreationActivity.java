@@ -203,12 +203,13 @@ public class AppointmentCreationActivity extends AppCompatActivity implements On
                 appointment = new Appointment(name, date,null, timeSlot, duration, coords,location,involvedPeople,isRecurrent);
             }
 
+            AppointmentManager.GetInstance().apptList.add(appointment);
+
             //add the constraint to the appointment
             appointment.setConstraint(constraints);
 
-            AppointmentManager.GetInstance().AddAppointment(appointment);
             //verifying that the appointment is added to the appointment list
-            Log.e("addAppointmentToTheList", String.valueOf(AppointmentManager.GetInstance().GetAppointmentList().size()));
+            Log.e("addAppointmentToTheList", String.valueOf(AppointmentManager.GetInstance().apptList.size()));
             super.onBackPressed();
         }
         //editing of an exsisting appointment

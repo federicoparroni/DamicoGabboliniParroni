@@ -1,12 +1,10 @@
 package com.example.gabdampar.travlendar.Controller;
 
-import android.content.ClipData;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.TextClock;
 import android.widget.TextView;
 
 import com.example.gabdampar.travlendar.Model.Appointment;
@@ -31,10 +29,10 @@ public class AppointmentsListViewAdapter extends ArrayAdapter<Appointment> {
         if (convertView == null) {
             LayoutInflater layoutInflater;
             layoutInflater = LayoutInflater.from(getContext());
-            convertView = layoutInflater.inflate(R.layout.appointment_list_row, null);
+            convertView = layoutInflater.inflate(R.layout.row_appointment_list, null);
         }
 
-        Appointment appointment = AppointmentManager.GetInstance().GetAppointmentList().get(position);
+        Appointment appointment = AppointmentManager.GetInstance().apptList.get(position);
 
         TextView appointmentNameField = convertView.findViewById(R.id.appointmentNameField);
         TextView dateField = convertView.findViewById(R.id.dateField);

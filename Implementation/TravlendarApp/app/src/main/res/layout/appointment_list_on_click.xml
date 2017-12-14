@@ -2,7 +2,8 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <RelativeLayout
         android:layout_width="290dp"
@@ -100,5 +101,16 @@
             android:layout_below="@+id/textView10"
             android:text="TextView"
             android:textColor="@android:color/black" />
+
+        <fragment
+            android:id="@+id/appointment_map_on_click"
+            android:name="com.google.android.gms.maps.MapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="333dp"
+            android:layout_alignEnd="@+id/onClickListViewLocation"
+            android:layout_alignStart="@+id/onClickListViewLocation"
+            android:layout_below="@+id/onClickListViewLocation"
+            tools:context="com.greenfeetsurvival.greenfeetaviator.MapsActivity"></fragment>
+
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
