@@ -3,8 +3,10 @@ package com.example.gabdampar.travlendar.Controller.ViewController;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -64,6 +66,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        /**
+         * the first time the user settings will be initialized to the default values
+         * take care to initialize with the same default values of the database
+         */
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
         Synchronizer.GetInstance().Synchronize();
 
