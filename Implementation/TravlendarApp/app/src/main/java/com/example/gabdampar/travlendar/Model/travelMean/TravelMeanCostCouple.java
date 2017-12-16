@@ -1,31 +1,33 @@
 package com.example.gabdampar.travlendar.Model.travelMean;
 
-import com.example.gabdampar.travlendar.Model.Weather;
-
-import java.util.Comparator;
+import android.support.annotation.NonNull;
 
 /**
  * Created by federico on 14/12/17.
  */
 
-public class TravelMeanCostCouple implements Comparator {
+public class TravelMeanCostCouple implements Comparable<TravelMeanCostCouple> {
 
 
-    private TravelMeanEnum mean;
+    private TravelMean mean;
     private float cost;
 
-    public TravelMeanCostCouple(TravelMeanEnum mean, float cost) {
+    public TravelMeanCostCouple(TravelMean mean, float cost) {
         this.mean = mean;
         this.cost = cost;
     }
 
-
     @Override
-    public int compare(Object o, Object t1) {
-        TravelMeanCostCouple o1 = (TravelMeanCostCouple) o;
-        TravelMeanCostCouple o2 = (TravelMeanCostCouple) t1;
-        return Float.compare(o1.cost, o2.cost);
+    public int compareTo(@NonNull TravelMeanCostCouple travelMeanCostCouple) {
+        return Float.compare(cost, travelMeanCostCouple.cost);
     }
 
+    public TravelMean getTravelMean() {
+        return mean;
+    }
+
+    public float getCost() {
+        return cost;
+    }
 
 }
