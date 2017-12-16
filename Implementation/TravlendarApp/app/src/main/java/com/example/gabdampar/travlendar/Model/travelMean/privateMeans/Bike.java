@@ -31,17 +31,17 @@ public class Bike extends TravelMean {
 
 
     @Override
-    public float EstimateTime(Appointment from, Appointment to) {
-        return (float)Math.ceil(MapUtils.distance(from.coords, to.coords)/averageBikeSpeed * 1.2f);
+    public float EstimateTime(Appointment from, Appointment to, float distance) {
+        return distance / averageBikeSpeed * 1.2f;
     }
 
     @Override
-    public float EstimateCost(Appointment from, Appointment to) {
+    public float EstimateCost(Appointment from, Appointment to, float distance) {
         return 0;
     }
 
     @Override
-    public float EstimateCarbon(Appointment from, Appointment to) {
+    public float EstimateCarbon(Appointment from, Appointment to, float distance) {
         return 0;
     }
 

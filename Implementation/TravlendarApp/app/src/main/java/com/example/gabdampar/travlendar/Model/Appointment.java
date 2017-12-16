@@ -119,11 +119,11 @@ public class Appointment {
         this.coords = coords;
     }
 
-    public ArrayList<ConstraintOnAppointment> getConstraint(){
+    public ArrayList<ConstraintOnAppointment> getConstraints(){
         return constraints;
     }
 
-    public void setConstraint(ArrayList<ConstraintOnAppointment> constraints){
+    public void setConstraints(ArrayList<ConstraintOnAppointment> constraints){
         this.constraints = constraints;
     }
 

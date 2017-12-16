@@ -18,5 +18,6 @@ public enum TravelMeanEnum {
     TRAIN,
     BIKE_SHARING,
     CAR_SHARING,
-    TAXI
+    TAXI,
+    UNKNOWN
 }

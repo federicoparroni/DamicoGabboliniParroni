@@ -31,18 +31,18 @@ public class Metro extends TravelMean {
     }
 
     @Override
-    public float EstimateTime(Appointment from, Appointment to) {
-        return MapUtils.distance(from.coords, to.coords) / AVG_SPEED * 1.2f + AVG_TIME_TO_STOP ;
+    public float EstimateTime(Appointment from, Appointment to, float distance) {
+        return distance / AVG_SPEED * 1.2f + AVG_TIME_TO_STOP ;
     }
 
     @Override
-    public float EstimateCost(Appointment from, Appointment to) {
+    public float EstimateCost(Appointment from, Appointment to, float distance) {
         return TICKET_COST;
     }
 
     @Override
-    public float EstimateCarbon(Appointment from, Appointment to) {
-        return MapUtils.distance(from.coords, to.coords) * AVG_CARBON_EMISSION_PER_KM ;
+    public float EstimateCarbon(Appointment from, Appointment to, float distance) {
+        return distance * AVG_CARBON_EMISSION_PER_KM ;
     }
 
 
