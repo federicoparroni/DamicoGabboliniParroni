@@ -15,10 +15,10 @@ Provides methods to evaluate travelling costs from appt 1 to appt 2
  */
 public interface IMeanEvaluable {
 
-    float EstimateTime(Appointment from, Appointment to);
+    float EstimateTime(Appointment from, Appointment to, float distance);
 
-    float EstimateCost(Appointment from, Appointment to);
+    float EstimateCost(Appointment from, Appointment to, float distance);
 
-    float EstimateCarbon(Appointment from, Appointment to);
+    float EstimateCarbon(Appointment from, Appointment to, float distance);
 
 }

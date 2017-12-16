@@ -8,15 +8,8 @@
     tools:context=".Controller.ViewController.ScheduleCreationActivity">
 
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
-        app:layout_anchorGravity="right|bottom"
-        app:srcCompat="@android:drawable/ic_media_play" />
-
     <ScrollView
+        android:id="@+id/schedule_creation_inner_scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="8dp"
@@ -38,22 +31,41 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Schedule date"
-                android:textColor="@color/colorPrimary" />
-
+                android:text="Schedule date:"
+                android:textColor="@color/colorPrimary"
+                android:textSize="16dp" />
             <CalendarView
                 android:id="@+id/calendarView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
 
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="15dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Wake up time:"
+                android:textSize="16dp"
+                android:textColor="@color/colorPrimary" />
+            <TimePicker
+                android:id="@+id/wakeUpTimePicker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="15dp" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Starting location"
+                android:textSize="16dp"
                 android:textColor="@color/colorPrimary" />
             <fragment
-                android:id="@+id/appointment_map"
+                android:id="@+id/starting_location_map"
                 android:name="com.google.android.gms.maps.SupportMapFragment"
                 android:layout_width="match_parent"
                 android:layout_height="333dp"
@@ -75,7 +87,109 @@
                 </android.support.v7.widget.CardView>
             </fragment>
 
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="15dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Optimize for:"
+                android:textSize="16dp"
+                android:textColor="@color/colorPrimary" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <info.hoang8f.android.segmented.SegmentedGroup xmlns:segmentedgroup="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/segmentedGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    segmentedgroup:sc_border_width="2dp"
+                    segmentedgroup:sc_corner_radius="10dp">
+
+                    <RadioButton
+                        android:id="@+id/optCriteria1"
+                        style="@style/RadioButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Time" />
+
+                    <RadioButton
+                        android:id="@+id/optCriteria2"
+                        style="@style/RadioButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Cost" />
+
+                    <RadioButton
+                        android:id="@+id/optCriteria3"
+                        style="@style/RadioButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Carbon" />
+                </info.hoang8f.android.segmented.SegmentedGroup>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="15dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Constraints:"
+                    android:textSize="16dp"
+                    android:textColor="@color/colorPrimary" />
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="38dp"
+                    android:layout_marginRight="5dp"
+                    android:onClick="OnAddConstraintClick"
+                    android:text="Add new constraint"
+                    android:textSize="14dp" />
+            </LinearLayout>
+
+            <ListView
+                android:id="@+id/constraintsListView"
+                android:layout_width="match_parent"
+                android:layout_height="120dp" />
+
+
         </LinearLayout>
     </ScrollView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        app:layout_anchor="@id/schedule_creation_inner_scrollview"
+        app:layout_anchorGravity="bottom|right|end"
+        app:srcCompat="@android:drawable/ic_media_play" />
 
 </android.support.design.widget.CoordinatorLayout>

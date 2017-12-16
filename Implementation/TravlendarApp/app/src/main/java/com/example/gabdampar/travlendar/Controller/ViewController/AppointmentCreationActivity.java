@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -30,12 +28,10 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.here.android.mpa.common.GeoCoordinate;
 
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 
@@ -203,12 +199,13 @@ public class AppointmentCreationActivity extends AppCompatActivity implements On
                 appointment = new Appointment(name, date,null, timeSlot, duration, coords,location,involvedPeople,isRecurrent);
             }
 
-            //add the constraint to the appointment
-            appointment.setConstraint(constraints);
+            AppointmentManager.GetInstance().apptList.add(appointment);
 
-            AppointmentManager.GetInstance().AddAppointment(appointment);
+            //add the constraint to the appointment
+            appointment.setConstraints(constraints);
+
             //verifying that the appointment is added to the appointment list
-            Log.e("addAppointmentToTheList", String.valueOf(AppointmentManager.GetInstance().GetAppointmentList().size()));
+            Log.e("addAppointmentToTheList", String.valueOf(AppointmentManager.GetInstance().apptList.size()));
             super.onBackPressed();
         }
         //editing of an exsisting appointment
@@ -231,7 +228,7 @@ public class AppointmentCreationActivity extends AppCompatActivity implements On
 
             //if the constraints has been changed update that ones
             if(constraints != null){
-                appointment.setConstraint(constraints);
+                appointment.setConstraints(constraints);
             }
         }
         super.onBackPressed();

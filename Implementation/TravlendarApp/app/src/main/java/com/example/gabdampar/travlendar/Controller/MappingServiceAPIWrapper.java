@@ -1,10 +1,7 @@
 package com.example.gabdampar.travlendar.Controller;
-
-import android.graphics.Color;
 import android.util.Log;
 import com.example.gabdampar.travlendar.Model.TimeSlot;
 import com.example.gabdampar.travlendar.Model.TravelOptionData;
-import com.example.gabdampar.travlendar.Model.travelMean.TravelMean;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -19,15 +16,10 @@ import com.google.maps.model.DirectionsStep;
 import com.google.maps.model.TransitMode;
 import com.google.maps.model.TravelMode;
 import com.google.maps.model.VehicleType;
-
-
 import org.joda.time.DateTime;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import static com.google.maps.model.TravelMode.BICYCLING;
 
 /**
  * Created by gabbo on 30/11/2017.

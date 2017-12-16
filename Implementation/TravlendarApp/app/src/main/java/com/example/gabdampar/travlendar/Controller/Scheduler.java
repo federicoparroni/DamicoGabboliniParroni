@@ -5,37 +5,48 @@
 package com.example.gabdampar.travlendar.Controller;
 
 import com.example.gabdampar.travlendar.Model.Appointment;
+import com.example.gabdampar.travlendar.Model.AppointmentCouple;
+import com.example.gabdampar.travlendar.Model.ConstraintOnAppointment;
 import com.example.gabdampar.travlendar.Model.ConstraintOnSchedule;
-import com.example.gabdampar.travlendar.Model.DateManager;
 import com.example.gabdampar.travlendar.Model.OptCriteria;
 import com.example.gabdampar.travlendar.Model.Schedule;
 import com.example.gabdampar.travlendar.Model.ScheduledAppointment;
-import com.example.gabdampar.travlendar.Model.TravelOptionData;
+import com.example.gabdampar.travlendar.Model.TimeWeatherList;
+import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanCostCouple;
+import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum;
+import com.example.gabdampar.travlendar.Model.travelMean.TravelMeansState;
 import com.example.gabdampar.travlendar.Model.travelMean.privateMeans.Bike;
 import com.example.gabdampar.travlendar.Model.travelMean.publicMeans.Bus;
-import com.example.gabdampar.travlendar.Model.travelMean.privateMeans.Car;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMean;
 import com.google.android.gms.maps.model.LatLng;
-import com.here.android.mpa.common.GeoCoordinate;
 
 import org.joda.time.LocalTime;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.PriorityQueue;
 
-public class Scheduler{
+public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWrapperCallBack {
 
-    private LocalTime wakeupTime;
-    private LatLng startingLocation;
-    private ArrayList<Appointment> appts;
-    private ArrayList<ConstraintOnSchedule> constraints;
-    private OptCriteria criteria;
+    public LocalTime wakeupTime;
+    public LatLng startingLocation;
+    public ArrayList<Appointment> appts = new ArrayList<>();
+    public ArrayList<ConstraintOnSchedule> constraints = new ArrayList<>();
+    public OptCriteria criteria;
+
+    private TimeWeatherList weatherConditions;
 
     byte[][] pred;
-    double[][] dist;
+    HashMap<AppointmentCouple, Float> distances = new HashMap<>();
     private ArrayList<Schedule> schedules = new ArrayList<Schedule>();
 
     ArrayList<Schedule> possibleSchedules = new ArrayList<Schedule>();
+
+    public Scheduler() {
+
+    }
 
     public Scheduler(LocalTime wakeupTime, LatLng location, ArrayList<Appointment> appts, ArrayList<ConstraintOnSchedule> constraints, OptCriteria c) {
         this.wakeupTime = wakeupTime;
@@ -45,9 +56,17 @@ public class Scheduler{
         this.criteria = c;
     }
 
+    /** check if all parameters have been set */
+    public boolean isConsistent() {
+        return wakeupTime != null && startingLocation != null && criteria != null && appts.size() > 0;
+    }
+
 
     public Schedule ComputeSchedule() {
         if(this.appts.size() > 0) {
+
+            /** call API to optimize time during arragements computation */
+            WeatherForecastAPIWrapper.getInstance().getWeather(this, appts.get(0).date, appts.get(0).coords);
 
             // 1-2
             CalculatePredecessorsAndDistanceMatrix(appts);
@@ -69,7 +88,6 @@ public class Scheduler{
 
     void CalculatePredecessorsAndDistanceMatrix(ArrayList<Appointment> apps) {
         pred = new byte[apps.size()][apps.size()];
-        dist = new double[apps.size()][apps.size()];
 
         for(int i=0; i < apps.size()-1; i++) {
             for(int j=i+1; j < apps.size(); j++) {
@@ -97,8 +115,7 @@ public class Scheduler{
                 }
 
                 // distance
-                //dist[i][j] = a1.coords.distanceTo(a2.coords);
-
+                distances.put(new AppointmentCouple(a1,a2), MapUtils.distance(a1.coords, a2.coords));
             }
         }
     }
@@ -170,14 +187,16 @@ public class Scheduler{
     Schedule GetSchedule(ArrayList<Appointment> arrangement) {
         ArrayList<ScheduledAppointment> scheduledAppts = new ArrayList<ScheduledAppointment>();
 
+        TravelMeansState state = new TravelMeansState(constraints);
+
         // create wakeup dummy appointment
         Appointment wakeUpAppt = new Appointment("WakeUp", appts.get(0).date, wakeupTime, 0, startingLocation);
         scheduledAppts.add(new ScheduledAppointment(wakeUpAppt, wakeupTime, wakeupTime, null));
 
         Appointment firstAppt = arrangement.get(0);
         if(firstAppt.isDeterministic()) {
-            TravelMean mean = GetBestTravelMean(wakeUpAppt, firstAppt);
-            int travelTime1 = (int)mean.EstimateTime(wakeUpAppt, firstAppt);
+            TravelMean mean = GetBestTravelMean(wakeUpAppt, firstAppt, state);
+            int travelTime1 = (int)mean.EstimateTime(wakeUpAppt, firstAppt, distances.get(new AppointmentCouple(wakeUpAppt, firstAppt)));
             LocalTime startingTime1 = firstAppt.startingTime.minusSeconds(travelTime1);
             scheduledAppts.add(new ScheduledAppointment(firstAppt, startingTime1, firstAppt.startingTime, mean));
 
@@ -185,8 +204,8 @@ public class Scheduler{
             if(startingTime1.isBefore(wakeupTime)) return null;
 
         } else {		// first appt is not deterministic
-            TravelMean mean = GetBestTravelMean(wakeUpAppt, firstAppt);
-            int travelTime1 = (int)mean.EstimateTime(wakeUpAppt, firstAppt);
+            TravelMean mean = GetBestTravelMean(wakeUpAppt, firstAppt, state);
+            int travelTime1 = (int)mean.EstimateTime(wakeUpAppt, firstAppt, distances.get(new AppointmentCouple(wakeUpAppt, firstAppt)));
 
             if(arrangement.size() == 1) {
                 LocalTime ETA1 = firstAppt.timeSlot.endingTime.minusSeconds(firstAppt.duration);
@@ -197,7 +216,7 @@ public class Scheduler{
                 if(startingTime1.isBefore(wakeupTime)) return null;
             } else {
                 Appointment secondAppt = arrangement.get(1);
-                int travelTime2 = (int)mean.EstimateTime(firstAppt, secondAppt);
+                int travelTime2 = (int)mean.EstimateTime(firstAppt, secondAppt, distances.get(new AppointmentCouple(firstAppt, secondAppt)));
 
                 LocalTime maxEndingTime1 = secondAppt.isDeterministic() ? secondAppt.startingTime.minusSeconds(travelTime2) :
                         secondAppt.timeSlot.startingTime.minusSeconds(travelTime2);
@@ -218,8 +237,8 @@ public class Scheduler{
             ScheduledAppointment appt1 = scheduledAppts.get(i);
             Appointment appt2 = arrangement.get(i);
 
-            TravelMean mean = GetBestTravelMean(appt1.originalAppointment, appt2);
-            int travelTime = (int)mean.EstimateTime(appt1.originalAppointment, appt2);
+            TravelMean mean = GetBestTravelMean(appt1.originalAppointment, appt2, state);
+            int travelTime = (int)mean.EstimateTime(appt1.originalAppointment, appt2, distances.get(new AppointmentCouple(appt1.originalAppointment, appt2)));
 
             if(appt2.isDeterministic()) {
                 // both deterministic, only creates scheduledAppointment with recalculated startingTime and ETA
@@ -245,14 +264,41 @@ public class Scheduler{
         return new Schedule(scheduledAppts);
     }
 
-    TravelMean GetBestTravelMean(Appointment a1, Appointment a2) {
-        switch (this.criteria) {
+    @Override
+    public void onWeatherResults(TimeWeatherList weatherConditionList) {
+        this.weatherConditions = weatherConditionList;
+    }
+
+    TravelMean GetBestTravelMean(Appointment a1, Appointment a2, TravelMeansState state) {
+        ArrayList<TravelMeanEnum> availableMeans = new ArrayList<>( Arrays.asList(TravelMeanEnum.values()) );
+
+        /** discard travel means that are not allowed by constraints on SCHEDULES */
+        for(ConstraintOnSchedule constraint : constraints) {
+            if(constraint.maxDistance == 0 &&
+                constraint.weather.contains(weatherConditions.getWeatherForTime(a1.endingTime()))
+                || (constraint.timeSlot.endingTime.isAfter(a1.endingTime()) && constraint.timeSlot.startingTime.isBefore(a2.startingTime))
+                )
+                availableMeans.remove(constraint.mean);
+        }
+        /** discard travel means that are not allowed by constraints on APPOINTMENTS */
+        for(ConstraintOnAppointment c : a2.getConstraints()) {
+            if(c.maxDistance == 0) availableMeans.remove(c.mean);
+        }
+
+        ArrayList<TravelMeanCostCouple> meansQueue = new ArrayList<>();
+
+        /** order remaining means */
+        switch (criteria) {
             case OPTIMIZE_TIME:
-                return Car.GetInstance();
+                for (TravelMeanEnum mean: availableMeans ) {
+                    /** get mean obj from respective enum value ... */
+                    TravelMean tm = TravelMean.getTravelMean(mean);
+                    meansQueue.add(new TravelMeanCostCouple(mean, tm.EstimateTime(a1, a2, distances.get(new AppointmentCouple(a1,a2)))));
+                }
             case OPTIMIZE_CARBON:
-                return Bike.GetInstance();
+
             case OPTIMIZE_COST:
-                return Bus.GetInstance();
+
             default:
                 return null;
 
@@ -306,5 +352,6 @@ public class Scheduler{
         System.out.println("---------------------------------");
         System.out.println("");
     }
+
 
 }

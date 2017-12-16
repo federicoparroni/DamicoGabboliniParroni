@@ -31,18 +31,18 @@ public class Car extends TravelMean {
     }
 
     @Override
-    public float EstimateTime(Appointment from, Appointment to) {
-        return (float)(MapUtils.distance(from.coords, to.coords)/AVG_SPEED * 1.2f );
+    public float EstimateTime(Appointment from, Appointment to, float distance) {
+        return distance/AVG_SPEED * 1.2f;
     }
 
     @Override
-    public float EstimateCost(Appointment from, Appointment to) {
-        return (float)( MapUtils.distance(from.coords, to.coords) * GAS_CONSUMPTION * GAS_COST );
+    public float EstimateCost(Appointment from, Appointment to, float distance) {
+        return distance * GAS_CONSUMPTION * GAS_COST;
     }
 
     @Override
-    public float EstimateCarbon(Appointment from, Appointment to) {
-        return (float)( MapUtils.distance(from.coords, to.coords) * AVG_CARBON_EMISSION_PER_KM );
+    public float EstimateCarbon(Appointment from, Appointment to, float distance) {
+        return distance * AVG_CARBON_EMISSION_PER_KM;
     }
 
 }

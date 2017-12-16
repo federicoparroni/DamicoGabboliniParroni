@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
+
 import android.widget.TextView;
 
 import com.example.gabdampar.travlendar.Controller.ViewController.Fragment.AppointmentsListFragment;
@@ -60,7 +61,7 @@ public class AppointmentsListViewAdapter extends ArrayAdapter<Appointment> imple
 
             FilterResults results = new FilterResults();
 
-            final ArrayList<Appointment> list = AppointmentManager.GetInstance().GetAppointmentList();
+            final ArrayList<Appointment> list = AppointmentManager.GetInstance().getAppointmentList();
 
             int count = list.size();
             final ArrayList<Appointment> filteredList = new ArrayList<Appointment>(count);
@@ -95,8 +96,9 @@ public class AppointmentsListViewAdapter extends ArrayAdapter<Appointment> imple
         if (convertView == null) {
             LayoutInflater layoutInflater;
             layoutInflater = LayoutInflater.from(getContext());
-            convertView = layoutInflater.inflate(R.layout.appointment_list_row, null);
+            convertView = layoutInflater.inflate(R.layout.row_appointment_list, null);
         }
+
 
         Appointment appointment = filteredData.get(position);
 
@@ -124,3 +126,4 @@ public class AppointmentsListViewAdapter extends ArrayAdapter<Appointment> imple
 
     }
 }
+

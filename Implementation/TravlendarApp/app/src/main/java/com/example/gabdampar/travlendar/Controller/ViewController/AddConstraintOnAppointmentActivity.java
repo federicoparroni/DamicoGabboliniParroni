@@ -9,7 +9,6 @@ import android.widget.CheckBox;
 import com.example.gabdampar.travlendar.Controller.AppointmentManager;
 import com.example.gabdampar.travlendar.Model.Appointment;
 import com.example.gabdampar.travlendar.Model.ConstraintOnAppointment;
-import com.example.gabdampar.travlendar.Model.travelMean.TravelMean;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum;
 import com.example.gabdampar.travlendar.R;
 
@@ -57,7 +56,7 @@ public class AddConstraintOnAppointmentActivity extends AppCompatActivity {
         //check if it is an editing
         if(position >= 0) {
             appointment = AppointmentManager.GetInstance().GetAppointment(position);
-            ArrayList<ConstraintOnAppointment> constraintOnAppointments = appointment.getConstraint();
+            ArrayList<ConstraintOnAppointment> constraintOnAppointments = appointment.getConstraints();
 
             //scan the arraylist and set the check on the checkbox
             for (ConstraintOnAppointment c: constraintOnAppointments){
