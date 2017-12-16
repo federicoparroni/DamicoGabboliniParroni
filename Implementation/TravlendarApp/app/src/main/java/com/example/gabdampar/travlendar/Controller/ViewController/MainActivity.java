@@ -30,6 +30,8 @@ import com.example.gabdampar.travlendar.Controller.ViewController.Fragment.UserP
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum;
 import com.example.gabdampar.travlendar.R;
 
+import org.joda.time.LocalTime;
+
 import java.util.ArrayList;
 
 
@@ -72,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
          * take care to initialize with the same default values of the database
          */
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+        //SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 
         Synchronizer.GetInstance().Synchronize();
 

@@ -53,7 +53,7 @@ public class MappingServiceAPIWrapper {
              */
 
             GeoApiContext.Builder b=new GeoApiContext.Builder();
-            //b.apiKey("AIzaSyAs4xaJnBh5JEsVm1MmQjg6CpUdwwL_Txk");
+            b.apiKey("AIzaSyAs4xaJnBh5JEsVm1MmQjg6CpUdwwL_Txk");
 
             DirectionsApiRequest d=DirectionsApi.getDirections(
                 b.build(),
@@ -140,20 +140,26 @@ public class MappingServiceAPIWrapper {
         else if(toConvert==VehicleType.TRAM)
             return TravelMeanEnum.TRAM;
         else
-            return TravelMeanEnum.UNKNOWN;
+            return null;
     }
 
     private TransitMode getGoogleVehicleTypeFromTravelMeanEnum(TravelMeanEnum toConvert){
-        if(toConvert == TravelMeanEnum.BUS)
-            return TransitMode.BUS;
-        else if(toConvert == TravelMeanEnum.METRO)
-            return TransitMode.SUBWAY;
-        else if(toConvert == TravelMeanEnum.TRAIN)
-            return TransitMode.TRAIN;
-        else if (toConvert == TravelMeanEnum.TRAM)
-            return TransitMode.TRAM;
-        else
-            return null;
+        TransitMode r = null;
+        switch (toConvert) {
+            case BUS:
+                r = TransitMode.BUS;
+                break;
+            case METRO:
+                r= TransitMode.SUBWAY;
+                break;
+            case TRAIN:
+                r= TransitMode.TRAIN;
+                break;
+            case TRAM:
+                r= TransitMode.TRAM;
+                break;
+        }
+        return r;
     }
 
     private String getTextualDirectionsGivenRouteAndUpdateMap(DirectionsRoute r){

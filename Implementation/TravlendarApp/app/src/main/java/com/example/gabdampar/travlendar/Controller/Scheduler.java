@@ -312,6 +312,7 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
     }
 
 
+
     /**
     **  +++++ AUXILIARY FUNCTIONS +++++
     **

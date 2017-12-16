@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -33,7 +34,11 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 
+import org.joda.time.LocalDate;
+
 import java.util.ArrayList;
+
+import static java.lang.Boolean.TRUE;
 
 
 public class AppointmentsListFragment extends Fragment implements OnMapReadyCallback {
@@ -43,7 +48,7 @@ public class AppointmentsListFragment extends Fragment implements OnMapReadyCall
     ArrayList<Appointment> appointmentsList;
 
     // the adapter that will manage the appointmentListView
-    ArrayAdapter<Appointment> arrayAdapter;
+    AppointmentsListViewAdapter arrayAdapter;
 
     //used for the map on the onClick of an appointment
     MapFragment appointment_map;
@@ -51,6 +56,9 @@ public class AppointmentsListFragment extends Fragment implements OnMapReadyCall
 
     //clicked appointment position
     int pos;
+
+    //the date of the appointment that has to be shown, if it is null all appointment are shown
+    public static LocalDate appointmentsDate;
 
     public AppointmentsListFragment() {
         setHasOptionsMenu(true);
@@ -60,6 +68,8 @@ public class AppointmentsListFragment extends Fragment implements OnMapReadyCall
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+        appointmentsDate = null;
 
         //TODO: AGGIUSTARE COORDS (METODO PER FINTO SYNCHRONIZER)
         Synchronizer.GetInstance().Synchronize();
@@ -71,7 +81,8 @@ public class AppointmentsListFragment extends Fragment implements OnMapReadyCall
         View fragmentView = inflater.inflate(R.layout.fragment_appointments_list, container, false);
 
         appointmentListView = fragmentView.findViewById(R.id.appointmentListView);
-        appointmentsList = AppointmentManager.GetInstance().apptList;
+
+        appointmentsList = AppointmentManager.GetInstance().getAppointmentList();
 
         //adapter of the listView
         arrayAdapter = new AppointmentsListViewAdapter(getActivity(), R.layout.row_appointment_list, appointmentsList);
@@ -93,7 +104,8 @@ public class AppointmentsListFragment extends Fragment implements OnMapReadyCall
                             public void onClick(DialogInterface dialog, int id) {
                                 AppointmentManager.GetInstance().apptList.remove(pos);
                                 //the adapter must redraw the list
-                                appointmentListView.setAdapter(arrayAdapter);
+                                arrayAdapter.removeFromFilteredData(pos);
+                                arrayAdapter.notifyDataSetChanged();
                                 dialog.cancel();
                             }
                         })
@@ -200,6 +212,45 @@ public class AppointmentsListFragment extends Fragment implements OnMapReadyCall
                 // User chose to add a new appointment
                 Intent createAppointment = new Intent(getActivity(), AppointmentCreationActivity.class);
                 startActivity(createAppointment);
+                return TRUE;
+
+            case R.id.sortByDateButton:
+                //button used to sort the appointments chosen a date
+                final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+                // Inflate and set the layout for the dialog, parent is null because its going in the dialog layout
+                LayoutInflater inflater = LayoutInflater.from(builder.getContext());
+                View inflatedView = inflater.inflate(R.layout.appointment_list_date_sorter, null);
+
+                final DatePicker appointmentsSorterDatePicker = inflatedView.findViewById(R.id.datePickerSorter);
+
+                builder.setTitle("Select Date")
+                        .setView(inflatedView)
+                        // Set up the view
+                        .setPositiveButton("SELECT",new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                                appointmentsDate =  new LocalDate(new LocalDate(appointmentsSorterDatePicker.getYear(),
+                                        appointmentsSorterDatePicker.getMonth()+1,appointmentsSorterDatePicker.getDayOfMonth()));
+                                arrayAdapter.getFilter().filter("");
+                                dialog.cancel();
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+                //Fields of the inflated view
+
+
+
+                //for show the alert
+                AlertDialog alert = builder.create();
+                alert.show();
+                return TRUE;
 
             default:
                 // If we got here, the user's action was not recognized.
@@ -210,9 +261,10 @@ public class AppointmentsListFragment extends Fragment implements OnMapReadyCall
 
     //needed for the refresh of the appointments list
     @Override public void onResume() {
-        super.onResume();
         //during the resume of the view the adapter of the appointmentList is set
-        appointmentListView.setAdapter(arrayAdapter);
+        arrayAdapter.notifyDataSetChanged();
+
+        super.onResume();
     }
 
     @Override
