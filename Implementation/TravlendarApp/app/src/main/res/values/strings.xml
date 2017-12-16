@@ -7,8 +7,12 @@
     <string name="has_bike">Bike ownage</string>
     <string name="has_bike_summary">Do you own a car?</string>
     <string name="has_car">Car ownage</string>
-    <string name="has_car_summary">Do you own a car?</string>
+    <string name="has_car_summary">Do you own a bike?</string>
+    <string name="wake_up_time">Wake up time</string>
+    <string name="wake_up_time_summary">At what time can the schedules start?</string>
     <string name="user_settings">Settings</string>
+    <string name="starting_location">Starting Location</string>
+    <string name="starting_location_summary">From where should your schedules start?</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
