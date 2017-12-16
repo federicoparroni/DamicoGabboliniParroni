@@ -6,11 +6,12 @@ import android.support.annotation.NonNull;
  * Created by federico on 14/12/17.
  */
 
-public class TravelMeanCostCouple implements Comparable<TravelMeanCostCouple> {
+public class
+TravelMeanCostCouple implements Comparable<TravelMeanCostCouple> {
 
 
-    private TravelMean mean;
-    private float cost;
+    public TravelMean mean;
+    public float cost;
 
     public TravelMeanCostCouple(TravelMean mean, float cost) {
         this.mean = mean;
