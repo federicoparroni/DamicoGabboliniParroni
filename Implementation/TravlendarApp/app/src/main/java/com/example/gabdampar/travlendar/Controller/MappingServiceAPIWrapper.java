@@ -21,11 +21,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import noman.googleplaces.NRPlaces;
+import noman.googleplaces.Place;
+import noman.googleplaces.PlaceType;
+import noman.googleplaces.PlacesException;
+import noman.googleplaces.PlacesListener;
+
 /**
  * Created by gabbo on 30/11/2017.
  */
 
-public class MappingServiceAPIWrapper {
+public class MappingServiceAPIWrapper{
 
     private static MappingServiceAPIWrapper ourInstance;
     private HashMap<TravelMeanEnum,Double> map;
@@ -38,19 +44,69 @@ public class MappingServiceAPIWrapper {
 
     private MappingServiceAPIWrapper() {}
 
+    public void getStopDistance(final StopServiceCallbackListener listener, TravelMeanEnum mean, final LatLng position, int radius){
+        String type=null;
+        switch (mean){
+            case BUS:
+                type=PlaceType.BUS_STATION;
+                break;
+            case TRAM:
+                type=PlaceType.LIGHT_RAIL_STATION;
+                break;
+            case METRO:
+                type=PlaceType.SUBWAY_STATION;
+                break;
+            case TRAIN:
+                type=PlaceType.TRAIN_STATION;
+                break;
+        }
+        if (type!=null)
+            new NRPlaces.Builder()
+                .listener(new PlacesListener() {
+                    @Override
+                    public void onPlacesFailure(PlacesException e) {
+                        listener.StopServiceCallback(-1);
+                    }
+                    @Override
+                    public void onPlacesSuccess(List<Place> places) {
+                        double r=-1;
+                        float maxDist = 0;
+                        float minDist = Float.MAX_VALUE;
+                        for(Place p : places){
+                            r=0;
+                            float actualDistance = MapUtils.distance(position,new LatLng(p.getLatitude(),p.getLongitude()));
+                            if (actualDistance < minDist)
+                                minDist=actualDistance;
+                            if (actualDistance > maxDist)
+                                maxDist=actualDistance;
+                        }
+                        r = (r==-1) ? -1 : minDist*0.3+maxDist*0.7;
+                        listener.StopServiceCallback(r);
+                    }
+                    @Override
+                    public void onPlacesStart() {
+
+                    }
+                    @Override
+                    public void onPlacesFinished() {
+
+                    }
+                })
+                .key("AIzaSyAs4xaJnBh5JEsVm1MmQjg6CpUdwwL_Txk")
+                .latlng(position.latitude, position.longitude)
+                .radius(radius)
+                .type(type)
+                .build()
+                .execute();
+        else
+            listener.StopServiceCallback(-1);
+    }
+
     public void getTravelOptionData(final MappingServiceCallbackListener listener, List<TravelMeanEnum> admittedMeans, String startingLocation, String endingLocaton, DateTime departureTime){
 
         ret.clear();
 
         for (TravelMeanEnum t:admittedMeans){
-
-            /**
-             * TODO: lets do it for all the categories admitted by google maps, in particular we
-             * can select among travel modes and in particular for the transit travel mode there's another
-             * particular description, so far we have done distinction just for buses.
-             * we should first perform the calls on the public travel means that we want (performing a unique call)
-             * then should be checked if also calls for bikes and cars should be performed
-             */
 
             GeoApiContext.Builder b=new GeoApiContext.Builder();
             b.apiKey("AIzaSyAs4xaJnBh5JEsVm1MmQjg6CpUdwwL_Txk");
@@ -268,6 +324,11 @@ public class MappingServiceAPIWrapper {
 
     }
 
+    public interface StopServiceCallbackListener {
+
+        void StopServiceCallback(double distance);
+
+    }
 }
 
 //era la prova di here
@@ -300,4 +361,3 @@ public class MappingServiceAPIWrapper {
 
         }
     }*/
-

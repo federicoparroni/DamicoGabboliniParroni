@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.gabdampar.travlendar.Controller.IdentityManager;
+import com.example.gabdampar.travlendar.Controller.MappingServiceAPIWrapper;
 import com.example.gabdampar.travlendar.Controller.Synchronizer;
 import com.example.gabdampar.travlendar.Controller.User;
 import com.example.gabdampar.travlendar.Controller.ViewController.Fragment.AppointmentsListFragment;
@@ -29,13 +30,16 @@ import com.example.gabdampar.travlendar.Controller.ViewController.Fragment.Sched
 import com.example.gabdampar.travlendar.Controller.ViewController.Fragment.UserProfileFragment;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum;
 import com.example.gabdampar.travlendar.R;
+import com.google.android.gms.maps.model.LatLng;
 
-import org.joda.time.LocalTime;
+import java.util.List;
 
-import java.util.ArrayList;
+import noman.googleplaces.NRPlaces;
+import noman.googleplaces.Place;
+import noman.googleplaces.PlacesException;
+import noman.googleplaces.PlacesListener;
 
-
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
     private NavigationView navigationView;
     private DrawerLayout drawer;
@@ -372,6 +376,4 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
-
 }
