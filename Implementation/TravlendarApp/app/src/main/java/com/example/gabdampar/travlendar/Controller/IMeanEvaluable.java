@@ -2,6 +2,8 @@
 package com.example.gabdampar.travlendar.Controller;
 
 import com.example.gabdampar.travlendar.Model.Appointment;
+import com.example.gabdampar.travlendar.Model.TemporaryAppointment;
+import com.google.maps.model.LatLng;
 
 import org.joda.time.Duration;
 
@@ -17,10 +19,12 @@ Provides methods to evaluate travelling costs from appt 1 to appt 2
  */
 public interface IMeanEvaluable {
 
-    float EstimateTime(Appointment from, Appointment to, float distance);
+    float EstimateTime(TemporaryAppointment from, TemporaryAppointment to, float distance);
 
-    float EstimateCost(Appointment from, Appointment to, float distance);
+    float EstimateTime(com.google.android.gms.maps.model.LatLng from, com.google.android.gms.maps.model.LatLng to);
 
-    float EstimateCarbon(Appointment from, Appointment to, float distance);
+    float EstimateCost(TemporaryAppointment from, TemporaryAppointment to, float distance);
+
+    float EstimateCarbon(TemporaryAppointment from, TemporaryAppointment to, float distance);
 
 }
