@@ -284,7 +284,7 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
 
             }
         }
-        while (hasConflicts /*|| addConstraintToUnfeasibleSchedule */|| currentCost >= cost);
+        while (hasConflicts || addConstraintToUnfeasibleSchedule() || currentCost >= cost);
 
         return new Schedule(tempAppts);
     }

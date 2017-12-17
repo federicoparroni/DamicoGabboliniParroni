@@ -15,6 +15,15 @@ import com.example.gabdampar.travlendar.Model.travelMean.publicMeans.Tram;
 
 import java.util.ArrayList;
 
+import static com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum.BIKE_SHARING;
+import static com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum.BUS;
+import static com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum.CAR_SHARING;
+import static com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum.METRO;
+import static com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum.TAXI;
+import static com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum.TRAIN;
+import static com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum.TRAM;
+import static com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum.WALK;
+
 public abstract class TravelMean implements IMeanEvaluable {
 
     protected static TravelMean instance;
@@ -47,6 +56,21 @@ public abstract class TravelMean implements IMeanEvaluable {
                 return Metro.GetInstance();
         }
         return null;
+    }
+
+        if(getTravelMean(actualMeanE) instanceof PublicTravelMean){
+            if (getTravelMean(futureMeanE) instanceof PublicTravelMean){
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            if (getTravelMean(futureMeanE) instanceof PublicTravelMean){
+                return true;
+            }else{
+                return actualMeanE == futureMeanE;
+            }
+        }
     }
 
 }
