@@ -198,7 +198,7 @@ public class AppointmentCreationActivity extends AppCompatActivity implements On
             } else {
                 appointment = new Appointment(name, date,null, timeSlot, duration, coords,location,involvedPeople,isRecurrent);
             }
-
+            AppointmentManager.GetInstance().setAllStopsCloseToAppointment(appointment);
             AppointmentManager.GetInstance().apptList.add(appointment);
 
             //add the constraint to the appointment

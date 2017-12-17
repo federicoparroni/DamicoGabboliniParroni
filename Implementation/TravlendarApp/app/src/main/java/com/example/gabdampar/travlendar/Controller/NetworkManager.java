@@ -22,6 +22,9 @@ public class NetworkManager {
 
     // global application request queue
     private static RequestQueue requestQueue;
+    public static boolean weatherResponseReturned = false;
+    public static boolean transitStopsResponseReturned = false;
+
 
     // CONTEXT MUST BE SET AT FIRST
     public static void SetContext(Context c) {

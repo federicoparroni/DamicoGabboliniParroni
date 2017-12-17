@@ -5,6 +5,7 @@
 package com.example.gabdampar.travlendar.Model;
 
 import com.example.gabdampar.travlendar.Controller.ViewController.Fragment.AppointmentsListFragment;
+import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.joda.time.DateTime;
@@ -12,6 +13,7 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Appointment {
 
@@ -25,7 +27,7 @@ public class Appointment {
     public boolean isRecurrent = false;
     public String location;
     public ArrayList<ConstraintOnAppointment> constraints = new ArrayList<ConstraintOnAppointment>();
-
+    public HashMap<TravelMeanEnum,LatLng> distanceOfEachTransitStop = new HashMap<TravelMeanEnum,LatLng>();
 
     public Appointment(String n, LocalDate date, LocalTime startingTime, int duration, LatLng coord) {
         this.name = n;
