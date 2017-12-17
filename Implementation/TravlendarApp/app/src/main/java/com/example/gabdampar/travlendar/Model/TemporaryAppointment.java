@@ -23,8 +23,12 @@ public class TemporaryAppointment {
     public ArrayList<ConstraintOnAppointment> incrementalConstraints = new ArrayList<>();
 
     /** true if this appointment is overlapping with the next */
-    public boolean isConflicting = false;
+    public boolean isTimeConflicting;
 
+    /** true if this appointment is using a mean that violates the Km constraint */
+    public boolean isMeanConflicting;
+
+    /** true if this appointment is using a mean that violates the Km constraint */
 
     /**
      * Create list of TemporaryAppointment from an arrangement

@@ -9,8 +9,8 @@ import com.example.gabdampar.travlendar.Model.Weather;
 
 public class TravelMeanWeatherCouple {
 
-    private TravelMeanEnum mean;
-    private Weather weather;
+    public TravelMeanEnum mean;
+    public Weather weather;
 
     public TravelMeanWeatherCouple(TravelMeanEnum mean, Weather weather) {
         this.mean = mean;

@@ -12,9 +12,11 @@ import com.example.gabdampar.travlendar.Model.OptCriteria;
 import com.example.gabdampar.travlendar.Model.Schedule;
 import com.example.gabdampar.travlendar.Model.TemporaryAppointment;
 import com.example.gabdampar.travlendar.Model.TimeWeatherList;
+import com.example.gabdampar.travlendar.Model.Weather;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMean;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanCostTimeInfo;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum;
+import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanWeatherCouple;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMeansState;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -24,6 +26,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+
+import static com.example.gabdampar.travlendar.Model.travelMean.TravelMean.getTravelMean;
 
 public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWrapperCallBack {
 
@@ -286,7 +290,7 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
     }
 
     void SetFlagForTimeConflict(ArrayList<TemporaryAppointment> temporaryAppts, int index) {
-        temporaryAppts.get(index).isConflicting = true;
+        temporaryAppts.get(index).isTimeConflicting = true;
     }
 
     ArrayList<TravelMeanCostTimeInfo> GetUsableTravelMeansOrderedByCost(TemporaryAppointment a1, TemporaryAppointment a2, TravelMeansState state) {
@@ -360,6 +364,66 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
         }
 
         return res;
+    }
+
+
+
+
+
+    public boolean addConstraintToUnfeasibleSchedule (ArrayList<TemporaryAppointment> arrangment, TravelMeansState state){
+
+        ArrayList<TemporaryAppointment> subArrangmentTimeFlaged = null;
+        ArrayList<TemporaryAppointment> subArrangmentMeanFlaged = null;
+
+
+        boolean arrangmentIsTimeConflicting = false;
+        boolean arrangmentIsMeanConflicting = false;
+        boolean inherentlyUnfeasible = true;
+
+        /**
+         * Check if an appointment has a TimeConflict Flag UP
+         */
+        for (TemporaryAppointment appt: arrangment) {
+            if (appt.isTimeConflicting == true){
+                subArrangmentTimeFlaged.add(appt);
+                arrangmentIsTimeConflicting = true;
+            }
+        }
+
+        /**
+         * If at least one appointment has a TimeConflict Flag UP
+         */
+        if(arrangmentIsTimeConflicting){
+            //TODO===================
+        /**
+         * If there aren't appointment with TimeConflict we must check for Mean conflicts
+         */
+        }else{
+            TravelMeanEnum conflictingMean = null;
+            Weather appointmentWeather = null;
+            for (TravelMeanWeatherCouple a: state.meansState.keySet()) {
+                if (state.meansState.get(a) <= 0) {
+                    arrangmentIsMeanConflicting = true;
+                    conflictingMean = a.mean;
+                    appointmentWeather = a.weather;
+                    break;
+                }
+            }
+            /**
+             * If at least one appointment has a MeanConflict Flag UP
+             */
+            if(conflictingMean != null){
+                for (TemporaryAppointment appt: arrangment) {
+                    if (appt.means.get(0).mean == getTravelMean(conflictingMean) &&
+                            appt.appointmentWeather == appointmentWeather){
+                        subArrangmentMeanFlaged.add(appt);
+                        arrangmentIsMeanConflicting = true;
+                    }
+                }
+            //TODO====================
+            }
+        }
+        return inherentlyUnfeasible;
     }
 
 
