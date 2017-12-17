@@ -9,14 +9,17 @@ import java.util.ArrayList;
 
 public class Schedule {
 
-    private ArrayList<TemporaryAppointment> appts;
-    private ArrayList<ScheduledAppointment> scheduledAppts;
+    private ArrayList<ScheduledAppointment> scheduledAppts = new ArrayList<>();
 
-    public Schedule(ArrayList<TemporaryAppointment> apps) {
-        this.appts = apps;
+    private float cost;
 
-        // TODO: convert TemporaryAppointments into ScheduledAppointments
-        // TODO ...
+    public Schedule(ArrayList<TemporaryAppointment> apps, float cost) {
+        this.cost = cost;
+
+        // TODO: convert TemporaryAppointments into ScheduledAppointments.. works??
+        for(TemporaryAppointment a : apps) {
+            scheduledAppts.add(new ScheduledAppointment(a.originalAppt, a.startingTime, a.ETA, a.means.get(0).getTravelMean()));
+        }
     }
 
     public void PrintToConsole() {

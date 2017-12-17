@@ -44,6 +44,7 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
 
     /** contains the schedules computed until now */
     private ArrayList<Schedule> schedules = new ArrayList<>();
+    //float cost = Float.MAX_VALUE;
 
     //ArrayList<Schedule> possibleSchedules = new ArrayList<Schedule>();
 
@@ -66,6 +67,7 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
     public Schedule ComputeSchedule() {
         if(this.appts.size() > 0) {
 
+            //TODO DECIDERE SE SPOSTARE LA CHIAMATA ALLE API DEL METEO
             /** call API to optimize time during arragements computation */
             WeatherForecastAPIWrapper.getInstance().getWeather(this, appts.get(0).date, appts.get(0).coords);
 
@@ -75,7 +77,7 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
             // 3
             CalculateCombinations(appts, pred.clone(), 0, 1);
 
-            // 4
+            // 4 TODO==========================
             // OrderSchedules();
 
             // 5
@@ -158,10 +160,11 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
 
             } else {
 
-                for(Appointment appt : arrangement) {
+                /*for(Appointment appt : arrangement) {
                     System.out.print(appt.toString() + " ");
                 }
                 System.out.println("- NON FATTIBILE");
+                */
             }
         }
     }
@@ -178,21 +181,25 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
     Schedule GetScheduleFromArrangement(ArrayList<Appointment> arrangement) {
         /** create and set wake-up dummy appointment */
         Appointment wakeUpAppt = new Appointment("WakeUp", appts.get(0).date, wakeupTime, 0, startingLocation);
+        arrangement.add(wakeUpAppt);
         ArrayList<TemporaryAppointment> tempAppts = TemporaryAppointment.Create(arrangement);
         tempAppts.get(0).Set(wakeUpAppt, wakeupTime, wakeupTime, null);
 
-        float cost = Float.MAX_VALUE;
         float currentCost = 0;
-        boolean hasConflicts;       // save if current arrangement has conflicts
+        boolean mustReiterate;       // current arrangement has conflicts
 
+        /**
+         *  |wake-up| arrangement[0] | arrangement[1] | arrangement[2] | .....
+         *  |wake-up|  tempAppts[0]  |  tempAppts[1]  |  tempAppts[2]  | .....
+        **/
         do {
             currentCost = 0;
-            hasConflicts = false;
+            mustReiterate = false;
             /** keep track of means usage (to not violate constraints) */
             TravelMeansState state = new TravelMeansState(constraints);
 
             /** TODO: first appointment logic ============= */
-            Appointment firstAppt = arrangement.get(0);
+            Appointment firstAppt = arrangement.get(1);
             if (firstAppt.isDeterministic()) {
                 /** take the best mean from appt1 to appt2 */
                 ArrayList<TravelMeanCostTimeInfo> means = UpdateStateWithBestMean(tempAppts.get(0), tempAppts.get(1), state);
@@ -201,12 +208,12 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
                 int travelTime1 = (int) bestMean.EstimateTime(wakeUpAppt, firstAppt, distances.get(new AppointmentCouple(wakeUpAppt, firstAppt)));
                 LocalTime startingTime1 = firstAppt.startingTime.minusSeconds(travelTime1);
 
-                tempAppts.get(1).Set(firstAppt, startingTime1, firstAppt.startingTime, means);
+                tempAppts.get(0).Set(firstAppt, startingTime1, firstAppt.startingTime, means);
                 currentCost += means.get(0).getCost();
 
                 // the wake up time is after the first appointment starting time, must take a faster mean
                 if (startingTime1.isBefore(wakeupTime)) {
-                    hasConflicts = true;
+                    mustReiterate = true;
                     tempAppts.get(1).isTimeConflicting = true;
                 }
 
@@ -283,12 +290,16 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
                         if(!appt1.originalAppt.isDeterministic()) tempAppts.get(i-1).isTimeConflicting = true;
                     }
                 }
-
+            }
+            if(mustReiterate) {
+               mustReiterate = addConstraintToUnfeasibleSchedule(tempAppts, state);
+               if(!mustReiterate) return null;
             }
         }
-        while (hasConflicts || addConstraintToUnfeasibleSchedule() || currentCost >= cost);
+        while (mustReiterate);
 
-        return new Schedule(tempAppts);
+        //cost = currentCost;
+        return new Schedule(tempAppts, currentCost);
     }
 
 
@@ -430,8 +441,28 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
             }
             // add the constraint to the most convinient appointment
             else {
-                subArrangmentTimeFlaged.get(index).incrementalConstraints.add(new ConstraintOnAppointment(
-                        arrangment.get(index).means.get(0).getMean().descr, 0));
+                //if we must improve the first appointment after the dummy wakeUp appointment and it is not deterministic
+                if(subArrangmentTimeFlaged.get(index) == arrangment.get(1) &&
+                        !arrangment.get(1).originalAppt.isDeterministic()){
+                    //TODO==============
+                    int timeGained = (int) (subArrangmentTimeFlaged.get(index).means.get(1).geTime() -
+                            subArrangmentTimeFlaged.get(index).means.get(0).geTime());
+
+                    subArrangmentTimeFlaged.get(index).startingTime =
+                            subArrangmentTimeFlaged.get(index).startingTime.minusSeconds(timeGained);
+
+
+
+                    subArrangmentTimeFlaged.get(index).endingTime() =
+                            subArrangmentTimeFlaged.get(index).endingTime().minusSeconds(timeGained);
+
+                    subArrangmentTimeFlaged.get(index).incrementalConstraints.add(new ConstraintOnAppointment(
+                    arrangment.get(index).means.get(0).getMean().descr, 0));
+
+                }else {
+                    subArrangmentTimeFlaged.get(index).incrementalConstraints.add(new ConstraintOnAppointment(
+                            arrangment.get(index).means.get(0).getMean().descr, 0));
+                }
             }
             /**
              * If there aren't appointment with TimeConflict we must check for Mean conflicts
@@ -476,8 +507,13 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
                 }
                 // add the constraint to the most convinient appointment
                 else {
-                    subArrangmentMeanFlaged.get(index).incrementalConstraints.add(new ConstraintOnAppointment(
-                            arrangment.get(index).means.get(0).getMean().descr, 0));
+                    //if we must improve the first appointment after the dummy wakeUp appointment
+                    if(subArrangmentMeanFlaged.get(index) == arrangment.get(1)){
+                        //TODO==================
+                    }else {
+                        subArrangmentMeanFlaged.get(index).incrementalConstraints.add(new ConstraintOnAppointment(
+                                arrangment.get(index).means.get(0).getMean().descr, 0));
+                    }
                 }
             }
         }
