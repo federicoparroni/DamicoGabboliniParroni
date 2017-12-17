@@ -1,7 +1,7 @@
 package com.example.gabdampar.travlendar.Model.travelMean.privateMeans;
 
-import com.example.gabdampar.travlendar.Controller.MapUtils;
 import com.example.gabdampar.travlendar.Model.Appointment;
+import com.example.gabdampar.travlendar.Model.travelMean.PrivateTravelMean;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMean;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum;
 
@@ -9,7 +9,7 @@ import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum;
  * Created by federico on 11/12/17.
  */
 
-public class Walk extends TravelMean {
+public class Walk extends PrivateTravelMean {
 
 
     protected static final float AVG_SPEED = 0.007f;                 // km/h

@@ -4,12 +4,12 @@
 
 package com.example.gabdampar.travlendar.Model.travelMean.publicMeans;
 
-import com.example.gabdampar.travlendar.Controller.MapUtils;
 import com.example.gabdampar.travlendar.Model.Appointment;
+import com.example.gabdampar.travlendar.Model.travelMean.PublicTravelMean;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMean;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum;
 
-public class Bus extends TravelMean {
+public class Bus extends PublicTravelMean {
 
 
     protected static final float AVG_SPEED = 0.025f;                 // km/h

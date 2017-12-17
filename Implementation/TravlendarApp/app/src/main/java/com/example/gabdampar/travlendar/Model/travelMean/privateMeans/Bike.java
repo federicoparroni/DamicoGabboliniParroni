@@ -4,15 +4,12 @@
 
 package com.example.gabdampar.travlendar.Model.travelMean.privateMeans;
 
-import com.example.gabdampar.travlendar.Controller.MapUtils;
 import com.example.gabdampar.travlendar.Model.Appointment;
-import com.example.gabdampar.travlendar.Model.Schedule;
+import com.example.gabdampar.travlendar.Model.travelMean.PrivateTravelMean;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMean;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum;
 
-import java.util.Map;
-
-public class Bike extends TravelMean {
+public class Bike extends PrivateTravelMean {
 
     protected static float averageBikeSpeed	= 0.007f;
 
