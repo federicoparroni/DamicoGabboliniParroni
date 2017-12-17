@@ -20,11 +20,6 @@ public class TemporaryAppointment {
     public LocalTime ETA;
 
     /** list of travel means ordered by cost */
-    //TODO===================================
-    public HashMap<TravelMean,Float> timePerMean = new HashMap<>();
-    //TODO===================================
-
-    /** list of travel means ordered by cost */
     public ArrayList<TravelMeanCostCouple> means = new ArrayList<>();
 
     /** dummy contraint assigned to avoid unfeasibility */

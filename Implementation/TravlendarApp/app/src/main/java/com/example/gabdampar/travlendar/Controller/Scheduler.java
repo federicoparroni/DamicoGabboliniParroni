@@ -329,7 +329,7 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
 
         boolean arrangmentIsTimeConflicting = false;
         boolean arrangmentIsMeanConflicting = false;
-        boolean inherentlyUnfeasible = true;
+        boolean mustReiterate = false;
 
         /**
          * Check if an appointment has a TimeConflict Flag UP
@@ -345,7 +345,15 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
          * If at least one appointment has a TimeConflict Flag UP
          */
         if(arrangmentIsTimeConflicting){
-            //TODO===================
+            int value = 0;
+            int index;
+            for (TemporaryAppointment appt: subArrangmentTimeFlaged) {
+                if(appt.means.size() > 1){
+                    TravelMeanCostCouple tmcc = appt.means.get(1);
+
+                }
+            }
+
         /**
          * If there aren't appointment with TimeConflict we must check for Mean conflicts
          */
@@ -366,7 +374,7 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
             if(conflictingMean != null){
                 for (TemporaryAppointment appt: arrangment) {
                     if (appt.means.get(0).mean == getTravelMean(conflictingMean) &&
-                            appt.appointmentWeather == appointmentWeather){
+                            weatherConditions.getWeatherForTime(appt.startingTime) == appointmentWeather){
                         subArrangmentMeanFlaged.add(appt);
                         arrangmentIsMeanConflicting = true;
                     }
@@ -374,7 +382,7 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
             //TODO====================
             }
         }
-        return inherentlyUnfeasible;
+        return mustReiterate;
     }
 
 
