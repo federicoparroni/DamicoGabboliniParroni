@@ -370,7 +370,7 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
 
 
 
-    public boolean addConstraintToUnfeasibleSchedule (ArrayList<TemporaryAppointment> arrangment, TravelMeansState state){
+    public boolean addConstraintToUnfeasibleSchedule (ArrayList<TemporaryAppointment> arrangment, TravelMeansState state) {
 
         ArrayList<TemporaryAppointment> subArrangmentTimeFlaged = null;
         ArrayList<TemporaryAppointment> subArrangmentMeanFlaged = null;
@@ -383,8 +383,8 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
         /**
          * Check if an appointment has a TimeConflict Flag UP
          */
-        for (TemporaryAppointment appt: arrangment) {
-            if (appt.isTimeConflicting == true){
+        for (TemporaryAppointment appt : arrangment) {
+            if (appt.isTimeConflicting == true) {
                 subArrangmentTimeFlaged.add(appt);
                 arrangmentIsTimeConflicting = true;
             }
@@ -393,22 +393,36 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
         /**
          * If at least one appointment has a TimeConflict Flag UP
          */
-        if(arrangmentIsTimeConflicting){
-            int value = 0;
-            int index;
-            for (TemporaryAppointment appt: subArrangmentTimeFlaged) {
-                if(appt.means.size() > 1){
+        if (arrangmentIsTimeConflicting) {
+            float value = 0;
+            int index = -1;
+            for (int i = 0; i < subArrangmentTimeFlaged.size(); i++) {
+                TemporaryAppointment appt = subArrangmentTimeFlaged.get(i);
+                if (appt.means.size() > 1) {
                     TravelMeanCostTimeInfo tmcti = appt.means.get(1);
+                    if (tmcti.relativeCost > value) {
+                        value = tmcti.relativeCost;
+                        index = i;
+                    }
                 }
             }
 
-        /**
-         * If there aren't appointment with TimeConflict we must check for Mean conflicts
-         */
-        }else{
+            // not possible to add constraint so the schedule is unfeasible
+            if (value == 0) {
+                mustReiterate = false;
+            }
+            // add the constraint to the most convinient appointment
+            else {
+                subArrangmentTimeFlaged.get(index).incrementalConstraints.add(new ConstraintOnAppointment(
+                        arrangment.get(index).means.get(0).getMean().descr, 0));
+            }
+            /**
+             * If there aren't appointment with TimeConflict we must check for Mean conflicts
+             */
+        } else {
             TravelMeanEnum conflictingMean = null;
             Weather appointmentWeather = null;
-            for (TravelMeanWeatherCouple a: state.meansState.keySet()) {
+            for (TravelMeanWeatherCouple a : state.meansState.keySet()) {
                 if (state.meansState.get(a) <= 0) {
                     arrangmentIsMeanConflicting = true;
                     conflictingMean = a.mean;
@@ -419,15 +433,35 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
             /**
              * If at least one appointment has a MeanConflict Flag UP
              */
-            if(conflictingMean != null){
-                for (TemporaryAppointment appt: arrangment) {
+            if (arrangmentIsMeanConflicting) {
+                for (TemporaryAppointment appt : arrangment) {
                     if (appt.means.get(0).getMean() == getTravelMean(conflictingMean) &&
-                            weatherConditions.getWeatherForTime(appt.startingTime) == appointmentWeather){
+                            weatherConditions.getWeatherForTime(appt.startingTime) == appointmentWeather) {
                         subArrangmentMeanFlaged.add(appt);
-                        arrangmentIsMeanConflicting = true;
                     }
                 }
-            //TODO====================
+                float value = 0;
+                int index = -1;
+                for (int i = 0; i < subArrangmentMeanFlaged.size(); i++) {
+                    TemporaryAppointment appt = subArrangmentMeanFlaged.get(i);
+                    if (appt.means.size() > 1) {
+                        TravelMeanCostTimeInfo tmcti = appt.means.get(1);
+                        if (tmcti.relativeCost > value) {
+                            value = tmcti.relativeCost;
+                            index = i;
+                        }
+                    }
+                }
+
+                // not possible to add constraint so the schedule is unfeasible
+                if (value == 0) {
+                    mustReiterate = false;
+                }
+                // add the constraint to the most convinient appointment
+                else {
+                    subArrangmentMeanFlaged.get(index).incrementalConstraints.add(new ConstraintOnAppointment(
+                            arrangment.get(index).means.get(0).getMean().descr, 0));
+                }
             }
         }
         return mustReiterate;
