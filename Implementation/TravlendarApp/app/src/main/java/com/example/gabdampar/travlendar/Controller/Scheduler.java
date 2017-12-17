@@ -181,8 +181,6 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
         ArrayList<TemporaryAppointment> tempAppts = TemporaryAppointment.Create(arrangement);
         tempAppts.get(0).Set(wakeUpAppt, wakeupTime, wakeupTime, null);
 
-        /** keep track of means usage (to not violate constraints) */
-        TravelMeansState state = new TravelMeansState(constraints);
         float cost = Float.MAX_VALUE;
         float currentCost = 0;
         boolean hasConflicts;       // save if current arrangement has conflicts
@@ -190,14 +188,17 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
         do {
             currentCost = 0;
             hasConflicts = false;
+            /** keep track of means usage (to not violate constraints) */
+            TravelMeansState state = new TravelMeansState(constraints);
 
             /** TODO: first appointment logic ============= */
             Appointment firstAppt = arrangement.get(0);
             if (firstAppt.isDeterministic()) {
-                ArrayList<TravelMeanCostTimeInfo> means = GetUsableTravelMeansOrderedByCost(tempAppts.get(0), tempAppts.get(1), state);
-                /** use FIRST BEST MEAN */
-                TravelMean mean = means.get(0).getTravelMean();
-                int travelTime1 = (int) mean.EstimateTime(wakeUpAppt, firstAppt, distances.get(new AppointmentCouple(wakeUpAppt, firstAppt)));
+                /** take the best mean from appt1 to appt2 */
+                ArrayList<TravelMeanCostTimeInfo> means = UpdateStateWithBestMean(tempAppts.get(0), tempAppts.get(1), state);
+                TravelMean bestMean = means.get(0).getTravelMean();
+
+                int travelTime1 = (int) bestMean.EstimateTime(wakeUpAppt, firstAppt, distances.get(new AppointmentCouple(wakeUpAppt, firstAppt)));
                 LocalTime startingTime1 = firstAppt.startingTime.minusSeconds(travelTime1);
 
                 tempAppts.get(1).Set(firstAppt, startingTime1, firstAppt.startingTime, means);
@@ -206,14 +207,15 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
                 // the wake up time is after the first appointment starting time, must take a faster mean
                 if (startingTime1.isBefore(wakeupTime)) {
                     hasConflicts = true;
-                    SetFlagForTimeConflict(tempAppts, 1);
+                    tempAppts.get(1).isTimeConflicting = true;
                 }
 
             } else {        /** first appt is not deterministic */
-                ArrayList<TravelMeanCostTimeInfo> means = GetUsableTravelMeansOrderedByCost(tempAppts.get(0), tempAppts.get(1), state);
                 /** use FIRST BEST MEAN */
-                TravelMean mean = means.get(0).getTravelMean();
-                int travelTime1 = (int) mean.EstimateTime(wakeUpAppt, firstAppt, distances.get(new AppointmentCouple(wakeUpAppt, firstAppt)));
+                ArrayList<TravelMeanCostTimeInfo> means = UpdateStateWithBestMean(tempAppts.get(0), tempAppts.get(1), state);
+                TravelMean bestMean = means.get(0).getTravelMean();
+
+                int travelTime1 = (int) bestMean.EstimateTime(wakeUpAppt, firstAppt, distances.get(new AppointmentCouple(wakeUpAppt, firstAppt)));
 
                 /** try to set the first appt as late as possible (so user doesn't have to leave too soon) */
                 if (arrangement.size() == 1) {
@@ -223,12 +225,12 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
                     currentCost += means.get(0).getCost();
 
                     // check if first appt starting time has been set after wake up time, if not so we have to use a fastest mean on it
-                    if (startingTime1.isBefore(wakeupTime)) SetFlagForTimeConflict(tempAppts, 1);
+                    if (startingTime1.isBefore(wakeupTime)) tempAppts.get(1).isTimeConflicting = true;
                 } else {
                     /** set starting as min between its time slot and next appt starting time */
                     Appointment secondAppt = arrangement.get(1);
                     // TODO: wrong mean to travel from first to second appt, it's another one!!!
-                    int travelTime2 = (int) mean.EstimateTime(firstAppt, secondAppt, distances.get(new AppointmentCouple(firstAppt, secondAppt)));
+                    int travelTime2 = (int) bestMean.EstimateTime(firstAppt, secondAppt, distances.get(new AppointmentCouple(firstAppt, secondAppt)));
 
                     LocalTime maxEndingTime1 = secondAppt.isDeterministic() ? secondAppt.startingTime.minusSeconds(travelTime2) :
                             secondAppt.timeSlot.startingTime.minusSeconds(travelTime2);
@@ -242,19 +244,19 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
                     // check if feasible
                     if (startingTime1.isBefore(wakeupTime) || startingTime1.isBefore(firstAppt.timeSlot.startingTime))
                         return null;
+                    /** TODO: =========================== */
                 }
             }
-            /** TODO: =========================== */
 
             // only appt2 must be scheduled for each cycle
             for (int i = 1; i < arrangement.size(); i++) {
                 TemporaryAppointment appt1 = tempAppts.get(i);
                 Appointment appt2 = arrangement.get(i);
 
-                ArrayList<TravelMeanCostTimeInfo> means = GetUsableTravelMeansOrderedByCost(tempAppts.get(i-1), tempAppts.get(i), state);
-                /** use FIRST BEST MEAN */
-                TravelMean mean = means.get(0).getTravelMean();
-                int travelTime = (int) mean.EstimateTime(appt1.originalAppt, appt2, distances.get(new AppointmentCouple(appt1.originalAppt, appt2)));
+                ArrayList<TravelMeanCostTimeInfo> means = UpdateStateWithBestMean(tempAppts.get(0), tempAppts.get(1), state);
+                TravelMean bestMean = means.get(0).getTravelMean();
+
+                int travelTime = (int) bestMean.EstimateTime(appt1.originalAppt, appt2, distances.get(new AppointmentCouple(appt1.originalAppt, appt2)));
 
                 if (appt2.isDeterministic()) {
                     // both deterministic, only creates scheduledAppointment with recalculated startingTime and ETA
@@ -264,8 +266,8 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
 
                     // previous appt is overlapping with current one (deterministic), flag the current appt
                     if (appt1.endingTime().isAfter(fixedStartingTime)) {
-                        SetFlagForTimeConflict(tempAppts, tempAppts.size() - 1);
-                        if(!appt1.originalAppt.isDeterministic()) SetFlagForTimeConflict(tempAppts, tempAppts.size() - 2);
+                        tempAppts.get(i).isTimeConflicting = true;
+                        if(!appt1.originalAppt.isDeterministic()) tempAppts.get(i-1).isTimeConflicting = true;
                     }
 
                 } else {
@@ -277,8 +279,8 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
 
                     // appt is out of its time slot bounds, flag both appts
                     if (appt2.timeSlot.endingTime.isBefore(ETA2.plusSeconds(appt2.duration))) {
-                        SetFlagForTimeConflict(tempAppts, tempAppts.size() - 1);
-                        if(!appt1.originalAppt.isDeterministic()) SetFlagForTimeConflict(tempAppts, tempAppts.size()-2);
+                        tempAppts.get(i).isTimeConflicting = true;
+                        if(!appt1.originalAppt.isDeterministic()) tempAppts.get(i-1).isTimeConflicting = true;
                     }
                 }
 
@@ -289,14 +291,11 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
         return new Schedule(tempAppts);
     }
 
-    void SetFlagForTimeConflict(ArrayList<TemporaryAppointment> temporaryAppts, int index) {
-        temporaryAppts.get(index).isTimeConflicting = true;
-    }
 
     ArrayList<TravelMeanCostTimeInfo> GetUsableTravelMeansOrderedByCost(TemporaryAppointment a1, TemporaryAppointment a2, TravelMeansState state) {
         ArrayList<TravelMeanEnum> availableMeans = new ArrayList<>( Arrays.asList(TravelMeanEnum.values()) );
 
-        /** discard travel means that are not allowed by constraints on SCHEDULES */
+        /** discard travel means that are not allowed by CONSTRAINTS on SCHEDULES */
         for(ConstraintOnSchedule constraint : constraints) {
             if(constraint.maxDistance == 0 &&
                 constraint.weather.contains(weatherConditions.getWeatherForTime(a1.endingTime()))
@@ -304,9 +303,24 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
                 )
                 availableMeans.remove(constraint.mean);
         }
-        /** discard travel means that are not allowed by constraints on APPOINTMENTS */
+        /** discard travel means that are not allowed by CONSTRAINTS on APPOINTMENTS */
         for(ConstraintOnAppointment c : a2.incrementalConstraints) {
             if(c.maxDistance == 0) availableMeans.remove(c.mean);
+        }
+        /** discard travel means that are not allowed by CURRENT STATE (mean-weather remaining distance / means order) */
+        Weather currentWeather = weatherConditions.getWeatherForTime(a1.endingTime());
+        for(int i=0; i < availableMeans.size(); i++) {
+            TravelMeanEnum tm = availableMeans.get(i);
+            // remove a mean if it's remaining distance is negative OR the current mean indicator is greater than state indicator
+            if( TravelMean.getTravelMean(tm).getOrderIndicator() > state.meanOrderIndicator ) {
+                availableMeans.remove(i);
+            } else {        // check remaining distance under current weather conditions
+                for (TravelMeanWeatherCouple mwCouple : state.meansState.keySet()) {
+                    if (mwCouple.mean == tm && mwCouple.weather == currentWeather && state.meansState.get(mwCouple) < 0) {
+                        availableMeans.remove(i);
+                    }
+                }
+            }
         }
         /** compute cost for each remaining mean */
         ArrayList<TravelMeanCostTimeInfo> meansQueue = new ArrayList<>();
@@ -329,21 +343,24 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
         }
         /** order the remaining means by cost */
         Collections.sort( meansQueue );
-        CleanUncovenientMeans(meansQueue);
+        TravelMeanCostTimeInfo.CleanUncovenientMeans(meansQueue);
         return meansQueue;
     }
 
-    void CleanUncovenientMeans(ArrayList<TravelMeanCostTimeInfo> meansQueue) {
-        for (int i = 1; i < meansQueue.size(); i++) {
-            TravelMeanCostTimeInfo mc2 = meansQueue.get(i);
-            TravelMeanCostTimeInfo mc1 = meansQueue.get(i-1);
-            float delta = (mc2.getCost() - mc1.getCost()) / (mc1.geTime() - mc2.geTime());
-            if(delta < 0)
-                meansQueue.remove(i);
-            else
-                mc2.relativeCost = delta;
-        }
+    /**
+     * Update the state by taking the best mean in the usable means collection
+     * @param a1
+     * @param a2
+     * @param state
+     * @return ordered collection of TravelMeanCostTimeInfo
+     */
+    ArrayList<TravelMeanCostTimeInfo> UpdateStateWithBestMean(TemporaryAppointment a1, TemporaryAppointment a2, TravelMeansState state) {
+        ArrayList<TravelMeanCostTimeInfo> means = GetUsableTravelMeansOrderedByCost(a1, a2, state);
+        /** update state! */
+
+        return means;
     }
+
 
 
 
@@ -351,7 +368,7 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
      * 	Elaborate predecessor matrix and return the appointment ordered by precedence
      */
     ArrayList<Appointment> ConvertPredMatrixToList(ArrayList<Appointment> appts, byte[][] pred) {
-        ArrayList<Appointment> res = new ArrayList<Appointment>();
+        ArrayList<Appointment> res = new ArrayList<>();
 
         for(int i = pred.length-1; i >= 0; i--) {
             // check/find the i-th appointment
