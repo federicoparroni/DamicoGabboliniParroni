@@ -90,7 +90,7 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
         this.weatherConditions = weatherConditionList;
     }
 
-    void CalculatePredecessorsAndDistanceMatrix(ArrayList<Appointment> apps) {
+    private void CalculatePredecessorsAndDistanceMatrix(ArrayList<Appointment> apps) {
         pred = new byte[apps.size()][apps.size()];
 
         for(int i=0; i < apps.size()-1; i++) {
@@ -128,7 +128,7 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
     /**
      * Recursively compute dispositions of appointment
      */
-    void CalculateCombinations(ArrayList<Appointment> appts, byte[][] pr, int curri, int currj) {
+    private void CalculateCombinations(ArrayList<Appointment> appts, byte[][] pr, int curri, int currj) {
 
         for(int i=curri; i < appts.size()-1; i++) {
             for(int j=currj-1; j < appts.size(); j++) {
@@ -175,11 +175,11 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
      *
      * 	First appt is dummy wake-up appointment
      */
-    Schedule GetScheduleFromArrangement(ArrayList<Appointment> arrangement) {
+    private Schedule GetScheduleFromArrangement(ArrayList<Appointment> arrangement) {
         /** create and set wake-up dummy appointment */
         Appointment wakeUpAppt = new Appointment("WakeUp", appts.get(0).date, wakeupTime, 0, startingLocation);
         ArrayList<TemporaryAppointment> tempAppts = TemporaryAppointment.Create(arrangement);
-        tempAppts.get(0).Set(wakeUpAppt, wakeupTime, wakeupTime, null);
+        tempAppts.add(0, new TemporaryAppointment(wakeUpAppt, wakeUpAppt.startingTime, wakeUpAppt.startingTime, null));
 
         float cost = Float.MAX_VALUE;
         float currentCost = 0;
@@ -225,7 +225,7 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
                     currentCost += means.get(0).getCost();
 
                     // check if first appt starting time has been set after wake up time, if not so we have to use a fastest mean on it
-                    if (startingTime1.isBefore(wakeupTime)) tempAppts.get(1).isTimeConflicting = true;
+                    if (startingTime1.isBefore(wakeupTime)) SetFlagForTimeConflicts(tempAppts, 0);
                 } else {
                     /** set starting as min between its time slot and next appt starting time */
                     Appointment secondAppt = arrangement.get(1);
@@ -264,11 +264,8 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
                     tempAppts.get(i).Set(appt2, fixedStartingTime, appt2.startingTime, means);
                     currentCost += means.get(0).getCost();
 
-                    // previous appt is overlapping with current one (deterministic), flag the current appt
-                    if (appt1.endingTime().isAfter(fixedStartingTime)) {
-                        tempAppts.get(i).isTimeConflicting = true;
-                        if(!appt1.originalAppt.isDeterministic()) tempAppts.get(i-1).isTimeConflicting = true;
-                    }
+                    // previous appt is overlapping with current one (deterministic)
+                    if (appt1.endingTime().isAfter(fixedStartingTime)) SetFlagForTimeConflicts(tempAppts, i);
 
                 } else {
                     // 2nd non deterministic, assing startingTime at max possible
@@ -277,11 +274,9 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
                     tempAppts.get(i).Set(appt2, fixedStartingTime, ETA2, means);
                     currentCost += means.get(0).getCost();
 
-                    // appt is out of its time slot bounds, flag both appts
-                    if (appt2.timeSlot.endingTime.isBefore(ETA2.plusSeconds(appt2.duration))) {
-                        tempAppts.get(i).isTimeConflicting = true;
-                        if(!appt1.originalAppt.isDeterministic()) tempAppts.get(i-1).isTimeConflicting = true;
-                    }
+                    // appt is out of its time slot bounds
+                    if (appt2.timeSlot.endingTime.isBefore(ETA2.plusSeconds(appt2.duration))) SetFlagForTimeConflicts(tempAppts, i);
+
                 }
 
             }
@@ -292,7 +287,7 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
     }
 
 
-    ArrayList<TravelMeanCostTimeInfo> GetUsableTravelMeansOrderedByCost(TemporaryAppointment a1, TemporaryAppointment a2, TravelMeansState state) {
+    private ArrayList<TravelMeanCostTimeInfo> GetUsableTravelMeansOrderedByCost(TemporaryAppointment a1, TemporaryAppointment a2, TravelMeansState state) {
         ArrayList<TravelMeanEnum> availableMeans = new ArrayList<>( Arrays.asList(TravelMeanEnum.values()) );
 
         /** discard travel means that are not allowed by CONSTRAINTS on SCHEDULES */
@@ -354,20 +349,29 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
      * @param state
      * @return ordered collection of TravelMeanCostTimeInfo
      */
-    ArrayList<TravelMeanCostTimeInfo> UpdateStateWithBestMean(TemporaryAppointment a1, TemporaryAppointment a2, TravelMeansState state) {
+    private ArrayList<TravelMeanCostTimeInfo> UpdateStateWithBestMean(TemporaryAppointment a1, TemporaryAppointment a2, TravelMeansState state) {
         ArrayList<TravelMeanCostTimeInfo> means = GetUsableTravelMeansOrderedByCost(a1, a2, state);
         /** update state! */
 
         return means;
     }
 
-
-
+    private void SetFlagForTimeConflicts(ArrayList<TemporaryAppointment> appts, int index) {
+        appts.get(index).isTimeConflicting = true;
+        int i = index-1;
+        while (i>=0 && !appts.get(i).originalAppt.isDeterministic()) {
+            appts.get(i).isTimeConflicting = true;
+            i--;
+        }
+    }
 
     /**
-     * 	Elaborate predecessor matrix and return the appointment ordered by precedence
+     * Elaborate predecessor matrix and return the appointment ordered by precedence
+     * @param appts
+     * @param pred
+     * @return arrangement (ArrayList<Appointment>)
      */
-    ArrayList<Appointment> ConvertPredMatrixToList(ArrayList<Appointment> appts, byte[][] pred) {
+    private ArrayList<Appointment> ConvertPredMatrixToList(ArrayList<Appointment> appts, byte[][] pred) {
         ArrayList<Appointment> res = new ArrayList<>();
 
         for(int i = pred.length-1; i >= 0; i--) {
@@ -382,8 +386,6 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
 
         return res;
     }
-
-
 
 
 
@@ -491,14 +493,14 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
     **
     */
 
-    int SumRow(byte[][] matrix, int riga) {
+    private int SumRow(byte[][] matrix, int riga) {
         int sum = 0;
         for(int i=riga+1; i < matrix.length; i++) {
             sum += matrix[riga][i];
         }
         return sum;
     }
-    int SumInvertedCol(byte[][] matrix, int col) {
+    private int SumInvertedCol(byte[][] matrix, int col) {
         int sum = 0;
         for(int i=0; i < col; i++) {
             sum += matrix[i][col];
@@ -509,7 +511,7 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
     /**
      * Create a clone of a matrix
      */
-    byte[][] CloneMatrix(byte[][] orig) {
+    private byte[][] CloneMatrix(byte[][] orig) {
         byte[][] clone = new byte[orig.length][orig.length];
 
         for(int i=0; i < orig.length; i++) {
@@ -520,7 +522,7 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
         return clone;
     }
 
-    void StampaArray(byte[][] m) {
+    private void StampaArray(byte[][] m) {
         for(int i=0; i < m.length; i++) {
             for(int j=0; j < m.length; j++) {
                 System.out.print(String.format("%d ", m[i][j]));
