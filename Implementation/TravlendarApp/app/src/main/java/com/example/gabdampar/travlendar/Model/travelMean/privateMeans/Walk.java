@@ -26,7 +26,7 @@ public class Walk extends PrivateTravelMean {
 
     public Walk() {
         super();
-        super.descr = TravelMeanEnum.WALK;
+        super.meanEnum = TravelMeanEnum.WALK;
     }
 
     @Override

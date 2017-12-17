@@ -27,7 +27,7 @@ import static com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum.W
 public abstract class TravelMean implements IMeanEvaluable {
 
     protected static TravelMean instance;
-    public TravelMeanEnum descr;
+    public TravelMeanEnum meanEnum;
 
     public int availableSeats;
 

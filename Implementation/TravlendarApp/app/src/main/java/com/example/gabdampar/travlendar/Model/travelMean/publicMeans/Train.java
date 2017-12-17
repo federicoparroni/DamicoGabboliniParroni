@@ -27,7 +27,7 @@ public class Train extends PublicTravelMean {
 
     public Train() {
         super();
-        super.descr = TravelMeanEnum.TRAIN;
+        super.meanEnum = TravelMeanEnum.TRAIN;
     }
 
     @Override

@@ -18,7 +18,7 @@ public class Car extends PrivateTravelMean {
 
     public Car() {
         super();
-        super.descr= TravelMeanEnum.CAR;
+        super.meanEnum = TravelMeanEnum.CAR;
     }
 
 

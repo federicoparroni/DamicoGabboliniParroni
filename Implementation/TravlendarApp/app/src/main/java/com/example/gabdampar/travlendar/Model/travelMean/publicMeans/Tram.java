@@ -27,7 +27,7 @@ public class Tram extends PublicTravelMean {
 
     public Tram() {
         super();
-        super.descr= TravelMeanEnum.TRAM;
+        super.meanEnum = TravelMeanEnum.TRAM;
     }
 
     @Override

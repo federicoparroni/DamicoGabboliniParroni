@@ -12,7 +12,7 @@ import java.util.HashMap;
 
 public class TravelMeansState {
 
-    public int meanOrderIndicator = Integer.MAX_VALUE;      /** assign an order in choosing means (e.g.: car cannot be used if not picked from the first appt */
+    public TravelMeanEnum currentMean;      /** assign an order in choosing means (e.g.: car cannot be used if not picked from the first appt */
     public HashMap<TravelMeanWeatherCouple, Float> meansState = new HashMap();
 
     public TravelMeansState(ArrayList<ConstraintOnSchedule> constraints) {

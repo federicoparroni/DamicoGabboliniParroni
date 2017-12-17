@@ -28,7 +28,7 @@ public class Bus extends PublicTravelMean {
 
     public Bus(){
         super();
-        super.descr= TravelMeanEnum.BUS;
+        super.meanEnum = TravelMeanEnum.BUS;
     }
 
     @Override

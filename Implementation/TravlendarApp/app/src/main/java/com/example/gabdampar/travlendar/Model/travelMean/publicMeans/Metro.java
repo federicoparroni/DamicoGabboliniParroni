@@ -27,7 +27,7 @@ public class Metro extends PublicTravelMean {
 
     public Metro() {
         super();
-        super.descr = TravelMeanEnum.METRO;
+        super.meanEnum = TravelMeanEnum.METRO;
     }
 
     @Override

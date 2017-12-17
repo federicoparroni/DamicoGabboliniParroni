@@ -15,7 +15,7 @@ public class Bike extends PrivateTravelMean {
 
     public Bike() {
         super();
-        super.descr= TravelMeanEnum.BIKE;
+        super.meanEnum = TravelMeanEnum.BIKE;
     }
 
     public static Bike GetInstance() {

@@ -206,9 +206,8 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
                 float distance = distances.get(new AppointmentCouple(appt1.originalAppt, appt2));
                 ArrayList<TravelMeanCostTimeInfo> means = UpdateStateWithBestMean(tempAppts.get(0), tempAppts.get(1), state, distance);
                 if(means.size() == 0) return null;      // no more means available
-                TravelMean bestMean = means.get(0).getTravelMean();
-
-                int travelTime = (int) bestMean.EstimateTime(appt1.originalAppt, appt2, distance);
+                // get best travel mean (first in list) travel time
+                int travelTime = (int) means.get(0).geTime(); //(int) bestMean.EstimateTime(appt1.originalAppt, appt2, distance);
 
                 if (appt2.isDeterministic()) {
                     // both deterministic, only creates scheduledAppointment with recalculated startingTime and ETA
@@ -269,33 +268,40 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
         for(int i=0; i < availableMeans.size(); i++) {
             TravelMeanEnum tm = availableMeans.get(i);
             // remove a mean if it's remaining distance is negative OR the current mean indicator is greater than state indicator
-            if( TravelMean.getTravelMean(tm).getOrderIndicator() > state.meanOrderIndicator ) {
+            if( TravelMean.isMeanUsable(state.currentMean, tm) ) {
                 availableMeans.remove(i);
             } else {        // check remaining distance under current weather conditions
                 for (TravelMeanWeatherCouple mwCouple : state.meansState.keySet()) {
                     if (mwCouple.mean == tm && mwCouple.weather == currentWeather && state.meansState.get(mwCouple) < 0) {
                         availableMeans.remove(i);
+                        i--;
                     }
                 }
             }
         }
         /** compute cost for each remaining mean */
         ArrayList<TravelMeanCostTimeInfo> meansQueue = new ArrayList<>();
-        for ( TravelMeanEnum mean: availableMeans ) {
+        for ( int j=0; j < availableMeans.size(); j++ ) {
+            TravelMeanEnum mean = availableMeans.get(j);
             TravelMean tm = TravelMean.getTravelMean(mean);
             float distance = distances.get(new AppointmentCouple(a1.originalAppt,a2.originalAppt));
             float time = tm.EstimateTime(a1.originalAppt, a2.originalAppt, distance);
 
-            switch (criteria) {
-                case OPTIMIZE_TIME:
-                    meansQueue.add(new TravelMeanCostTimeInfo(tm, time, time));
-                    break;
-                case OPTIMIZE_CARBON:
-                    meansQueue.add(new TravelMeanCostTimeInfo(tm, tm.EstimateCarbon(a1.originalAppt, a2.originalAppt, distance), time));
-                    break;
-                case OPTIMIZE_COST:
-                    meansQueue.add(new TravelMeanCostTimeInfo(tm, tm.EstimateCost(a1.originalAppt, a2.originalAppt, distance), time));
-                    break;
+            if(time >= 0) {
+                switch (criteria) {
+                    case OPTIMIZE_TIME:
+                        meansQueue.add(new TravelMeanCostTimeInfo(tm, time, time));
+                        break;
+                    case OPTIMIZE_CARBON:
+                        meansQueue.add(new TravelMeanCostTimeInfo(tm, tm.EstimateCarbon(a1.originalAppt, a2.originalAppt, distance), time));
+                        break;
+                    case OPTIMIZE_COST:
+                        meansQueue.add(new TravelMeanCostTimeInfo(tm, tm.EstimateCost(a1.originalAppt, a2.originalAppt, distance), time));
+                        break;
+                }
+            } else {        // if time is negative, the current mean cannot be chosen because there are no near stops
+                availableMeans.remove(j);
+                j--;
             }
         }
         /** order the remaining means by cost */
@@ -316,13 +322,14 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
         /** update state! */
         TravelMeanCostTimeInfo bestMean = means.get(0);
         Weather currentWeather = weatherConditions.getWeatherForTime(a1.endingTime());
-        TravelMeanWeatherCouple key = new TravelMeanWeatherCouple(bestMean.getMean().descr, currentWeather);
+        TravelMeanWeatherCouple key = new TravelMeanWeatherCouple(bestMean.getMean().meanEnum, currentWeather);
         float newDistance = state.meansState.get(key) - distance;       // state.distance -= distance;
         state.meansState.remove(key);
         state.meansState.put(key, newDistance);
         // set flag for mean conflict
         if(newDistance < 0) a1.isMeanConflicting = true;
 
+        state.currentMean = bestMean.getMean().meanEnum;
         return means;
     }
 
@@ -418,11 +425,11 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
                             subArrangmentTimeFlaged.get(index).endingTime().minusSeconds(timeGained);
 
                     subArrangmentTimeFlaged.get(index).incrementalConstraints.add(new ConstraintOnAppointment(
-                    arrangment.get(index).means.get(0).getMean().descr, 0));
+                    arrangment.get(index).means.get(0).getMean().meanEnum, 0));
 
                 }else {
                     subArrangmentTimeFlaged.get(index).incrementalConstraints.add(new ConstraintOnAppointment(
-                            arrangment.get(index).means.get(0).getMean().descr, 0));
+                            arrangment.get(index).means.get(0).getMean().meanEnum, 0));
                 }
             }
             /**
@@ -473,7 +480,7 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
                         //TODO==================
                     }else {
                         subArrangmentMeanFlaged.get(index).incrementalConstraints.add(new ConstraintOnAppointment(
-                                arrangment.get(index).means.get(0).getMean().descr, 0));
+                                arrangment.get(index).means.get(0).getMean().meanEnum, 0));
                     }
                 }
             }
