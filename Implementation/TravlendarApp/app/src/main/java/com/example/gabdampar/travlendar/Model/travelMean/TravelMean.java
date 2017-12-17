@@ -58,6 +58,7 @@ public abstract class TravelMean implements IMeanEvaluable {
         return null;
     }
 
+    public static boolean isMeanUsable(TravelMeanEnum actualMeanE, TravelMeanEnum futureMeanE){
         if(getTravelMean(actualMeanE) instanceof PublicTravelMean){
             if (getTravelMean(futureMeanE) instanceof PublicTravelMean){
                 return true;
