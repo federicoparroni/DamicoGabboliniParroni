@@ -17,7 +17,6 @@ import android.widget.TimePicker;
 
 import com.example.gabdampar.travlendar.Controller.AppointmentManager;
 import com.example.gabdampar.travlendar.Controller.Scheduler;
-import com.example.gabdampar.travlendar.Model.Constraint;
 import com.example.gabdampar.travlendar.Model.ConstraintOnSchedule;
 import com.example.gabdampar.travlendar.Model.OptCriteria;
 import com.example.gabdampar.travlendar.R;
@@ -95,7 +94,7 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
 
     @Override
     public void onTimeChanged(TimePicker timePicker, int hours, int minutes) {
-        scheduler.wakeupTime = new LocalTime(hours, minutes);
+        scheduler.scheduleStartingTime = new LocalTime(hours, minutes);
     }
 
     @Override
