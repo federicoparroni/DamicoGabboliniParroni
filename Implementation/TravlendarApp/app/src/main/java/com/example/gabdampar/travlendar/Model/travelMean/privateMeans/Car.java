@@ -4,12 +4,12 @@
 
 package com.example.gabdampar.travlendar.Model.travelMean.privateMeans;
 
-import com.example.gabdampar.travlendar.Controller.MapUtils;
 import com.example.gabdampar.travlendar.Model.Appointment;
+import com.example.gabdampar.travlendar.Model.travelMean.PrivateTravelMean;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMean;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum;
 
-public class Car extends TravelMean {
+public class Car extends PrivateTravelMean {
 
     protected static final float AVG_SPEED = 0.02f;                  // km/h
     protected static final float AVG_CARBON_EMISSION_PER_KM = 120;   // g/km

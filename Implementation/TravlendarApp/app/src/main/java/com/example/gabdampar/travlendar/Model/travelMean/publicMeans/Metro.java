@@ -1,7 +1,7 @@
 package com.example.gabdampar.travlendar.Model.travelMean.publicMeans;
 
-import com.example.gabdampar.travlendar.Controller.MapUtils;
 import com.example.gabdampar.travlendar.Model.Appointment;
+import com.example.gabdampar.travlendar.Model.travelMean.PublicTravelMean;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMean;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum;
 
@@ -9,7 +9,7 @@ import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum;
  * Created by federico on 11/12/17.
  */
 
-public class Metro extends TravelMean {
+public class Metro extends PublicTravelMean {
 
     protected static final float AVG_SPEED = 0.022f;                 // km/h
     protected static final float AVG_CARBON_EMISSION_PER_KM = 0;     // g/km

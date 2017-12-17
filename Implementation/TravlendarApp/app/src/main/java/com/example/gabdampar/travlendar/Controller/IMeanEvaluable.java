@@ -3,6 +3,8 @@ package com.example.gabdampar.travlendar.Controller;
 
 import com.example.gabdampar.travlendar.Model.Appointment;
 
+import org.joda.time.Duration;
+
 /**
  * Created by gabdampar on 30/11/2017.
  */

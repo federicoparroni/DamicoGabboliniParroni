@@ -4,6 +4,7 @@
 
 package com.example.gabdampar.travlendar.Model;
 
+import com.example.gabdampar.travlendar.Controller.ViewController.Fragment.AppointmentsListFragment;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.joda.time.DateTime;
@@ -126,5 +127,6 @@ public class Appointment {
     public void setConstraints(ArrayList<ConstraintOnAppointment> constraints){
         this.constraints = constraints;
     }
+
 
 }

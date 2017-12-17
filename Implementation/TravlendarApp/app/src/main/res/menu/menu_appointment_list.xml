@@ -4,9 +4,17 @@
     tools:context="com.example.gabdampar.travlendar.ScrollingActivity">
 
     <item
+        android:title="sort By Date Button"
+        android:id="@+id/sortByDateButton"
+        android:icon="@drawable/ic_action_date_range"
+        android:orderInCategory="100"
+        app:showAsAction="always" />
+
+    <item
         android:title="Add Appointment Button"
         android:id="@+id/addAppointmentButton"
         android:icon="@mipmap/ic_plus"
         android:orderInCategory="100"
         app:showAsAction="always" />
+
 </menu>
