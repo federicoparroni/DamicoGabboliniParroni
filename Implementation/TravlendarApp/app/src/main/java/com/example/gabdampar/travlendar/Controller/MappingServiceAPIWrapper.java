@@ -65,22 +65,19 @@ public class MappingServiceAPIWrapper{
                 .listener(new PlacesListener() {
                     @Override
                     public void onPlacesFailure(PlacesException e) {
-                        listener.StopServiceCallback(-1);
+                        listener.StopServiceCallback(null);
                     }
                     @Override
                     public void onPlacesSuccess(List<Place> places) {
-                        double r=-1;
-                        float maxDist = 0;
+                        LatLng r=null;
                         float minDist = Float.MAX_VALUE;
                         for(Place p : places){
-                            r=0;
                             float actualDistance = MapUtils.distance(position,new LatLng(p.getLatitude(),p.getLongitude()));
-                            if (actualDistance < minDist)
-                                minDist=actualDistance;
-                            if (actualDistance > maxDist)
-                                maxDist=actualDistance;
+                            if (actualDistance < minDist) {
+                                minDist = actualDistance;
+                                r = new LatLng(p.getLatitude(),p.getLongitude());
+                            }
                         }
-                        r = (r==-1) ? -1 : minDist*0.3+maxDist*0.7;
                         listener.StopServiceCallback(r);
                     }
                     @Override
@@ -99,7 +96,7 @@ public class MappingServiceAPIWrapper{
                 .build()
                 .execute();
         else
-            listener.StopServiceCallback(-1);
+            listener.StopServiceCallback(null);
     }
 
     public void getTravelOptionData(final MappingServiceCallbackListener listener, List<TravelMeanEnum> admittedMeans, String startingLocation, String endingLocaton, DateTime departureTime){
@@ -326,7 +323,7 @@ public class MappingServiceAPIWrapper{
 
     public interface StopServiceCallbackListener {
 
-        void StopServiceCallback(double distance);
+        void StopServiceCallback(LatLng latLng);
 
     }
 }
