@@ -19,9 +19,7 @@ public class Bus extends PublicTravelMean {
     protected static final float AVG_SPEED = 0.025f;                 // km/h
     protected static final float AVG_CARBON_EMISSION_PER_KM = 150;   // g/km
     protected static final float TICKET_COST = 1.50f;                    // euro
-
-    //protected static final float AVG_TIME_TO_STOP = 6*60;            // sec
-
+    
     public static Bus GetInstance() {
         if(instance == null) {
             instance = new Bus();
@@ -47,16 +45,15 @@ public class Bus extends PublicTravelMean {
             //distance travelled with bus
             totalTime += EstimateTime(stationFrom,stationTo);
             //distance from first appointment to the stop
-            TravelMean meanFrom = from.means.get(0).getMean();
-            totalTime += Walk.EstimateTime(from.originalAppt.coords,stationFrom);
-            totalTime += Walk.EstimateTime(stationTo,to.originalAppt.coords);
+            totalTime += Walk.GetInstance().EstimateTime(from.originalAppt.coords,stationFrom);
+            totalTime += Walk.GetInstance().EstimateTime(stationTo,to.originalAppt.coords);
         }
         return totalTime;
     }
 
     @Override
     public float EstimateTime(LatLng from, LatLng to) {
-        return MapUtils.distance(from,to)*1.3f*AVG_SPEED;
+        return (MapUtils.distance(from,to)*1.3f)/AVG_SPEED;
     }
 
     @Override

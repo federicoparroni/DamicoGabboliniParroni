@@ -1,9 +1,12 @@
 package com.example.gabdampar.travlendar.Model.travelMean.privateMeans;
 
+import com.example.gabdampar.travlendar.Controller.MapUtils;
 import com.example.gabdampar.travlendar.Model.Appointment;
+import com.example.gabdampar.travlendar.Model.TemporaryAppointment;
 import com.example.gabdampar.travlendar.Model.travelMean.PrivateTravelMean;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMean;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum;
+import com.google.android.gms.maps.model.LatLng;
 
 /**
  * Created by federico on 11/12/17.
@@ -30,17 +33,22 @@ public class Walk extends PrivateTravelMean {
     }
 
     @Override
-    public float EstimateTime(Appointment from, Appointment to, float distance) {
+    public float EstimateTime(TemporaryAppointment from, TemporaryAppointment to, float distance) {
         return distance / AVG_SPEED * 1.2f ;
     }
 
     @Override
-    public float EstimateCost(Appointment from, Appointment to, float distance) {
+    public float EstimateTime(LatLng from, LatLng to) {
+        return MapUtils.distance(from,to) / AVG_SPEED * 1.2f ;
+    }
+
+    @Override
+    public float EstimateCost(TemporaryAppointment from, TemporaryAppointment to, float distance) {
         return TICKET_COST;
     }
 
     @Override
-    public float EstimateCarbon(Appointment from, Appointment to, float distance) {
+    public float EstimateCarbon(TemporaryAppointment from, TemporaryAppointment to, float distance) {
         return distance * AVG_CARBON_EMISSION_PER_KM;
     }
 
