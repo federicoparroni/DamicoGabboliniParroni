@@ -1,7 +1,9 @@
 package com.example.gabdampar.travlendar.Controller.ViewController;
 
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -27,6 +29,7 @@ import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
@@ -115,6 +118,15 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        String time = pref.getString("wake_up_time", "");
+        if(!time.isEmpty()) scheduler.scheduleStartingTime = new LocalTime( time );
+
+        // TODO get starting location from preferences
+        scheduler.startingLocation = new LatLng(45.4809352, 9.233779);
+        onSelectedDayChange(calendar, 2017, 10, 18);
+        scheduler.criteria = OptCriteria.OPTIMIZE_COST;
+
         // enable fab click listener
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,6 +137,8 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
                     scheduler.ComputeSchedule();
                     //Intent intent = new Intent();
                     //intent.putExtra("scheduler", scheduler);
+                } else {
+                    Snackbar.make(view, "Missing fields", Snackbar.LENGTH_LONG).show();
                 }
             }
         });

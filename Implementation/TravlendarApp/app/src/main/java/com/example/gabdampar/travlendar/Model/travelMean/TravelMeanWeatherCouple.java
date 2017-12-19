@@ -17,7 +17,6 @@ public class TravelMeanWeatherCouple {
         this.weather = weather;
     }
 
-
     @Override
     public boolean equals(Object obj) {
         if(obj.getClass() != TravelMeanWeatherCouple.class) return  false;
@@ -25,5 +24,10 @@ public class TravelMeanWeatherCouple {
             TravelMeanWeatherCouple obj2 = (TravelMeanWeatherCouple) obj;
             return this.mean == obj2.mean && this.weather == obj2.weather;
         }
+    }
+
+    @Override
+    public int hashCode() {
+        return mean.hashCode()+weather.hashCode();
     }
 }

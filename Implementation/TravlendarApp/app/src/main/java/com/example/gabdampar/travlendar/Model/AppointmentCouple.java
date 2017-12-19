@@ -14,4 +14,18 @@ public class AppointmentCouple {
         this.a2 = a2;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        //if(obj instanceof AppointmentCouple){
+            AppointmentCouple a = (AppointmentCouple) obj;
+            return (this.a1.equals(a.a1) && this.a2.equals(a.a2));
+        /*}else{
+            return false;
+        }*/
+    }
+
+    @Override
+    public int hashCode() {
+        return a1.hashCode()+a2.hashCode();
+    }
 }

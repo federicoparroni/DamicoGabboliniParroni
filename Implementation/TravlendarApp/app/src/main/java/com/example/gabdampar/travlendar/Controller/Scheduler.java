@@ -4,6 +4,8 @@
 
 package com.example.gabdampar.travlendar.Controller;
 
+import android.util.Log;
+
 import com.example.gabdampar.travlendar.Model.Appointment;
 import com.example.gabdampar.travlendar.Model.AppointmentCouple;
 import com.example.gabdampar.travlendar.Model.ConstraintOnAppointment;
@@ -101,27 +103,28 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
                 Appointment a2 = apps.get(j);
 
                 if(a1.isDeterministic() && a2.isDeterministic()) {
-                    if(a1.startingTime.isBefore(a2.startingTime)) pred[i][j] = 1;
+                    if(a1.endingTime().isBefore(a2.startingTime)) pred[i][j] = 1;
                     else pred[i][j] = 0;
                 } else
                 if(a1.isDeterministic() && !a2.isDeterministic()) {
-                    if(a1.startingTime.isBefore(a2.timeSlot.startingTime)) pred[i][j] = 1;
-                    else if(a1.endingTime().isAfter(a2.timeSlot.endingTime)) pred[i][j] = 0;
+                    if(a1.endingTime().isBefore(a2.timeSlot.startingTime.plusSeconds(a2.duration))) pred[i][j] = 1;
+                    else if(a1.startingTime.isAfter(a2.timeSlot.endingTime.minusSeconds(a2.duration))) pred[i][j] = 0;
                     else pred[i][j] = 2;
                 } else
                 if(!a1.isDeterministic() && a2.isDeterministic()) {
-                    if(a1.timeSlot.endingTime.isAfter(a2.endingTime())) pred[i][j] = 1;
-                    else if(a1.timeSlot.startingTime.isAfter(a2.startingTime)) pred[i][j] = 0;
+                    if(a1.timeSlot.endingTime.minusSeconds(a1.duration).isBefore(a2.startingTime)) pred[i][j] = 1;
+                    else if(a1.timeSlot.startingTime.plusSeconds(a1.duration).isAfter(a2.endingTime())) pred[i][j] = 0;
                     else pred[i][j] = 2;
                 } else
                 if(!a1.isDeterministic() && !a2.isDeterministic()) {
-                    if(a1.timeSlot.endingTime.isAfter(a2.timeSlot.startingTime)) pred[i][j] = 1;
-                    else if(a1.timeSlot.startingTime.isAfter(a2.timeSlot.endingTime)) pred[i][j] = 0;
+                    if(a1.timeSlot.endingTime.minusSeconds(a1.duration).isBefore(a2.timeSlot.startingTime)) pred[i][j] = 1;
+                    else if(a1.timeSlot.startingTime.plusSeconds(a1.duration).isAfter(a2.timeSlot.endingTime)) pred[i][j] = 0;
                     else pred[i][j] = 2;
                 }
 
                 // distance
                 distances.put(new AppointmentCouple(a1,a2), MapUtils.distance(a1.coords, a2.coords));
+                distances.put(new AppointmentCouple(a2,a1), MapUtils.distance(a2.coords, a1.coords));
             }
         }
     }
@@ -133,7 +136,7 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
     private void CalculateCombinations(ArrayList<Appointment> appts, byte[][] pr, int curri, int currj) {
 
         for(int i=curri; i < appts.size()-1; i++) {
-            for(int j=currj-1; j < appts.size(); j++) {
+            for(int j=currj; j < appts.size(); j++) {
                 if(pr[i][j] == 2) {
 
                     byte[][] pred0 = CloneMatrix(pr);
@@ -147,11 +150,13 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
                     return;
                 }
             }
+            currj = i+1;
         }
 
         // all appointments have been ordered, calculate schedule
         ArrayList<Appointment> arrangement = ConvertPredMatrixToList(appts, pr);
         if(arrangement.size() == pred.length) {
+            StampaArray(pr);
             // schedule appointments in the arrangement
             Schedule s = GetScheduleFromArrangement(arrangement);
             if(s != null) {
@@ -203,6 +208,7 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
                 TemporaryAppointment appt1 = tempAppts.get(i);
                 Appointment appt2 = arrangement.get(i);
 
+                Log.e("Dist", appt1.toString() + " " + appt2.toString());
                 float distance = distances.get(new AppointmentCouple(appt1.originalAppt, appt2));
                 ArrayList<TravelMeanCostTimeInfo> means = UpdateStateWithBestMean(tempAppts.get(0), tempAppts.get(1), state, distance);
                 if(means.size() == 0) return null;      // no more means available
@@ -285,7 +291,7 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
             TravelMeanEnum mean = availableMeans.get(j);
             TravelMean tm = TravelMean.getTravelMean(mean);
             float distance = distances.get(new AppointmentCouple(a1.originalAppt,a2.originalAppt));
-            float time = tm.EstimateTime(a1.originalAppt, a2.originalAppt, distance);
+            float time = tm.EstimateTime(a1, a2, distance);
 
             if(time >= 0) {
                 switch (criteria) {
@@ -293,10 +299,10 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
                         meansQueue.add(new TravelMeanCostTimeInfo(tm, time, time));
                         break;
                     case OPTIMIZE_CARBON:
-                        meansQueue.add(new TravelMeanCostTimeInfo(tm, tm.EstimateCarbon(a1.originalAppt, a2.originalAppt, distance), time));
+                        meansQueue.add(new TravelMeanCostTimeInfo(tm, tm.EstimateCarbon(a1, a2, distance), time));
                         break;
                     case OPTIMIZE_COST:
-                        meansQueue.add(new TravelMeanCostTimeInfo(tm, tm.EstimateCost(a1.originalAppt, a2.originalAppt, distance), time));
+                        meansQueue.add(new TravelMeanCostTimeInfo(tm, tm.EstimateCost(a1, a2, distance), time));
                         break;
                 }
             } else {        // if time is negative, the current mean cannot be chosen because there are no near stops
