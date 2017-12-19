@@ -15,50 +15,50 @@ import com.example.gabdampar.travlendar.Model.travelMean.publicMeans.Tram;
 
 import java.util.ArrayList;
 
-import static com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum.BIKE_SHARING;
-import static com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum.BUS;
-import static com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum.CAR_SHARING;
-import static com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum.METRO;
-import static com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum.TAXI;
-import static com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum.TRAIN;
-import static com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum.TRAM;
-import static com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum.WALK;
-
 public abstract class TravelMean implements IMeanEvaluable {
 
-    protected static TravelMean instance;
     public TravelMeanEnum meanEnum;
 
     public int availableSeats;
 
     // provides a list of all instantiated travel means
-    public static ArrayList<TravelMean> MeansCollection;
+    public static ArrayList<TravelMean> MeansCollection = new ArrayList<>();
 
     public static TravelMean GetInstance() {
         throw new IllegalAccessError("Cannot call this method");
     }
 
     public static TravelMean getTravelMean(TravelMeanEnum meanType) {
+        TravelMean res = null;
         switch (meanType) {
             case WALK:
-                return Walk.GetInstance();
+                res = Walk.GetInstance();
+                break;
             case BIKE:
-                return Bike.GetInstance();
+                res = Bike.GetInstance();
+                break;
             case CAR:
-                return Car.GetInstance();
+                res = Car.GetInstance();
+                break;
             case TRAIN:
-                return Train.GetInstance();
+                res = Train.GetInstance();
+                break;
             case TRAM:
-                return Tram.GetInstance();
+                res = Tram.GetInstance();
+                break;
             case BUS:
-                return Bus.GetInstance();
+                res = Bus.GetInstance();
+                break;
             case METRO:
-                return Metro.GetInstance();
+                res = Metro.GetInstance();
+                break;
         }
-        return null;
+        return res;
     }
 
     public static boolean isMeanUsable(TravelMeanEnum actualMeanE, TravelMeanEnum futureMeanE){
+        if(actualMeanE == null) return true;
+
         if(getTravelMean(actualMeanE) instanceof PublicTravelMean){
             if (getTravelMean(futureMeanE) instanceof PublicTravelMean){
                 return true;

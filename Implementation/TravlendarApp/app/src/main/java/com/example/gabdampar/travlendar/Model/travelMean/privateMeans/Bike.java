@@ -14,7 +14,9 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class Bike extends PrivateTravelMean {
 
-    protected static float averageBikeSpeed	= 0.007f;
+    private static Bike instance;
+
+    protected static float averageBikeSpeed	= 0.333f;
 
     public Bike() {
         super();
@@ -26,7 +28,7 @@ public class Bike extends PrivateTravelMean {
             instance = new Bike();
             TravelMean.MeansCollection.add(instance);
         }
-        return (Bike)instance;
+        return instance;
     }
 
 

@@ -16,10 +16,10 @@ public enum TravelMeanEnum {
     CAR,
     WALK,
     TRAIN,
-    BIKE_SHARING,
-    CAR_SHARING,
-    TAXI,
-    UNKNOWN
+    //BIKE_SHARING,
+    //CAR_SHARING,
+    //TAXI,
+    //UNKNOWN
 }
 
 
