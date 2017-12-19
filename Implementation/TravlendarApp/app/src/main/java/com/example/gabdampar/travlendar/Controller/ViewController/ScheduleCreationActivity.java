@@ -96,25 +96,25 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
             Snackbar.make(findViewById(R.id.schedule_creation_inner_scrollview), "You have not saved any appointment for the chosen date", Snackbar.LENGTH_LONG).show();
         } else {
             // check for weather data
-            SharedPreferences settings = getSharedPreferences("ApiData", 0);
-            String savedDateString = settings.getString("weatherApiDate","");
-            if(savedDateString.isEmpty()) {
+            //SharedPreferences settings = getSharedPreferences("ApiData", 0);
+            //String savedDateString = settings.getString("weatherApiDate","");
+            //if(savedDateString.isEmpty()) {
                 /** calls to weather because no data found */
                 WeatherForecastAPIWrapper.getInstance().getWeather(this, date, scheduler.appts.get(0).coords);
 
-            } else {
-                LocalDate savedDate = LocalDate.parse(savedDateString);
-                LocalDate now = LocalDate.now();
-                if(savedDate.getYear() != now.getYear() || savedDate.getDayOfYear() != now.getDayOfYear()) {
-                    /** calls to weather because data found are of a different day */
-                    WeatherForecastAPIWrapper.getInstance().getWeather(this, date, scheduler.appts.get(0).coords);
-
-                } else {
-                    // load data from file
-                    Log.e("weather", "loading weather from file");
-                    this.setSchedulerWeather( TimeWeatherList.readFromFile(getApplicationContext(), "timeWeatherList.ser"));
-                }
-            }
+            //} else {
+//                LocalDate savedDate = LocalDate.parse(savedDateString);
+//                LocalDate now = LocalDate.now();
+//                if(savedDate.getYear() != now.getYear() || savedDate.getDayOfYear() != now.getDayOfYear()) {
+//                    /** calls to weather because data found are of a different day */
+//                    WeatherForecastAPIWrapper.getInstance().getWeather(this, date, scheduler.appts.get(0).coords);
+//
+//                } else {
+//                    // load data from file
+//                    Log.e("weather", "loading weather from file");
+//                    this.setSchedulerWeather( TimeWeatherList.readFromFile(getApplicationContext(), "timeWeatherList.ser"));
+//                }
+//            }
 
 
 
@@ -128,13 +128,14 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
     @Override
     public void onWeatherResults(TimeWeatherList weatherConditionList) {
         // save to preferences the received data
-        SharedPreferences settings = getSharedPreferences("ApiData", 0);
+        /*SharedPreferences settings = getSharedPreferences("ApiData", 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString("weatherApiDate", new LocalDate( calendar.getDate() ).toString());
 
         weatherConditionList.saveToFile(getApplicationContext(), "timeWeatherList.ser");
 
         editor.commit();
+        */
 
         Log.e("weather", "weather callback");
 

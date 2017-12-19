@@ -49,7 +49,7 @@ public class WeatherForecastAPIWrapper {
         request.setLat(String.valueOf(lat));
         request.setLng(String.valueOf(lon));
         request.setUnits(Request.Units.SI);
-        request.setTime(date.toString("YYYY-MM-DD_HH:MM:SS").replace("_","T"));
+        request.setTime(date.toDateTimeAtStartOfDay().toString("YYYY-MM-dd'T'HH:MM:SS"));
         request.setLanguage(Request.Language.ENGLISH);
         request.addExcludeBlock(Request.Block.ALERTS);
         request.addExcludeBlock(Request.Block.FLAGS);
