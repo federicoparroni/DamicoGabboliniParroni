@@ -1,6 +1,7 @@
 package com.example.gabdampar.travlendar.Controller.ViewController;
 
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -17,8 +18,10 @@ import android.widget.TimePicker;
 
 import com.example.gabdampar.travlendar.Controller.AppointmentManager;
 import com.example.gabdampar.travlendar.Controller.Scheduler;
+import com.example.gabdampar.travlendar.Controller.WeatherForecastAPIWrapper;
 import com.example.gabdampar.travlendar.Model.ConstraintOnSchedule;
 import com.example.gabdampar.travlendar.Model.OptCriteria;
+import com.example.gabdampar.travlendar.Model.TimeWeatherList;
 import com.example.gabdampar.travlendar.R;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
@@ -28,12 +31,13 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
 import info.hoang8f.android.segmented.SegmentedGroup;
 
-public class ScheduleCreationActivity extends AppCompatActivity implements CalendarView.OnDateChangeListener, TimePicker.OnTimeChangedListener, RadioGroup.OnCheckedChangeListener, OnMapReadyCallback, PlaceSelectionListener{
+public class ScheduleCreationActivity extends AppCompatActivity implements CalendarView.OnDateChangeListener, TimePicker.OnTimeChangedListener, RadioGroup.OnCheckedChangeListener, OnMapReadyCallback, PlaceSelectionListener, WeatherForecastAPIWrapper.WeatherForecastAPIWrapperCallBack{
 
     // view controls
     CalendarView calendar;
@@ -77,7 +81,6 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
         /** start schedule computation */
         fab = findViewById(R.id.fab);
 
-
         // LoadUserDefaults();
     }
 
@@ -89,7 +92,56 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
         if(scheduler.appts.size() == 0) {
             // no appointments for the specified date
             Snackbar.make(findViewById(R.id.schedule_creation_inner_scrollview), "You have not saved any appointment for the chosen date", Snackbar.LENGTH_LONG).show();
+        } else {
+            // check for weather data
+            SharedPreferences settings = getSharedPreferences("ApiData", 0);
+            String savedDateString = settings.getString("weatherApiDate","");
+            if(savedDateString.isEmpty()) {
+                /** calls to weather because no data found */
+                WeatherForecastAPIWrapper.getInstance().getWeather(this, date, scheduler.appts.get(0).coords);
+
+            } else {
+                LocalDate savedDate = LocalDate.parse(savedDateString);
+                LocalDate now = LocalDate.now();
+                if(savedDate.getYear() != now.getYear() || savedDate.getDayOfYear() != now.getDayOfYear()) {
+                    /** calls to weather because data found are of a different day */
+                    WeatherForecastAPIWrapper.getInstance().getWeather(this, date, scheduler.appts.get(0).coords);
+
+                } else {
+                    // load data from file
+                    Log.e("weather", "loading weather from file");
+                    this.setSchedulerWeather( TimeWeatherList.readFromFile(getApplicationContext(), "timeWeatherList.ser"));
+                }
+            }
+
+
+
         }
+    }
+
+    /**
+     * On weather results callback
+     * @param weatherConditionList
+     */
+    @Override
+    public void onWeatherResults(TimeWeatherList weatherConditionList) {
+        // save to preferences the received data
+        SharedPreferences settings = getSharedPreferences("ApiData", 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString("weatherApiDate", new LocalDate( calendar.getDate() ).toString());
+
+        weatherConditionList.saveToFile(getApplicationContext(), "timeWeatherList.ser");
+
+        editor.commit();
+
+        Log.e("weather", "weather callback");
+
+        this.setSchedulerWeather(weatherConditionList);
+    }
+
+    private void setSchedulerWeather(TimeWeatherList weatherConditionList) {
+        Log.e("weather", "set weather to scheduler");
+        scheduler.weatherConditions = weatherConditionList;
     }
 
     @Override

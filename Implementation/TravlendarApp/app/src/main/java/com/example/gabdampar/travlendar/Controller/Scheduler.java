@@ -26,10 +26,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import static com.example.gabdampar.travlendar.Model.travelMean.TravelMean.getTravelMean;
 
-public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWrapperCallBack {
+public class Scheduler {
 
     public LocalTime scheduleStartingTime;
     public LatLng startingLocation;
@@ -37,7 +38,7 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
     public ArrayList<ConstraintOnSchedule> constraints = new ArrayList<>();
     public OptCriteria criteria;
 
-    private TimeWeatherList weatherConditions;      // set by weather API callback
+    public TimeWeatherList weatherConditions;      // set by weather API callback
 
     private byte[][] pred;
     private HashMap<AppointmentCouple, Float> distances = new HashMap<>();
@@ -69,7 +70,7 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
 
             //TODO DECIDERE SE SPOSTARE LA CHIAMATA ALLE API DEL METEO
             /** call API to optimize time during arragements computation */
-            WeatherForecastAPIWrapper.getInstance().getWeather(this, appts.get(0).date, appts.get(0).coords);
+            //WeatherForecastAPIWrapper.getInstance().getWeather(this, appts.get(0).date, appts.get(0).coords);
 
             // 1-2
             CalculatePredecessorsAndDistanceMatrix(appts);
@@ -85,11 +86,6 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
         } else {
             throw new IllegalArgumentException("Empty appointment list");
         }
-    }
-
-    @Override
-    public void onWeatherResults(TimeWeatherList weatherConditionList) {
-        this.weatherConditions = weatherConditionList;
     }
 
     private void CalculatePredecessorsAndDistanceMatrix(ArrayList<Appointment> apps) {
@@ -265,24 +261,28 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
         }
         /** discard travel means that are not allowed by CURRENT STATE (mean-weather remaining distance / means order) */
         Weather currentWeather = weatherConditions.getWeatherForTime(a1.endingTime());
-        for(int i=0; i < availableMeans.size(); i++) {
-            TravelMeanEnum tm = availableMeans.get(i);
+        Iterator<TravelMeanEnum> it = availableMeans.iterator();
+        while (it.hasNext()) {
+            TravelMeanEnum tm = it.next();
             // remove a mean if it's remaining distance is negative OR the current mean indicator is greater than state indicator
             if( TravelMean.isMeanUsable(state.currentMean, tm) ) {
-                availableMeans.remove(i);
+                it.remove();
             } else {        // check remaining distance under current weather conditions
                 for (TravelMeanWeatherCouple mwCouple : state.meansState.keySet()) {
                     if (mwCouple.mean == tm && mwCouple.weather == currentWeather && state.meansState.get(mwCouple) < 0) {
-                        availableMeans.remove(i);
-                        i--;
+                        it.remove();
                     }
+
+                    // TODO: check if cost computation (under this) can be done here
+
                 }
             }
         }
         /** compute cost for each remaining mean */
         ArrayList<TravelMeanCostTimeInfo> meansQueue = new ArrayList<>();
-        for ( int j=0; j < availableMeans.size(); j++ ) {
-            TravelMeanEnum mean = availableMeans.get(j);
+        it = availableMeans.iterator();
+        while (it.hasNext()) {
+            TravelMeanEnum mean = it.next();
             TravelMean tm = TravelMean.getTravelMean(mean);
             float distance = distances.get(new AppointmentCouple(a1.originalAppt,a2.originalAppt));
             float time = tm.EstimateTime(a1.originalAppt, a2.originalAppt, distance);
@@ -300,8 +300,7 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
                         break;
                 }
             } else {        // if time is negative, the current mean cannot be chosen because there are no near stops
-                availableMeans.remove(j);
-                j--;
+                it.remove();
             }
         }
         /** order the remaining means by cost */
