@@ -20,6 +20,7 @@ import android.widget.TimePicker;
 import com.example.gabdampar.travlendar.Controller.AppointmentManager;
 import com.example.gabdampar.travlendar.Controller.Scheduler;
 import com.example.gabdampar.travlendar.Controller.WeatherForecastAPIWrapper;
+import com.example.gabdampar.travlendar.Model.Appointment;
 import com.example.gabdampar.travlendar.Model.ConstraintOnSchedule;
 import com.example.gabdampar.travlendar.Model.OptCriteria;
 import com.example.gabdampar.travlendar.Model.TimeWeatherList;
@@ -82,7 +83,7 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
         constraintsListView.setAdapter(constraintsAdapter);
         /** start schedule computation */
         fab = findViewById(R.id.fab);
-
+        fab.setClickable(false);
         // LoadUserDefaults();
     }
 
@@ -145,6 +146,8 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
     private void setSchedulerWeather(TimeWeatherList weatherConditionList) {
         Log.e("weather", "set weather to scheduler");
         scheduler.weatherConditions = weatherConditionList;
+
+        fab.setClickable(true);
     }
 
     @Override

@@ -5,7 +5,6 @@
 package com.example.gabdampar.travlendar.Model.travelMean.privateMeans;
 
 import com.example.gabdampar.travlendar.Controller.MapUtils;
-import com.example.gabdampar.travlendar.Model.Appointment;
 import com.example.gabdampar.travlendar.Model.TemporaryAppointment;
 import com.example.gabdampar.travlendar.Model.travelMean.PrivateTravelMean;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMean;
@@ -14,7 +13,9 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class Car extends PrivateTravelMean {
 
-    protected static final float AVG_SPEED = 0.03f;                  // km/h
+    private static Car instance;
+
+    protected static final float AVG_SPEED = 0.93f;                  // km/h
     protected static final float AVG_CARBON_EMISSION_PER_KM = 120;   // g/km
     protected static final float GAS_CONSUMPTION = 5.5f / 100f;      // l/km
     protected static final float GAS_COST = 1.4f;                    // euro/l
@@ -30,7 +31,7 @@ public class Car extends PrivateTravelMean {
             instance = new Car();
             TravelMean.MeansCollection.add(instance);
         }
-        return (Car)instance;
+        return instance;
     }
 
     @Override

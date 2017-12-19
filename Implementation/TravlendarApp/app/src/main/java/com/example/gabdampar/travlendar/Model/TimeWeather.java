@@ -12,7 +12,7 @@ public class TimeWeather {
 
     public TimeWeather(long l, Weather w){
         this.weather=w;
-        this.time=new LocalTime(l);
+        this.time=new LocalTime(l*1000);
     }
 
 

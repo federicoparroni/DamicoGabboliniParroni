@@ -1,7 +1,6 @@
 package com.example.gabdampar.travlendar.Model.travelMean.publicMeans;
 
 import com.example.gabdampar.travlendar.Controller.MapUtils;
-import com.example.gabdampar.travlendar.Model.Appointment;
 import com.example.gabdampar.travlendar.Model.TemporaryAppointment;
 import com.example.gabdampar.travlendar.Model.travelMean.PublicTravelMean;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMean;
@@ -15,6 +14,8 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class Metro extends PublicTravelMean {
 
+    private static Metro instance;
+
     protected static final float AVG_SPEED = 0.030f;                 // km/h
     protected static final float AVG_CARBON_EMISSION_PER_KM = 0;     // g/km
     protected static final float TICKET_COST = 1.5f;                 // euro
@@ -24,7 +25,7 @@ public class Metro extends PublicTravelMean {
             instance = new Metro();
             TravelMean.MeansCollection.add(instance);
         }
-        return (Metro) instance;
+        return instance;
     }
 
     public Metro() {

@@ -88,7 +88,7 @@ public class AddConstraintOnAppointmentActivity extends AppCompatActivity {
             case TRAM:
                 tramCheckBox.setChecked(true);
                 break;
-            case CAR_SHARING:
+            /*case CAR_SHARING:
                 carSharingCheckBox.setChecked(true);
                 break;
             case BIKE_SHARING:
@@ -96,7 +96,7 @@ public class AddConstraintOnAppointmentActivity extends AppCompatActivity {
                 break;
             case TAXI:
                 taxiCheckBox.setChecked(true);
-                break;
+                break;*/
             case WALK:
                 walkingCheckBox.setChecked(true);
                 break;
@@ -117,9 +117,9 @@ public class AddConstraintOnAppointmentActivity extends AppCompatActivity {
         createConstraint(carCheckBox,TravelMeanEnum.CAR);
         createConstraint(busCheckBox,TravelMeanEnum.BUS);
         createConstraint(tramCheckBox,TravelMeanEnum.TRAM);
-        createConstraint(carSharingCheckBox,TravelMeanEnum.CAR_SHARING);
-        createConstraint(bikeSharingCheckBox,TravelMeanEnum.BIKE_SHARING);
-        createConstraint(taxiCheckBox,TravelMeanEnum.TAXI);
+        //createConstraint(carSharingCheckBox,TravelMeanEnum.CAR_SHARING);
+        //createConstraint(bikeSharingCheckBox,TravelMeanEnum.BIKE_SHARING);
+        //createConstraint(taxiCheckBox,TravelMeanEnum.TAXI);
         createConstraint(walkingCheckBox,TravelMeanEnum.WALK);
         createConstraint(undergroundCheckBox,TravelMeanEnum.METRO);
         createConstraint(bikeCheckBox,TravelMeanEnum.BIKE);

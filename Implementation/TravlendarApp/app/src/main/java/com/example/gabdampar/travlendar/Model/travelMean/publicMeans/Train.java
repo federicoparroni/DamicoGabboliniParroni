@@ -1,11 +1,11 @@
 package com.example.gabdampar.travlendar.Model.travelMean.publicMeans;
 
 import com.example.gabdampar.travlendar.Controller.MapUtils;
-import com.example.gabdampar.travlendar.Model.Appointment;
 import com.example.gabdampar.travlendar.Model.TemporaryAppointment;
 import com.example.gabdampar.travlendar.Model.travelMean.PublicTravelMean;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMean;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum;
+import com.example.gabdampar.travlendar.Model.travelMean.privateMeans.Bike;
 import com.example.gabdampar.travlendar.Model.travelMean.privateMeans.Walk;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -15,7 +15,10 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class Train extends PublicTravelMean {
 
-    protected static final float AVG_SPEED = 0.030f;                 // km/h
+    private static Train instance;
+
+
+    protected static final float AVG_SPEED = 1.53f;                 // km/h
     protected static final float AVG_CARBON_EMISSION_PER_KM = 0;     // g/km
     protected static final float TICKET_COST = 1.5f;                 // euro
 
@@ -24,7 +27,7 @@ public class Train extends PublicTravelMean {
             instance = new Train();
             TravelMean.MeansCollection.add(instance);
         }
-        return (Train) instance;
+        return instance;
     }
 
     public Train() {
