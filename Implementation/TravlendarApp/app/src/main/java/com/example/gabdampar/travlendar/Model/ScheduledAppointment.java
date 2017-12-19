@@ -14,7 +14,7 @@ public class ScheduledAppointment {
     public LocalTime startingTime;
     public LocalTime ETA;
     public TravelMean travelMeanToUse;
-
+    public TravelOptionData dataFromPreviousToThis;
 
     public ScheduledAppointment(Appointment appt, LocalTime startingTime, LocalTime ETA, TravelMean mean) {
         this.originalAppointment = appt;

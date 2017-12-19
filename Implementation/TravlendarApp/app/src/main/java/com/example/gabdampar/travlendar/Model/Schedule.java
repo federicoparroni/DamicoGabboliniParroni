@@ -9,8 +9,11 @@ import java.util.ArrayList;
 
 public class Schedule {
 
-    private ArrayList<ScheduledAppointment> scheduledAppts = new ArrayList<>();
+    public ArrayList<ScheduledAppointment> getScheduledAppts() {
+        return scheduledAppts;
+    }
 
+    private ArrayList<ScheduledAppointment> scheduledAppts = new ArrayList<>();
     private float cost;
 
     public Schedule(ArrayList<TemporaryAppointment> apps, float cost) {

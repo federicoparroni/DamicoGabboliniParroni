@@ -14,9 +14,12 @@ import com.google.maps.model.DirectionsResult;
 import com.google.maps.model.DirectionsRoute;
 import com.google.maps.model.DirectionsStep;
 import com.google.maps.model.TransitMode;
+import com.google.maps.model.TransitRoutingPreference;
 import com.google.maps.model.TravelMode;
 import com.google.maps.model.VehicleType;
 import org.joda.time.DateTime;
+import org.joda.time.LocalTime;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -99,7 +102,7 @@ public class MappingServiceAPIWrapper{
             listener.StopServiceCallback(null);
     }
 
-    public void getTravelOptionData(final MappingServiceCallbackListener listener, List<TravelMeanEnum> admittedMeans, String startingLocation, String endingLocaton, DateTime departureTime){
+    public void getTravelOptionData(final MappingServiceCallbackListener listener, List<TravelMeanEnum> admittedMeans, LatLng startingLocation, LatLng endingLocaton, DateTime departureTime){
 
         ret.clear();
 
@@ -108,13 +111,17 @@ public class MappingServiceAPIWrapper{
             GeoApiContext.Builder b=new GeoApiContext.Builder();
             b.apiKey("AIzaSyAs4xaJnBh5JEsVm1MmQjg6CpUdwwL_Txk");
 
-            DirectionsApiRequest d=DirectionsApi.getDirections(
-                b.build(),
-                startingLocation,
-                endingLocaton
+            DirectionsApiRequest d=DirectionsApi.newRequest(
+                b.build()
             );
-            d.alternatives(true);
+            /**set this to false to speed up the whole scheduling alg
+             * on the other hand we would have more alternatives among which to choose
+             */
+            d.alternatives(false);
+
             d.departureTime(departureTime);
+            d.origin(new com.google.maps.model.LatLng(startingLocation.latitude,startingLocation.longitude));
+            d.destination(new com.google.maps.model.LatLng(endingLocaton.latitude,endingLocaton.longitude));
 
             /**
              * this in general will become the call for all the public travel means
@@ -133,8 +140,7 @@ public class MappingServiceAPIWrapper{
                             n.setCarbonEmission(0); //TODO
                             n.setPrice(0); //TODO
                             n.setPolyline(new PolylineOptions()
-                                    .addAll(decodePoly(
-                                            r.overviewPolyline.getEncodedPath())));
+                                    .addAll(convertLatLong(r.overviewPolyline.decodePath())));
                             n.setBounds(r.bounds);
                             n.setDirections(getTextualDirectionsGivenRouteAndUpdateMap(r));
                             n.setTime(new TimeSlot(
@@ -277,47 +283,16 @@ public class MappingServiceAPIWrapper{
         return r;
     }
 
-    private List<LatLng> decodePoly(String encoded){
-        List<LatLng> poly = new ArrayList<LatLng>();
-        int index = 0;
-        int length = encoded.length();
-
-        int latitude = 0;
-        int longitude = 0;
-
-        while(index < length){
-            int b;
-            int shift = 0;
-            int result = 0;
-
-            do {
-                b = encoded.charAt(index++) - 63;
-                result |= (b & 0x1f) << shift;
-                shift += 5;
-            } while (b >= 0x20);
-
-            int destLat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
-            latitude += destLat;
-
-            shift = 0;
-            result = 0;
-            do {
-                b = encoded.charAt(index++) - 63;
-                result |= (b & 0x1f) << shift;
-                shift += 5;
-            } while (b > 0x20);
-
-            int destLong = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
-            longitude += destLong;
-
-            poly.add(new LatLng((latitude / 1E5),(longitude / 1E5) ));
-        }
-        return poly;
+    private List<LatLng> convertLatLong(List<com.google.maps.model.LatLng> toConvert) {
+        ArrayList<LatLng> r = new ArrayList<LatLng>();
+        for (com.google.maps.model.LatLng latLng : toConvert)
+            r.add(new LatLng(latLng.lat, latLng.lng));
+        return r;
     }
 
     public interface MappingServiceCallbackListener {
 
-        void MappingServiceCallback(List<TravelOptionData> travelData);
+        void MappingServiceCallback(ArrayList<TravelOptionData> travelData);
 
     }
 

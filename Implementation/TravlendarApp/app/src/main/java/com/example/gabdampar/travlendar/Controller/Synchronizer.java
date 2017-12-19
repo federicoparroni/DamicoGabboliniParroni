@@ -38,7 +38,6 @@ public class Synchronizer {
             AppointmentManager.GetInstance().apptList.add(new Appointment("Aaaaaaaaaa", new LocalDate(2017, 11, 18),
                     new TimeSlot(new LocalTime(13, 30), new LocalTime(23, 40)),
                     5 * 60, new LatLng(45.4955892, 9.1919801)));
-
             AppointmentManager.GetInstance().apptList.add(new Appointment("E", new LocalDate(2017,11,18),
                 new TimeSlot(new LocalTime(10,0),new LocalTime(15,10)),
                 10*60, new LatLng(45.4704799,9.1771438)));
