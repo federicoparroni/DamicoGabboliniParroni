@@ -20,9 +20,10 @@ import android.widget.TimePicker;
 import com.example.gabdampar.travlendar.Controller.AppointmentManager;
 import com.example.gabdampar.travlendar.Controller.Scheduler;
 import com.example.gabdampar.travlendar.Controller.WeatherForecastAPIWrapper;
-import com.example.gabdampar.travlendar.Model.Appointment;
 import com.example.gabdampar.travlendar.Model.ConstraintOnSchedule;
 import com.example.gabdampar.travlendar.Model.OptCriteria;
+import com.example.gabdampar.travlendar.Model.Schedule;
+import com.example.gabdampar.travlendar.Model.ScheduleComputationListener;
 import com.example.gabdampar.travlendar.Model.TimeWeatherList;
 import com.example.gabdampar.travlendar.R;
 import com.google.android.gms.common.api.Status;
@@ -34,13 +35,15 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
 import info.hoang8f.android.segmented.SegmentedGroup;
 
-public class ScheduleCreationActivity extends AppCompatActivity implements CalendarView.OnDateChangeListener, TimePicker.OnTimeChangedListener, RadioGroup.OnCheckedChangeListener, OnMapReadyCallback, PlaceSelectionListener, WeatherForecastAPIWrapper.WeatherForecastAPIWrapperCallBack{
+public class ScheduleCreationActivity extends AppCompatActivity implements CalendarView.OnDateChangeListener,
+        TimePicker.OnTimeChangedListener, RadioGroup.OnCheckedChangeListener,
+        OnMapReadyCallback, PlaceSelectionListener,
+        WeatherForecastAPIWrapper.WeatherForecastAPIWrapperCallBack {
 
     // view controls
     CalendarView calendar;
@@ -189,7 +192,12 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
                 if(scheduler.isConsistent()) {
                     // start schedule computation
 
-                    scheduler.ComputeSchedule();
+                    scheduler.ComputeSchedule(new ScheduleComputationListener() {
+                        @Override
+                        public void onScheduleComputedCallback(Schedule s) {
+                            // scheduler computed
+                        }
+                    });
                     //Intent intent = new Intent();
                     //intent.putExtra("scheduler", scheduler);
                 } else {
@@ -231,5 +239,6 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
         // update list view adapter
         constraintsAdapter.notifyDataSetChanged();
     }
+
 
 }

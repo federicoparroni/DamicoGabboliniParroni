@@ -19,7 +19,7 @@ public class Tram extends PublicTravelMean {
     private static Tram instance;
 
 
-    protected static final float AVG_SPEED = 0.56f;                 // km/h
+    protected static final float AVG_SPEED = 6.94f;                 // km/h
     protected static final float AVG_CARBON_EMISSION_PER_KM = 0;     // g/km
     protected static final float TICKET_COST = 1.5f;                 // euro
 

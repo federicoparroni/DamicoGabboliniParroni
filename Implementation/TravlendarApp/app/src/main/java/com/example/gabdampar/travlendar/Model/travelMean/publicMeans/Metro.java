@@ -16,7 +16,7 @@ public class Metro extends PublicTravelMean {
 
     private static Metro instance;
 
-    protected static final float AVG_SPEED = 0.030f;                 // km/h
+    protected static final float AVG_SPEED = 13.889f;                 // km/h
     protected static final float AVG_CARBON_EMISSION_PER_KM = 0;     // g/km
     protected static final float TICKET_COST = 1.5f;                 // euro
 

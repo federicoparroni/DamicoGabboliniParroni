@@ -12,6 +12,7 @@ import com.example.gabdampar.travlendar.Model.ConstraintOnAppointment;
 import com.example.gabdampar.travlendar.Model.ConstraintOnSchedule;
 import com.example.gabdampar.travlendar.Model.OptCriteria;
 import com.example.gabdampar.travlendar.Model.Schedule;
+import com.example.gabdampar.travlendar.Model.ScheduleComputationListener;
 import com.example.gabdampar.travlendar.Model.TemporaryAppointment;
 import com.example.gabdampar.travlendar.Model.TimeWeatherList;
 import com.example.gabdampar.travlendar.Model.Weather;
@@ -67,7 +68,7 @@ public class Scheduler {
     }
 
 
-    public Schedule ComputeSchedule() {
+    public void ComputeSchedule(ScheduleComputationListener listener) {
         if(this.appts.size() > 0) {
 
             //TODO DECIDERE SE SPOSTARE LA CHIAMATA ALLE API DEL METEO
@@ -84,7 +85,10 @@ public class Scheduler {
             // OrderSchedules();
 
             // 5
-            return schedules.get(0);
+            for (Schedule s : schedules) {
+                System.out.printf("%s\n", s.toString());
+            }
+            listener.onScheduleComputedCallback( schedules.get(0) );
         } else {
             throw new IllegalArgumentException("Empty appointment list");
         }
@@ -207,7 +211,7 @@ public class Scheduler {
 
                 Log.e("Dist", appt1.toString() + " " + appt2.toString());
                 float distance = distances.get(new AppointmentCouple(appt1.originalAppt, appt2));
-                ArrayList<TravelMeanCostTimeInfo> means = UpdateStateWithBestMean(tempAppts.get(0), tempAppts.get(1), state, distance);
+                ArrayList<TravelMeanCostTimeInfo> means = UpdateStateWithBestMean(appt1, tempAppts.get(i+1), state, distance);
                 if(means.size() == 0) return null;      // no more means available
                 // get best travel mean (first in list) travel time
                 int travelTime = (int) means.get(0).geTime(); //(int) bestMean.EstimateTime(appt1.originalAppt, appt2, distance);
@@ -479,8 +483,10 @@ public class Scheduler {
 
     void AddWakeUpDistances(Appointment wakeUpAppt, ArrayList<Appointment> arrangement) {
         for(Appointment a : arrangement) {
-            distances.put(new AppointmentCouple(wakeUpAppt,a), MapUtils.distance(wakeUpAppt.coords, a.coords));
-            //distances.put(new AppointmentCouple(a,wakeUpAppt), MapUtils.distance(a.coords, wakeUpAppt.coords));
+            AppointmentCouple key = new AppointmentCouple(wakeUpAppt,a);
+            if(!distances.containsKey(key)) {
+                distances.put(key, MapUtils.distance(wakeUpAppt.coords, a.coords));
+            }
         }
     }
 

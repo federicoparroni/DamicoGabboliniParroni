@@ -16,7 +16,7 @@ public class Bus extends PublicTravelMean {
 
     private static Bus instance;
 
-    protected static final float AVG_SPEED = 0.83f;                 // km/h
+    protected static final float AVG_SPEED = 8.33f;                 // km/h
     protected static final float AVG_CARBON_EMISSION_PER_KM = 150;   // g/km
     protected static final float TICKET_COST = 1.50f;                    // euro
     

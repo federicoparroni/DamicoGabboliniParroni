@@ -18,7 +18,7 @@ public class Train extends PublicTravelMean {
     private static Train instance;
 
 
-    protected static final float AVG_SPEED = 1.53f;                 // km/h
+    protected static final float AVG_SPEED = 19.4f;                 // km/h
     protected static final float AVG_CARBON_EMISSION_PER_KM = 0;     // g/km
     protected static final float TICKET_COST = 1.5f;                 // euro
 

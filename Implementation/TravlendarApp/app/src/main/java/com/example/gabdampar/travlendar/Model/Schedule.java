@@ -4,6 +4,8 @@
 
 package com.example.gabdampar.travlendar.Model;
 
+import com.example.gabdampar.travlendar.Model.travelMean.TravelMean;
+
 import java.util.ArrayList;
 
 
@@ -18,16 +20,23 @@ public class Schedule {
 
         // TODO: convert TemporaryAppointments into ScheduledAppointments.. works??
         for(TemporaryAppointment a : apps) {
-            scheduledAppts.add(new ScheduledAppointment(a.originalAppt, a.startingTime, a.ETA, a.means.get(0).getTravelMean()));
+            TravelMean m = a.means != null ? a.means.get(0).getTravelMean() : null;
+            scheduledAppts.add(new ScheduledAppointment(a.originalAppt, a.startingTime, a.ETA, m ));
         }
     }
 
-    public void PrintToConsole() {
-        System.out.println("----- Schedule -----");
+    public String toString() {
+        StringBuilder res = new StringBuilder();
+        res.append("----- Schedule -----\n");
         for(ScheduledAppointment appt : scheduledAppts) {
-            System.out.println(String.format("%s: %s --- %s --- %s", appt.toString(), appt.startingTime.toString(), appt.ETA.toString(), appt.endingTime().toString()));
+            if(appt.travelMeanToUse != null) {
+                res.append(String.format("| %s: %s --%s-- %s --- %s | ", appt.toString(), appt.startingTime.toString("HH:mm"), appt.travelMeanToUse.toString(), appt.ETA.toString("HH:mm"), appt.endingTime().toString("HH:mm")));
+            } else {
+                res.append(String.format("| %s: %s |", appt.toString(), appt.endingTime().toString("HH:mm") ));
+            }
         }
-        System.out.println("------------");
+        res.append("\n------------");
+        return res.toString();
     }
 
 }

@@ -15,7 +15,7 @@ public class Walk extends PrivateTravelMean {
 
     private static Walk instance;
 
-    protected static final float AVG_SPEED = 0.17f;                 // km/h
+    protected static final float AVG_SPEED = 1.25f;                 // km/h
     protected static final float AVG_CARBON_EMISSION_PER_KM = 0;     // g/km
     protected static final float TICKET_COST = 0;                   // euro
 

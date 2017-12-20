@@ -74,4 +74,8 @@ public abstract class TravelMean implements IMeanEvaluable {
         }
     }
 
+    public String toString() {
+        return meanEnum.toString();
+    }
+
 }

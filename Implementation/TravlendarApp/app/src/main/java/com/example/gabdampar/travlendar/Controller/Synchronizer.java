@@ -74,7 +74,7 @@ public class Synchronizer {
 
 
             Appointment F = new Appointment("F", new LocalDate(2017,11,18),
-                    new TimeSlot(new LocalTime(14,30),new LocalTime(17,0)),
+                    new TimeSlot(new LocalTime(14,30),new LocalTime(19,0)),
                     25*60, new LatLng(45.5061279,9.1500127));
             F.distanceOfEachTransitStop.put(TravelMeanEnum.TRAIN, new LatLng(45.50205820000001,9.150917999999997));
             F.distanceOfEachTransitStop.put(TravelMeanEnum.BUS, new LatLng(45.4976291,9.152635499999999));
