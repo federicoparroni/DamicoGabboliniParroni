@@ -19,9 +19,12 @@ public class Tram extends PublicTravelMean {
     private static Tram instance;
 
 
-    protected static final float AVG_SPEED = 6.94f;                 // km/h
-    protected static final float AVG_CARBON_EMISSION_PER_KM = 0;     // g/km
-    protected static final float TICKET_COST = 1.5f;                 // euro
+    protected static final float AVG_SPEED = 2.78f;                 // m/s
+    protected static final float AVG_CARBON_EMISSION_PER_KM = 1;    // g/km
+    protected static final float TICKET_COST = 1.5f;                // euro
+    protected static final float AVG_WAITING_SEC = 4*60f;           // sec
+
+
 
     public static Tram GetInstance() {
         if(instance == null) {
@@ -56,7 +59,7 @@ public class Tram extends PublicTravelMean {
 
     @Override
     public float EstimateTime(LatLng from, LatLng to) {
-        return (MapUtils.distance(from,to)*1.3f)/AVG_SPEED;
+        return (MapUtils.distance(from,to)*1.3f)/AVG_SPEED + AVG_WAITING_SEC;
     }
 
 

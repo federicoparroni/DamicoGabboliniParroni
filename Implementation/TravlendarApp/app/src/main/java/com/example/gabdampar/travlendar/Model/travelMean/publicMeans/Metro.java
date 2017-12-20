@@ -16,9 +16,11 @@ public class Metro extends PublicTravelMean {
 
     private static Metro instance;
 
-    protected static final float AVG_SPEED = 13.889f;                 // km/h
-    protected static final float AVG_CARBON_EMISSION_PER_KM = 0;     // g/km
+    protected static final float AVG_SPEED = 4.5f;                   // m/s
+    protected static final float AVG_CARBON_EMISSION_PER_KM = 2;     // g/km
     protected static final float TICKET_COST = 1.5f;                 // euro
+    protected static final float AVG_WAITING_SEC = 2*60f;            // sec
+
 
     public static Metro GetInstance() {
         if (instance == null) {
@@ -53,7 +55,7 @@ public class Metro extends PublicTravelMean {
 
     @Override
     public float EstimateTime(LatLng from, LatLng to) {
-        return (MapUtils.distance(from,to)*1.3f)/AVG_SPEED;
+        return (MapUtils.distance(from,to)*1.3f)/AVG_SPEED + AVG_WAITING_SEC;
     }
 
     @Override
