@@ -28,10 +28,15 @@ import com.example.gabdampar.travlendar.Controller.ViewController.Fragment.Appoi
 import com.example.gabdampar.travlendar.Controller.ViewController.Fragment.HomeFragment;
 import com.example.gabdampar.travlendar.Controller.ViewController.Fragment.ScheduleListFragment;
 import com.example.gabdampar.travlendar.Controller.ViewController.Fragment.UserProfileFragment;
+import com.example.gabdampar.travlendar.Model.TravelOptionData;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum;
 import com.example.gabdampar.travlendar.R;
 import com.google.android.gms.maps.model.LatLng;
 
+import org.joda.time.DateTime;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import noman.googleplaces.NRPlaces;
@@ -80,6 +85,13 @@ public class MainActivity extends AppCompatActivity{
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         //SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 
+        /*MappingServiceAPIWrapper.getInstance().getTravelOptionData(new MappingServiceAPIWrapper.MappingServiceCallbackListener() {
+            @Override
+            public void MappingServiceCallback(List<TravelOptionData> travelData) {
+
+            }
+        },new ArrayList<TravelMeanEnum>(Arrays.asList(TravelMeanEnum.METRO)), new LatLng(45.481784,9.2476635), new LatLng(45.4641013,9.1897325), new DateTime(2017,12,19,16,0));
+*/
         Synchronizer.GetInstance().Synchronize();
 
         toolbar = findViewById(R.id.toolbar);
@@ -111,6 +123,8 @@ public class MainActivity extends AppCompatActivity{
             CURRENT_TAG = TAG_HOME;
             loadHomeFragment();
         }
+
+
     }
 
     /***

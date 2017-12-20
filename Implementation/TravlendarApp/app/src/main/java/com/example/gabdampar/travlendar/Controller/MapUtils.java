@@ -1,12 +1,17 @@
 package com.example.gabdampar.travlendar.Controller;
 
+import android.graphics.Color;
+
 import com.example.gabdampar.travlendar.Model.Appointment;
+import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolygonOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.List;
 
@@ -18,6 +23,12 @@ public class MapUtils {
 
     public static void disableNavigationButtons(GoogleMap map){
         map.getUiSettings().setMapToolbarEnabled(false);
+    }
+
+    public static void drawPolyline(GoogleMap map, PolylineOptions polylineOptions, TravelMeanEnum meanEnum){
+        polylineOptions.color(Color.RED);
+        polylineOptions.width(25);
+        map.addPolyline(polylineOptions);
     }
 
     public static void putMapMarkersGivenAppointment(GoogleMap map, Appointment appointment){

@@ -5,19 +5,25 @@
 package com.example.gabdampar.travlendar.Model;
 
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMean;
-
+import org.joda.time.LocalDate;
 import java.util.ArrayList;
 
 
 public class Schedule {
 
-    private ArrayList<ScheduledAppointment> scheduledAppts = new ArrayList<>();
+    public ArrayList<ScheduledAppointment> getScheduledAppts() {
+        return scheduledAppts;
+    }
 
+    private ArrayList<ScheduledAppointment> scheduledAppts = new ArrayList<>();
     private float cost;
+
+    public LocalDate getDate(){
+        return scheduledAppts.get(0).originalAppointment.getDate();
+    }
 
     public Schedule(ArrayList<TemporaryAppointment> apps, float cost) {
         this.cost = cost;
-
         // TODO: convert TemporaryAppointments into ScheduledAppointments.. works??
         for(TemporaryAppointment a : apps) {
             TravelMean m = a.means != null ? a.means.get(0).getTravelMean() : null;
@@ -25,9 +31,10 @@ public class Schedule {
         }
     }
 
+
     public String toString() {
         StringBuilder res = new StringBuilder();
-        res.append("----- Schedule -----\n");
+
         for(ScheduledAppointment appt : scheduledAppts) {
             if(appt.travelMeanToUse != null) {
                 res.append(String.format("| %s: %s --%s-- %s --- %s | ", appt.toString(), appt.startingTime.toString("HH:mm"), appt.travelMeanToUse.toString(), appt.ETA.toString("HH:mm"), appt.endingTime().toString("HH:mm")));

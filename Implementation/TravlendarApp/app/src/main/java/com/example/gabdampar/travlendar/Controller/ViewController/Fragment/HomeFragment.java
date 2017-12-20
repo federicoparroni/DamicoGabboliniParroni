@@ -16,6 +16,8 @@ import android.view.ViewGroup;
 
 import com.example.gabdampar.travlendar.Controller.AppointmentManager;
 import com.example.gabdampar.travlendar.Controller.MapUtils;
+import com.example.gabdampar.travlendar.Controller.ScheduleManager;
+import com.example.gabdampar.travlendar.Model.ScheduledAppointment;
 import com.example.gabdampar.travlendar.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -50,6 +52,15 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         MapUtils.putMapMarkersGivenAppointmentsAndSetMapZoomToThose(googleMap, AppointmentManager.GetInstance().apptList);
         MapUtils.disableNavigationButtons(map);
         askForPermissionAndShowUserPositionOnMap();
+
+        if(ScheduleManager.GetInstance().runningSchedule!=null){
+            /**
+             * TODO: show the current running schedule with directions
+             */
+            for(ScheduledAppointment sa : ScheduleManager.GetInstance().runningSchedule.getScheduledAppts())
+                if(sa.dataFromPreviousToThis!=null)
+                    MapUtils.drawPolyline(googleMap, sa.dataFromPreviousToThis.getPolyline(), sa.travelMeanToUse.meanEnum);
+        }
     }
 
     private void askForPermissionAndShowUserPositionOnMap(){

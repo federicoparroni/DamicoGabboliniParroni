@@ -12,9 +12,9 @@ import com.example.gabdampar.travlendar.Model.ConstraintOnAppointment;
 import com.example.gabdampar.travlendar.Model.ConstraintOnSchedule;
 import com.example.gabdampar.travlendar.Model.OptCriteria;
 import com.example.gabdampar.travlendar.Model.Schedule;
-import com.example.gabdampar.travlendar.Model.ScheduleComputationListener;
 import com.example.gabdampar.travlendar.Model.TemporaryAppointment;
 import com.example.gabdampar.travlendar.Model.TimeWeatherList;
+import com.example.gabdampar.travlendar.Model.TravelOptionData;
 import com.example.gabdampar.travlendar.Model.Weather;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMean;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanCostTimeInfo;
@@ -23,6 +23,8 @@ import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanWeatherCouple
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMeansState;
 import com.google.android.gms.maps.model.LatLng;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.LocalTime;
 
 import java.util.ArrayList;
@@ -67,8 +69,7 @@ public class Scheduler {
         return scheduleStartingTime != null && startingLocation != null && criteria != null && appts.size() > 0;
     }
 
-
-    public void ComputeSchedule(ScheduleComputationListener listener) {
+    public void ComputeSchedule(ScheduleCallbackListener listener) {
         if(this.appts.size() > 0) {
 
             //TODO DECIDERE SE SPOSTARE LA CHIAMATA ALLE API DEL METEO
@@ -88,10 +89,62 @@ public class Scheduler {
             for (Schedule s : schedules) {
                 System.out.printf("%s\n", s.toString());
             }
-            listener.onScheduleComputedCallback( schedules.get(0) );
+
+            /**
+             * for the current schedule, retrieve all the data for the travel means linking the two appointments
+             * if the time-bounds of the heuristical schedule is exceeded, the schedule is to be considered not valid
+             */
+            i=0;
+            j=1;
+            getBestScheduleAsync(listener);
         } else {
             throw new IllegalArgumentException("Empty appointment list");
         }
+    }
+
+    private int i=0;
+    private int j=1;
+    public void getBestScheduleAsync(final ScheduleCallbackListener listener){
+        if(schedules.size()>0) {
+            MappingServiceAPIWrapper.getInstance().getTravelOptionData(
+                new MappingServiceAPIWrapper.MappingServiceCallbackListener() {
+                    @Override
+                    public void MappingServiceCallback(ArrayList<TravelOptionData> travelData) {
+                        if(travelData.size()>0) {
+                            //da rivedere
+                            if(travelData.get(0).getTime().endingTime.isBefore(
+                                    schedules.get(i).getScheduledAppts().get(j).ETA)) {
+                                schedules.get(i).getScheduledAppts().get(j).dataFromPreviousToThis = travelData.get(0);
+                                j++;
+                                if((j==schedules.get(i).getScheduledAppts().size()))
+                                    listener.ScheduleCallback(schedules.get(i));
+                            } else
+                                i++;
+                        }
+                        else
+                            i++;
+                        if(i==schedules.size())
+                            listener.ScheduleCallback(null);
+                        else
+                            getBestScheduleAsync(listener);
+
+
+                        /**
+                         * an api call should be performed again
+                         * except in the case of j being equal to the number of scheduled appointments of that schedule (the method should end in this case)
+                         * and also in case of i beign large as the number of possible schedules
+                         */
+
+                    }},
+                    new ArrayList<TravelMeanEnum>(Arrays.asList(schedules.get(i).getScheduledAppts().get(j-1).travelMeanToUse.meanEnum)),
+                    schedules.get(i).getScheduledAppts().get(j - 1).originalAppointment.coords,
+                    schedules.get(i).getScheduledAppts().get(j).originalAppointment.coords,
+                    schedules.get(i).getScheduledAppts().get(j-1).originalAppointment.date.toDateTime(
+                            schedules.get(i).getScheduledAppts().get(j-1).endingTime(),
+                            DateTimeZone.forID("Europe/Rome")));
+        }
+        else
+            listener.ScheduleCallback(null);
     }
 
     private void CalculatePredecessorsAndDistanceMatrix(ArrayList<Appointment> apps) {
@@ -198,6 +251,7 @@ public class Scheduler {
          *  | arrangement[0] | arrangement[1] | arrangement[2] | .....
          *  |     wake-up    |  tempAppts[0]  |  tempAppts[1]  |  tempAppts[2]  | .....
         **/
+        DateTime scheduleData=null;
         do {
             currentCost = 0;
             mustReiterate = false;
@@ -251,6 +305,10 @@ public class Scheduler {
         while (mustReiterate);
 
         //cost = currentCost;
+
+        /**
+         * TODO: set the right date for the schedule
+         */
         return new Schedule(tempAppts, currentCost);
     }
 
@@ -536,5 +594,10 @@ public class Scheduler {
         System.out.println("");
     }
 
+    public interface ScheduleCallbackListener{
+
+        void ScheduleCallback(Schedule schedule);
+
+    }
 
 }

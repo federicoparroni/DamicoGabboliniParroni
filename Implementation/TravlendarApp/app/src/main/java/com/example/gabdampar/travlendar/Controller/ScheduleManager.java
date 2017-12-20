@@ -12,6 +12,11 @@ public class ScheduleManager {
 
     public ArrayList<Schedule> schedulesList = new ArrayList<>();
 
+    /**
+     * TODO: set it equals to the actual running schedule
+     */
+    public Schedule runningSchedule=null;
+
     // singleton
     private static ScheduleManager instance;
     public static ScheduleManager GetInstance() {
@@ -21,10 +26,10 @@ public class ScheduleManager {
         return instance;
     }
 
-
     public Schedule getSchedule(int position){
         return schedulesList.get(position);
     }
+
 
 
 }
