@@ -123,6 +123,8 @@ public class MainActivity extends AppCompatActivity{
             CURRENT_TAG = TAG_HOME;
             loadHomeFragment();
         }
+
+
     }
 
     /***

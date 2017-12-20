@@ -14,15 +14,19 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CalendarView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.example.gabdampar.travlendar.Controller.AppointmentManager;
+import com.example.gabdampar.travlendar.Controller.ScheduleManager;
 import com.example.gabdampar.travlendar.Controller.Scheduler;
 import com.example.gabdampar.travlendar.Controller.WeatherForecastAPIWrapper;
 import com.example.gabdampar.travlendar.Model.Appointment;
 import com.example.gabdampar.travlendar.Model.ConstraintOnSchedule;
 import com.example.gabdampar.travlendar.Model.OptCriteria;
+import com.example.gabdampar.travlendar.Model.Schedule;
 import com.example.gabdampar.travlendar.Model.TimeWeatherList;
 import com.example.gabdampar.travlendar.R;
 import com.google.android.gms.common.api.Status;
@@ -50,6 +54,7 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
     SegmentedGroup group;
     ListView constraintsListView;
     FloatingActionButton fab;
+    ProgressBar bar;
 
     ConstraintScheduleListViewAdapter constraintsAdapter;
 
@@ -68,6 +73,9 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
         /** wake up time picker */
         timePickerWakeUp = findViewById(R.id.wakeUpTimePicker);
         timePickerWakeUp.setOnTimeChangedListener(this);
+        /** progress bar */
+        bar = findViewById(R.id.progressBarScheduleCreation);
+        bar.setVisibility(View.INVISIBLE);
         /** optimizing criteria segmented control */
         group = findViewById(R.id.segmentedGroup);
         group.setTintColor( ResourcesCompat.getColor(getResources(), R.color.colorPrimary, null) );
@@ -189,7 +197,20 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
                 if(scheduler.isConsistent()) {
                     // start schedule computation
 
-                    scheduler.ComputeSchedule();
+                    SetViewState(false);
+
+                    scheduler.ComputeSchedule(new Scheduler.ScheduleCallbackListener() {
+                        @Override
+                        public void ScheduleCallback(Schedule schedule) {
+                            ScheduleManager.GetInstance().schedulesList.add(schedule);
+                            SetViewState(true);
+
+                            Toast.makeText(getApplicationContext(),"Computed schedule of date " + schedule.getDate().toString(), Toast.LENGTH_LONG);
+
+                            //to remove, just trying
+                            ScheduleManager.GetInstance().runningSchedule=schedule;
+                        }
+                    });
                     //Intent intent = new Intent();
                     //intent.putExtra("scheduler", scheduler);
                 } else {
@@ -197,6 +218,11 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
                 }
             }
         });
+    }
+
+    public void SetViewState(Boolean active) {
+        fab.setActivated(active);
+        bar.setVisibility(active ? View.INVISIBLE : View.VISIBLE);
     }
 
     @Override

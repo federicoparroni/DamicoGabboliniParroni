@@ -247,6 +247,7 @@ public class Scheduler {
          *  | arrangement[0] | arrangement[1] | arrangement[2] | .....
          *  |     wake-up    |  tempAppts[0]  |  tempAppts[1]  |  tempAppts[2]  | .....
         **/
+        DateTime scheduleData=null;
         do {
             currentCost = 0;
             mustReiterate = false;
@@ -289,7 +290,6 @@ public class Scheduler {
                         mustReiterate = true;
                         SetFlagForTimeConflicts(tempAppts, i+1);
                     }
-
                 }
             }
             if(mustReiterate) {
@@ -300,6 +300,10 @@ public class Scheduler {
         while (mustReiterate);
 
         //cost = currentCost;
+
+        /**
+         * TODO: set the right date for the schedule
+         */
         return new Schedule(tempAppts, currentCost);
     }
 

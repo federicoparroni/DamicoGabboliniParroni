@@ -4,6 +4,9 @@
 
 package com.example.gabdampar.travlendar.Model;
 
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+
 import java.util.ArrayList;
 
 
@@ -18,11 +21,14 @@ public class Schedule {
 
     public Schedule(ArrayList<TemporaryAppointment> apps, float cost) {
         this.cost = cost;
-
         // TODO: convert TemporaryAppointments into ScheduledAppointments.. works??
         for(TemporaryAppointment a : apps) {
             scheduledAppts.add(new ScheduledAppointment(a.originalAppt, a.startingTime, a.ETA, a.means.get(0).getTravelMean()));
         }
+    }
+
+    public LocalDate getDate(){
+        return scheduledAppts.get(0).originalAppointment.getDate();
     }
 
     public void PrintToConsole() {
