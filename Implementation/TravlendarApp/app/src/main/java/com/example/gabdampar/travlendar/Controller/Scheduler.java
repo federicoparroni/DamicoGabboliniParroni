@@ -93,13 +93,13 @@ public class Scheduler {
              * if the time-bounds of the heuristical schedule is exceeded, the schedule is to be considered not valid
              */
             i=0;
-            j=0;
+            j=1;
             getBestScheduleAsync(listener);
         }
     }
 
     private int i=0;
-    private int j=0;
+    private int j=1;
     public void getBestScheduleAsync(final ScheduleCallbackListener listener){
         if(schedules.size()>0) {
             MappingServiceAPIWrapper.getInstance().getTravelOptionData(
@@ -107,7 +107,8 @@ public class Scheduler {
                     @Override
                     public void MappingServiceCallback(ArrayList<TravelOptionData> travelData) {
                         if(travelData.size()>0) {
-                            if (schedules.get(i).getScheduledAppts().get(j).dataFromPreviousToThis.getTime().endingTime.isAfter(
+                            //da rivedere
+                            if(travelData.get(0).getTime().endingTime.isBefore(
                                     schedules.get(i).getScheduledAppts().get(j).ETA)) {
                                 schedules.get(i).getScheduledAppts().get(j).dataFromPreviousToThis = travelData.get(0);
                                 j++;
@@ -131,11 +132,11 @@ public class Scheduler {
                          */
 
                     }},
-                    new ArrayList<TravelMeanEnum>(Arrays.asList(schedules.get(i).getScheduledAppts().get(i).travelMeanToUse.meanEnum)),
-                    schedules.get(i).getScheduledAppts().get(i - 1).originalAppointment.coords,
-                    schedules.get(i).getScheduledAppts().get(i).originalAppointment.coords,
-                    schedules.get(i).getScheduledAppts().get(i).originalAppointment.date.toDateTime(
-                            schedules.get(i).getScheduledAppts().get(i).startingTime,
+                    new ArrayList<TravelMeanEnum>(Arrays.asList(schedules.get(i).getScheduledAppts().get(j-1).travelMeanToUse.meanEnum)),
+                    schedules.get(i).getScheduledAppts().get(j - 1).originalAppointment.coords,
+                    schedules.get(i).getScheduledAppts().get(j).originalAppointment.coords,
+                    schedules.get(i).getScheduledAppts().get(j-1).originalAppointment.date.toDateTime(
+                            schedules.get(i).getScheduledAppts().get(j-1).endingTime(),
                             DateTimeZone.forID("Europe/Rome")));
         }
         else
