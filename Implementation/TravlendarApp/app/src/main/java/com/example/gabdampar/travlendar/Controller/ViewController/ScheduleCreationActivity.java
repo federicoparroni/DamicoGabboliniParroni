@@ -231,6 +231,7 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
                             SetViewState(true);
                             finish();
                             //Toast.makeText(getApplicationContext(),"Computed schedule of date " + schedule.getDate().toString(), Toast.LENGTH_LONG);
+
                         }
                     });
                     //Intent intent = new Intent();

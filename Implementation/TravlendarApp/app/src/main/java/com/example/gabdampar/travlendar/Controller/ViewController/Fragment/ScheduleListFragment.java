@@ -55,22 +55,23 @@ public class ScheduleListFragment extends Fragment implements OnMapReadyCallback
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    // code run when click on menu item 1
-                    return true;
-                case R.id.navigation_dashboard:
-                    // code run when click on menu item 2
-                    return true;
-                default:
-                    return false;
+            if(item.getTitle().toString().equals("Current schedules")){
+                arrayAdapter.showCurrentSchedules=true;
+                arrayAdapter.getFilter().filter("");
             }
+            if(item.getTitle().toString().equals("Past schedules")){
+                arrayAdapter.showCurrentSchedules=false;
+                arrayAdapter.getFilter().filter("");
+            }
+            return true;
         }
+
     };
 
     @Override
     public void onResume(){
         super.onResume();
+        arrayAdapter.getFilter().filter("");
         arrayAdapter.notifyDataSetChanged();
     }
 
@@ -88,6 +89,7 @@ public class ScheduleListFragment extends Fragment implements OnMapReadyCallback
 
         scheduleListView = view.findViewById(R.id.scheduleListView);
         arrayAdapter = new ScheduleListViewAdapter(getActivity(), ScheduleManager.GetInstance().schedulesList);
+        arrayAdapter.getFilter().filter("");
         scheduleListView.setAdapter(arrayAdapter);
 
 
