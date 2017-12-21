@@ -17,6 +17,7 @@ public class Schedule {
 
     private ArrayList<ScheduledAppointment> scheduledAppts = new ArrayList<>();
     private float cost;
+    public OptCriteria criteria;
 
     public LocalDate getDate(){
         return scheduledAppts.get(0).originalAppointment.getDate();
@@ -30,7 +31,6 @@ public class Schedule {
             scheduledAppts.add(new ScheduledAppointment(a.originalAppt, a.startingTime, a.ETA, m ));
         }
     }
-
 
     public String toString() {
         StringBuilder res = new StringBuilder();

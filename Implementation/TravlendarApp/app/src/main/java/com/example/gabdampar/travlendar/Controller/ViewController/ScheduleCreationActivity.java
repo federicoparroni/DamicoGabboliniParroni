@@ -166,7 +166,6 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
     private void setSchedulerWeather(TimeWeatherList weatherConditionList) {
         Log.e("weather", "set weather to scheduler");
         scheduler.weatherConditions = weatherConditionList;
-
         fab.setClickable(true);
     }
 
@@ -225,8 +224,6 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
                                 }
                             });
 
-                            //to remove, just trying
-                            ScheduleManager.GetInstance().runningSchedule = schedule;
                         }
                     });
                     //Intent intent = new Intent();

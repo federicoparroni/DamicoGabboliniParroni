@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="73dp"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
+
+        <TextView
+            android:id="@+id/scheduleNameField"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="9dp"
+            android:text="Schedule name and date"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/runningField"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/scheduleNameField"
+            android:layout_below="@+id/scheduleNameField"
+            android:layout_marginTop="12dp"
+            android:text="is running"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+        <TextView
+            android:id="@+id/optimizationCriteriaField"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/runningField"
+            android:layout_alignBottom="@+id/runningField"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="25dp"
+            android:text="Optimization criteria?"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>
