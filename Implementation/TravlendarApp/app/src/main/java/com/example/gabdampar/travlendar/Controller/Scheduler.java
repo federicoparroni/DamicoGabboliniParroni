@@ -115,7 +115,8 @@ public class Scheduler {
                             /**
                              * in case of bike usage, we use our estimates (google doesnt provide estimates for bikes so far)
                              */
-                            if (schedules.get(i).getScheduledAppts().get(j).travelMeanToUse.meanEnum==TravelMeanEnum.BIKE){
+                            if (schedules.get(i).getScheduledAppts().get(j).travelMeanToUse.meanEnum==TravelMeanEnum.BIKE
+                                    ||schedules.get(i).getScheduledAppts().get(j).travelMeanToUse.meanEnum==TravelMeanEnum.CAR){
                                 schedules.get(i).getScheduledAppts().get(j).dataFromPreviousToThis = travelData.get(0);
                                 schedules.get(i).getScheduledAppts().get(j).dataFromPreviousToThis.setTime(new TimeSlot(
                                         schedules.get(i).getScheduledAppts().get(j).startingTime,
@@ -322,10 +323,9 @@ public class Scheduler {
 
         //cost = currentCost;
 
-        /**
-         * TODO: set the right date for the schedule
-         */
-        return new Schedule(tempAppts, currentCost);
+        Schedule r= new Schedule(tempAppts, currentCost);
+        r.criteria=this.criteria;
+        return r;
     }
 
 
