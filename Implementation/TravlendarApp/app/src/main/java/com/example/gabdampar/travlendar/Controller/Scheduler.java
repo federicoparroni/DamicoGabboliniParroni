@@ -113,7 +113,8 @@ public class Scheduler {
                     public void MappingServiceCallback(ArrayList<TravelOptionData> travelData) {
                         if(travelData.size()>0) {
                             /**
-                             * in case of bike usage, we use our estimates (google doesnt provide estimates for bikes so far)
+                             * in case of bike usage, we use our estimates of times (google doesnt provide estimates for bikes so far)
+                             * also in the case of the car our estimation are used, until we wont have more accurate estimates
                              */
                             if (schedules.get(i).getScheduledAppts().get(j).travelMeanToUse.meanEnum==TravelMeanEnum.BIKE
                                     ||schedules.get(i).getScheduledAppts().get(j).travelMeanToUse.meanEnum==TravelMeanEnum.CAR){
@@ -122,26 +123,28 @@ public class Scheduler {
                                         schedules.get(i).getScheduledAppts().get(j).startingTime,
                                         schedules.get(i).getScheduledAppts().get(j).ETA)
                                 );
-
-                                j++;
                                 if ((j == schedules.get(i).getScheduledAppts().size()-1))
                                     listener.ScheduleCallback(schedules.get(i));
+                                j++;
                             }
                             else {
                                 if (travelData.get(0).getTime().endingTime.isBefore(
                                         schedules.get(i).getScheduledAppts().get(j).ETA)) {
                                     schedules.get(i).getScheduledAppts().get(j).dataFromPreviousToThis = travelData.get(0);
-                                    j++;
                                     if ((j == schedules.get(i).getScheduledAppts().size() - 1))
                                         listener.ScheduleCallback(schedules.get(i));
+                                    j++;
                                 } else {
                                     i++;
                                     j=1;
                                 }
                             }
                         }
-                        else
+                        else{
                             i++;
+                            j=1;
+                        }
+
                         if(i==schedules.size())
                             listener.ScheduleCallback(null);
                         else

@@ -21,17 +21,21 @@ import java.util.ArrayList;
  * Created by gabbo on 21/12/2017.
  */
 
-public class ScheduleListViewAdapter extends ArrayAdapter<Schedule>{
-    //private ArrayList<Schedule> filteredData = null;
-    //private ScheduleListViewAdapter.ItemFilter mFilter = new ScheduleListViewAdapter.ItemFilter();
+public class ScheduleListViewAdapter extends ArrayAdapter<Schedule> implements Filterable{
+    private ArrayList<Schedule> filteredData = null;
+    private ScheduleListViewAdapter.ItemFilter mFilter = new ScheduleListViewAdapter.ItemFilter();
+    /**
+     * used in filtering
+     */
+    public boolean showCurrentSchedules=true;
 
     public ScheduleListViewAdapter(Context context, ArrayList<Schedule> scheduleList) {
         super(context, 0, scheduleList);
-        //this.filteredData = scheduleList;
+        this.filteredData = scheduleList;
     }
 
     // getter and setter
-    /*public int getCount() {
+    public int getCount() {
         return filteredData.size();
     }
 
@@ -55,28 +59,20 @@ public class ScheduleListViewAdapter extends ArrayAdapter<Schedule>{
     private class ItemFilter extends Filter {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-
-            LocalDate filterDate = AppointmentsListFragment.appointmentsDate;
-
             FilterResults results = new FilterResults();
 
-            final ArrayList<Appointment> list = AppointmentManager.GetInstance().getAppointmentList();
+            final ArrayList<Schedule> filteredList = new ArrayList<Schedule>(ScheduleManager.GetInstance().schedulesList.size());
 
-            int count = list.size();
-            final ArrayList<Appointment> filteredList = new ArrayList<Appointment>(count);
-
-            Appointment a;
-
-            for (int i = 0; i < count; i++) {
-                a = list.get(i);
-                if (a.getDate().equals(filterDate) || filterDate == null) {
-                    filteredList.add(a);
-                }
-            }
+            for(Schedule s:ScheduleManager.GetInstance().schedulesList)
+                if(showCurrentSchedules)
+                    if(s.getDate().equals(LocalDate.now())||s.getDate().isAfter(LocalDate.now()))
+                        filteredList.add(s);
+                else
+                    if(s.getDate().isBefore(LocalDate.now()))
+                        filteredList.add(s);
 
             results.values = filteredList;
             results.count = filteredList.size();
-
             return results;
         }
 
@@ -88,11 +84,11 @@ public class ScheduleListViewAdapter extends ArrayAdapter<Schedule>{
         }
 
     }
-*/
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
-        Schedule schedule = getItem(position);
+        Schedule schedule = filteredData.get(position);
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_schedule_list, parent, false);
