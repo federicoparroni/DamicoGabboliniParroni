@@ -340,6 +340,10 @@ public class Scheduler {
                 )
                 availableMeans.remove(constraint.mean);
         }
+
+        for(ConstraintOnAppointment c : a2.originalAppt.constraints) {
+            if(c.maxDistance == 0) availableMeans.remove(c.mean);
+        }
         /** discard travel means that are not allowed by CONSTRAINTS on APPOINTMENTS */
         for(ConstraintOnAppointment c : a2.incrementalConstraints) {
             if(c.maxDistance == 0) availableMeans.remove(c.mean);

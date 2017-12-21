@@ -6,47 +6,50 @@
     android:layout_height="match_parent"
     tools:context=".Controller.ViewController.AddConstraintOnAppointmentActivity">
 
+
     <CheckBox
         android:id="@+id/busCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Bus"
+        android:drawableLeft="@drawable/ic_action_bus"
+        android:drawablePadding="10dp"
         app:layout_constraintBottom_toTopOf="@+id/tramCheckBox"
         app:layout_constraintStart_toStartOf="@+id/tramCheckBox"
-        app:layout_constraintTop_toBottomOf="@+id/trainCheckBox" />
+        app:layout_constraintTop_toBottomOf="@+id/trainCheckBox"
+        />
 
     <CheckBox
         android:id="@+id/tramCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Tram"
-        app:layout_constraintBottom_toTopOf="@+id/taxiCheckBox"
-        app:layout_constraintStart_toStartOf="@+id/taxiCheckBox"
-        app:layout_constraintTop_toBottomOf="@+id/busCheckBox" />
-
-    <CheckBox
-        android:id="@+id/taxiCheckBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Taxi"
+        android:drawableLeft="@drawable/ic_action_tram"
+        android:drawablePadding="10dp"
         app:layout_constraintBottom_toTopOf="@+id/undergroundCheckBox"
         app:layout_constraintStart_toStartOf="@+id/undergroundCheckBox"
-        app:layout_constraintTop_toBottomOf="@+id/tramCheckBox" />
+        app:layout_constraintTop_toBottomOf="@+id/busCheckBox"
+        />
 
     <CheckBox
         android:id="@+id/undergroundCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Underground"
+        android:drawableLeft="@drawable/ic_action_subway"
+        android:drawablePadding="10dp"
         app:layout_constraintBottom_toTopOf="@+id/carSharingCheckBox"
         app:layout_constraintStart_toStartOf="@+id/carSharingCheckBox"
-        app:layout_constraintTop_toBottomOf="@+id/taxiCheckBox" />
+        app:layout_constraintTop_toBottomOf="@+id/tramCheckBox"
+        />
 
     <CheckBox
         android:id="@+id/carSharingCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Car Sharing"
+        android:drawableLeft="@drawable/ic_action_car"
+        android:drawablePadding="10dp"
         app:layout_constraintBottom_toTopOf="@+id/bikeSharingCheckBox"
         app:layout_constraintStart_toStartOf="@+id/bikeSharingCheckBox"
         app:layout_constraintTop_toBottomOf="@+id/undergroundCheckBox" />
@@ -56,6 +59,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="BikeSharing"
+        android:drawableLeft="@drawable/ic_action_bike"
+        android:drawablePadding="10dp"
         app:layout_constraintBottom_toTopOf="@+id/bikeCheckBox"
         app:layout_constraintStart_toStartOf="@+id/bikeCheckBox"
         app:layout_constraintTop_toBottomOf="@+id/carSharingCheckBox" />
@@ -65,6 +70,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Bike"
+        android:drawableLeft="@drawable/ic_action_bike"
+        android:drawablePadding="10dp"
         app:layout_constraintBottom_toTopOf="@+id/carCheckBox"
         app:layout_constraintStart_toStartOf="@+id/carCheckBox"
         app:layout_constraintTop_toBottomOf="@+id/bikeSharingCheckBox" />
@@ -75,6 +82,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="Train"
+        android:drawableLeft="@drawable/ic_action_train"
+        android:drawablePadding="10dp"
         app:layout_constraintBottom_toTopOf="@+id/busCheckBox"
         app:layout_constraintStart_toStartOf="@+id/busCheckBox"
         app:layout_constraintTop_toTopOf="parent"
@@ -85,6 +94,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Car"
+        android:drawableLeft="@drawable/ic_action_car"
+        android:drawablePadding="10dp"
         app:layout_constraintBottom_toTopOf="@+id/walkingCheckBox"
         app:layout_constraintStart_toStartOf="@+id/walkingCheckBox"
         app:layout_constraintTop_toBottomOf="@+id/bikeCheckBox" />
@@ -97,6 +108,8 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:text="Walking"
+        android:drawableLeft="@drawable/ic_action_walk"
+        android:drawablePadding="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.069"

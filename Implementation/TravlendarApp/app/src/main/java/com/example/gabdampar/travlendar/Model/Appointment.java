@@ -22,7 +22,7 @@ public class Appointment {
     public LocalTime startingTime = null;
     public TimeSlot timeSlot = null;
     public int duration = -1;    // seconds
-    public int involvedPeople = -1;
+    public int involvedPeople = 0;
     public LatLng coords;
     public boolean isRecurrent = false;
     public String location;

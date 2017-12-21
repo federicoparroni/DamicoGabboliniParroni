@@ -48,7 +48,6 @@ public class AddConstraintOnAppointmentActivity extends AppCompatActivity {
         carSharingCheckBox= findViewById(R.id.carSharingCheckBox);
         bikeSharingCheckBox= findViewById(R.id.bikeSharingCheckBox);
         tramCheckBox = findViewById(R.id.tramCheckBox);
-        taxiCheckBox = findViewById(R.id.taxiCheckBox);
         walkingCheckBox = findViewById(R.id.walkingCheckBox);
         undergroundCheckBox= findViewById(R.id.undergroundCheckBox);
         bikeCheckBox = findViewById(R.id.bikeCheckBox);
