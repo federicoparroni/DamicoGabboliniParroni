@@ -13,10 +13,17 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
+
+import android.view.MotionEvent;
+
 import android.view.View;
 import android.widget.CalendarView;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -30,6 +37,8 @@ import com.example.gabdampar.travlendar.Model.ConstraintOnSchedule;
 import com.example.gabdampar.travlendar.Model.OptCriteria;
 import com.example.gabdampar.travlendar.Model.Schedule;
 import com.example.gabdampar.travlendar.Model.TimeWeatherList;
+import com.example.gabdampar.travlendar.Model.Weather;
+import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum;
 import com.example.gabdampar.travlendar.R;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
@@ -42,6 +51,8 @@ import com.google.android.gms.maps.model.LatLng;
 
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
+
+import java.util.ArrayList;
 
 import info.hoang8f.android.segmented.SegmentedGroup;
 
@@ -93,6 +104,7 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
         constraintsListView = findViewById(R.id.constraintsListView);
         constraintsAdapter = new ConstraintScheduleListViewAdapter(getApplicationContext(), R.id.constraintsListView, scheduler.constraints);
         constraintsListView.setAdapter(constraintsAdapter);
+        FixListviewInScrollview(constraintsListView);
         /** start schedule computation */
         fab = findViewById(R.id.fab);
         fab.setClickable(false);
@@ -247,15 +259,93 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
     }
 
     /** called when user click on ADD CONSTRAINT */
-    public void OnAddConstraintClick(View view) {
-        // show dialog to create new constraint
+    public void OnAddConstraintClick(final View view) {
+        // create and add new constraint
+        final ConstraintOnSchedule newConstraint = new ConstraintOnSchedule();
+        newConstraint.maxDistance = 0;
+
+        // build dialog to create new constraint
+        LayoutInflater inflater = getLayoutInflater();
+        View dialoglayout = inflater.inflate(R.layout.dialog_constraint_creation, null);
+
+        final ArrayList<RadioButton> radioButtonsMean = new ArrayList<>();
+        final EditText txtMaxDistance = dialoglayout.findViewById(R.id.txt_maxDistance);
+
+        radioButtonsMean.add( (RadioButton) dialoglayout.findViewById(R.id.rbWalk) );
+        radioButtonsMean.add( (RadioButton) dialoglayout.findViewById(R.id.rbBike) );
+        radioButtonsMean.add( (RadioButton) dialoglayout.findViewById(R.id.rbCar) );
+        radioButtonsMean.add( (RadioButton) dialoglayout.findViewById(R.id.rbBus) );
+        radioButtonsMean.add( (RadioButton) dialoglayout.findViewById(R.id.rbTram) );
+        radioButtonsMean.add( (RadioButton) dialoglayout.findViewById(R.id.rbTrain) );
+        radioButtonsMean.add( (RadioButton) dialoglayout.findViewById(R.id.rbMetro) );
+        radioButtonsMean.add( (RadioButton) dialoglayout.findViewById(R.id.rbBikeSharing) );
+        for(RadioButton rb : radioButtonsMean) {
+            rb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                    onConstraintViewTravelMeanRadioButtonClicked(compoundButton, checked, radioButtonsMean, newConstraint);
+                }
+            });
+        }
+
+        final ArrayList<CheckBox> checksButtonsWeather = new ArrayList<>();
+        checksButtonsWeather.add( (CheckBox) dialoglayout.findViewById(R.id.ckSunny) );
+        checksButtonsWeather.add( (CheckBox) dialoglayout.findViewById(R.id.ckCloudy) );
+        checksButtonsWeather.add( (CheckBox) dialoglayout.findViewById(R.id.ckRainy) );
+        checksButtonsWeather.add( (CheckBox) dialoglayout.findViewById(R.id.ckSnowy) );
+        checksButtonsWeather.add( (CheckBox) dialoglayout.findViewById(R.id.ckFoggy) );
+        checksButtonsWeather.add( (CheckBox) dialoglayout.findViewById(R.id.ckWindy) );
+        for(CheckBox ck : checksButtonsWeather) {
+            ck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                    newConstraint.weather.clear();
+
+                    for(CheckBox ck : checksButtonsWeather) {
+
+                        if(ck.isChecked()) {
+                            switch (ck.getId()) {
+                                case R.id.ckSunny:
+                                    newConstraint.weather.add( Weather.CLEAN );
+                                    break;
+                                case R.id.ckCloudy:
+                                    newConstraint.weather.add( Weather.CLOUDY );
+                                    break;
+                                case R.id.ckRainy:
+                                    newConstraint.weather.add( Weather.RAINY );
+                                    break;
+                                case R.id.ckSnowy:
+                                    newConstraint.weather.add( Weather.SNOWY );
+                                    break;
+                                case R.id.ckFoggy:
+                                    newConstraint.weather.add( Weather.FOGGY );
+                                    break;
+                                case R.id.ckWindy:
+                                    newConstraint.weather.add( Weather.WINDY );
+                                    break;
+                            }
+                        }
+
+                    }
+                }
+            });
+        }
+
+
         AlertDialog.Builder builder = new AlertDialog.Builder(ScheduleCreationActivity.this);
-        builder.setView(R.layout.dialog_constraint_creation).setPositiveButton("Add", new DialogInterface.OnClickListener() {
+        builder.setView(dialoglayout).setPositiveButton("Add", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                // create and add new constraint
-                ConstraintOnSchedule c = new ConstraintOnSchedule();
-                //c.mean = ;
+                // set fields on constraint as set in the view
+                newConstraint.maxDistance = Float.parseFloat( txtMaxDistance.getText().toString() );
+
+                if(newConstraint.isConsistent()) {
+                    scheduler.constraints.add(newConstraint);
+                    // update list view adapter
+                    constraintsAdapter.notifyDataSetChanged();
+                } else {
+                    Snackbar.make(view, "Missing fields on the constraint", Snackbar.LENGTH_LONG).show();
+                }
             }
         }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
@@ -264,9 +354,67 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
             }
         });
         builder.create().show();
-        // update list view adapter
-        constraintsAdapter.notifyDataSetChanged();
+
     }
 
+
+    /**
+     * Called when a radiobutton in constraint dialog change its checked state
+     * @param compoundButton: radiobutton which its state has changed
+     * @param checked: state (checked or not)
+     * @param radios: all others radiobuttons on the dialog
+     * @param newConstraint: new constraint in creation
+     */
+    void onConstraintViewTravelMeanRadioButtonClicked(CompoundButton compoundButton, boolean checked, ArrayList<RadioButton> radios, ConstraintOnSchedule newConstraint) {
+        if(checked) {
+            switch (compoundButton.getId()) {
+                case R.id.rbWalk:
+                    newConstraint.mean = TravelMeanEnum.WALK;
+                    break;
+                case R.id.rbCar:
+                    newConstraint.mean = TravelMeanEnum.CAR;
+                    break;
+                case R.id.rbBike:
+                    newConstraint.mean = TravelMeanEnum.BIKE;
+                    break;
+                case R.id.rbTrain:
+                    newConstraint.mean = TravelMeanEnum.TRAIN;
+                    break;
+                case R.id.rbTram:
+                    newConstraint.mean = TravelMeanEnum.TRAM;
+                    break;
+                case R.id.rbMetro:
+                    newConstraint.mean = TravelMeanEnum.METRO;
+                    break;
+                case R.id.rbBus:
+                    newConstraint.mean = TravelMeanEnum.BUS;
+                    break;
+                /*case R.id.rbBikeSharing:
+                    newConstraint.mean = TravelMeanEnum.WALK;
+                    break;*/
+            }
+
+            //set all others to !checked
+            for (RadioButton radio : radios) {
+                if(radio.getId() != compoundButton.getId()) radio.setChecked(false);
+            }
+        }
+    }
+
+
+    /**
+     * Fix for scrollview with listview as child
+     */
+    void FixListviewInScrollview(ListView lv) {
+        lv.setOnTouchListener(new View.OnTouchListener() {
+            // Setting on Touch Listener for handling the touch inside ScrollView
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                // Disallow the touch request for parent scroll on touch of child view
+                v.getParent().requestDisallowInterceptTouchEvent(true);
+                return false;
+            }
+        });
+    }
 
 }

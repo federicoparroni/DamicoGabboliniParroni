@@ -115,18 +115,18 @@
                         android:orientation="horizontal">
 
                         <ImageView
-                            android:id="@+id/imgTram"
+                            android:id="@+id/imgBike"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            app:srcCompat="@drawable/ic_action_tram" />
+                            app:srcCompat="@drawable/ic_action_bike" />
 
                         <RadioButton
-                            android:id="@+id/rbTram"
+                            android:id="@+id/rbBike"
                             android:layout_width="120dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Tram" />
+                            android:text="Bike" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -149,18 +149,18 @@
                         android:orientation="horizontal">
 
                         <ImageView
-                            android:id="@+id/imgTaxi"
+                            android:id="@+id/imgTram"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            app:srcCompat="@drawable/ic_action_car" />
+                            app:srcCompat="@drawable/ic_action_tram" />
 
                         <RadioButton
-                            android:id="@+id/rbTaxi"
+                            android:id="@+id/rbTram"
                             android:layout_width="120dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Taxi" />
+                            android:text="Tram" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -195,14 +195,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            app:srcCompat="@drawable/ic_action_car" />
+                            app:srcCompat="@drawable/ic_action_subway" />
 
                         <RadioButton
-                            android:id="@+id/rbCarSharing"
+                            android:id="@+id/rbMetro"
                             android:layout_width="120dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="CarSharing" />
+                            android:text="Metro" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -242,12 +242,195 @@
             android:textColor="@color/colorPrimary" />
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/txt_maxDistance"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="number" />
+            android:inputType="number"
+            android:text="0" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="15dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="When:"
+            android:textColor="@color/colorPrimary" />
+
+        <!-- weather horizontal -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <!-- weather vertical -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <!-- weather cell horizontal -->
+
+                <!-- Sunny -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imgSunny"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        app:srcCompat="@drawable/ic_action_sun" />
+
+                    <CheckBox
+                        android:id="@+id/ckSunny"
+                        android:layout_width="120dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Sunny" />
+                </LinearLayout>
+
+                <!-- Cloudy -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imgCloudy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:contentDescription="cloudy"
+                        app:srcCompat="@drawable/ic_action_cloud" />
+
+                    <CheckBox
+                        android:id="@+id/ckCloudy"
+                        android:layout_width="120dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Cloudy" />
+                </LinearLayout>
+
+                <!-- Rainy -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imgRainy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:contentDescription="rainy"
+                        app:srcCompat="@drawable/ic_action_rain" />
+
+                    <CheckBox
+                        android:id="@+id/ckRainy"
+                        android:layout_width="120dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Rainy" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <Space
+                android:layout_width="20dp"
+                android:layout_height="match_parent" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <!-- weather cell horizontal -->
+
+                <!-- Foggy -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imgFoggy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:contentDescription="foggy"
+                        app:srcCompat="@drawable/ic_action_fog" />
+
+                    <CheckBox
+                        android:id="@+id/ckFoggy"
+                        android:layout_width="120dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Foggy" />
+                </LinearLayout>
+
+                <!-- Snowy -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imgSnowy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:contentDescription="cloudy"
+                        app:srcCompat="@drawable/ic_action_snow" />
+
+                    <CheckBox
+                        android:id="@+id/ckSnowy"
+                        android:layout_width="120dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Snowy" />
+                </LinearLayout>
+
+                <!-- Windy -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imgWindy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:contentDescription="windy"
+                        app:srcCompat="@drawable/ic_action_fog" />
+
+                    <CheckBox
+                        android:id="@+id/ckWindy"
+                        android:layout_width="120dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Windy" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
 
     </LinearLayout>
+
+
 
 </android.support.constraint.ConstraintLayout>
