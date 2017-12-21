@@ -257,7 +257,7 @@ public class Scheduler {
         /** create and set wake-up dummy appointment */
         Appointment wakeUpAppt = new Appointment("WakeUp", appts.get(0).date, scheduleStartingTime, 0, startingLocation);
         //arrangement.add(wakeUpAppt);
-        AddWakeUpDistances(wakeUpAppt, arrangement);
+        AddWakeUpDistances(wakeUpAppt, arrangement.get(0));
         ArrayList<TemporaryAppointment> tempAppts = TemporaryAppointment.Create(arrangement);
         tempAppts.add(0, new TemporaryAppointment(wakeUpAppt, wakeUpAppt.startingTime, wakeUpAppt.startingTime, null));
 
@@ -280,7 +280,6 @@ public class Scheduler {
                 TemporaryAppointment appt1 = tempAppts.get(i);
                 Appointment appt2 = arrangement.get(i);
 
-                Log.e("Dist", appt1.toString() + " " + appt2.toString());
                 float distance = distances.get(new AppointmentCouple(appt1.originalAppt, appt2));
                 ArrayList<TravelMeanCostTimeInfo> means = UpdateStateWithBestMean(appt1, tempAppts.get(i+1), state, distance);
                 if(means.size() == 0) return null;      // no more means available
@@ -461,7 +460,7 @@ public class Scheduler {
      * @return true if the new arrangement must be recomputed with new added constraint, false if the arrangement is unfeasible
      */
     public boolean addConstraintToUnfeasibleSchedule (ArrayList<TemporaryAppointment> arrangment, TravelMeansState state) {
-        ArrayList<TemporaryAppointment> subArrangmentTimeFlaged = new ArrayList<>();
+        //ArrayList<TemporaryAppointment> subArrangmentTimeFlaged = new ArrayList<>();
         ArrayList<TemporaryAppointment> subArrangmentMeanFlaged = new ArrayList<>();
 
         boolean arrangmentIsTimeConflicting = false;
@@ -471,22 +470,24 @@ public class Scheduler {
         /**
          * Check if an appointment has a TimeConflict Flag UP
          */
-        for (TemporaryAppointment appt : arrangment) {
+        /*for (TemporaryAppointment appt : arrangment) {
             if (appt.isTimeConflicting == true) {
                 subArrangmentTimeFlaged.add(appt);
                 arrangmentIsTimeConflicting = true;
             }
-        }
+        }*/
 
         /**
          * If at least one appointment has a TimeConflict Flag UP
          */
-        if (arrangmentIsTimeConflicting) {
+        //if (arrangmentIsTimeConflicting) {
             float value = 0;
             int index = -1;
-            for (int i = 0; i < subArrangmentTimeFlaged.size(); i++) {
-                TemporaryAppointment appt = subArrangmentTimeFlaged.get(i);
-                if (appt.means.size() > 1) {
+
+            for (int i = 0; i < arrangment.size()-1; i++) {
+                TemporaryAppointment appt = arrangment.get(i);
+                if (appt.isTimeConflicting && appt.means.size() > 1) {
+                    arrangmentIsTimeConflicting = true;
                     TravelMeanCostTimeInfo tmcti = appt.means.get(1);
                     if (tmcti.relativeCost > value) {
                         value = tmcti.relativeCost;
@@ -501,13 +502,16 @@ public class Scheduler {
             }
             // add the constraint to the most convinient appointment
             else {
-                subArrangmentTimeFlaged.get(index).incrementalConstraints.add(new ConstraintOnAppointment(
+                arrangment.get(index).incrementalConstraints.add(new ConstraintOnAppointment(
                         arrangment.get(index).means.get(0).getMean().meanEnum, 0));
             }
             /**
              * If there aren't appointment with TimeConflict we must check for Mean conflicts
              */
-        } else {
+        //} else {
+
+        if(!arrangmentIsTimeConflicting) {
+
             TravelMeanEnum conflictingMean = null;
             Weather appointmentWeather = null;
             for (TravelMeanWeatherCouple a : state.meansState.keySet()) {
@@ -528,27 +532,27 @@ public class Scheduler {
                         subArrangmentMeanFlaged.add(appt);
                     }
                 }
-                float value = 0;
-                int index = -1;
+                float value2 = 0;
+                int index2 = -1;
                 for (int i = 0; i < subArrangmentMeanFlaged.size(); i++) {
                     TemporaryAppointment appt = subArrangmentMeanFlaged.get(i);
                     if (appt.means.size() > 1) {
                         TravelMeanCostTimeInfo tmcti = appt.means.get(1);
-                        if (tmcti.relativeCost > value) {
-                            value = tmcti.relativeCost;
-                            index = i;
+                        if (tmcti.relativeCost > value2) {
+                            value2 = tmcti.relativeCost;
+                            index2 = i;
                         }
                     }
                 }
 
                 // not possible to add constraint so the schedule is unfeasible
-                if (value == 0) {
+                if (value2 == 0) {
                     mustReiterate = false;
                 }
                 // add the constraint to the most convinient appointment
                 else {
-                    subArrangmentMeanFlaged.get(index).incrementalConstraints.add(new ConstraintOnAppointment(
-                            arrangment.get(index).means.get(0).getMean().meanEnum, 0));
+                    subArrangmentMeanFlaged.get(index2).incrementalConstraints.add(new ConstraintOnAppointment(
+                            arrangment.get(index2).means.get(0).getMean().meanEnum, 0));
                 }
             }
         }
@@ -556,13 +560,13 @@ public class Scheduler {
     }
 
 
-    void AddWakeUpDistances(Appointment wakeUpAppt, ArrayList<Appointment> arrangement) {
-        for(Appointment a : arrangement) {
-            AppointmentCouple key = new AppointmentCouple(wakeUpAppt,a);
-            if(!distances.containsKey(key)) {
-                distances.put(key, MapUtils.distance(wakeUpAppt.coords, a.coords));
-            }
+    void AddWakeUpDistances(Appointment wakeUpAppt, Appointment appt) {
+
+        AppointmentCouple key = new AppointmentCouple(wakeUpAppt, appt);
+        if(!distances.containsKey(key)) {
+            distances.put(key, MapUtils.distance(wakeUpAppt.coords, appt.coords));
         }
+
     }
 
     /**

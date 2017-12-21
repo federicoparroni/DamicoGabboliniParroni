@@ -45,7 +45,6 @@ public class TemporaryAppointment {
 
     public TemporaryAppointment(Appointment originalAppt) {
         this.originalAppt = originalAppt;
-        this.incrementalConstraints = (ArrayList<ConstraintOnAppointment>) originalAppt.getConstraints().clone();
     }
 
     public TemporaryAppointment(Appointment originalAppt, LocalTime startingTime, LocalTime ETA, ArrayList<TravelMeanCostTimeInfo> means) {

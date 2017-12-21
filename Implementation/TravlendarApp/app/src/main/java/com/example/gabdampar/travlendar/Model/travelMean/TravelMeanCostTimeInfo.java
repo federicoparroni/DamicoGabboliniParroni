@@ -45,11 +45,17 @@ public class TravelMeanCostTimeInfo implements Comparable<TravelMeanCostTimeInfo
     }
 
     public static void CleanUncovenientMeans(ArrayList<TravelMeanCostTimeInfo> meansQueue) {
-        for (int i = 1; i < meansQueue.size(); i++) {
+        for (int i = 1; i < meansQueue.size()-1; i++) { //aggiunto quel meno uno sul for
             TravelMeanCostTimeInfo mc2 = meansQueue.get(i);
             TravelMeanCostTimeInfo mc1 = meansQueue.get(i - 1);
-            float delta = (mc2.getCost() - mc1.getCost()) / (mc1.geTime() - mc2.geTime());
-            if (delta < 0)
+            float delta;
+            if((mc2.getCost() - mc1.getCost()) > 0){
+                delta = (mc1.geTime() - mc2.geTime()) / (mc2.getCost() - mc1.getCost());
+            }else{
+                delta = mc1.geTime() - mc2.geTime();
+            }
+
+            if (delta <= 0)
                 meansQueue.remove(i);
             else
                 mc2.relativeCost = delta;
