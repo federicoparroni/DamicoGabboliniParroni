@@ -13,6 +13,7 @@ import com.example.gabdampar.travlendar.Model.ConstraintOnSchedule;
 import com.example.gabdampar.travlendar.Model.OptCriteria;
 import com.example.gabdampar.travlendar.Model.Schedule;
 import com.example.gabdampar.travlendar.Model.TemporaryAppointment;
+import com.example.gabdampar.travlendar.Model.TimeSlot;
 import com.example.gabdampar.travlendar.Model.TimeWeatherList;
 import com.example.gabdampar.travlendar.Model.TravelOptionData;
 import com.example.gabdampar.travlendar.Model.Weather;
@@ -96,7 +97,7 @@ public class Scheduler {
              */
             i=0;
             j=1;
-            //getBestScheduleAsync(listener);
+            getBestScheduleAsync(listener);
         } else {
             throw new IllegalArgumentException("Empty appointment list");
         }
@@ -111,15 +112,32 @@ public class Scheduler {
                     @Override
                     public void MappingServiceCallback(ArrayList<TravelOptionData> travelData) {
                         if(travelData.size()>0) {
-                            //da rivedere
-                            if(travelData.get(0).getTime().endingTime.isBefore(
-                                    schedules.get(i).getScheduledAppts().get(j).ETA)) {
+                            /**
+                             * in case of bike usage, we use our estimates (google doesnt provide estimates for bikes so far)
+                             */
+                            if (schedules.get(i).getScheduledAppts().get(j).travelMeanToUse.meanEnum==TravelMeanEnum.BIKE){
                                 schedules.get(i).getScheduledAppts().get(j).dataFromPreviousToThis = travelData.get(0);
+                                schedules.get(i).getScheduledAppts().get(j).dataFromPreviousToThis.setTime(new TimeSlot(
+                                        schedules.get(i).getScheduledAppts().get(j).startingTime,
+                                        schedules.get(i).getScheduledAppts().get(j).ETA)
+                                );
+
                                 j++;
-                                if((j==schedules.get(i).getScheduledAppts().size()))
+                                if ((j == schedules.get(i).getScheduledAppts().size()-1))
                                     listener.ScheduleCallback(schedules.get(i));
-                            } else
-                                i++;
+                            }
+                            else {
+                                if (travelData.get(0).getTime().endingTime.isBefore(
+                                        schedules.get(i).getScheduledAppts().get(j).ETA)) {
+                                    schedules.get(i).getScheduledAppts().get(j).dataFromPreviousToThis = travelData.get(0);
+                                    j++;
+                                    if ((j == schedules.get(i).getScheduledAppts().size() - 1))
+                                        listener.ScheduleCallback(schedules.get(i));
+                                } else {
+                                    i++;
+                                    j=1;
+                                }
+                            }
                         }
                         else
                             i++;
@@ -127,7 +145,6 @@ public class Scheduler {
                             listener.ScheduleCallback(null);
                         else
                             getBestScheduleAsync(listener);
-
 
                         /**
                          * an api call should be performed again
@@ -139,8 +156,8 @@ public class Scheduler {
                     new ArrayList<TravelMeanEnum>(Arrays.asList(schedules.get(i).getScheduledAppts().get(j).travelMeanToUse.meanEnum)),
                     schedules.get(i).getScheduledAppts().get(j - 1).originalAppointment.coords,
                     schedules.get(i).getScheduledAppts().get(j).originalAppointment.coords,
-                    schedules.get(i).getScheduledAppts().get(j-1).originalAppointment.date.toDateTime(
-                            schedules.get(i).getScheduledAppts().get(j-1).endingTime(),
+                    schedules.get(i).getScheduledAppts().get(j).originalAppointment.date.toDateTime(
+                            schedules.get(i).getScheduledAppts().get(j).startingTime,
                             DateTimeZone.forID("Europe/Rome")));
         }
         else

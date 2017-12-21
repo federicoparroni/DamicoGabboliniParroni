@@ -188,8 +188,8 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
 
         // TODO get starting location from preferences
         scheduler.startingLocation = new LatLng(45.4809352, 9.233779);
-        onSelectedDayChange(calendar, 2017, 10, 18);
-        scheduler.criteria = OptCriteria.OPTIMIZE_COST;
+        onSelectedDayChange(calendar, 2017, 11, 26);
+        scheduler.criteria = OptCriteria.OPTIMIZE_TIME;
 
         // enable fab click listener
         fab.setOnClickListener(new View.OnClickListener() {
@@ -202,11 +202,17 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
 
                     scheduler.ComputeSchedule(new Scheduler.ScheduleCallbackListener() {
                         @Override
-                        public void ScheduleCallback(Schedule schedule) {
+                        public void ScheduleCallback(final Schedule schedule) {
                             ScheduleManager.GetInstance().schedulesList.add(schedule);
-                            SetViewState(true);
 
-                            Toast.makeText(getApplicationContext(),"Computed schedule of date " + schedule.getDate().toString(), Toast.LENGTH_LONG);
+                            //only the main thread can touch the view
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    SetViewState(true);
+                                    Toast.makeText(getApplicationContext(),"Computed schedule of date " + schedule.getDate().toString(), Toast.LENGTH_LONG);
+                                }
+                            });
 
                             //to remove, just trying
                             ScheduleManager.GetInstance().runningSchedule = schedule;

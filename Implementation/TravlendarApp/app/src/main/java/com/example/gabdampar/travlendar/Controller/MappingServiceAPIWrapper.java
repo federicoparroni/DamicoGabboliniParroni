@@ -102,7 +102,7 @@ public class MappingServiceAPIWrapper{
             listener.StopServiceCallback(null);
     }
 
-    public void getTravelOptionData(final MappingServiceCallbackListener listener, List<TravelMeanEnum> admittedMeans, LatLng startingLocation, LatLng endingLocaton, DateTime departureTime){
+    public void getTravelOptionData(final MappingServiceCallbackListener listener, List<TravelMeanEnum> admittedMeans, LatLng startingLocation, LatLng endingLocaton, final DateTime departureTime){
 
         ret.clear();
 
@@ -143,10 +143,15 @@ public class MappingServiceAPIWrapper{
                                     .addAll(convertLatLong(r.overviewPolyline.decodePath())));
                             n.setBounds(r.bounds);
                             n.setDirections(getTextualDirectionsGivenRouteAndUpdateMap(r));
-                            n.setTime(new TimeSlot(
+                            n.setMeanToKmMap(map);
+                            if(n.getMeanToKmMap().size()==1 && (n.getMeanToKmMap().containsKey(TravelMeanEnum.CAR))||(n.getMeanToKmMap().containsKey(TravelMeanEnum.WALK))){
+                                n.setTime(new TimeSlot(departureTime.toLocalTime(),departureTime.plus(r.legs[0].duration.inSeconds*1000).toLocalTime()));
+                            }
+                            else{
+                                n.setTime(new TimeSlot(
                                     r.legs[0].departureTime.toLocalTime(),
                                     r.legs[r.legs.length-1].arrivalTime.toLocalTime()));
-                            n.setMeanToKmMap(map);
+                            }
                             ret.add(n);
                         }
                         // callback return
@@ -176,7 +181,7 @@ public class MappingServiceAPIWrapper{
 
     private TravelMode getGoogleEnumValueFromTravelMeanEnum(TravelMeanEnum toConvert) {
         if(toConvert==TravelMeanEnum.BIKE)
-            return TravelMode.BICYCLING;
+            return TravelMode.WALKING;
         else if(toConvert==TravelMeanEnum.CAR)
             return TravelMode.DRIVING;
         else if(toConvert==TravelMeanEnum.WALK)
