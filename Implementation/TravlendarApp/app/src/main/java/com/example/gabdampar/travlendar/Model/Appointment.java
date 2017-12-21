@@ -21,8 +21,8 @@ public class Appointment {
     public LocalDate date;
     public LocalTime startingTime = null;
     public TimeSlot timeSlot = null;
-    public int duration;    // seconds
-    public int involvedPeople = 0;
+    public int duration = -1;    // seconds
+    public int involvedPeople = -1;
     public LatLng coords;
     public boolean isRecurrent = false;
     public String location;
