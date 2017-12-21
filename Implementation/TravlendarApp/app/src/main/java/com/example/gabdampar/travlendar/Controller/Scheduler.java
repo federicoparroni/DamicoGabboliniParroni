@@ -136,7 +136,7 @@ public class Scheduler {
                          */
 
                     }},
-                    new ArrayList<TravelMeanEnum>(Arrays.asList(schedules.get(i).getScheduledAppts().get(j-1).travelMeanToUse.meanEnum)),
+                    new ArrayList<TravelMeanEnum>(Arrays.asList(schedules.get(i).getScheduledAppts().get(j).travelMeanToUse.meanEnum)),
                     schedules.get(i).getScheduledAppts().get(j - 1).originalAppointment.coords,
                     schedules.get(i).getScheduledAppts().get(j).originalAppointment.coords,
                     schedules.get(i).getScheduledAppts().get(j-1).originalAppointment.date.toDateTime(
