@@ -16,7 +16,7 @@ public class Bike extends PrivateTravelMean {
 
     private static Bike instance;
 
-    protected static float averageBikeSpeed	= 3.333f;
+    protected static float averageBikeSpeed	= 2.84f;
 
     public Bike() {
         super();

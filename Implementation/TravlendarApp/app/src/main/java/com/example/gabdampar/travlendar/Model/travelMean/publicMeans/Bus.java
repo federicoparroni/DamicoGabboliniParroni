@@ -16,10 +16,12 @@ public class Bus extends PublicTravelMean {
 
     private static Bus instance;
 
-    protected static final float AVG_SPEED = 8.33f;                 // km/h
-    protected static final float AVG_CARBON_EMISSION_PER_KM = 150;   // g/km
-    protected static final float TICKET_COST = 1.50f;                    // euro
-    
+    protected static final float AVG_SPEED = 2.5f;                   // m/s
+    protected static final float AVG_CARBON_EMISSION_PER_KM = 4;     // g/km
+    protected static final float TICKET_COST = 1.50f;                // euro
+    protected static final float AVG_WAITING_SEC = 4*60f;            // sec
+
+
     public static Bus GetInstance() {
         if(instance == null) {
             instance = new Bus();
@@ -53,7 +55,7 @@ public class Bus extends PublicTravelMean {
 
     @Override
     public float EstimateTime(LatLng from, LatLng to) {
-        return (MapUtils.distance(from,to)*1.3f)/AVG_SPEED;
+        return (MapUtils.distance(from,to)*1.3f)/AVG_SPEED + AVG_WAITING_SEC;
     }
 
     @Override

@@ -209,7 +209,7 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
                             Toast.makeText(getApplicationContext(),"Computed schedule of date " + schedule.getDate().toString(), Toast.LENGTH_LONG);
 
                             //to remove, just trying
-                            ScheduleManager.GetInstance().runningSchedule=schedule;
+                            ScheduleManager.GetInstance().runningSchedule = schedule;
                         }
                     });
                     //Intent intent = new Intent();

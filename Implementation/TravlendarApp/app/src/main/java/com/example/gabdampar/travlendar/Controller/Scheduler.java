@@ -96,7 +96,7 @@ public class Scheduler {
              */
             i=0;
             j=1;
-            getBestScheduleAsync(listener);
+            //getBestScheduleAsync(listener);
         } else {
             throw new IllegalArgumentException("Empty appointment list");
         }
@@ -209,7 +209,7 @@ public class Scheduler {
         // all appointments have been ordered, calculate schedule
         ArrayList<Appointment> arrangement = ConvertPredMatrixToList(appts, pr);
         if(arrangement.size() == pred.length) {
-            StampaArray(pr);
+            //StampaArray(pr);
             // schedule appointments in the arrangement
             Schedule s = GetScheduleFromArrangement(arrangement);
             if(s != null) {
@@ -251,7 +251,7 @@ public class Scheduler {
          *  | arrangement[0] | arrangement[1] | arrangement[2] | .....
          *  |     wake-up    |  tempAppts[0]  |  tempAppts[1]  |  tempAppts[2]  | .....
         **/
-        DateTime scheduleData=null;
+
         do {
             currentCost = 0;
             mustReiterate = false;
