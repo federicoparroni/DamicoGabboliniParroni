@@ -11,9 +11,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
+import com.example.gabdampar.travlendar.Controller.AppointmentManager;
+import com.example.gabdampar.travlendar.Controller.ScheduleManager;
 import com.example.gabdampar.travlendar.Controller.ViewController.AppointmentCreationActivity;
 import com.example.gabdampar.travlendar.Controller.ViewController.ScheduleCreationActivity;
+import com.example.gabdampar.travlendar.Controller.ViewController.ScheduleListViewAdapter;
 import com.example.gabdampar.travlendar.R;
 
 import static android.app.Activity.RESULT_OK;
@@ -21,6 +25,8 @@ import static android.app.Activity.RESULT_OK;
 public class ScheduleListFragment extends Fragment {
 
     final int SCHEDULE_CREATION_REQUEST = 0;    // request code for startActivityForResult
+    ListView scheduleListView;
+    ScheduleListViewAdapter arrayAdapter;
 
     public ScheduleListFragment() {
         setHasOptionsMenu(true);    // to inflate appbar options menu
@@ -45,10 +51,14 @@ public class ScheduleListFragment extends Fragment {
     };
 
     @Override
+    public void onResume(){
+        super.onResume();
+        arrayAdapter.notifyDataSetChanged();
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
     }
 
     @Override
@@ -57,6 +67,10 @@ public class ScheduleListFragment extends Fragment {
 
         BottomNavigationView navigation = view.findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        scheduleListView = view.findViewById(R.id.scheduleListView);
+        arrayAdapter = new ScheduleListViewAdapter(getActivity(), ScheduleManager.GetInstance().schedulesList);
+        scheduleListView.setAdapter(arrayAdapter);
 
         return view;
     }

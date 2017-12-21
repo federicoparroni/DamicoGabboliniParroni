@@ -8,6 +8,15 @@ public enum OptCriteria {
 
     OPTIMIZE_TIME,
     OPTIMIZE_COST,
-    OPTIMIZE_CARBON
+    OPTIMIZE_CARBON;
 
+    @Override
+    public String toString() {
+        switch(this) {
+            case OPTIMIZE_TIME: return "Time optimization";
+            case OPTIMIZE_CARBON: return "Carbon optimization";
+            case OPTIMIZE_COST: return "Cost optimization";
+            default: throw new IllegalArgumentException();
+        }
+    }
 }
