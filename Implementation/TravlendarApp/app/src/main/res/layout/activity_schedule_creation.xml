@@ -105,6 +105,9 @@
                 android:text="Optimize for:"
                 android:textSize="16dp"
                 android:textColor="@color/colorPrimary" />
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="8dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -129,6 +132,7 @@
                         style="@style/RadioButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:checked="true"
                         android:text="Time" />
 
                     <RadioButton
@@ -196,6 +200,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
+        app:backgroundTint="?android:attr/colorPressedHighlight"
         app:layout_anchor="@id/schedule_creation_inner_scrollview"
         app:layout_anchorGravity="bottom|right|end"
         app:srcCompat="@android:drawable/ic_media_play" />
