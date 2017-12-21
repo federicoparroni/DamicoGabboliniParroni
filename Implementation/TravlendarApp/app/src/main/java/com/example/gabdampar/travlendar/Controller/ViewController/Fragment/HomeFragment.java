@@ -57,9 +57,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             /**
              * TODO: show the current running schedule with directions
              */
-            for(ScheduledAppointment sa : ScheduleManager.GetInstance().runningSchedule.getScheduledAppts())
+
+            /*for(ScheduledAppointment sa : ScheduleManager.GetInstance().runningSchedule.getScheduledAppts())
                 if(sa.dataFromPreviousToThis!=null)
-                    MapUtils.drawPolyline(googleMap, sa.dataFromPreviousToThis.getPolyline(), sa.travelMeanToUse.meanEnum);
+                    MapUtils.drawPolyline(googleMap, sa.dataFromPreviousToThis.getPolyline(), sa.travelMeanToUse.meanEnum);*/
+
+            MapUtils.drawScheduleOnMap(ScheduleManager.GetInstance().runningSchedule,googleMap);
         }
     }
 

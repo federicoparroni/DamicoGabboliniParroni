@@ -3,6 +3,8 @@ package com.example.gabdampar.travlendar.Controller;
 import android.graphics.Color;
 
 import com.example.gabdampar.travlendar.Model.Appointment;
+import com.example.gabdampar.travlendar.Model.Schedule;
+import com.example.gabdampar.travlendar.Model.ScheduledAppointment;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -62,6 +64,19 @@ public class MapUtils {
         map.animateCamera(cu);
     }
 
+    public static void putMapMarkersGivenScheduledAppointmentsAndSetMapZoomToThose(GoogleMap map, List<ScheduledAppointment> appointments){
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        for(ScheduledAppointment a: appointments) {
+            MarkerOptions marker = new MarkerOptions().position(a.originalAppointment.coords)
+                    .title(a.toString());
+            map.addMarker(marker);
+            builder.include(marker.getPosition());
+        }
+        LatLngBounds bounds = builder.build();
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 120);
+        map.animateCamera(cu);
+    }
+
     public static float distance(LatLng start, LatLng end){
         double lat_a = start.latitude;
         double lat_b = end.latitude;
@@ -80,5 +95,11 @@ public class MapUtils {
         int meterConversion = 1609;
 
         return new Float(distance * meterConversion).floatValue();
+    }
+
+    public static void drawScheduleOnMap(Schedule s,GoogleMap map){
+        for(ScheduledAppointment sa : s.getScheduledAppts())
+            if(sa.dataFromPreviousToThis!=null)
+                MapUtils.drawPolyline(map, sa.dataFromPreviousToThis.getPolyline(), sa.travelMeanToUse.meanEnum);
     }
 }

@@ -1,6 +1,7 @@
 package com.example.gabdampar.travlendar.Controller.ViewController;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -11,6 +12,7 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CalendarView;
 import android.widget.ListView;
@@ -22,6 +24,7 @@ import android.widget.Toast;
 import com.example.gabdampar.travlendar.Controller.AppointmentManager;
 import com.example.gabdampar.travlendar.Controller.ScheduleManager;
 import com.example.gabdampar.travlendar.Controller.Scheduler;
+import com.example.gabdampar.travlendar.Controller.ViewController.Fragment.ScheduleListFragment;
 import com.example.gabdampar.travlendar.Controller.WeatherForecastAPIWrapper;
 import com.example.gabdampar.travlendar.Model.ConstraintOnSchedule;
 import com.example.gabdampar.travlendar.Model.OptCriteria;
@@ -204,15 +207,18 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
                         public void ScheduleCallback(final Schedule schedule) {
                             ScheduleManager.GetInstance().schedulesList.add(schedule);
 
-                            //only the main thread can touch the view
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    SetViewState(true);
-                                    Toast.makeText(getApplicationContext(),"Computed schedule of date " + schedule.getDate().toString(), Toast.LENGTH_LONG);
-                                }
-                            });
-
+                            //creation of the waiting view through an alert dialogue
+                            final AlertDialog.Builder builder = new AlertDialog.Builder(ScheduleCreationActivity.this);
+                            // Inflate and set the layout for the dialog, parent is null because its going in the dialog layout
+                            LayoutInflater inflater = LayoutInflater.from(builder.getContext());
+                            View inflatedView = inflater.inflate(R.layout.waiting_view, null);
+                            builder.setView(inflatedView);
+                            AlertDialog alert = builder.create();
+                            alert.show();
+                            
+                            SetViewState(true);
+                            finish();
+                            //Toast.makeText(getApplicationContext(),"Computed schedule of date " + schedule.getDate().toString(), Toast.LENGTH_LONG);
                         }
                     });
                     //Intent intent = new Intent();

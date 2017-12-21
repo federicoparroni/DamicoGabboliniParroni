@@ -14,7 +14,7 @@ import com.google.android.gms.maps.model.LatLng;
 public class Car extends PrivateTravelMean {
 
     private static Car instance;
-    
+
     protected static final float AVG_SPEED = 3.5f;                     // m/s
 
     protected static final float AVG_CARBON_EMISSION_PER_KM = 120;   // g/km
