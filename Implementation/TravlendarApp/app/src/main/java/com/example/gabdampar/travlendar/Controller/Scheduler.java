@@ -337,11 +337,14 @@ public class Scheduler {
 
         /** discard travel means that are not allowed by CONSTRAINTS on SCHEDULES */
         for(ConstraintOnSchedule constraint : constraints) {
-            if(constraint.maxDistance == 0 &&
-                constraint.weather.contains(weatherConditions.getWeatherForTime(a1.endingTime()))
-                || (constraint.timeSlot.endingTime.isAfter(a1.endingTime()) && constraint.timeSlot.startingTime.isBefore(a2.startingTime))
-                )
+            if (constraint.maxDistance == 0 && constraint.weather.contains(weatherConditions.getWeatherForTime(a1.endingTime()))) {
                 availableMeans.remove(constraint.mean);
+            }
+            /** remove if it is not allowed by time slot */
+            if(constraint.timeSlot != null) {
+                if((constraint.timeSlot.endingTime.isAfter(a1.endingTime()) && constraint.timeSlot.startingTime.isBefore(a2.startingTime)))
+                    availableMeans.remove(constraint.mean);
+            }
         }
 
         for(ConstraintOnAppointment c : a2.originalAppt.constraints) {
