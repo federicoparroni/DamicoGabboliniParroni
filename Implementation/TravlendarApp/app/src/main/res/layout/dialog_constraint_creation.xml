@@ -233,25 +233,33 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="15dp" />
+            android:layout_height="12dp" />
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Travel at most:"
-            android:textColor="@color/colorPrimary" />
+            android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/txt_maxDistance"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="number"
-            android:text="0" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Travel at most:"
+                android:textColor="@color/colorPrimary" />
+            <Space
+                android:layout_width="15dp"
+                android:layout_height="match_parent" />
+            <EditText
+                android:id="@+id/txt_maxDistance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="number"
+                android:text="0" />
+        </LinearLayout>
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="15dp" />
+            android:layout_height="12dp" />
 
         <TextView
             android:layout_width="match_parent"
@@ -429,8 +437,66 @@
 
         </LinearLayout>
 
+        <!-- time slot horizontal -->
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="12dp" />
+
+        <CheckBox
+            android:id="@+id/ck_constraint_timeslot"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:text="Disable for a specific time slot"
+            android:textColor="@color/colorPrimary" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="from" />
+
+                <TimePicker
+                    android:id="@+id/tp_constraint_timeslot_start"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:timePickerMode="spinner" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="to" />
+
+                <TimePicker
+                    android:id="@+id/tp_constraint_timeslot_end"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:timePickerMode="spinner" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+
     </LinearLayout>
-
-
 
 </android.support.constraint.ConstraintLayout>

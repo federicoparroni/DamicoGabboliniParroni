@@ -326,9 +326,9 @@ public class Scheduler {
 
         //cost = currentCost;
 
-        Schedule r= new Schedule(tempAppts, currentCost);
-        r.criteria=this.criteria;
-        return r;
+        Schedule s = new Schedule(tempAppts);
+        s.criteria = this.criteria;
+        return s;
     }
 
 
@@ -470,58 +470,39 @@ public class Scheduler {
      * @return true if the new arrangement must be recomputed with new added constraint, false if the arrangement is unfeasible
      */
     public boolean addConstraintToUnfeasibleSchedule (ArrayList<TemporaryAppointment> arrangment, TravelMeansState state) {
-        //ArrayList<TemporaryAppointment> subArrangmentTimeFlaged = new ArrayList<>();
         ArrayList<TemporaryAppointment> subArrangmentMeanFlaged = new ArrayList<>();
 
         boolean arrangmentIsTimeConflicting = false;
         boolean arrangmentIsMeanConflicting = false;
         boolean mustReiterate = true;
 
-        /**
-         * Check if an appointment has a TimeConflict Flag UP
-         */
-        /*for (TemporaryAppointment appt : arrangment) {
-            if (appt.isTimeConflicting == true) {
-                subArrangmentTimeFlaged.add(appt);
+        /** Take the best second mean between all appointments with a TimeConflict flag */
+        float value = 0;
+        int index = -1;
+
+        for (int i = 0; i < arrangment.size()-1; i++) {
+            TemporaryAppointment appt = arrangment.get(i);
+            if (appt.isTimeConflicting && appt.means.size() > 1) {
                 arrangmentIsTimeConflicting = true;
-            }
-        }*/
-
-        /**
-         * If at least one appointment has a TimeConflict Flag UP
-         */
-        //if (arrangmentIsTimeConflicting) {
-            float value = 0;
-            int index = -1;
-
-            for (int i = 0; i < arrangment.size()-1; i++) {
-                TemporaryAppointment appt = arrangment.get(i);
-                if (appt.isTimeConflicting && appt.means.size() > 1) {
-                    arrangmentIsTimeConflicting = true;
-                    TravelMeanCostTimeInfo tmcti = appt.means.get(1);
-                    if (tmcti.relativeCost > value) {
-                        value = tmcti.relativeCost;
-                        index = i;
-                    }
+                TravelMeanCostTimeInfo tmcti = appt.means.get(1);
+                if (tmcti.relativeCost > value) {
+                    value = tmcti.relativeCost;
+                    index = i;
                 }
             }
+        }
 
-            // not possible to add constraint so the schedule is unfeasible
-            if (value == 0) {
-                mustReiterate = false;
-            }
-            // add the constraint to the most convinient appointment
-            else {
-                arrangment.get(index).incrementalConstraints.add(new ConstraintOnAppointment(
-                        arrangment.get(index).means.get(0).getMean().meanEnum, 0));
-            }
-            /**
-             * If there aren't appointment with TimeConflict we must check for Mean conflicts
-             */
-        //} else {
-
+        // not possible to add constraint so the schedule is unfeasible
+        if (value == 0) {
+            mustReiterate = false;
+        }
+        // add the constraint to the most convinient appointment
+        else {
+            arrangment.get(index).incrementalConstraints.add(new ConstraintOnAppointment(
+                    arrangment.get(index).means.get(0).getMean().meanEnum, 0));
+        }
+        /** ff there aren't appointment with TimeConflict we must check for Mean conflicts */
         if(!arrangmentIsTimeConflicting) {
-
             TravelMeanEnum conflictingMean = null;
             Weather appointmentWeather = null;
             for (TravelMeanWeatherCouple a : state.meansState.keySet()) {
@@ -532,9 +513,7 @@ public class Scheduler {
                     break;
                 }
             }
-            /**
-             * If at least one appointment has a MeanConflict Flag UP
-             */
+            /** if at least one appointment has a MeanConflict Flag UP */
             if (arrangmentIsMeanConflicting) {
                 for (TemporaryAppointment appt : arrangment) {
                     if (appt.means.get(0).getMean() == getTravelMean(conflictingMean) &&

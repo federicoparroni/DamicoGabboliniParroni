@@ -16,21 +16,41 @@ public class Schedule {
     }
 
     private ArrayList<ScheduledAppointment> scheduledAppts = new ArrayList<>();
-    private float cost;
     public OptCriteria criteria;
 
     public LocalDate getDate(){
         return scheduledAppts.get(0).originalAppointment.getDate();
     }
 
-    public Schedule(ArrayList<TemporaryAppointment> apps, float cost) {
-        this.cost = cost;
+    public Schedule(ArrayList<TemporaryAppointment> apps) {
         // TODO: convert TemporaryAppointments into ScheduledAppointments.. works??
         for(TemporaryAppointment a : apps) {
             TravelMean m = a.means != null ? a.means.get(0).getTravelMean() : null;
             scheduledAppts.add(new ScheduledAppointment(a.originalAppt, a.startingTime, a.ETA, m ));
         }
     }
+
+
+    public float getTotalCost() {
+        float cost = 0;
+        for (int i=1; i < scheduledAppts.size(); i++) {
+            ScheduledAppointment a1 = scheduledAppts.get(i);
+            ScheduledAppointment a2 = scheduledAppts.get(i+1);
+            cost += a2.travelMeanToUse.EstimateCost(a1.originalAppointment.coords, a2.originalAppointment.coords);
+        }
+        return cost;
+    }
+
+    public float getTotalCarbon() {
+        float cost = 0;
+        for (int i=1; i < scheduledAppts.size(); i++) {
+            ScheduledAppointment a1 = scheduledAppts.get(i);
+            ScheduledAppointment a2 = scheduledAppts.get(i+1);
+            cost += a2.travelMeanToUse.EstimateCarbon(a1.originalAppointment.coords, a2.originalAppointment.coords);
+        }
+        return cost;
+    }
+
 
     public String toString() {
         StringBuilder res = new StringBuilder();
