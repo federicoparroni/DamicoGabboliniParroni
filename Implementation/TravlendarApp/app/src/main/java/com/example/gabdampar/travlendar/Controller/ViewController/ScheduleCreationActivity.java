@@ -11,6 +11,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 
@@ -210,25 +211,28 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
             @Override
             public void onClick(View view) {
                 if(scheduler.isConsistent()) {
+
+                    DisplayMetrics metrics = getResources().getDisplayMetrics();
+                    int width = metrics.widthPixels;
+                    int height = metrics.heightPixels;
                     // start schedule computation
 
-                    SetViewState(false);
+                    //SetViewState(false);
+
+                    //creation of the waiting view through an alert dialogue
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(ScheduleCreationActivity.this);
+                    // Inflate and set the layout for the dialog, parent is null because its going in the dialog layout
+                    LayoutInflater inflater = LayoutInflater.from(builder.getContext());
+                    View inflatedView = inflater.inflate(R.layout.waiting_view, null);
+                    builder.setView(inflatedView);
+                    AlertDialog alert = builder.create();
+                    alert.show();
 
                     scheduler.ComputeSchedule(new Scheduler.ScheduleCallbackListener() {
                         @Override
                         public void ScheduleCallback(final Schedule schedule) {
                             ScheduleManager.GetInstance().schedulesList.add(schedule);
-
-                            //creation of the waiting view through an alert dialogue
-                            final AlertDialog.Builder builder = new AlertDialog.Builder(ScheduleCreationActivity.this);
-                            // Inflate and set the layout for the dialog, parent is null because its going in the dialog layout
-                            LayoutInflater inflater = LayoutInflater.from(builder.getContext());
-                            View inflatedView = inflater.inflate(R.layout.waiting_view, null);
-                            builder.setView(inflatedView);
-                            AlertDialog alert = builder.create();
-                            alert.show();
-                            
-                            SetViewState(true);
+                            //SetViewState(true);
                             finish();
                             //Toast.makeText(getApplicationContext(),"Computed schedule of date " + schedule.getDate().toString(), Toast.LENGTH_LONG);
 
