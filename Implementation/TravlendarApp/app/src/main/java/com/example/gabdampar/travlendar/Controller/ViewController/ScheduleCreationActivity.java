@@ -1,7 +1,6 @@
 package com.example.gabdampar.travlendar.Controller.ViewController;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -14,29 +13,26 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
-
 import android.view.MotionEvent;
-
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.CalendarView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.example.gabdampar.travlendar.Controller.AppointmentManager;
 import com.example.gabdampar.travlendar.Controller.ScheduleManager;
 import com.example.gabdampar.travlendar.Controller.Scheduler;
-import com.example.gabdampar.travlendar.Controller.ViewController.Fragment.ScheduleListFragment;
 import com.example.gabdampar.travlendar.Controller.WeatherForecastAPIWrapper;
 import com.example.gabdampar.travlendar.Model.ConstraintOnSchedule;
 import com.example.gabdampar.travlendar.Model.OptCriteria;
 import com.example.gabdampar.travlendar.Model.Schedule;
+import com.example.gabdampar.travlendar.Model.TimeSlot;
 import com.example.gabdampar.travlendar.Model.TimeWeatherList;
 import com.example.gabdampar.travlendar.Model.Weather;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum;
@@ -59,18 +55,18 @@ import info.hoang8f.android.segmented.SegmentedGroup;
 
 public class ScheduleCreationActivity extends AppCompatActivity implements CalendarView.OnDateChangeListener,
         TimePicker.OnTimeChangedListener, RadioGroup.OnCheckedChangeListener,
-        OnMapReadyCallback, PlaceSelectionListener,
+        OnMapReadyCallback, PlaceSelectionListener, AdapterView.OnItemLongClickListener,
         WeatherForecastAPIWrapper.WeatherForecastAPIWrapperCallBack {
 
     // view controls
     CalendarView calendar;
+
     TimePicker timePickerWakeUp;
     SupportMapFragment startingLocationMap;
     PlaceAutocompleteFragment autocompleteFragment;
     SegmentedGroup group;
     ListView constraintsListView;
     FloatingActionButton fab;
-    ProgressBar bar;
 
     ConstraintScheduleListViewAdapter constraintsAdapter;
 
@@ -89,9 +85,6 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
         /** wake up time picker */
         timePickerWakeUp = findViewById(R.id.wakeUpTimePicker);
         timePickerWakeUp.setOnTimeChangedListener(this);
-        /** progress bar */
-        bar = findViewById(R.id.progressBarScheduleCreation);
-        bar.setVisibility(View.INVISIBLE);
         /** optimizing criteria segmented control */
         group = findViewById(R.id.segmentedGroup);
         group.setTintColor( ResourcesCompat.getColor(getResources(), R.color.colorPrimary, null) );
@@ -105,6 +98,7 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
         constraintsListView = findViewById(R.id.constraintsListView);
         constraintsAdapter = new ConstraintScheduleListViewAdapter(getApplicationContext(), R.id.constraintsListView, scheduler.constraints);
         constraintsListView.setAdapter(constraintsAdapter);
+        constraintsListView.setOnItemLongClickListener(this);
         FixListviewInScrollview(constraintsListView);
         /** start schedule computation */
         fab = findViewById(R.id.fab);
@@ -247,10 +241,10 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
         });
     }
 
-    public void SetViewState(Boolean active) {
+    /*public void SetViewState(Boolean active) {
         fab.setActivated(active);
         bar.setVisibility(active ? View.INVISIBLE : View.VISIBLE);
-    }
+    }*/
 
     @Override
     public void onPlaceSelected(Place place) {
@@ -266,8 +260,8 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
     /** called when user click on ADD CONSTRAINT */
     public void OnAddConstraintClick(final View view) {
         // create and add new constraint
-        final ConstraintOnSchedule newConstraint = new ConstraintOnSchedule();
-        newConstraint.maxDistance = 0;
+        final ConstraintOnSchedule editingConstraint = new ConstraintOnSchedule();
+        editingConstraint.maxDistance = 0;
 
         // build dialog to create new constraint
         LayoutInflater inflater = getLayoutInflater();
@@ -288,7 +282,7 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
             rb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                    onConstraintViewTravelMeanRadioButtonClicked(compoundButton, checked, radioButtonsMean, newConstraint);
+                    onConstraintViewTravelMeanRadioButtonClicked(compoundButton, checked, radioButtonsMean, editingConstraint);
                 }
             });
         }
@@ -304,37 +298,42 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
             ck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                    newConstraint.weather.clear();
+                    editingConstraint.weather.clear();
 
                     for(CheckBox ck : checksButtonsWeather) {
 
                         if(ck.isChecked()) {
                             switch (ck.getId()) {
                                 case R.id.ckSunny:
-                                    newConstraint.weather.add( Weather.CLEAN );
+                                    editingConstraint.weather.add( Weather.CLEAN );
                                     break;
                                 case R.id.ckCloudy:
-                                    newConstraint.weather.add( Weather.CLOUDY );
+                                    editingConstraint.weather.add( Weather.CLOUDY );
                                     break;
                                 case R.id.ckRainy:
-                                    newConstraint.weather.add( Weather.RAINY );
+                                    editingConstraint.weather.add( Weather.RAINY );
                                     break;
                                 case R.id.ckSnowy:
-                                    newConstraint.weather.add( Weather.SNOWY );
+                                    editingConstraint.weather.add( Weather.SNOWY );
                                     break;
                                 case R.id.ckFoggy:
-                                    newConstraint.weather.add( Weather.FOGGY );
+                                    editingConstraint.weather.add( Weather.FOGGY );
                                     break;
                                 case R.id.ckWindy:
-                                    newConstraint.weather.add( Weather.WINDY );
+                                    editingConstraint.weather.add( Weather.WINDY );
                                     break;
                             }
                         }
-
                     }
                 }
             });
         }
+        final TimePicker tpConstraintTimeSlotStart = dialoglayout.findViewById(R.id.tp_constraint_timeslot_start);
+        final TimePicker tpConstraintTimeSlotEnd = dialoglayout.findViewById(R.id.tp_constraint_timeslot_end);
+        tpConstraintTimeSlotStart.setIs24HourView(true);
+        tpConstraintTimeSlotEnd.setIs24HourView(true);
+
+        final CheckBox ckConstraintTimeSlot = dialoglayout.findViewById(R.id.ck_constraint_timeslot);
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(ScheduleCreationActivity.this);
@@ -342,10 +341,15 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 // set fields on constraint as set in the view
-                newConstraint.maxDistance = Float.parseFloat( txtMaxDistance.getText().toString() );
+                editingConstraint.maxDistance = Float.parseFloat( txtMaxDistance.getText().toString() );
+                if(ckConstraintTimeSlot.isChecked()) {
+                    LocalTime timeSlotStart = new LocalTime( tpConstraintTimeSlotStart.getHour(), tpConstraintTimeSlotStart.getMinute());
+                    LocalTime timeSlotEnd = new LocalTime( tpConstraintTimeSlotEnd.getHour(), tpConstraintTimeSlotEnd.getMinute());
+                    editingConstraint.timeSlot = new TimeSlot(timeSlotStart, timeSlotEnd);
+                }
 
-                if(newConstraint.isConsistent()) {
-                    scheduler.constraints.add(newConstraint);
+                if(editingConstraint.isConsistent()) {
+                    scheduler.constraints.add(editingConstraint);
                     // update list view adapter
                     constraintsAdapter.notifyDataSetChanged();
                 } else {
@@ -399,11 +403,42 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
                     break;*/
             }
 
-            //set all others to !checked
+            //set all others radios to unchecked
             for (RadioButton radio : radios) {
                 if(radio.getId() != compoundButton.getId()) radio.setChecked(false);
             }
         }
+    }
+
+    /**
+     * Called when a long click on a constraint list view row item is performed
+     * @param adapterView
+     * @param view
+     * @param index
+     * @param id
+     * @return
+     */
+    @Override
+    public boolean onItemLongClick(final AdapterView<?> adapterView, View view, final int index, long id) {
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+        alertBuilder.setTitle("Constraint deletion")
+                .setMessage("Are you sure you want to delete this constraint?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        scheduler.constraints.remove(index);
+                        // update list view adapter
+                        constraintsAdapter.notifyDataSetChanged();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                })
+                .create().show();
+        return true;
     }
 
 

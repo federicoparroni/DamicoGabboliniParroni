@@ -8,10 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.gabdampar.travlendar.Controller.ScheduleManager;
-import com.example.gabdampar.travlendar.Model.Constraint;
 import com.example.gabdampar.travlendar.Model.ConstraintOnSchedule;
-import com.example.gabdampar.travlendar.Model.Schedule;
 import com.example.gabdampar.travlendar.R;
 
 import java.util.ArrayList;
@@ -82,8 +79,15 @@ public class ConstraintScheduleListViewAdapter extends ArrayAdapter<ConstraintOn
             }
         }
 
+        if(constraint.timeSlot == null) {
+            textView.setText( String.format("Travel by %s for max %s when weather is: %s",
+                    constraint.mean.toString().toUpperCase(), maxDist, weatherList.toString() ));
+        } else {
+            textView.setText( String.format("Travel by %s for max %s when weather is: %s or between %s and %s",
+                    constraint.mean.toString().toUpperCase(), maxDist, weatherList.toString(),
+                    constraint.timeSlot.startingTime.toString("HH:mm"), constraint.timeSlot.endingTime.toString("HH:mm")));
+        }
 
-        textView.setText( String.format("Travel by %s for max %s when weather is: %s", constraint.mean.toString().toUpperCase(), maxDist, weatherList.toString() ) );
 
         return convertView;
     }
