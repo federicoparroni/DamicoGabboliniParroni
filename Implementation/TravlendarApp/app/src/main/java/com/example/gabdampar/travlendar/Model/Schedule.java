@@ -45,25 +45,25 @@ public class Schedule {
 
     public float getTotalCost() {
         float cost = 0;
-        for (int i=1; i < scheduledAppts.size(); i++) {
+        for (int i=1; i < scheduledAppts.size()-1; i++) {
             ScheduledAppointment a1 = scheduledAppts.get(i);
             ScheduledAppointment a2 = scheduledAppts.get(i+1);
             cost += a2.travelMeanToUse.EstimateCost(a1.originalAppointment.coords, a2.originalAppointment.coords);
         }
-        return cost;
+        return cost/1000; //must count the km
     }
 
     public float getTotalCarbon() {
         float cost = 0;
-        for (int i=1; i < scheduledAppts.size(); i++) {
+        for (int i=1; i < scheduledAppts.size()-1; i++) {
             ScheduledAppointment a1 = scheduledAppts.get(i);
             ScheduledAppointment a2 = scheduledAppts.get(i+1);
             cost += a2.travelMeanToUse.EstimateCarbon(a1.originalAppointment.coords, a2.originalAppointment.coords);
         }
-        return cost;
+        return cost/1000; //must count the km
     }
 
-    
+
     public String toString() {
         StringBuilder res = new StringBuilder();
 
@@ -75,6 +75,17 @@ public class Schedule {
             }
         }
         res.append("\n------------");
+        return res.toString();
+    }
+
+    public String toStringGraphical(){
+        StringBuilder res = new StringBuilder();
+
+        for(ScheduledAppointment appt : scheduledAppts) {
+            if(appt.travelMeanToUse != null) {
+                res.append(String.format("%s a.time: %s", appt.toString(), appt.ETA.toString("HH:mm")));
+            }
+        }
         return res.toString();
     }
 
