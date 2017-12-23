@@ -6,6 +6,8 @@ package com.example.gabdampar.travlendar.Model;
 
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMean;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
+
 import java.util.ArrayList;
 
 
@@ -30,6 +32,15 @@ public class Schedule {
             TravelMean m = a.means != null ? a.means.get(0).getTravelMean() : null;
             scheduledAppts.add(new ScheduledAppointment(a.originalAppt, a.startingTime, a.ETA, m ));
         }
+    }
+
+    public LocalTime getTotalTravelTime(){
+        int totalTravelTime = 0;
+        for(int i=1; i<this.getScheduledAppts().size()-1; i++){
+            totalTravelTime += this.getScheduledAppts().get(i).dataFromPreviousToThis.getTime().getDuration();
+        }
+        LocalTime t = new LocalTime(totalTravelTime /60,totalTravelTime%60);
+        return t;
     }
 
     public String toString() {
