@@ -2,9 +2,9 @@ package com.example.gabdampar.travlendar.Controller.ViewController;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -204,6 +204,9 @@ public class AppointmentCreationActivity extends AppCompatActivity implements On
                     AppointmentManager.GetInstance().setAllStopsCloseToAppointment(appointment);
                     AppointmentManager.GetInstance().apptList.add(appointment);
 
+                    // save appointments to file
+                    AppointmentManager.GetInstance().saveAppointments(this);
+
                     //add the constraint to the appointment
                     appointment.setConstraints(constraints);
 
@@ -212,7 +215,7 @@ public class AppointmentCreationActivity extends AppCompatActivity implements On
                     super.onBackPressed();
                 }
             }
-            //editing of an exsisting appointment
+            //editing of an existing appointment
             else {
                 //appointment that must be modified
                 Appointment appointment = AppointmentManager.GetInstance().GetAppointment(position);
@@ -251,6 +254,9 @@ public class AppointmentCreationActivity extends AppCompatActivity implements On
                         super.onBackPressed();
                     }
                 }
+
+                // save appointments to file
+                AppointmentManager.GetInstance().saveAppointments(this);
             }
         }
 
