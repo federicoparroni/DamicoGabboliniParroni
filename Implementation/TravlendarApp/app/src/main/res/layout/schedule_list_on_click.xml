@@ -32,37 +32,37 @@
             android:layout_below="@+id/appointment_map_on_click"
             android:orientation="horizontal"
             tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="257dp">
+            tools:layout_editor_absoluteY="257dp"
+            android:id="@+id/linearLayout3">
 
             <LinearLayout
                 android:layout_width="145dp"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp" />
+
                 <TextView
                     android:id="@+id/textView17"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Starting Time" />
+                    android:text="Starting Time"
+                    android:textAppearance="@style/TextAppearance.AppCompat"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/starting_timeText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:text="TextView"
+                    android:textColor="@color/common_google_signin_btn_text_dark_focused" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <ImageButton
-                        android:id="@+id/imageButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"
-                        android:background="@android:drawable/ic_menu_info_details"
-                        app:srcCompat="@android:drawable/ic_menu_info_details" />
                 </RelativeLayout>
 
             </LinearLayout>
@@ -72,43 +72,74 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp" />
+
                 <TextView
                     android:id="@+id/textView18"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="cost" />
+                    android:text="Cost"
+                    android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/cost_textView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:text="TextView"
+                    android:textColor="@color/common_google_signin_btn_text_dark_focused" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp" />
 
                 <TextView
                     android:id="@+id/textView18"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="time" />
+                    android:text="Total Travelled Time"
+                    android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/time_textView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:text="TextView"
+                    android:textColor="@color/common_google_signin_btn_text_dark_focused" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp" />
 
                 <TextView
                     android:id="@+id/textView18"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="carbon" />
+                    android:text="Carbon"
+                    android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/carbon_TextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:text="TextView"
+                    android:textColor="@color/common_google_signin_btn_text_dark_focused" />
+
             </LinearLayout>
         </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/linearLayout3"
+            android:layout_alignParentEnd="true"
+            android:background="@color/colorPrimaryDark"
+            app:srcCompat="@android:drawable/ic_menu_info_details" />
 
     </RelativeLayout>
 

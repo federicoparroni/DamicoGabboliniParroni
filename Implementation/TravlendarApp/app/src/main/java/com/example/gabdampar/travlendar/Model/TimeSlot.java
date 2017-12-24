@@ -8,6 +8,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
 
@@ -36,6 +37,15 @@ public class TimeSlot {
 
     public LocalTime getEndingTime(){
         return endingTime;
+    }
+
+    public int getDuration(){
+        int endingTimeInSecond = this.endingTime.getHourOfDay()*60 + this.endingTime.getMinuteOfHour();
+        int startingTimeInSecond = this.startingTime.getHourOfDay()*60 + this.startingTime.getMinuteOfHour();
+        int duration = (endingTimeInSecond - startingTimeInSecond);
+        //LocalTime t = new LocalTime(duration /60,duration%60);
+
+        return duration;
     }
 
     public String toString(){

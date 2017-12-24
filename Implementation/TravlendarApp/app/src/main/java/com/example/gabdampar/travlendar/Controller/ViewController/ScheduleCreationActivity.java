@@ -219,6 +219,7 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
                     LayoutInflater inflater = LayoutInflater.from(builder.getContext());
                     View inflatedView = inflater.inflate(R.layout.waiting_view, null);
                     builder.setView(inflatedView);
+                    builder.setTitle("Schedule Creation");
                     AlertDialog alert = builder.create();
                     alert.show();
 

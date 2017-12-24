@@ -8,7 +8,7 @@
 
     <RelativeLayout
         android:layout_width="268dp"
-        android:layout_height="206dp"
+        android:layout_height="101dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
@@ -23,19 +23,24 @@
             style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true" />
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="44dp" />
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/progressBar2"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="27dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="13dp"
+            android:layout_toEndOf="@+id/progressBar2"
             android:text="Computing..."
-            android:textColor="@color/colorPrimary"
-            android:textSize="24sp" />
+            android:textColor="@color/common_google_signin_btn_text_dark_focused"
+            android:textSize="18sp"
+            tools:layout_editor_absoluteX="161dp"
+            tools:layout_editor_absoluteY="243dp" />
+
     </RelativeLayout>
+
 </android.support.constraint.ConstraintLayout>
 
