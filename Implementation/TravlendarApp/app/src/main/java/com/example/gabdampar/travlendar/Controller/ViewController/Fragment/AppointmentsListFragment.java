@@ -26,6 +26,7 @@ import com.example.gabdampar.travlendar.Controller.AppointmentsListViewAdapter;
 import com.example.gabdampar.travlendar.Controller.MapUtils;
 import com.example.gabdampar.travlendar.Controller.Synchronizer;
 import com.example.gabdampar.travlendar.Controller.ViewController.AppointmentCreationActivity;
+import com.example.gabdampar.travlendar.Controller.ViewController.MainActivity;
 import com.example.gabdampar.travlendar.Model.Appointment;
 import com.example.gabdampar.travlendar.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -72,7 +73,7 @@ public class AppointmentsListFragment extends Fragment implements OnMapReadyCall
         appointmentsDate = null;
 
         //TODO: AGGIUSTARE COORDS (METODO PER FINTO SYNCHRONIZER)
-        Synchronizer.GetInstance().Synchronize();
+        Synchronizer.GetInstance().Synchronize(getActivity());
 
     }
 

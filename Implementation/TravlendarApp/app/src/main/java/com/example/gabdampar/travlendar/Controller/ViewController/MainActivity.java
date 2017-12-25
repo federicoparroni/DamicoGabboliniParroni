@@ -78,6 +78,9 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        /** synchronize appointment (load from file) */
+        Synchronizer.GetInstance().Synchronize(this);
+
         /**
          * the first time the user settings will be initialized to the default values
          * take care to initialize with the same default values of the database
@@ -92,7 +95,6 @@ public class MainActivity extends AppCompatActivity{
             }
         },new ArrayList<TravelMeanEnum>(Arrays.asList(TravelMeanEnum.METRO)), new LatLng(45.481784,9.2476635), new LatLng(45.4641013,9.1897325), new DateTime(2017,12,19,16,0));
 */
-        Synchronizer.GetInstance().Synchronize();
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

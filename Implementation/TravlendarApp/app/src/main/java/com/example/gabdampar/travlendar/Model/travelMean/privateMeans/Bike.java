@@ -7,7 +7,6 @@ package com.example.gabdampar.travlendar.Model.travelMean.privateMeans;
 import android.graphics.Color;
 
 import com.example.gabdampar.travlendar.Controller.MapUtils;
-import com.example.gabdampar.travlendar.Model.Appointment;
 import com.example.gabdampar.travlendar.Model.TemporaryAppointment;
 import com.example.gabdampar.travlendar.Model.travelMean.PrivateTravelMean;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMean;
@@ -39,17 +38,26 @@ public class Bike extends PrivateTravelMean {
     public float EstimateTime(TemporaryAppointment from, TemporaryAppointment to, float distance) {
         return distance / averageBikeSpeed * 1.2f;
     }
-
     @Override
     public float EstimateTime(LatLng from, LatLng to) {
         return MapUtils.distance(from, to)/ averageBikeSpeed * 1.2f;
     }
 
+
     @Override
     public float EstimateCost(TemporaryAppointment from, TemporaryAppointment to, float distance) {
         return 0;
     }
+    @Override
+    public float EstimateCost(LatLng from, LatLng to) {
+        return 0;
+    }
 
+
+    @Override
+    public float EstimateCarbon(LatLng from, LatLng to) {
+        return 0;
+    }
     @Override
     public float EstimateCarbon(TemporaryAppointment from, TemporaryAppointment to, float distance) {
         return 0;

@@ -127,8 +127,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
+                android:backgroundTint="@color/colorPrimary"
                 android:onClick="OnAddConstraintClick"
-                android:text="Add Constraints" />
+                android:text="Add Constraints"
+                android:textColor="@android:color/white" />
 
             <Button
                 android:id="@+id/saveButton"
@@ -136,8 +138,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="25dp"
                 android:layout_marginTop="15dp"
+                android:backgroundTint="@color/colorAccent"
                 android:onClick="OnSaveCliCk"
-                android:text="SAVE" />
+                android:text="SAVE"
+                android:textColor="@android:color/white"
+                android:textSize="18sp" />
 
         </LinearLayout>
     </ScrollView>

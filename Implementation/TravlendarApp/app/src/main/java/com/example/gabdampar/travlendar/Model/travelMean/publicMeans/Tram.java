@@ -40,6 +40,7 @@ public class Tram extends PublicTravelMean {
         super.meanEnum = TravelMeanEnum.TRAM;
     }
 
+
     @Override
     public float EstimateTime(TemporaryAppointment from, TemporaryAppointment to, float distance) {
         LatLng stationFrom = from.originalAppt.distanceOfEachTransitStop.get(TravelMeanEnum.TRAM);
@@ -57,18 +58,25 @@ public class Tram extends PublicTravelMean {
         }
         return totalTime;
     }
-
     @Override
     public float EstimateTime(LatLng from, LatLng to) {
         return (MapUtils.distance(from,to)*1.3f)/AVG_SPEED + AVG_WAITING_SEC;
     }
 
-
     @Override
     public float EstimateCost(TemporaryAppointment from, TemporaryAppointment to, float distance) {
         return TICKET_COST;
     }
+    @Override
+    public float EstimateCost(LatLng from, LatLng to) {
+        return TICKET_COST;
+    }
 
+    @Override
+    public float EstimateCarbon(LatLng from, LatLng to) {
+        float distance = MapUtils.distance(from, to);
+        return distance * AVG_CARBON_EMISSION_PER_KM;
+    }
     @Override
     public float EstimateCarbon(TemporaryAppointment from, TemporaryAppointment to, float distance) {
         return distance * AVG_CARBON_EMISSION_PER_KM ;

@@ -4,11 +4,9 @@
 
 package com.example.gabdampar.travlendar.Model;
 
-import com.example.gabdampar.travlendar.Controller.ViewController.Fragment.AppointmentsListFragment;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum;
 import com.google.android.gms.maps.model.LatLng;
 
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AlertDialog;
+import android.transition.Scene;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -176,34 +177,26 @@ public class ScheduleListFragment extends Fragment implements OnMapReadyCallback
                             }
                         });
 
-                /*
-                TODO: THE SAME AS BELOW BUT FOR THE CLICKED SCHEDULE
+
+                //TODO: THE SAME AS BELOW BUT FOR THE CLICKED SCHEDULE
                 //Fields of the inflated view
-                TextView onClickListViewName = inflatedView.findViewById(R.id.onClickListViewName);
-                TextView onClickListViewDate = inflatedView.findViewById(R.id.onClickListViewDate);
-                TextView onClickListViewDuration = inflatedView.findViewById(R.id.onClickListViewDuration);
-                TextView onClickListViewLocation = inflatedView.findViewById(R.id.onClickListViewLocation);
-                TextView onClickListViewStartingTimeOrTimeSlot = inflatedView.findViewById(R.id.onClickListViewStartingTimeOrTimeSlot);
-                TextView onClickListViewStartingTimeOrTimeSlotField = inflatedView.findViewById(R.id.onClickListViewStartingTimeOrTimeSlotField);
+                TextView starting_timeText = inflatedView.findViewById(R.id.starting_timeText);
+                TextView cost_textView = inflatedView.findViewById(R.id.cost_textView);
+                TextView time_textView = inflatedView.findViewById(R.id.time_textView);
+                TextView carbon_TextView = inflatedView.findViewById(R.id.carbon_TextView);
 
                 //The clicked Appointment
-                Appointment clickedAppointment = AppointmentManager.GetInstance().GetAppointment(i);
+                Schedule clickedSchedule = ScheduleManager.GetInstance().getSchedule(i);
 
                 //position of the clicked appointment needed for know which appointment has been click from the googleMapCallback
                 pos = i;
 
-                onClickListViewName.setText(clickedAppointment.toString());
-                onClickListViewDate.setText(clickedAppointment.getDate().toString());
-                onClickListViewDuration.setText(clickedAppointment.getStringDuration());
-                onClickListViewLocation.setText(clickedAppointment.getLocation());
-                if(clickedAppointment.getTimeSlot() == null) {
-                    onClickListViewStartingTimeOrTimeSlotField.setText("Starting Time");
-                    onClickListViewStartingTimeOrTimeSlot.setText(clickedAppointment.getStartingTime().toString("HH:mm"));
-                }else {
-                    onClickListViewStartingTimeOrTimeSlotField.setText("Time Slot");
-                    onClickListViewStartingTimeOrTimeSlot.setText(clickedAppointment.getTimeSlot().toString());
-                }
-                */
+                starting_timeText.setText(clickedSchedule.getScheduledAppts().get(0).startingTime.toString("HH:mm"));
+
+                time_textView.setText(clickedSchedule.getTotalTravelTime().toString("HH:mm"));
+
+                cost_textView.setText(String.format("%.2f",clickedSchedule.getTotalCost())+"$$");
+                carbon_TextView.setText(String.format("%.2f",clickedSchedule.getTotalCarbon())+"mg");
 
                 AlertDialog alert = builder.create();
                 alert.show();

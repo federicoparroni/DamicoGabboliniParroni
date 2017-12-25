@@ -66,7 +66,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 MapUtils.putMapMarkersGivenScheduledAppointmentsAndSetMapZoomToThose(map, ScheduleManager.GetInstance().runningSchedule.getScheduledAppts());
                 String toPut="";
                 for (ScheduledAppointment scheduledAppointment : ScheduleManager.GetInstance().runningSchedule.getScheduledAppts()) {
-                    toPut+=scheduledAppointment.toString()+scheduledAppointment.;
+                    //toPut+=scheduledAppointment.toString()+scheduledAppointment.;
                     if (scheduledAppointment.dataFromPreviousToThis != null)
                         toPut += scheduledAppointment.dataFromPreviousToThis.getDirections();
                 }
