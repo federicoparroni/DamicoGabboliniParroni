@@ -8,6 +8,7 @@ import android.app.Fragment;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 
 import com.example.gabdampar.travlendar.Controller.AppointmentManager;
 import com.example.gabdampar.travlendar.Controller.MapUtils;
+import com.example.gabdampar.travlendar.Controller.NetworkManager;
 import com.example.gabdampar.travlendar.Controller.ScheduleManager;
 import com.example.gabdampar.travlendar.Model.ScheduledAppointment;
 import com.example.gabdampar.travlendar.R;
@@ -39,8 +41,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         // reference ui control here
         // TextField f = view.findViewById(...);
 
-        MapFragment mapFragment = (MapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        if(NetworkManager.isOnline()) {
+            MapFragment mapFragment = (MapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+            mapFragment.getMapAsync(this);
+        } else {
+            Snackbar.make(view, "Internet connection appears to be offline", Snackbar.LENGTH_LONG).show();
+        }
 
         return view;
     }
