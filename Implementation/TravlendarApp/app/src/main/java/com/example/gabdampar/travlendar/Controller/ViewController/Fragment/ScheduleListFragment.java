@@ -111,6 +111,7 @@ public class ScheduleListFragment extends Fragment implements OnMapReadyCallback
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
                                 ScheduleManager.GetInstance().schedulesList.remove(pos);
+                                arrayAdapter.removeFromFilteredData(pos);
                                 //the adapter must redraw the list
                                 arrayAdapter.notifyDataSetChanged();
                                 dialog.cancel();
@@ -163,8 +164,6 @@ public class ScheduleListFragment extends Fragment implements OnMapReadyCallback
 
                                 //trick for the fragment nested in another fragment
                                 getFragmentManager().beginTransaction().remove(appointment_map).commit();
-
-                                //TODO: METTERE LO SCHEDULE IN RUNNING
                             }
                         })
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

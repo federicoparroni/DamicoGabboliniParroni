@@ -1,9 +1,11 @@
 package com.example.gabdampar.travlendar.Model;
 
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum;
+import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanPolylineCouple;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.model.Bounds;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -15,7 +17,15 @@ public class TravelOptionData {
     private double price, carbonEmission;
     private TimeSlot time;
     private Map<TravelMeanEnum,Double> meanToKmMap;
-    private PolylineOptions polyline;
+    private ArrayList<TravelMeanPolylineCouple> travelMeanPolylineCouples;
+
+    public void setTravelMeanPolylineCouples(ArrayList<TravelMeanPolylineCouple> travelMeanPolylineCouples) {
+        this.travelMeanPolylineCouples = travelMeanPolylineCouples;
+    }
+
+    public ArrayList<TravelMeanPolylineCouple> getTravelMeanPolylineCouples() {
+        return travelMeanPolylineCouples;
+    }
     private Bounds bounds;
     private String directions;
 
@@ -43,10 +53,6 @@ public class TravelOptionData {
 
     public void setMeanToKmMap(Map<TravelMeanEnum, Double> map) { this.meanToKmMap = map; }
 
-    public void setPolyline(PolylineOptions polyline) {
-        this.polyline = polyline;
-    }
-
     public double getCarbonEmission() {
         return carbonEmission;
     }
@@ -57,10 +63,6 @@ public class TravelOptionData {
 
     public Map<TravelMeanEnum, Double> getMeanToKmMap() {
         return meanToKmMap;
-    }
-
-    public PolylineOptions getPolyline() {
-        return polyline;
     }
 
     public String getDirections() {

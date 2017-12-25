@@ -3,6 +3,8 @@ import android.util.Log;
 import com.example.gabdampar.travlendar.Model.TimeSlot;
 import com.example.gabdampar.travlendar.Model.TravelOptionData;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum;
+import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanPolylineCouple;
+import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanWeatherCouple;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.DirectionsApi;
@@ -38,6 +40,7 @@ public class MappingServiceAPIWrapper{
 
     private static MappingServiceAPIWrapper ourInstance;
     private HashMap<TravelMeanEnum,Double> map;
+    private ArrayList<TravelMeanPolylineCouple> polylineMeanList;
     private ArrayList<TravelOptionData> ret=new ArrayList<TravelOptionData>();
 
     public static MappingServiceAPIWrapper getInstance() {
@@ -136,14 +139,14 @@ public class MappingServiceAPIWrapper{
                     public void onResult(DirectionsResult result) {
                         for(DirectionsRoute r : result.routes){
                             map = new HashMap<TravelMeanEnum,Double>();
+                            polylineMeanList = new ArrayList<TravelMeanPolylineCouple>();
                             TravelOptionData n = new TravelOptionData();
                             n.setCarbonEmission(0); //TODO
                             n.setPrice(0); //TODO
-                            n.setPolyline(new PolylineOptions()
-                                    .addAll(convertLatLong(r.overviewPolyline.decodePath())));
                             n.setBounds(r.bounds);
-                            n.setDirections(getTextualDirectionsGivenRouteAndUpdateMap(r));
+                            n.setDirections(getTextualDirectionsGivenRouteAndUpdateMapAndUpdatePolylineList(r));
                             n.setMeanToKmMap(map);
+                            n.setTravelMeanPolylineCouples(polylineMeanList);
                             if(n.getMeanToKmMap().size()==1 && (n.getMeanToKmMap().containsKey(TravelMeanEnum.CAR))||(n.getMeanToKmMap().containsKey(TravelMeanEnum.WALK))){
                                 n.setTime(new TimeSlot(departureTime.toLocalTime(),departureTime.plus(r.legs[0].duration.inSeconds*1000).toLocalTime()));
                             }
@@ -226,16 +229,16 @@ public class MappingServiceAPIWrapper{
         return r;
     }
 
-    private String getTextualDirectionsGivenRouteAndUpdateMap(DirectionsRoute r){
+    private String getTextualDirectionsGivenRouteAndUpdateMapAndUpdatePolylineList(DirectionsRoute r){
         String s = "";
         for (int i=0; i<r.legs.length;i++) {
             DirectionsLeg l = r.legs[i];
-            s += getTextualDirectionsGivenLegsAndUpdateMap(l);
+            s += getTextualDirectionsGivenLegsAndUpdateMapAndUpdatePolylineList(l);
         }
         return s;
     }
 
-    private String getTextualDirectionsGivenLegsAndUpdateMap(DirectionsLeg l){
+    private String getTextualDirectionsGivenLegsAndUpdateMapAndUpdatePolylineList(DirectionsLeg l){
         String s = "+ Sei in " + l.startAddress + "\n";
         if(l.steps != null)
             for(int i=0; i<l.steps.length; i++){
@@ -246,6 +249,9 @@ public class MappingServiceAPIWrapper{
                 else
                     obj = getTravelMeanEnumValueFromGoogleEnum(st.transitDetails.line.vehicle.type);
 
+                /**
+                 * update the distances map
+                 */
                 if (map.containsKey(obj)) {
                     Double old = map.get(obj);
                     map.remove(obj);
@@ -254,6 +260,14 @@ public class MappingServiceAPIWrapper{
                 else
                     map.put(obj, Double.valueOf(st.distance.inMeters));
 
+                /**
+                 * update the polylines list
+                 */
+                polylineMeanList.add(new TravelMeanPolylineCouple(obj,new PolylineOptions().addAll(convertLatLong(st.polyline.decodePath()))));
+
+                /**
+                 * collect directions
+                 */
                 s += getTextualDirectionsGivenStepsAndUpdateMap(st, "++");
             }
         return s+"+ Arrivato in: " + l.endAddress + "\n";

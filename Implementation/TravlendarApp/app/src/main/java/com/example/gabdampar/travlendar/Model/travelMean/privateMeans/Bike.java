@@ -4,6 +4,8 @@
 
 package com.example.gabdampar.travlendar.Model.travelMean.privateMeans;
 
+import android.graphics.Color;
+
 import com.example.gabdampar.travlendar.Controller.MapUtils;
 import com.example.gabdampar.travlendar.Model.Appointment;
 import com.example.gabdampar.travlendar.Model.TemporaryAppointment;
@@ -28,6 +30,7 @@ public class Bike extends PrivateTravelMean {
             instance = new Bike();
             TravelMean.MeansCollection.add(instance);
         }
+        color=Color.MAGENTA;
         return instance;
     }
 

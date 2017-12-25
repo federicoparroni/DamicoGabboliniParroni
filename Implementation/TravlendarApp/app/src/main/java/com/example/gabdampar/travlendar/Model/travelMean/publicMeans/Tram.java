@@ -1,5 +1,7 @@
 package com.example.gabdampar.travlendar.Model.travelMean.publicMeans;
 
+import android.graphics.Color;
+
 import com.example.gabdampar.travlendar.Controller.MapUtils;
 import com.example.gabdampar.travlendar.Model.Appointment;
 import com.example.gabdampar.travlendar.Model.TemporaryAppointment;
@@ -24,13 +26,12 @@ public class Tram extends PublicTravelMean {
     protected static final float TICKET_COST = 1.5f;                // euro
     protected static final float AVG_WAITING_SEC = 4*60f;           // sec
 
-
-
     public static Tram GetInstance() {
         if(instance == null) {
             instance = new Tram();
             TravelMean.MeansCollection.add(instance);
         }
+        color=Color.GREEN;
         return instance;
     }
 

@@ -5,16 +5,24 @@ import android.graphics.Color;
 import com.example.gabdampar.travlendar.Model.Appointment;
 import com.example.gabdampar.travlendar.Model.Schedule;
 import com.example.gabdampar.travlendar.Model.ScheduledAppointment;
+import com.example.gabdampar.travlendar.Model.travelMean.TravelMean;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum;
+import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanPolylineCouple;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.Dash;
+import com.google.android.gms.maps.model.Dot;
+import com.google.android.gms.maps.model.Gap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PatternItem;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -27,9 +35,25 @@ public class MapUtils {
         map.getUiSettings().setMapToolbarEnabled(false);
     }
 
-    public static void drawPolyline(GoogleMap map, PolylineOptions polylineOptions, TravelMeanEnum meanEnum){
-        polylineOptions.color(Color.RED);
-        polylineOptions.width(25);
+    public static void drawScheduleOnMap(Schedule s,GoogleMap map){
+        for(ScheduledAppointment sa : s.getScheduledAppts())
+            if(sa.dataFromPreviousToThis!=null)
+                MapUtils.drawPolyline(map, sa.dataFromPreviousToThis.getTravelMeanPolylineCouples());
+    }
+
+    public static void drawPolyline(GoogleMap map, ArrayList<TravelMeanPolylineCouple> travelMeanPolylineCouples){
+        for(TravelMeanPolylineCouple travelMeanPolylineCouple : travelMeanPolylineCouples)
+            drawPolyline(map,travelMeanPolylineCouple.polylineOptions, travelMeanPolylineCouple.travelMeanEnum);
+    }
+
+    private static void drawPolyline(GoogleMap map, PolylineOptions polylineOptions, TravelMeanEnum meanEnum){
+        polylineOptions.color(TravelMean.getTravelMean(meanEnum).color);
+        polylineOptions.width(15);
+        if(meanEnum.equals(TravelMeanEnum.WALK)) {
+            List<PatternItem> pattern = Arrays.<PatternItem>asList(
+                    new Dot(), new Gap(20));
+            polylineOptions.pattern(pattern);
+        }
         map.addPolyline(polylineOptions);
     }
 
@@ -97,9 +121,4 @@ public class MapUtils {
         return new Float(distance * meterConversion).floatValue();
     }
 
-    public static void drawScheduleOnMap(Schedule s,GoogleMap map){
-        for(ScheduledAppointment sa : s.getScheduledAppts())
-            if(sa.dataFromPreviousToThis!=null)
-                MapUtils.drawPolyline(map, sa.dataFromPreviousToThis.getPolyline(), sa.travelMeanToUse.meanEnum);
-    }
 }

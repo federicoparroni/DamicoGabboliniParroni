@@ -4,6 +4,8 @@
 
 package com.example.gabdampar.travlendar.Model.travelMean;
 
+import android.graphics.Color;
+
 import com.example.gabdampar.travlendar.Controller.IMeanEvaluable;
 import com.example.gabdampar.travlendar.Model.travelMean.privateMeans.Bike;
 import com.example.gabdampar.travlendar.Model.travelMean.privateMeans.Car;
@@ -18,6 +20,7 @@ import java.util.ArrayList;
 public abstract class TravelMean implements IMeanEvaluable {
 
     public TravelMeanEnum meanEnum;
+    public static int color;
 
     public int availableSeats;
 

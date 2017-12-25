@@ -4,6 +4,8 @@
 
 package com.example.gabdampar.travlendar.Model.travelMean.publicMeans;
 
+import android.graphics.Color;
+
 import com.example.gabdampar.travlendar.Controller.MapUtils;
 import com.example.gabdampar.travlendar.Model.TemporaryAppointment;
 import com.example.gabdampar.travlendar.Model.travelMean.PublicTravelMean;
@@ -21,12 +23,12 @@ public class Bus extends PublicTravelMean {
     protected static final float TICKET_COST = 1.50f;                // euro
     protected static final float AVG_WAITING_SEC = 4*60f;            // sec
 
-
     public static Bus GetInstance() {
         if(instance == null) {
             instance = new Bus();
             TravelMean.MeansCollection.add(instance);
         }
+        color = Color.YELLOW;
         return instance;
     }
 

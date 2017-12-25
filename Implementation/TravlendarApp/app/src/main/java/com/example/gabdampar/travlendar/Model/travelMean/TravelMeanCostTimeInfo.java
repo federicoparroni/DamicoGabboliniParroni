@@ -9,8 +9,6 @@ import java.util.ArrayList;
  */
 
 public class TravelMeanCostTimeInfo implements Comparable<TravelMeanCostTimeInfo> {
-
-
     private TravelMean mean;
     private float cost;
 
