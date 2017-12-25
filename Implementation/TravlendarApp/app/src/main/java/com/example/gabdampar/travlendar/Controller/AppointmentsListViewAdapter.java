@@ -33,7 +33,7 @@ public class AppointmentsListViewAdapter extends ArrayAdapter<Appointment> imple
 
     // getter and setter
     public int getCount() {
-        return filteredData.size();
+        return filteredData==null? 0 : filteredData.size();
     }
 
     public Appointment getItem(int position) {

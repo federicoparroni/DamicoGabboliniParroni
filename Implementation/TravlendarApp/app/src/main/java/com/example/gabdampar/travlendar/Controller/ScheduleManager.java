@@ -1,6 +1,7 @@
 package com.example.gabdampar.travlendar.Controller;
 
 import com.example.gabdampar.travlendar.Model.Schedule;
+import com.example.gabdampar.travlendar.Model.ScheduledAppointment;
 
 import java.util.ArrayList;
 
@@ -30,6 +31,23 @@ public class ScheduleManager {
         return schedulesList.get(position);
     }
 
-
-
+    public String getDirectionForRunningSchedule(){
+        String directions=new String();
+        if(runningSchedule==null){
+            return directions;
+        }
+        else{
+            for(int i=0; i<ScheduleManager.GetInstance().runningSchedule.getScheduledAppts().size(); i++) {
+                ScheduledAppointment scheduledAppointment = ScheduleManager.GetInstance().runningSchedule.getScheduledAppts().get(i);
+                directions += i==0 ? scheduledAppointment.toString() + "\n" : "";
+                if (scheduledAppointment.dataFromPreviousToThis != null) {
+                    directions += "Start at " + scheduledAppointment.dataFromPreviousToThis.getTime().startingTime.toString()+"\n";
+                    directions += scheduledAppointment.dataFromPreviousToThis.getDirections();
+                    directions += "Estimate arrival time: " + scheduledAppointment.dataFromPreviousToThis.getTime().endingTime.toString() + "\n \n";
+                }
+                directions += i!=0 ? scheduledAppointment.toString() + " [" + scheduledAppointment.ETA.toString() + " - " + scheduledAppointment.endingTime().toString() + "] \n" : "";
+            }
+        }
+        return directions;
+    }
 }

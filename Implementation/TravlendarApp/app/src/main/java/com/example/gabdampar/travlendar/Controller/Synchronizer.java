@@ -2,6 +2,10 @@ package com.example.gabdampar.travlendar.Controller;
 
 import android.content.Context;
 
+import com.example.gabdampar.travlendar.Model.Appointment;
+
+import java.util.ArrayList;
+
 /**
  * Created by Edoardo D'Amico on 04/12/2017.
  */
@@ -20,9 +24,9 @@ public class Synchronizer {
 
 
     public void Synchronize(Context context) {
-
-        AppointmentManager.GetInstance().apptList = AppointmentManager.GetInstance().loadAppointments(context);
-
+        ArrayList<Appointment> list = AppointmentManager.GetInstance().loadAppointments(context);
+        if(list!=null)
+            AppointmentManager.GetInstance().apptList = AppointmentManager.GetInstance().loadAppointments(context);
     }
 
 

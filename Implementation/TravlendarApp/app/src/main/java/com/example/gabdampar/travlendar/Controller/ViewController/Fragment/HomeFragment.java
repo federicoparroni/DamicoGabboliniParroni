@@ -13,6 +13,9 @@ import android.support.v4.content.ContextCompat;
 import android.text.method.ScrollingMovementMethod;
 import android.transition.Visibility;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -37,7 +40,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     /**
      * view state
      */
-    public HomeFragment.State fragmentState= State.NOTSCHEDULERUNNING;
+    public HomeFragment.State fragmentState = State.NOTSCHEDULERUNNING;
 
     /**
      * references to view elements
@@ -64,19 +67,53 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 askForPermissionAndShowUserPositionOnMap();
                 MapUtils.drawScheduleOnMap(ScheduleManager.GetInstance().runningSchedule, map);
                 MapUtils.putMapMarkersGivenScheduledAppointmentsAndSetMapZoomToThose(map, ScheduleManager.GetInstance().runningSchedule.getScheduledAppts());
-                String toPut="";
-                for (ScheduledAppointment scheduledAppointment : ScheduleManager.GetInstance().runningSchedule.getScheduledAppts()) {
-                    //toPut+=scheduledAppointment.toString()+scheduledAppointment.;
-                    if (scheduledAppointment.dataFromPreviousToThis != null)
-                        toPut += scheduledAppointment.dataFromPreviousToThis.getDirections();
-                }
-                directionTextView.setText(toPut);
+                directionTextView.setText(ScheduleManager.GetInstance().getDirectionForRunningSchedule());
+                break;
+        }
+        getActivity().invalidateOptionsMenu();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_home_fragment, menu);
+        super.onCreateOptionsMenu(menu,inflater);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        if(fragmentState==State.NOTSCHEDULERUNNING){
+            menu.getItem(0).setVisible(false);
+            menu.getItem(1).setVisible(false);
+        }
+        else if (fragmentState==State.SCHEDULERUNNINGWITHDIRECTIONS){
+            menu.getItem(0).setVisible(true);
+            menu.getItem(1).setVisible(true);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.stop_schedule:
+                ScheduleManager.GetInstance().runningSchedule=null;
+                changeState();
+                return true;
+            case R.id.color_info:
+                /**
+                 * TODO: a view that shows the corrisponding between colors and travel means
+                 */
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        AppointmentManager.GetInstance().CreateDummyAppointments();
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -96,7 +133,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         //called when the map is ready
         map=googleMap;
-        MapUtils.putMapMarkersGivenAppointmentsAndSetMapZoomToThose(googleMap, AppointmentManager.GetInstance().apptList);
+        //MapUtils.putMapMarkersGivenAppointmentsAndSetMapZoomToThose(googleMap, AppointmentManager.GetInstance().apptList);
         MapUtils.disableNavigationButtons(map);
         askForPermissionAndShowUserPositionOnMap();
         changeState();

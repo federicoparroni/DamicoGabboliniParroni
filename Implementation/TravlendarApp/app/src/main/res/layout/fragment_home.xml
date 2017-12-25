@@ -39,7 +39,8 @@ tools:context=".Controller.ViewController.Fragment.HomeFragment">
         android:id="@+id/directionsScrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="vertical">
+        android:scrollbars="vertical"
+        android:layout_marginBottom="1dp">
 
         <TextView android:id="@+id/directionsTextView"
             android:layout_height="match_parent"

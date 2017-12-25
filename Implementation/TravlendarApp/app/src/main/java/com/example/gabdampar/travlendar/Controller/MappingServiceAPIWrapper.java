@@ -239,7 +239,7 @@ public class MappingServiceAPIWrapper{
     }
 
     private String getTextualDirectionsGivenLegsAndUpdateMapAndUpdatePolylineList(DirectionsLeg l){
-        String s = "+ Sei in " + l.startAddress + "\n";
+        String s = "+ You are in: " + l.startAddress + "\n";
         if(l.steps != null)
             for(int i=0; i<l.steps.length; i++){
                 DirectionsStep st = l.steps[i];
@@ -270,7 +270,7 @@ public class MappingServiceAPIWrapper{
                  */
                 s += getTextualDirectionsGivenStepsAndUpdateMap(st, "++");
             }
-        return s+"+ Arrivato in: " + l.endAddress + "\n";
+        return s+"+ Arrived in: " + l.endAddress + "\n";
     }
 
     private String getTextualDirectionsGivenStepsAndUpdateMap(DirectionsStep st, String token){

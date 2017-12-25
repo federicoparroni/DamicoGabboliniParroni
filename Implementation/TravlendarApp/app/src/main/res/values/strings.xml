@@ -66,6 +66,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Home fragment</string>
     <string name="title_activity_schedule_creation">ScheduleCreationActivity</string>
+    <string name="stop_schedule">"Stop schedule"</string>
+    <string name="color_info">"Color info"</string>
 
     <string name="action_settings">Settings</string>
 

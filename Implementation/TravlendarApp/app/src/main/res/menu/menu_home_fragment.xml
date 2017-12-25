@@ -1,0 +1,19 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.gabdampar.travlendar.ScrollingActivity">
+
+    <item
+        android:id="@+id/stop_schedule"
+        android:icon="@drawable/stop_schedule"
+        android:title="@string/stop_schedule"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/color_info"
+        android:icon="@drawable/color_info"
+        android:title="@string/color_info"
+        app:showAsAction="always" />
+
+</menu>
+

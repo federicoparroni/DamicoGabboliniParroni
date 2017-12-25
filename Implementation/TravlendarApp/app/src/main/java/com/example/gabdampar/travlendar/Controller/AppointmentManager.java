@@ -30,11 +30,15 @@ import java.util.Arrays;
 
 public class AppointmentManager {
 
-    public ArrayList<Appointment> apptList = new ArrayList<>();
+    public ArrayList<Appointment> apptList;
     int sync=0;
+    private static AppointmentManager instance;
+
+    public AppointmentManager(){
+        apptList=new ArrayList<Appointment>();
+    }
 
     // singleton
-    private static AppointmentManager instance;
     public static AppointmentManager GetInstance() {
         if(instance == null) {
             instance = new AppointmentManager();
@@ -206,12 +210,14 @@ public class AppointmentManager {
         F.distanceOfEachTransitStop.put(TravelMeanEnum.BUS, new LatLng(45.4976291,9.152635499999999));
         F.distanceOfEachTransitStop.put(TravelMeanEnum.TRAM, new LatLng(45.4945885,9.141471199999998));
 
-        AppointmentManager.GetInstance().apptList.add(A);
-        AppointmentManager.GetInstance().apptList.add(B);
-        AppointmentManager.GetInstance().apptList.add(C);
-        AppointmentManager.GetInstance().apptList.add(D);
-        AppointmentManager.GetInstance().apptList.add(E);
-        AppointmentManager.GetInstance().apptList.add(F);
+        apptList=new ArrayList<Appointment>();
+
+        apptList.add(A);
+        apptList.add(B);
+        apptList.add(C);
+        apptList.add(D);
+        apptList.add(E);
+        apptList.add(F);
     }
 
 }

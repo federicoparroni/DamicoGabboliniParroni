@@ -195,7 +195,7 @@ public class ScheduleListFragment extends Fragment implements OnMapReadyCallback
 
                 time_textView.setText(clickedSchedule.getTotalTravelTime().toString("HH:mm"));
 
-                cost_textView.setText(String.format("%.2f",clickedSchedule.getTotalCost())+"$$");
+                cost_textView.setText(String.format("%.2f",clickedSchedule.getTotalCost())+"$");
                 carbon_TextView.setText(String.format("%.2f",clickedSchedule.getTotalCarbon())+"mg");
 
                 AlertDialog alert = builder.create();
