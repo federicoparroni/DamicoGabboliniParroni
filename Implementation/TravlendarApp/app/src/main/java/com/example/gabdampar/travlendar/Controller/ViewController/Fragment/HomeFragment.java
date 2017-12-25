@@ -38,39 +38,26 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     public final static int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION =1;
 
     /**
-     * view state
-     */
-    public HomeFragment.State fragmentState = State.NOTSCHEDULERUNNING;
-
-    /**
      * references to view elements
      */
     GoogleMap map;
     TextView directionTextView;
 
     public void changeState(){
-        if(ScheduleManager.GetInstance().runningSchedule!=null)
-            fragmentState=State.SCHEDULERUNNINGWITHDIRECTIONS;
-        else
-            fragmentState=State.NOTSCHEDULERUNNING;
-
-        switch (fragmentState) {
-            case NOTSCHEDULERUNNING:
-                directionTextView.setText("");
-                directionTextView.setVisibility(View.GONE);
-                map.clear();
-                askForPermissionAndShowUserPositionOnMap();
-                break;
-            case SCHEDULERUNNINGWITHDIRECTIONS:
-                directionTextView.setVisibility(View.VISIBLE);
-                map.clear();
-                askForPermissionAndShowUserPositionOnMap();
-                MapUtils.drawScheduleOnMap(ScheduleManager.GetInstance().runningSchedule, map);
-                MapUtils.putMapMarkersGivenScheduledAppointmentsAndSetMapZoomToThose(map, ScheduleManager.GetInstance().runningSchedule.getScheduledAppts());
-                directionTextView.setText(ScheduleManager.GetInstance().getDirectionForRunningSchedule());
-                break;
+        if(ScheduleManager.GetInstance().runningSchedule==null) {
+            directionTextView.setText("");
+            directionTextView.setVisibility(View.GONE);
+            map.clear();
+            askForPermissionAndShowUserPositionOnMap();
         }
-        getActivity().invalidateOptionsMenu();
+        else {
+            directionTextView.setVisibility(View.VISIBLE);
+            map.clear();
+            askForPermissionAndShowUserPositionOnMap();
+            MapUtils.drawScheduleOnMap(ScheduleManager.GetInstance().runningSchedule, map);
+            MapUtils.putMapMarkersGivenScheduledAppointmentsAndSetMapZoomToThose(map, ScheduleManager.GetInstance().runningSchedule.getScheduledAppts());
+            directionTextView.setText(ScheduleManager.GetInstance().getDirectionForRunningSchedule());
+        }
     }
 
     @Override
@@ -82,11 +69,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        if(fragmentState==State.NOTSCHEDULERUNNING){
+        if(ScheduleManager.GetInstance().runningSchedule==null){
             menu.getItem(0).setVisible(false);
             menu.getItem(1).setVisible(false);
         }
-        else if (fragmentState==State.SCHEDULERUNNINGWITHDIRECTIONS){
+        else{
             menu.getItem(0).setVisible(true);
             menu.getItem(1).setVisible(true);
         }
@@ -182,10 +169,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 }
             }
         }
-    }
-
-    public enum State{
-        NOTSCHEDULERUNNING, SCHEDULERUNNINGWITHDIRECTIONS ;
     }
 
 }

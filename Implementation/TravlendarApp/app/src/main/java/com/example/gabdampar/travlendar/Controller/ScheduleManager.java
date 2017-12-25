@@ -41,11 +41,11 @@ public class ScheduleManager {
                 ScheduledAppointment scheduledAppointment = ScheduleManager.GetInstance().runningSchedule.getScheduledAppts().get(i);
                 directions += i==0 ? scheduledAppointment.toString() + "\n" : "";
                 if (scheduledAppointment.dataFromPreviousToThis != null) {
-                    directions += "Start at " + scheduledAppointment.dataFromPreviousToThis.getTime().startingTime.toString()+"\n";
+                    directions += "Start at " + scheduledAppointment.dataFromPreviousToThis.getTime().startingTime.toString("HH:mm")+"\n";
                     directions += scheduledAppointment.dataFromPreviousToThis.getDirections();
-                    directions += "Estimate arrival time: " + scheduledAppointment.dataFromPreviousToThis.getTime().endingTime.toString() + "\n \n";
+                    directions += "Estimate arrival time: " + scheduledAppointment.dataFromPreviousToThis.getTime().endingTime.toString("HH:mm") + "\n \n";
                 }
-                directions += i!=0 ? scheduledAppointment.toString() + " [" + scheduledAppointment.ETA.toString() + " - " + scheduledAppointment.endingTime().toString() + "] \n" : "";
+                directions += i!=0 ? scheduledAppointment.toString() + " [" + scheduledAppointment.ETA.toString("HH:mm") + " - " + scheduledAppointment.endingTime().toString("HH:mm") + "] \n" : "";
             }
         }
         return directions;

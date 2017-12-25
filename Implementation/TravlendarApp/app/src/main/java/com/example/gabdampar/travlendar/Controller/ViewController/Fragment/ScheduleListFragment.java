@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.example.gabdampar.travlendar.Controller.AppointmentManager;
 import com.example.gabdampar.travlendar.Controller.MapUtils;
 import com.example.gabdampar.travlendar.Controller.ScheduleManager;
+import com.example.gabdampar.travlendar.Controller.ScheduledAppointmentsListViewAdapter;
 import com.example.gabdampar.travlendar.Controller.ViewController.AppointmentCreationActivity;
 import com.example.gabdampar.travlendar.Controller.ViewController.ScheduleCreationActivity;
 import com.example.gabdampar.travlendar.Controller.ViewController.ScheduleListViewAdapter;
@@ -177,13 +178,13 @@ public class ScheduleListFragment extends Fragment implements OnMapReadyCallback
                             }
                         });
 
-
                 //TODO: THE SAME AS BELOW BUT FOR THE CLICKED SCHEDULE
                 //Fields of the inflated view
                 TextView starting_timeText = inflatedView.findViewById(R.id.starting_timeText);
                 TextView cost_textView = inflatedView.findViewById(R.id.cost_textView);
                 TextView time_textView = inflatedView.findViewById(R.id.time_textView);
                 TextView carbon_TextView = inflatedView.findViewById(R.id.carbon_TextView);
+                ListView scheduleListView = inflatedView.findViewById(R.id.schedule_appointments_list);
 
                 //The clicked Appointment
                 Schedule clickedSchedule = ScheduleManager.GetInstance().getSchedule(i);
@@ -197,6 +198,10 @@ public class ScheduleListFragment extends Fragment implements OnMapReadyCallback
 
                 cost_textView.setText(String.format("%.2f",clickedSchedule.getTotalCost())+"$");
                 carbon_TextView.setText(String.format("%.2f",clickedSchedule.getTotalCarbon())+"mg");
+
+                clickedSchedule.getScheduledAppts().remove(0);
+                ScheduledAppointmentsListViewAdapter adapter = new ScheduledAppointmentsListViewAdapter(getActivity(), clickedSchedule.getScheduledAppts());
+                scheduleListView.setAdapter(adapter);
 
                 AlertDialog alert = builder.create();
                 alert.show();
