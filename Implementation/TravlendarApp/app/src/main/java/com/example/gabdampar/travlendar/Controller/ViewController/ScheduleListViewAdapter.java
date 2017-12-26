@@ -1,4 +1,5 @@
 package com.example.gabdampar.travlendar.Controller.ViewController;
+
 import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -8,22 +9,24 @@ import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
-import com.example.gabdampar.travlendar.Controller.AppointmentManager;
+
 import com.example.gabdampar.travlendar.Controller.ScheduleManager;
-import com.example.gabdampar.travlendar.Controller.ViewController.Fragment.AppointmentsListFragment;
-import com.example.gabdampar.travlendar.Model.Appointment;
 import com.example.gabdampar.travlendar.Model.Schedule;
 import com.example.gabdampar.travlendar.R;
+
 import org.joda.time.LocalDate;
+
 import java.util.ArrayList;
 
 /**
  * Created by gabbo on 21/12/2017.
  */
 
-public class ScheduleListViewAdapter extends ArrayAdapter<Schedule> implements Filterable{
-    private ArrayList<Schedule> filteredData = null;
+public class ScheduleListViewAdapter extends ArrayAdapter<Schedule> implements Filterable {
+
+    private ArrayList<Schedule> filteredData = new ArrayList<>();
     private ScheduleListViewAdapter.ItemFilter mFilter = new ScheduleListViewAdapter.ItemFilter();
+
     /**
      * used in filtering
      */

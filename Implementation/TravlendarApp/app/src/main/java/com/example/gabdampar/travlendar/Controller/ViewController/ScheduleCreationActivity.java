@@ -220,16 +220,16 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
                     View inflatedView = inflater.inflate(R.layout.waiting_view, null);
                     builder.setView(inflatedView);
                     builder.setTitle("Schedule Creation");
-                    AlertDialog alert = builder.create();
+                    final AlertDialog alert = builder.create();
                     alert.show();
 
                     scheduler.ComputeSchedule(new Scheduler.ScheduleCallbackListener() {
                         @Override
                         public void ScheduleCallback(final Schedule schedule) {
                             ScheduleManager.GetInstance().schedulesList.add(schedule);
-                            //SetViewState(true);
+
+                            alert.dismiss();
                             finish();
-                            //Toast.makeText(getApplicationContext(),"Computed schedule of date " + schedule.getDate().toString(), Toast.LENGTH_LONG);
 
                         }
                     });

@@ -35,7 +35,7 @@ public class AppointmentManager {
     private static AppointmentManager instance;
 
     public AppointmentManager(){
-        apptList=new ArrayList<Appointment>();
+        apptList=new ArrayList<>();
     }
 
     // singleton
