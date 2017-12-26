@@ -28,12 +28,27 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Schedule date:"
-                android:textColor="@color/colorPrimary"
-                android:textSize="16dp" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Schedule date "
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:id="@+id/txtApptNumberForSelectedDay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="(0 appointments)" />
+            </LinearLayout>
+
             <CalendarView
                 android:id="@+id/calendarView"
                 android:layout_width="match_parent"

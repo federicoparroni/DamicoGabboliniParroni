@@ -2,6 +2,7 @@ package com.example.gabdampar.travlendar.Controller.ViewController;
 
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -23,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.example.gabdampar.travlendar.Controller.AppointmentManager;
@@ -46,6 +48,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
@@ -61,6 +64,7 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
     // view controls
     CalendarView calendar;
 
+    TextView txtApptNumberForSelectedDay;
     TimePicker timePickerWakeUp;
     SupportMapFragment startingLocationMap;
     PlaceAutocompleteFragment autocompleteFragment;
@@ -82,6 +86,8 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
         /** schedule date calendar view */
         calendar = findViewById(R.id.calendarView);
         calendar.setOnDateChangeListener(this);
+        /** txtApptNumberForSelectedDay */
+        txtApptNumberForSelectedDay = findViewById(R.id.txtApptNumberForSelectedDay);
         /** wake up time picker */
         timePickerWakeUp = findViewById(R.id.wakeUpTimePicker);
         timePickerWakeUp.setOnTimeChangedListener(this);
@@ -103,7 +109,11 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
         /** start schedule computation */
         fab = findViewById(R.id.fab);
         fab.setClickable(false);
+
         // LoadUserDefaults();
+        final DateTime now = DateTime.now();
+        onSelectedDayChange(calendar, now.getYear(), now.getMonthOfYear()-1, now.getDayOfMonth());
+
     }
 
     @Override
@@ -111,10 +121,9 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
         LocalDate date = new LocalDate(year, month+1, dayOfMonth);
         scheduler.appts = AppointmentManager.GetInstance().GetAppointmentsByDate(date);
 
-        if(scheduler.appts.size() == 0) {
-            // no appointments for the specified date
-            Snackbar.make(findViewById(R.id.schedule_creation_inner_scrollview), "You have not saved any appointment for the chosen date", Snackbar.LENGTH_LONG).show();
-        } else {
+        updateAppointmentNumberForSelectedDate(scheduler.appts.size());
+
+        if(scheduler.appts.size() > 0) {
             // check for weather data
             //SharedPreferences settings = getSharedPreferences("ApiData", 0);
             //String savedDateString = settings.getString("weatherApiDate","");
@@ -138,6 +147,22 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
 
 
 
+        }
+    }
+
+
+    /**
+     *
+     */
+    private void updateAppointmentNumberForSelectedDate(int numberOfAppts) {
+        // no appointments for the specified date
+        txtApptNumberForSelectedDay.setText( String.format("(%d appointments)", numberOfAppts) );
+
+        if(numberOfAppts == 0) {
+            txtApptNumberForSelectedDay.setTextColor(Color.RED);
+            Snackbar.make(findViewById(R.id.schedule_creation_inner_scrollview), "You have not saved any appointment for the chosen date", Snackbar.LENGTH_LONG).show();
+        } else {
+            txtApptNumberForSelectedDay.setTextColor(Color.DKGRAY);
         }
     }
 
@@ -197,7 +222,6 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
 
         // TODO get starting location from preferences
         scheduler.startingLocation = new LatLng(45.4809352, 9.233779);
-        onSelectedDayChange(calendar, 2017, 11, 26);
         scheduler.criteria = OptCriteria.OPTIMIZE_TIME;
 
         // enable fab click listener
