@@ -39,7 +39,7 @@ public class ScheduleListViewAdapter extends ArrayAdapter<Schedule> implements F
 
     // getter and setter
     public int getCount() {
-        return filteredData.size();
+        return filteredData == null ? 0 : filteredData.size();
     }
 
     public Schedule getItem(int position) {

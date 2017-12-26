@@ -28,7 +28,7 @@
 
         <RadioGroup
             android:id="@+id/meansRadioGroup"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:layout_editor_absoluteX="39dp"
             tools:layout_editor_absoluteY="71dp">
@@ -42,7 +42,6 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -132,14 +131,13 @@
                 </LinearLayout>
 
                 <Space
-                    android:layout_weight="1"
                     android:layout_width="30dp"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -261,11 +259,29 @@
             android:layout_width="match_parent"
             android:layout_height="12dp" />
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="When:"
-            android:textColor="@color/colorPrimary" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="When:"
+                android:textColor="@color/colorPrimary" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/txtSelectAll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Select/Deselect all"
+                android:textColor="@color/colorAccent" />
+        </LinearLayout>
 
         <!-- weather horizontal -->
         <LinearLayout
@@ -277,7 +293,6 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <!-- weather cell horizontal -->
@@ -301,6 +316,7 @@
                         android:layout_width="120dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:checked="true"
                         android:text="Sunny" />
                 </LinearLayout>
 
@@ -324,6 +340,7 @@
                         android:layout_width="120dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:checked="true"
                         android:text="Cloudy" />
                 </LinearLayout>
 
@@ -347,19 +364,20 @@
                         android:layout_width="120dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:checked="true"
                         android:text="Rainy" />
                 </LinearLayout>
 
             </LinearLayout>
 
             <Space
-                android:layout_width="20dp"
-                android:layout_height="match_parent" />
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <!-- weather cell horizontal -->
@@ -384,6 +402,7 @@
                         android:layout_width="120dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:checked="true"
                         android:text="Foggy" />
                 </LinearLayout>
 
@@ -407,6 +426,7 @@
                         android:layout_width="120dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:checked="true"
                         android:text="Snowy" />
                 </LinearLayout>
 
@@ -430,6 +450,7 @@
                         android:layout_width="120dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:checked="true"
                         android:text="Windy" />
                 </LinearLayout>
 
