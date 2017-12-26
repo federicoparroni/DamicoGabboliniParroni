@@ -23,9 +23,11 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.example.gabdampar.travlendar.Controller.AppointmentManager;
+import com.example.gabdampar.travlendar.Controller.NetworkManager;
 import com.example.gabdampar.travlendar.Controller.ScheduleManager;
 import com.example.gabdampar.travlendar.Controller.Scheduler;
 import com.example.gabdampar.travlendar.Controller.WeatherForecastAPIWrapper;
@@ -206,35 +208,36 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
             public void onClick(View view) {
                 if(scheduler.isConsistent()) {
 
-                    DisplayMetrics metrics = getResources().getDisplayMetrics();
-                    int width = metrics.widthPixels;
-                    int height = metrics.heightPixels;
-                    // start schedule computation
+                    if(NetworkManager.isOnline()) {
 
-                    //SetViewState(false);
+                        DisplayMetrics metrics = getResources().getDisplayMetrics();
+                        int width = metrics.widthPixels;
+                        int height = metrics.heightPixels;
+                        // start schedule computation
 
-                    //creation of the waiting view through an alert dialogue
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(ScheduleCreationActivity.this);
-                    // Inflate and set the layout for the dialog, parent is null because its going in the dialog layout
-                    LayoutInflater inflater = LayoutInflater.from(builder.getContext());
-                    View inflatedView = inflater.inflate(R.layout.waiting_view, null);
-                    builder.setView(inflatedView);
-                    builder.setTitle("Schedule Creation");
-                    AlertDialog alert = builder.create();
-                    alert.show();
+                        //SetViewState(false);
 
-                    scheduler.ComputeSchedule(new Scheduler.ScheduleCallbackListener() {
-                        @Override
-                        public void ScheduleCallback(final Schedule schedule) {
-                            ScheduleManager.GetInstance().schedulesList.add(schedule);
-                            //SetViewState(true);
-                            finish();
-                            //Toast.makeText(getApplicationContext(),"Computed schedule of date " + schedule.getDate().toString(), Toast.LENGTH_LONG);
+                        //creation of the waiting view through an alert dialogue
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(ScheduleCreationActivity.this);
+                        // Inflate and set the layout for the dialog, parent is null because its going in the dialog layout
+                        LayoutInflater inflater = LayoutInflater.from(builder.getContext());
+                        View inflatedView = inflater.inflate(R.layout.waiting_view, null);
+                        builder.setView(inflatedView);
+                        builder.setTitle("Schedule Creation");
+                        AlertDialog alert = builder.create();
+                        alert.show();
 
-                        }
-                    });
-                    //Intent intent = new Intent();
-                    //intent.putExtra("scheduler", scheduler);
+                        scheduler.ComputeSchedule(new Scheduler.ScheduleCallbackListener() {
+                            @Override
+                            public void ScheduleCallback(final Schedule schedule) {
+                                ScheduleManager.GetInstance().schedulesList.add(schedule);
+                                //SetViewState(true);
+                                finish();
+                            }
+                        });
+                    } else {
+                        Snackbar.make(view, "Internet connection appears to be offline", Snackbar.LENGTH_LONG).show();
+                    }
                 } else {
                     Snackbar.make(view, "Missing fields", Snackbar.LENGTH_LONG).show();
                 }
@@ -336,6 +339,22 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
 
         final CheckBox ckConstraintTimeSlot = dialoglayout.findViewById(R.id.ck_constraint_timeslot);
 
+        final TextView txtSelectAllWeather = dialoglayout.findViewById(R.id.txtSelectAll);
+        txtSelectAllWeather.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                /** inverts the checked state of the weather checkboxes */
+                boolean areAllChecked = true;
+                for (CheckBox ck : checksButtonsWeather) {
+                    if(!ck.isChecked()) areAllChecked = false;
+                    break;
+                }
+                for (CheckBox ck : checksButtonsWeather) {
+                    ck.setChecked( !areAllChecked );
+                }
+
+            }
+        });
 
         AlertDialog.Builder builder = new AlertDialog.Builder(ScheduleCreationActivity.this);
         builder.setView(dialoglayout).setPositiveButton("Add", new DialogInterface.OnClickListener() {
