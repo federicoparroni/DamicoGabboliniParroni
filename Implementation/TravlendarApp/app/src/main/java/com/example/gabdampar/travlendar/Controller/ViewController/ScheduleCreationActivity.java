@@ -229,16 +229,8 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(scheduler.isConsistent()) {
-
-                    if(NetworkManager.isOnline()) {
-
-                        DisplayMetrics metrics = getResources().getDisplayMetrics();
-                        int width = metrics.widthPixels;
-                        int height = metrics.heightPixels;
-                        // start schedule computation
-
-                        //SetViewState(false);
+                if(NetworkManager.isOnline()) {
+                    if(scheduler.isConsistent()) {
 
                         //creation of the waiting view through an alert dialogue
                         final AlertDialog.Builder builder = new AlertDialog.Builder(ScheduleCreationActivity.this);
@@ -247,22 +239,23 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
                         View inflatedView = inflater.inflate(R.layout.waiting_view, null);
                         builder.setView(inflatedView);
                         builder.setTitle("Schedule Creation");
-                        AlertDialog alert = builder.create();
+                        final AlertDialog alert = builder.create();
                         alert.show();
 
+                        // start schedule computation
                         scheduler.ComputeSchedule(new Scheduler.ScheduleCallbackListener() {
                             @Override
                             public void ScheduleCallback(final Schedule schedule) {
                                 ScheduleManager.GetInstance().schedulesList.add(schedule);
-                                //SetViewState(true);
+                                alert.dismiss();
                                 finish();
                             }
                         });
                     } else {
-                        Snackbar.make(view, "Internet connection appears to be offline", Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(view, "Missing fields", Snackbar.LENGTH_LONG).show();
                     }
                 } else {
-                    Snackbar.make(view, "Missing fields", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(view, "Internet connection appears to be offline", Snackbar.LENGTH_LONG).show();
                 }
             }
         });

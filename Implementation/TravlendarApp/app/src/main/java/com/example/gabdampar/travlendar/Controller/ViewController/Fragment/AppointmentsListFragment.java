@@ -75,9 +75,6 @@ public class AppointmentsListFragment extends Fragment implements OnMapReadyCall
 
         appointmentsDate = null;
 
-        //TODO: AGGIUSTARE COORDS (METODO PER FINTO SYNCHRONIZER)
-        Synchronizer.GetInstance().Synchronize(getActivity());
-
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

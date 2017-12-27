@@ -8,11 +8,8 @@ import android.app.Fragment;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.text.method.ScrollingMovementMethod;
-import android.transition.Visibility;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,8 +22,7 @@ import com.example.gabdampar.travlendar.Controller.AppointmentManager;
 import com.example.gabdampar.travlendar.Controller.MapUtils;
 import com.example.gabdampar.travlendar.Controller.NetworkManager;
 import com.example.gabdampar.travlendar.Controller.ScheduleManager;
-import com.example.gabdampar.travlendar.Model.ScheduledAppointment;
-import com.example.gabdampar.travlendar.Model.TravelOptionData;
+import com.example.gabdampar.travlendar.Controller.Synchronizer;
 import com.example.gabdampar.travlendar.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -91,7 +87,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 return true;
             case R.id.color_info:
                 /**
-                 * TODO: a view that shows the corrisponding between colors and travel means
+                 * TODO: a view that shows the corrispondance between colors and travel means
                  */
             default:
                 return super.onOptionsItemSelected(item);
@@ -103,6 +99,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         AppointmentManager.GetInstance().CreateDummyAppointments();
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+        // synchronize appointments
+        if(savedInstanceState == null) Synchronizer.GetInstance().Synchronize(getActivity());
     }
 
     @Override
@@ -110,7 +109,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         // reference ui control here
         // TextField f = view.findViewById(...);
-        directionTextView = (TextView) view.findViewById(R.id.directionsTextView);
+        directionTextView = view.findViewById(R.id.directionsTextView);
 
         if(NetworkManager.isOnline()) {
             MapFragment mapFragment = (MapFragment) getChildFragmentManager().findFragmentById(R.id.map);
