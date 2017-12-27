@@ -116,7 +116,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             MapFragment mapFragment = (MapFragment) getChildFragmentManager().findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
         } else {
-            Snackbar.make(view, "Internet connection appears to be offline", Snackbar.LENGTH_LONG).show();
+            //Snackbar.make(view, "Internet connection appears to be offline", Snackbar.LENGTH_LONG).show();
         }
 
         return view;

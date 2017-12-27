@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 
 import com.example.gabdampar.travlendar.Controller.AppointmentManager;
@@ -33,6 +35,8 @@ public class AddConstraintOnAppointmentActivity extends AppCompatActivity {
     CheckBox undergroundCheckBox;
     CheckBox bikeCheckBox;
 
+    Button setButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +45,8 @@ public class AddConstraintOnAppointmentActivity extends AppCompatActivity {
         position = getIntent().getIntExtra("position",-1);
 
         constraints = new ArrayList<ConstraintOnAppointment>();
+
+        setButton = findViewById(R.id.setButton);
 
         trainCheckBox = findViewById(R.id.trainCheckBox);
         carCheckBox = findViewById(R.id.carCheckBox);
@@ -63,6 +69,32 @@ public class AddConstraintOnAppointmentActivity extends AppCompatActivity {
             }
 
         }
+
+        // onClick of the swtButton
+        setButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                //create the constraints arraylist to pass back
+                createConstraint(trainCheckBox,TravelMeanEnum.TRAIN);
+                createConstraint(carCheckBox,TravelMeanEnum.CAR);
+                createConstraint(busCheckBox,TravelMeanEnum.BUS);
+                createConstraint(tramCheckBox,TravelMeanEnum.TRAM);
+                //createConstraint(carSharingCheckBox,TravelMeanEnum.CAR_SHARING);
+                //createConstraint(bikeSharingCheckBox,TravelMeanEnum.BIKE_SHARING);
+                //createConstraint(taxiCheckBox,TravelMeanEnum.TAXI);
+                createConstraint(walkingCheckBox,TravelMeanEnum.WALK);
+                createConstraint(undergroundCheckBox,TravelMeanEnum.METRO);
+                createConstraint(bikeCheckBox,TravelMeanEnum.BIKE);
+
+                //Create the Intent to pass back
+                Intent returnIntent = new Intent();
+                returnIntent.putParcelableArrayListExtra("constraints",constraints);
+                setResult(Activity.RESULT_OK, returnIntent);
+                finish();
+
+            }
+        });
     }
 
     public void createConstraint (CheckBox checkBox, TravelMeanEnum mean){
@@ -108,27 +140,5 @@ public class AddConstraintOnAppointmentActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onBackPressed(){
 
-        //create the constraints arraylist to pass back
-        createConstraint(trainCheckBox,TravelMeanEnum.TRAIN);
-        createConstraint(carCheckBox,TravelMeanEnum.CAR);
-        createConstraint(busCheckBox,TravelMeanEnum.BUS);
-        createConstraint(tramCheckBox,TravelMeanEnum.TRAM);
-        //createConstraint(carSharingCheckBox,TravelMeanEnum.CAR_SHARING);
-        //createConstraint(bikeSharingCheckBox,TravelMeanEnum.BIKE_SHARING);
-        //createConstraint(taxiCheckBox,TravelMeanEnum.TAXI);
-        createConstraint(walkingCheckBox,TravelMeanEnum.WALK);
-        createConstraint(undergroundCheckBox,TravelMeanEnum.METRO);
-        createConstraint(bikeCheckBox,TravelMeanEnum.BIKE);
-
-        //Create the Intent to pass back
-        Intent returnIntent = new Intent();
-        returnIntent.putParcelableArrayListExtra("constraints",constraints);
-        setResult(Activity.RESULT_OK, returnIntent);
-        finish();
-
-        super.onBackPressed();
-    }
 }
