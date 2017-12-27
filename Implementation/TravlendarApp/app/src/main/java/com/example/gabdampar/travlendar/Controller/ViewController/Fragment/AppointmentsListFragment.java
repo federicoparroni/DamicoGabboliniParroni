@@ -61,6 +61,9 @@ public class AppointmentsListFragment extends Fragment implements OnMapReadyCall
     //the date of the appointment that has to be shown, if it is null all appointment are shown
     public static LocalDate appointmentsDate;
 
+    //text view of the filtered date
+    TextView dateFilteredView;
+
     public AppointmentsListFragment() {
         setHasOptionsMenu(true);
     }
@@ -78,8 +81,13 @@ public class AppointmentsListFragment extends Fragment implements OnMapReadyCall
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View fragmentView = inflater.inflate(R.layout.fragment_appointments_list, container, false);
+
+        // initializing the filter date to all date the first time the view has been created
+        dateFilteredView = fragmentView.findViewById(R.id.dateFilterView);
+        dateFilteredView.setText("Date: All");
 
         appointmentListView = fragmentView.findViewById(R.id.appointmentListView);
 
@@ -234,12 +242,21 @@ public class AppointmentsListFragment extends Fragment implements OnMapReadyCall
                                 appointmentsDate =  new LocalDate(new LocalDate(appointmentsSorterDatePicker.getYear(),
                                         appointmentsSorterDatePicker.getMonth()+1,appointmentsSorterDatePicker.getDayOfMonth()));
                                 arrayAdapter.getFilter().filter("");
+                                dateFilteredView.setText("Date: " + appointmentsDate.toString());
                                 dialog.cancel();
                             }
                         })
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        })
+                        .setNeutralButton("Show All", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                                arrayAdapter.removeFilter();
+                                dateFilteredView.setText("Date: All");
                                 dialog.cancel();
                             }
                         });
