@@ -148,8 +148,8 @@ public class AppointmentManager {
                 text.append(line + "\n");
             }
 
-            Appointment[] test = gson.fromJson(text.toString(), Appointment[].class);
-            return new ArrayList<>(Arrays.asList(test));
+            Appointment[] result = gson.fromJson(text.toString(), Appointment[].class);
+            return new ArrayList<>(Arrays.asList(result));
         } catch (IOException e) {
             Log.e("IOException", e.getMessage());
             return null;

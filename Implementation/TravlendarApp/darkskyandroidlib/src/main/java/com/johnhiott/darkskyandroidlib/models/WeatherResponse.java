@@ -1,6 +1,5 @@
 package com.johnhiott.darkskyandroidlib.models;
 
-import java.io.Serializable;
 import java.util.List;
 
 public class WeatherResponse

@@ -11,7 +11,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -28,6 +27,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.example.gabdampar.travlendar.Controller.AppointmentManager;
+import com.example.gabdampar.travlendar.Controller.MapUtils;
 import com.example.gabdampar.travlendar.Controller.NetworkManager;
 import com.example.gabdampar.travlendar.Controller.ScheduleManager;
 import com.example.gabdampar.travlendar.Controller.Scheduler;
@@ -125,35 +125,15 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
         updateAppointmentNumberForSelectedDate(scheduler.appts.size());
 
         if(scheduler.appts.size() > 0) {
-            // check for weather data
-            //SharedPreferences settings = getSharedPreferences("ApiData", 0);
-            //String savedDateString = settings.getString("weatherApiDate","");
-            //if(savedDateString.isEmpty()) {
-                /** calls to weather because no data found */
-                WeatherForecastAPIWrapper.getInstance().getWeather(this, date, scheduler.appts.get(0).coords);
-
-            //} else {
-//                LocalDate savedDate = LocalDate.parse(savedDateString);
-//                LocalDate now = LocalDate.now();
-//                if(savedDate.getYear() != now.getYear() || savedDate.getDayOfYear() != now.getDayOfYear()) {
-//                    /** calls to weather because data found are of a different day */
-//                    WeatherForecastAPIWrapper.getInstance().getWeather(this, date, scheduler.appts.get(0).coords);
-//
-//                } else {
-//                    // load data from file
-//                    Log.e("weather", "loading weather from file");
-//                    this.setSchedulerWeather( TimeWeatherList.readFromFile(getApplicationContext(), "timeWeatherList.ser"));
-//                }
-//            }
-
-
-
+            /** get weather conditions for select date and baricentre of the daily appointments */
+            WeatherForecastAPIWrapper.getInstance().getWeather(this, this, date, MapUtils.baricentre(scheduler.appts));
         }
     }
 
 
     /**
-     *
+     * Update the UI showing in a textview the number of appointments in the select date
+     * @param numberOfAppts: number of appointments for the selected date
      */
     private void updateAppointmentNumberForSelectedDate(int numberOfAppts) {
         // no appointments for the specified date
@@ -167,32 +147,14 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
         }
     }
 
-    /**
-     * On weather results callback
-     * @param weatherConditionList
-     */
+    /** on weather results callback */
     @Override
     public void onWeatherResults(TimeWeatherList weatherConditionList) {
-        // save to preferences the received data
-        /*SharedPreferences settings = getSharedPreferences("ApiData", 0);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putString("weatherApiDate", new LocalDate( calendar.getDate() ).toString());
-
-        weatherConditionList.saveToFile(getApplicationContext(), "timeWeatherList.ser");
-
-        editor.commit();
-        */
-
         Log.e("weather", "weather callback");
-
-        this.setSchedulerWeather(weatherConditionList);
-    }
-
-    private void setSchedulerWeather(TimeWeatherList weatherConditionList) {
-        Log.e("weather", "set weather to scheduler");
         scheduler.weatherConditions = weatherConditionList;
         fab.setClickable(true);
     }
+
 
     @Override
     public void onTimeChanged(TimePicker timePicker, int hours, int minutes) {

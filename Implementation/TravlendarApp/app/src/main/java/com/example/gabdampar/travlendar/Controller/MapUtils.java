@@ -1,19 +1,14 @@
 package com.example.gabdampar.travlendar.Controller;
 
-import android.graphics.Color;
-
 import com.example.gabdampar.travlendar.Model.Appointment;
 import com.example.gabdampar.travlendar.Model.Schedule;
 import com.example.gabdampar.travlendar.Model.ScheduledAppointment;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMean;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanPolylineCouple;
-import com.example.gabdampar.travlendar.R;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CustomCap;
 import com.google.android.gms.maps.model.Dot;
 import com.google.android.gms.maps.model.Gap;
 import com.google.android.gms.maps.model.LatLng;
@@ -59,13 +54,16 @@ public class MapUtils {
     }
 
     public static void putMapMarkersGivenAppointment(GoogleMap map, Appointment appointment){
-        map.addMarker(new MarkerOptions().position(appointment.coords)
+        map.addMarker(new MarkerOptions()
+                .position(appointment.coords)
                 .title(appointment.toString()));
     }
 
     public static void putMapMarkersGivenAppointmentAndSetZoomOnIt(GoogleMap map, Appointment appointment){
-        map.addMarker(new MarkerOptions().position(appointment.coords)
-                .title(appointment.toString()));
+        map.addMarker(new MarkerOptions()
+                .position(appointment.coords)
+                .title(appointment.toString())
+        );
         CameraUpdate cu = CameraUpdateFactory.newLatLng(appointment.getCoords());
         map.animateCamera(cu);
     }
@@ -79,7 +77,8 @@ public class MapUtils {
     public static void putMapMarkersGivenAppointmentsAndSetMapZoomToThose(GoogleMap map, List<Appointment> appointments){
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         for(Appointment a: appointments) {
-            MarkerOptions marker = new MarkerOptions().position(a.coords)
+            MarkerOptions marker = new MarkerOptions()
+                    .position(a.coords)
                     .title(a.toString());
             map.addMarker(marker);
             builder.include(marker.getPosition());
@@ -92,7 +91,8 @@ public class MapUtils {
     public static void putMapMarkersGivenScheduledAppointmentsAndSetMapZoomToThose(GoogleMap map, List<ScheduledAppointment> appointments){
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         for(ScheduledAppointment a: appointments) {
-            MarkerOptions marker = new MarkerOptions().position(a.originalAppointment.coords)
+            MarkerOptions marker = new MarkerOptions()
+                    .position(a.originalAppointment.coords)
                     .title(a.toString());
             map.addMarker(marker);
             builder.include(marker.getPosition());
@@ -102,6 +102,13 @@ public class MapUtils {
         map.animateCamera(cu);
     }
 
+
+    /**
+     * Calculate distance in meters between 2 location using Haversine formula: https://en.wikipedia.org/wiki/Haversine_formula
+     * @param start: location 1 coordinates
+     * @param end: location 2 coordinates
+     * @return distance (meters)
+     */
     public static float distance(LatLng start, LatLng end){
         double lat_a = start.latitude;
         double lat_b = end.latitude;
@@ -120,6 +127,18 @@ public class MapUtils {
         int meterConversion = 1609;
 
         return new Float(distance * meterConversion).floatValue();
+    }
+
+
+
+    public static LatLng baricentre(ArrayList<Appointment> appts) {
+        float latSum = 0;
+        float longSum = 0;
+        for (Appointment a : appts) {
+            latSum += a.getCoords().latitude;
+            longSum += a.getCoords().longitude;
+        }
+        return new LatLng(latSum/appts.size(), longSum/appts.size());
     }
 
 }
