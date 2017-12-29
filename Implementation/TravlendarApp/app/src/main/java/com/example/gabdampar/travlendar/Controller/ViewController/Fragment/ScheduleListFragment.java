@@ -1,5 +1,6 @@
 package com.example.gabdampar.travlendar.Controller.ViewController.Fragment;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,6 +24,7 @@ import com.example.gabdampar.travlendar.Controller.MapUtils;
 import com.example.gabdampar.travlendar.Controller.ScheduleManager;
 import com.example.gabdampar.travlendar.Controller.ScheduledAppointmentsListViewAdapter;
 import com.example.gabdampar.travlendar.Controller.ViewController.AppointmentCreationActivity;
+import com.example.gabdampar.travlendar.Controller.ViewController.MainActivity;
 import com.example.gabdampar.travlendar.Controller.ViewController.ScheduleCreationActivity;
 import com.example.gabdampar.travlendar.Controller.ViewController.ScheduleListViewAdapter;
 import com.example.gabdampar.travlendar.Model.Appointment;
@@ -166,6 +168,9 @@ public class ScheduleListFragment extends Fragment implements OnMapReadyCallback
 
                                 //trick for the fragment nested in another fragment
                                 getFragmentManager().beginTransaction().remove(appointment_map).commit();
+
+                                MainActivity a = (MainActivity) getActivity();
+                                a.changeFragment(MainActivity.TAG_HOME,0);
                             }
                         })
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity{
     public static int navItemIndex = 0;
 
     // tags used to attach the fragments
-    private static final String TAG_HOME = "home";
+    public static final String TAG_HOME = "home";
     private static final String TAG_APPOINTMENTS = "appts";
     private static final String TAG_SCHEDULES = "schedules";
     private static final  String TAG_PROFILE = "profile";
@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity{
      * Returns respected fragment that user
      * selected from navigation menu
      */
-    private void loadHomeFragment() {
+    public void loadHomeFragment() {
         // set toolbar title
         setToolbarTitle();
 
@@ -259,19 +259,13 @@ public class MainActivity extends AppCompatActivity{
                 switch (menuItem.getItemId()) {
                     //Replacing the main content with ContentFragment Which is our Inbox View;
                     case R.id.nav_home:
-                        navItemIndex = 0;
-                        CURRENT_TAG = TAG_HOME;
-                        menuItem.setChecked(true);
+                        changeFragment(TAG_HOME,0);
                         break;
                     case R.id.nav_appointments:
-                        navItemIndex = 1;
-                        CURRENT_TAG = TAG_APPOINTMENTS;
-                        menuItem.setChecked(true);
+                        changeFragment(TAG_APPOINTMENTS,1);
                         break;
                     case R.id.nav_schedules:
-                        navItemIndex = 2;
-                        CURRENT_TAG = TAG_SCHEDULES;
-                        menuItem.setChecked(true);
+                        changeFragment(TAG_SCHEDULES,2);
                         break;
                     case R.id.nav_logout:
                         IdentityManager.Logout();
@@ -293,12 +287,11 @@ public class MainActivity extends AppCompatActivity{
                     case R.id.nav_user_profile:
                         navItemIndex = 3;
                         CURRENT_TAG = TAG_PROFILE;
+                        loadHomeFragment();
                         break;
                     default:
                         navItemIndex = 0;
                 }
-
-                loadHomeFragment();
                 return true;
             }
         });
@@ -392,5 +385,12 @@ public class MainActivity extends AppCompatActivity{
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void changeFragment(String fragmentTag, int index){
+        navItemIndex = index;
+        CURRENT_TAG = fragmentTag;
+        navigationView.getMenu().getItem(index).setChecked(true);
+        loadHomeFragment();
     }
 }
