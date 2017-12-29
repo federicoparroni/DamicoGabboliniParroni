@@ -146,6 +146,10 @@ public class MappingServiceAPIWrapper{
                             n.setBounds(r.bounds);
                             n.setDirections(getTextualDirectionsGivenRouteAndUpdateMapAndUpdatePolylineList(r));
                             n.setMeanToKmMap(map);
+                            /**
+                             * special behaviour for bikes, we should replace walk mode with bike mode since the bicicle mode isnt available yet
+                             * for milan zone in maps.
+                             */
                             n.setTravelMeanPolylineCouples(polylineMeanList);
                             if(n.getMeanToKmMap().size()==1 && (n.getMeanToKmMap().containsKey(TravelMeanEnum.CAR))||(n.getMeanToKmMap().containsKey(TravelMeanEnum.WALK))){
                                 n.setTime(new TimeSlot(departureTime.toLocalTime(),departureTime.plus(r.legs[0].duration.inSeconds*1000).toLocalTime()));

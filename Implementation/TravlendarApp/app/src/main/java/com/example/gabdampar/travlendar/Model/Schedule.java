@@ -43,13 +43,12 @@ public class Schedule implements Comparable {
 
     public LocalTime getTotalTravelTime(){
         int totalTravelTime = 0;
-        for(int i=1; i<this.getScheduledAppts().size()-1; i++){
-            totalTravelTime += this.getScheduledAppts().get(i).dataFromPreviousToThis.getTime().getDuration();
+        for(int i=1; i<this.getScheduledAppts().size(); i++){
+            totalTravelTime += (this.getScheduledAppts().get(i).ETA.getMillisOfDay() - this.getScheduledAppts().get(i).startingTime.getMillisOfDay())/1000;
         }
-        LocalTime t = new LocalTime(totalTravelTime /60,totalTravelTime%60);
+        LocalTime t = new LocalTime(totalTravelTime /3600,totalTravelTime%60);
         return t;
     }
-
 
     public float getTotalCost() {
         float cost = 0;
