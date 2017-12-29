@@ -64,11 +64,11 @@ public class ScheduleListViewAdapter extends ArrayAdapter<Schedule> implements F
         protected FilterResults performFiltering(CharSequence constraint) {
             FilterResults results = new FilterResults();
 
-            final ArrayList<Schedule> filteredList = new ArrayList<Schedule>(ScheduleManager.GetInstance().schedulesList.size());
+            final ArrayList<Schedule> filteredList = new ArrayList<>(ScheduleManager.GetInstance().schedulesList.size());
 
             for(Schedule s:ScheduleManager.GetInstance().schedulesList)
                 if(showCurrentSchedules)
-                    if(s.getDate().equals(LocalDate.now())||s.getDate().isAfter(LocalDate.now()))
+                    if(s.getDate().equals(LocalDate.now()) || s.getDate().isAfter(LocalDate.now()))
                         filteredList.add(s);
                 else
                     if(s.getDate().isBefore(LocalDate.now()))

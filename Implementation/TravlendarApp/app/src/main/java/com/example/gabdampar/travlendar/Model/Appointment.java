@@ -27,14 +27,6 @@ public class Appointment {
     public ArrayList<ConstraintOnAppointment> constraints = new ArrayList<ConstraintOnAppointment>();
     public HashMap<TravelMeanEnum,LatLng> distanceOfEachTransitStop = new HashMap<TravelMeanEnum,LatLng>();
 
-    /*@Override
-    public boolean equals(Object obj) {
-        if(obj instanceof Appointment){
-
-        }else{
-            return false;
-        }
-    }*/
 
     public Appointment(String n, LocalDate date, LocalTime startingTime, int duration, LatLng coord) {
         this.name = n;

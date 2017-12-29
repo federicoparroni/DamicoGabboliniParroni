@@ -123,7 +123,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         layout=(LinearLayout)view.findViewById(R.id.linearLayoutMap);
         scrollView=view.findViewById(R.id.directionsScrollView);
 
-        if(NetworkManager.isOnline()) {
+        if(NetworkManager.isOnline(this.getContext())) {
             MapFragment mapFragment = (MapFragment) getChildFragmentManager().findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
         } else {
