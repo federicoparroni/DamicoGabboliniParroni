@@ -10,6 +10,7 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 import java.lang.reflect.Type;
+import java.util.Locale;
 
 /**
  * Created by federico on 23/12/17.
@@ -44,7 +45,7 @@ public class LatLngSerializer implements JsonDeserializer<LatLng>, JsonSerialize
         }
         else
         {
-            res = String.format("%f,%f", src.latitude, src.longitude);
+            res = String.format(Locale.US,"%f,%f", src.latitude, src.longitude);
         }
         return new JsonPrimitive(res);
     }

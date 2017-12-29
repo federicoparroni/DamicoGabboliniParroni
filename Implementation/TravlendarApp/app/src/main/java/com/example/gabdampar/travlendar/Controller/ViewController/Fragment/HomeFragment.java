@@ -30,6 +30,10 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 
+import org.joda.time.LocalDate;
+
+import java.util.Map;
+
 public class HomeFragment extends Fragment implements OnMapReadyCallback {
     /**
      * infos about permission given to the user of the application
@@ -53,6 +57,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             scrollView.setLayoutParams(params);
             map.clear();
             askForPermissionAndShowUserPositionOnMap();
+            MapUtils.putMapMarkersGivenAppointmentsAndSetMapZoomToThose(map, AppointmentManager.GetInstance().GetAppointmentsByDate(LocalDate.now()));
             directionTextView.setText("");
         }
         else {
@@ -150,23 +155,14 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             catch (SecurityException e) {e.printStackTrace();}
         }
         else {
-            getLocationPermission();
-            askForPermissionAndShowUserPositionOnMap();
-        }
-    }
-
-    private void getLocationPermission() {
-    /*
-     * Request location permission, so that we can get the location of the
-     * device. The result of the permission request is handled by a callback,
-     * onRequestPermissionsResult.
-     */
-        if (ContextCompat.checkSelfPermission(this.getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            mLocationPermissionGranted = true;
-        } else {
-            ActivityCompat.requestPermissions(this.getActivity(),
-                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+            if (ContextCompat.checkSelfPermission(this.getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED) {
+                mLocationPermissionGranted = true;
+                map.setMyLocationEnabled(true);
+            } else {
+                ActivityCompat.requestPermissions(this.getActivity(),
+                        new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+            }
         }
     }
 

@@ -59,47 +59,51 @@ public class MapUtils {
                 .title(appointment.toString()));
     }
 
-    public static void putMapMarkersGivenAppointmentAndSetZoomOnIt(GoogleMap map, Appointment appointment){
+    /*public static void putMapMarkersGivenAppointmentAndSetZoomOnIt(GoogleMap map, Appointment appointment){
         map.addMarker(new MarkerOptions()
                 .position(appointment.coords)
                 .title(appointment.toString())
         );
         CameraUpdate cu = CameraUpdateFactory.newLatLng(appointment.getCoords());
         map.animateCamera(cu);
-    }
+    }*/
 
-    public static void putMapMarkersGivenAppointments(GoogleMap map, List<Appointment> appointments){
+    /*public static void putMapMarkersGivenAppointments(GoogleMap map, List<Appointment> appointments){
         for(Appointment a: appointments) {
             putMapMarkersGivenAppointment(map, a);
         }
-    }
+    }*/
 
     public static void putMapMarkersGivenAppointmentsAndSetMapZoomToThose(GoogleMap map, List<Appointment> appointments){
-        LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        for(Appointment a: appointments) {
-            MarkerOptions marker = new MarkerOptions()
-                    .position(a.coords)
-                    .title(a.toString());
-            map.addMarker(marker);
-            builder.include(marker.getPosition());
+        if(appointments.size()>0) {
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+            for (Appointment a : appointments) {
+                MarkerOptions marker = new MarkerOptions()
+                        .position(a.coords)
+                        .title(a.toString());
+                map.addMarker(marker);
+                builder.include(marker.getPosition());
+            }
+            LatLngBounds bounds = builder.build();
+            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 200);
+            map.animateCamera(cu);
         }
-        LatLngBounds bounds = builder.build();
-        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 200);
-        map.animateCamera(cu);
     }
 
     public static void putMapMarkersGivenScheduledAppointmentsAndSetMapZoomToThose(GoogleMap map, List<ScheduledAppointment> appointments){
-        LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        for(ScheduledAppointment a: appointments) {
-            MarkerOptions marker = new MarkerOptions()
-                    .position(a.originalAppointment.coords)
-                    .title(a.toString());
-            map.addMarker(marker);
-            builder.include(marker.getPosition());
+        if(appointments.size()>0) {
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+            for (ScheduledAppointment a : appointments) {
+                MarkerOptions marker = new MarkerOptions()
+                        .position(a.originalAppointment.coords)
+                        .title(a.toString());
+                map.addMarker(marker);
+                builder.include(marker.getPosition());
+            }
+            LatLngBounds bounds = builder.build();
+            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 120);
+            map.animateCamera(cu);
         }
-        LatLngBounds bounds = builder.build();
-        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 120);
-        map.animateCamera(cu);
     }
 
 

@@ -105,11 +105,9 @@ public class AppointmentCreationActivity extends AppCompatActivity implements On
             public void onPlaceSelected(Place place) {
                 map.clear();
                 String placeName = place.getName().toString();
-                LatLng latLng = place.getLatLng();
-                map.addMarker(new MarkerOptions().position(latLng).title(placeName));
-                map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,15));
-
                 coords = place.getLatLng();
+                map.addMarker(new MarkerOptions().position(coords).title(placeName));
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(coords,15));
                 location = (String) place.getAddress();
             }
             @Override
@@ -200,7 +198,7 @@ public class AppointmentCreationActivity extends AppCompatActivity implements On
                         appointment = new Appointment(name, date, startingTime, null, duration, coords, location, involvedPeople, isRecurrent);
                     } else {
                         appointment = new Appointment(name, date, null, timeSlot, duration, coords, location, involvedPeople, isRecurrent);
-                    }
+                }
                     AppointmentManager.GetInstance().setAllStopsCloseToAppointment(appointment);
                     AppointmentManager.GetInstance().apptList.add(appointment);
 
