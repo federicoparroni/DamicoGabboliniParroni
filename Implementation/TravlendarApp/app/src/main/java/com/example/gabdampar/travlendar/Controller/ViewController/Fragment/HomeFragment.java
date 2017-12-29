@@ -16,6 +16,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.gabdampar.travlendar.Controller.AppointmentManager;
@@ -40,22 +42,31 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
      */
     GoogleMap map;
     TextView directionTextView;
+    LinearLayout layout;
+    ScrollView scrollView;
 
     public void changeState(){
         if(ScheduleManager.GetInstance().runningSchedule==null) {
-            directionTextView.setText("");
-            directionTextView.setVisibility(View.GONE);
+            layout.setWeightSum(4);
+            ViewGroup.LayoutParams params = (ViewGroup.LayoutParams) scrollView.getLayoutParams();
+            params.height = 0;
+            scrollView.setLayoutParams(params);
             map.clear();
             askForPermissionAndShowUserPositionOnMap();
+            directionTextView.setText("");
         }
         else {
-            directionTextView.setVisibility(View.VISIBLE);
+            layout.setWeightSum(10);
+            ViewGroup.LayoutParams params = (ViewGroup.LayoutParams) scrollView.getLayoutParams();
+            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            scrollView.setLayoutParams(params);
             map.clear();
+            directionTextView.setText(ScheduleManager.GetInstance().getDirectionForRunningSchedule());
             askForPermissionAndShowUserPositionOnMap();
             MapUtils.drawScheduleOnMap(ScheduleManager.GetInstance().runningSchedule, map);
             MapUtils.putMapMarkersGivenScheduledAppointmentsAndSetMapZoomToThose(map, ScheduleManager.GetInstance().runningSchedule.getScheduledAppts());
-            directionTextView.setText(ScheduleManager.GetInstance().getDirectionForRunningSchedule());
         }
+        getActivity().invalidateOptionsMenu();
     }
 
     @Override
@@ -99,7 +110,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         AppointmentManager.GetInstance().CreateDummyAppointments();
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
         // synchronize appointments
         if(savedInstanceState == null) Synchronizer.GetInstance().Synchronize(getActivity());
     }
@@ -110,6 +120,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         // reference ui control here
         // TextField f = view.findViewById(...);
         directionTextView = view.findViewById(R.id.directionsTextView);
+        layout=(LinearLayout)view.findViewById(R.id.linearLayoutMap);
+        scrollView=view.findViewById(R.id.directionsScrollView);
 
         if(NetworkManager.isOnline()) {
             MapFragment mapFragment = (MapFragment) getChildFragmentManager().findFragmentById(R.id.map);
@@ -117,7 +129,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         } else {
             //Snackbar.make(view, "Internet connection appears to be offline", Snackbar.LENGTH_LONG).show();
         }
-
         return view;
     }
 
