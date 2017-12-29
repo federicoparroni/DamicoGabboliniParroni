@@ -179,7 +179,7 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
         // enable fab click listener
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 if(NetworkManager.isOnline(getApplicationContext())) {
                     if(scheduler.isConsistent()) {
 
@@ -197,9 +197,13 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
                         scheduler.ComputeSchedule(getApplicationContext(), new Scheduler.ScheduleCallbackListener() {
                             @Override
                             public void ScheduleCallback(final Schedule schedule) {
-                                ScheduleManager.GetInstance().schedulesList.add(schedule);
                                 alert.dismiss();
-                                finish();
+                                if(schedule == null) {
+                                    Snackbar.make(view, "Unfeasible schedule", Snackbar.LENGTH_LONG).show();
+                                } else {
+                                    ScheduleManager.GetInstance().schedulesList.add(schedule);
+                                    finish();
+                                }
                             }
                         });
                     } else {

@@ -27,11 +27,16 @@ public class Schedule {
     public Schedule(ArrayList<TemporaryAppointment> apps) {
         // TODO: convert TemporaryAppointments into ScheduledAppointments.. works??
         for(TemporaryAppointment a : apps) {
-            TravelMean m = a.means != null ? a.means.get(0).getTravelMean() : null;
+            TravelMean m = a.means != null ? a.means.get(0).getMean() : null;
             scheduledAppts.add(new ScheduledAppointment(a.originalAppt, a.startingTime, a.ETA, m ));
         }
     }
 
+    public Schedule(ArrayList<TemporaryAppointment> apps, OptCriteria criteria) {
+        // TODO: convert TemporaryAppointments into ScheduledAppointments.. works??
+        this(apps);
+        this.criteria = criteria;
+    }
 
     public LocalTime getTotalTravelTime(){
         int totalTravelTime = 0;

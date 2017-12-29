@@ -48,7 +48,7 @@ public class TemporaryAppointment {
     }
 
     public TemporaryAppointment(Appointment originalAppt, LocalTime startingTime, LocalTime ETA, ArrayList<TravelMeanCostTimeInfo> means) {
-        this.originalAppt = originalAppt;
+        this(originalAppt);
         this.startingTime = startingTime;
         this.ETA = ETA;
         this.means = means;
