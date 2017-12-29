@@ -24,10 +24,9 @@ public class Synchronizer {
 
 
     public void Synchronize(Context context) {
-        AppointmentManager.GetInstance().apptList = AppointmentManager.GetInstance().loadAppointments(context);
+        ArrayList<Appointment> loaded = AppointmentManager.GetInstance().loadAppointments(context);
+        if(loaded!=null)
+            AppointmentManager.GetInstance().apptList = loaded;
     }
-
-
-
 
 }
