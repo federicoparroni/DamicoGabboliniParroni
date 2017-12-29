@@ -35,16 +35,14 @@ import java.util.Iterator;
 
 import static com.example.gabdampar.travlendar.Model.travelMean.TravelMean.getTravelMean;
 
-public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWrapperCallBack {
+public class Scheduler{
 
     public LocalTime scheduleStartingTime;
     public LatLng startingLocation;
     public ArrayList<Appointment> appts = new ArrayList<>();
     public ArrayList<ConstraintOnSchedule> constraints = new ArrayList<>();
     public OptCriteria criteria;
-
-    public TimeWeatherList weatherConditions;      // set by weather API callback
-
+    public TimeWeatherList weatherConditions;
 
     // intermediate computation result
     private byte[][] pred;
@@ -53,8 +51,7 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
     private ArrayList<ArrayList<Appointment>> arrangements = new ArrayList<>();
     /** contains the schedules computed until now */
     private ArrayList<Schedule> schedules = new ArrayList<>();
-
-    boolean callStateWeatherAPI;    // true if call to weather API went ok, false otherwise
+    //boolean callStateWeatherAPI;    // true if call to weather API went ok, false otherwise
 
 
     /** constructors */
@@ -73,41 +70,45 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
         return scheduleStartingTime != null && startingLocation != null && criteria != null && appts.size() > 0;
     }
 
-    public void ComputeSchedule(Context context, ScheduleCallbackListener listener) {
-        callStateWeatherAPI = false;
-
+    public void ComputeSchedule(Context context, final ScheduleCallbackListener listener) {
         if(this.appts.size() > 0) {
 
             /** get weather conditions for select date and baricentre of the daily appointments */
             // 1
-            WeatherForecastAPIWrapper.getInstance().getWeather(context, this, appts.get(0).getDate(), MapUtils.baricentre(appts));
+            WeatherForecastAPIWrapper.getInstance().getWeather(context, new WeatherForecastAPIWrapper.WeatherForecastAPIWrapperCallBack() {
+                @Override
+                public void onWeatherResults(TimeWeatherList weatherConditionList) {
+                    weatherConditions=weatherConditionList;
 
-            // 2
-            CalculatePredecessorsAndDistanceMatrix(appts);
+                    // 2
+                    CalculatePredecessorsAndDistanceMatrix(appts);
 
-            // 3
-            CalculateArrangements(appts, pred.clone(), 0, 1);
+                    // 3
+                    CalculateArrangements(appts, pred.clone(), 0, 1);
 
-            // 4
-            WaitForWeatherAPI();
-            GetSchedulesFromArrangements();
+                    // 4
+                    //WaitForWeatherAPI();
+                    GetSchedulesFromArrangements();
 
-            // 5
-            /** order schedules to update current minimum cost */
-            // OrderSchedules();
+                    // 5
+                    /** order schedules to update current minimum cost */
+                    // OrderSchedules();
 
-            // debug
-            for (Schedule s : schedules) {
-                System.out.printf("%s\n", s.toString());
-            }
+                    // debug
+                    for (Schedule s : schedules) {
+                        System.out.printf("%s\n", s.toString());
+                    }
 
-            /**
-             * for the current schedule, retrieve all the data for the travel means linking the two appointments
-             * if the time-bounds of the heuristical schedule is exceeded, the schedule to be considered not valid
-             */
-            i=0;
-            j=1;
-            getBestScheduleAsync(listener);
+                    /**
+                     * for the current schedule, retrieve all the data for the travel means linking the two appointments
+                     * if the time-bounds of the heuristical schedule is exceeded, the schedule to be considered not valid
+                     */
+                    i=0;
+                    j=1;
+                    getBestScheduleAsync(listener);
+                }
+            }, appts.get(0).getDate(), MapUtils.baricentre(appts));
+
         } else {
             throw new IllegalArgumentException("Empty appointment list");
         }
@@ -576,38 +577,27 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
 
 
     void AddWakeUpDistances(Appointment wakeUpAppt, Appointment appt) {
-
         AppointmentCouple key = new AppointmentCouple(wakeUpAppt, appt);
         if(!distances.containsKey(key)) {
             distances.put(key, MapUtils.distance(wakeUpAppt.coords, appt.coords));
         }
-
     }
 
-    /** On weather results callback: set the weatherConditionList variable
-     */
-    @Override
-    public void onWeatherResults(TimeWeatherList weatherConditionList) {
-        this.weatherConditions = weatherConditionList;
-        callStateWeatherAPI = true;
-    }
 
-    private void WaitForWeatherAPI() {
-        while (weatherConditions == null && callStateWeatherAPI == false) {
-            try {
-                Thread.sleep(5);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+    /*private void WaitForWeatherAPI() {
+        new Thread(new Runnable() {
+            public void run() {
+                while (weatherConditions == null && callStateWeatherAPI == false) {
+                    // do something in the loop
+                }
             }
-        }
-    }
-
+        }).start();
+    }*/
 
     /**
     **  +++++ AUXILIARY FUNCTIONS +++++
     **
     */
-
     private int SumRow(byte[][] matrix, int riga) {
         int sum = 0;
         for(int i=riga+1; i < matrix.length; i++) {

@@ -62,51 +62,48 @@ public class AppointmentManager {
         return result;
     }
 
+    /**
+     * TODO: synchronize the results of these call, a schedule can be created only after the results of these calls
+     */
     public void setAllStopsCloseToAppointment(final Appointment app){
-        NetworkManager.transitStopsResponseReturned = false;
-        sync=0;
         MappingServiceAPIWrapper.getInstance().getStopDistance(new MappingServiceAPIWrapper.StopServiceCallbackListener() {
             @Override
             public void StopServiceCallback(LatLng latLng) {
                 sync++;
-                if(latLng!=null)
+                if(latLng!=null) {
                     app.distanceOfEachTransitStop.put(TravelMeanEnum.TRAM, latLng);
-                if(sync==4)
-                    NetworkManager.transitStopsResponseReturned = true;
+                }
+
             }
         }, TravelMeanEnum.TRAM, app.coords, 2000);
         MappingServiceAPIWrapper.getInstance().getStopDistance(new MappingServiceAPIWrapper.StopServiceCallbackListener() {
             @Override
             public void StopServiceCallback(LatLng latLng) {
                 sync++;
-                if(latLng!=null)
+                if(latLng!=null) {
                     app.distanceOfEachTransitStop.put(TravelMeanEnum.BUS, latLng);
-                if(sync==4)
-                    NetworkManager.transitStopsResponseReturned = true;
+                }
             }
         }, TravelMeanEnum.BUS, app.coords, 2000);
         MappingServiceAPIWrapper.getInstance().getStopDistance(new MappingServiceAPIWrapper.StopServiceCallbackListener() {
             @Override
             public void StopServiceCallback(LatLng latLng) {
                 sync++;
-                if(latLng!=null)
+                if(latLng!=null) {
                     app.distanceOfEachTransitStop.put(TravelMeanEnum.METRO, latLng);
-                if(sync==4)
-                    NetworkManager.transitStopsResponseReturned = true;
+                }
             }
         }, TravelMeanEnum.METRO, app.coords, 2000);
         MappingServiceAPIWrapper.getInstance().getStopDistance(new MappingServiceAPIWrapper.StopServiceCallbackListener() {
             @Override
             public void StopServiceCallback(LatLng latLng) {
                 sync++;
-                if(latLng!=null)
+                if (latLng != null){
                     app.distanceOfEachTransitStop.put(TravelMeanEnum.TRAIN, latLng);
-                if(sync==4)
-                    NetworkManager.transitStopsResponseReturned = true;
+                }
             }
         }, TravelMeanEnum.TRAIN, app.coords, 2000);
     }
-
 
     /** APPOINTMENT PERSISTENCE */
     public boolean saveAppointments(Context context) {
@@ -139,9 +136,7 @@ public class AppointmentManager {
         final Gson gson = builder.create();
 
         try {
-
             BufferedReader bReader = new BufferedReader(new InputStreamReader(context.openFileInput("appointments.json")));
-
             StringBuffer text = new StringBuffer();
             String line;
             while ((line = bReader.readLine()) != null) {
