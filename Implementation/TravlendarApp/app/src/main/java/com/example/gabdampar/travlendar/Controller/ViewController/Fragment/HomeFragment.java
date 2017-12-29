@@ -111,7 +111,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         // TextField f = view.findViewById(...);
         directionTextView = view.findViewById(R.id.directionsTextView);
 
-        if(NetworkManager.isOnline()) {
+        if(NetworkManager.isOnline(this.getContext())) {
             MapFragment mapFragment = (MapFragment) getChildFragmentManager().findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
         } else {

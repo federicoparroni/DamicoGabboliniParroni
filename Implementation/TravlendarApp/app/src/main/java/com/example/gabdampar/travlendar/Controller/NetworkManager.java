@@ -5,6 +5,8 @@
 package com.example.gabdampar.travlendar.Controller;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -50,15 +52,13 @@ public class NetworkManager {
     }
 
     /** Checks whether an internet connection is available and the device is connected */
-    public static Boolean isOnline() {
-        try {
-            Process p1 = java.lang.Runtime.getRuntime().exec("ping -c 1 www.google.com");
-            int returnVal = p1.waitFor();
-            return (returnVal==0);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
+    public static Boolean isOnline(Context c ) {
+        boolean connected = false;
+        ConnectivityManager connectivityManager = (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager.getActiveNetworkInfo() == null)
+            connected = false;
+        else
+            connected = true;
+        return connected;
     }
-
 }

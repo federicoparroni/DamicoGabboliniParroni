@@ -180,7 +180,7 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(NetworkManager.isOnline()) {
+                if(NetworkManager.isOnline(getApplicationContext())) {
                     if(scheduler.isConsistent()) {
 
                         //creation of the waiting view through an alert dialogue
