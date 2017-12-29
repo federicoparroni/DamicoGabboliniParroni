@@ -44,7 +44,7 @@ public class Metro extends PublicTravelMean {
         LatLng stationTo = from.originalAppt.distanceOfEachTransitStop.get(TravelMeanEnum.METRO);
         float totalTime = 0;
 
-        if(stationFrom == null || stationTo == null){
+        if(stationFrom == null || stationTo == null || stationFrom.equals(stationTo)){
             return -1;
         }else{
             //distance travelled with bus

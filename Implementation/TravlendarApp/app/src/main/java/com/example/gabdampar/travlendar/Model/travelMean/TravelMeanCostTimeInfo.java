@@ -26,10 +26,6 @@ public class TravelMeanCostTimeInfo implements Comparable<TravelMeanCostTimeInfo
         return Float.compare(cost, travelMeanCostTimeInfo.cost);
     }
 
-    public TravelMean getTravelMean() {
-        return mean;
-    }
-
     public float getCost() {
         return cost;
     }
@@ -43,7 +39,7 @@ public class TravelMeanCostTimeInfo implements Comparable<TravelMeanCostTimeInfo
     }
 
     public static void CleanUncovenientMeans(ArrayList<TravelMeanCostTimeInfo> meansQueue) {
-        for (int i = 1; i < meansQueue.size()-1; i++) { //aggiunto quel meno uno sul for
+        for (int i = 1; i < meansQueue.size(); i++) { //aggiunto quel meno uno sul for
             TravelMeanCostTimeInfo mc2 = meansQueue.get(i);
             TravelMeanCostTimeInfo mc1 = meansQueue.get(i - 1);
             float delta;

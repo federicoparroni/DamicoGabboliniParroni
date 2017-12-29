@@ -44,7 +44,7 @@ public class Bus extends PublicTravelMean {
         LatLng stationTo = from.originalAppt.distanceOfEachTransitStop.get(TravelMeanEnum.BUS);
         float totalTime = 0;
 
-        if(stationFrom == null || stationTo == null){
+        if(stationFrom == null || stationTo == null || stationFrom.equals(stationTo)){
             return -1;
         }else{
             //distance travelled with bus
@@ -78,7 +78,7 @@ public class Bus extends PublicTravelMean {
     public float EstimateCarbon(TemporaryAppointment from, TemporaryAppointment to, float distance) {
         LatLng stationFrom = from.originalAppt.distanceOfEachTransitStop.get(TravelMeanEnum.BUS);
         LatLng stationTo = from.originalAppt.distanceOfEachTransitStop.get(TravelMeanEnum.BUS);
-        return MapUtils.distance(stationFrom,stationTo) * AVG_CARBON_EMISSION_PER_KM ;
+        return MapUtils.distance(stationFrom, stationTo) * AVG_CARBON_EMISSION_PER_KM ;
     }
 
 
