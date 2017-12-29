@@ -30,7 +30,7 @@ public class TravelMeanCostTimeInfo implements Comparable<TravelMeanCostTimeInfo
         return cost;
     }
 
-    public float geTime() {
+    public float getTime() {
         return time;
     }
 
@@ -44,9 +44,9 @@ public class TravelMeanCostTimeInfo implements Comparable<TravelMeanCostTimeInfo
             TravelMeanCostTimeInfo mc1 = meansQueue.get(i - 1);
             float delta;
             if((mc2.getCost() - mc1.getCost()) > 0){
-                delta = (mc1.geTime() - mc2.geTime()) / (mc2.getCost() - mc1.getCost());
+                delta = (mc1.getTime() - mc2.getTime()) / (mc2.getCost() - mc1.getCost());
             }else{
-                delta = mc1.geTime() - mc2.geTime();
+                delta = mc1.getTime() - mc2.getTime();
             }
 
             if (delta <= 0)

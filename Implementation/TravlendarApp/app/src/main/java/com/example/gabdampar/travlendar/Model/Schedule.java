@@ -4,14 +4,17 @@
 
 package com.example.gabdampar.travlendar.Model;
 
+import android.support.annotation.NonNull;
+
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMean;
+
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
 import java.util.ArrayList;
 
 
-public class Schedule {
+public class Schedule implements Comparable {
 
     public ArrayList<ScheduledAppointment> getScheduledAppts() {
         return scheduledAppts;
@@ -94,4 +97,17 @@ public class Schedule {
         return res.toString();
     }
 
+    @Override
+    public int compareTo(@NonNull Object o) {
+        Schedule s2 = (Schedule) o;
+        switch (criteria) {
+            case OPTIMIZE_TIME:
+                return this.getTotalTravelTime().compareTo(s2.getTotalTravelTime());
+            case OPTIMIZE_COST:
+                return Float.compare( this.getTotalCost(), s2.getTotalCost() );
+            case OPTIMIZE_CARBON:
+                return Float.compare( this.getTotalCarbon(), s2.getTotalCarbon() );
+        }
+        return 2;
+    }
 }
