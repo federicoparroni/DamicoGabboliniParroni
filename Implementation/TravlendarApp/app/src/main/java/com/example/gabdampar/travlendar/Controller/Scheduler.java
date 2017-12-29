@@ -33,8 +33,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import static com.example.gabdampar.travlendar.Model.travelMean.TravelMean.getTravelMean;
-
 public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWrapperCallBack {
 
     public LocalTime scheduleStartingTime;
@@ -94,7 +92,7 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
 
             // 5
             /** order schedules to update current minimum cost */
-            // OrderSchedules();
+            Collections.sort(schedules);
 
             // debug
             for (Schedule s : schedules) {
@@ -276,7 +274,7 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
         ArrayList<TemporaryAppointment> tempAppts = TemporaryAppointment.Create(arrangement);
         tempAppts.add(0, new TemporaryAppointment(wakeUpAppt, wakeUpAppt.startingTime, wakeUpAppt.startingTime, null));
 
-        float currentCost;
+        //float currentCost;
         boolean mustReiterate;       // current arrangement has conflicts
 
         /**
@@ -285,7 +283,7 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
          **/
 
         do {
-            currentCost = 0;
+            //currentCost = 0;
             mustReiterate = false;
             /** keep track of means usage (to not violate constraints) */
             TravelMeansState state = new TravelMeansState(constraints);
@@ -307,13 +305,13 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
                 } else {
                     if (means.size() == 0) return null;      // no more means available
                     // get best travel mean (first in list) travel time
-                    int travelTime = (int) means.get(0).geTime(); //(int) bestMean.EstimateTime(appt1.originalAppt, appt2, distance);
+                    int travelTime = (int) means.get(0).getTime(); //(int) bestMean.EstimateTime(appt1.originalAppt, appt2, distance);
 
                     if (appt2.isDeterministic()) {
                         // both deterministic, only creates scheduledAppointment with recalculated startingTime and ETA
                         LocalTime fixedStartingTime = appt2.startingTime.minusSeconds(travelTime);
                         tempAppts.get(i + 1).Set(appt2, fixedStartingTime, appt2.startingTime, means);
-                        currentCost += means.get(0).getCost();
+                        //currentCost += means.get(0).getCost();
 
                         // previous appt is overlapping with current one (deterministic)
                         if (appt1.endingTime().isAfter(fixedStartingTime)) {
@@ -326,7 +324,7 @@ public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWr
                         LocalTime fixedStartingTime = DateManager.MaxTime(appt1.endingTime(), appt2.timeSlot.startingTime.minusSeconds(travelTime));
                         LocalTime ETA2 = fixedStartingTime.plusSeconds(travelTime);
                         tempAppts.get(i + 1).Set(appt2, fixedStartingTime, ETA2, means);
-                        currentCost += means.get(0).getCost();
+                        //currentCost += means.get(0).getCost();
 
                         // appt is out of its time slot bounds
                         if (appt2.timeSlot.endingTime.isBefore(ETA2.plusSeconds(appt2.duration))) {
