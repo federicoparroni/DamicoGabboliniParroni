@@ -27,7 +27,7 @@ public class ScheduledAppointmentsListViewAdapter extends ArrayAdapter<Scheduled
         TextView appointmentNameField = convertView.findViewById(R.id.appointmentNameField);
         TextView timeField = convertView.findViewById(R.id.timeField);
         TextView reachedBy = convertView.findViewById(R.id.reachedBy);
-        reachedBy.setText(position == 0 ? appointment.travelMeanToUse.toString() : "");
+        reachedBy.setText(position != 0 ? "Reached by: " + appointment.travelMeanToUse.toString() : "");
         appointmentNameField.setText(appointment.originalAppointment.toString());
         timeField.setText(appointment.ETA.toString("HH:mm" ) + " - " + appointment.endingTime().toString("HH:mm"));
         return convertView;

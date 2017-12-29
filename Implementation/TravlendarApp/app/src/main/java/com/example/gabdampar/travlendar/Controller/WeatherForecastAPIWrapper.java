@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Locale;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -200,7 +201,7 @@ public class WeatherForecastAPIWrapper {
         SharedPreferences settings = context.getSharedPreferences("ApiData", 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString("weatherAPICacheDate", date.toString());
-        editor.putString("weatherAPICacheCoords", String.format("%f,%f", coords.latitude, coords.longitude));
+        editor.putString("weatherAPICacheCoords", String.format(Locale.US,"%f,%f", coords.latitude, coords.longitude));
         editor.commit();
 
         return true;

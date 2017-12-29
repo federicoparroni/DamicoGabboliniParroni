@@ -26,7 +26,7 @@ public class Appointment {
     public String location;
     public ArrayList<ConstraintOnAppointment> constraints = new ArrayList<ConstraintOnAppointment>();
     public HashMap<TravelMeanEnum,LatLng> distanceOfEachTransitStop = new HashMap<TravelMeanEnum,LatLng>();
-    
+
     public Appointment(String n, LocalDate date, LocalTime startingTime, int duration, LatLng coord) {
         this.name = n;
         this.startingTime = startingTime;
