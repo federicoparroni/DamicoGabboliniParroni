@@ -232,22 +232,6 @@ public class ScheduleListFragment extends Fragment implements OnMapReadyCallback
         }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Check which request we're responding to
-        switch (requestCode) {
-            case SCHEDULE_CREATION_REQUEST:
-                // Make sure the request was successful
-                if (resultCode == RESULT_OK) {
-                    // The user picked a contact.
-                    // The Intent's data Uri identifies which contact was selected.
-
-                    // refresh schedule list
-                }
-            break;
-        }
-    }
-
 
     /**
      * CALLBACK of the google API, this is done when the map is returned and it is ready to be showned

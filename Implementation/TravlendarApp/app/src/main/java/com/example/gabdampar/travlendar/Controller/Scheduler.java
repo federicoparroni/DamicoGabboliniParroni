@@ -4,7 +4,7 @@
 
 package com.example.gabdampar.travlendar.Controller;
 
-import android.util.Log;
+import android.content.Context;
 
 import com.example.gabdampar.travlendar.Model.Appointment;
 import com.example.gabdampar.travlendar.Model.AppointmentCouple;
@@ -24,7 +24,6 @@ import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanWeatherCouple
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMeansState;
 import com.google.android.gms.maps.model.LatLng;
 
-import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalTime;
 
@@ -36,7 +35,7 @@ import java.util.Iterator;
 
 import static com.example.gabdampar.travlendar.Model.travelMean.TravelMean.getTravelMean;
 
-public class Scheduler {
+public class Scheduler implements WeatherForecastAPIWrapper.WeatherForecastAPIWrapperCallBack {
 
     public LocalTime scheduleStartingTime;
     public LatLng startingLocation;
@@ -46,15 +45,19 @@ public class Scheduler {
 
     public TimeWeatherList weatherConditions;      // set by weather API callback
 
+
+    // intermediate computation result
     private byte[][] pred;
     private HashMap<AppointmentCouple, Float> distances = new HashMap<>();
-
+    /** contains the arrangement computed until now */
+    private ArrayList<ArrayList<Appointment>> arrangements = new ArrayList<>();
     /** contains the schedules computed until now */
     private ArrayList<Schedule> schedules = new ArrayList<>();
-    //float cost = Float.MAX_VALUE;
 
-    //ArrayList<Schedule> possibleSchedules = new ArrayList<Schedule>();
+    boolean callStateWeatherAPI;    // true if call to weather API went ok, false otherwise
 
+
+    /** constructors */
     public Scheduler() {}
 
     public Scheduler(LocalTime scheduleStartingTime, LatLng location, ArrayList<Appointment> appts, ArrayList<ConstraintOnSchedule> constraints, OptCriteria c) {
@@ -70,30 +73,37 @@ public class Scheduler {
         return scheduleStartingTime != null && startingLocation != null && criteria != null && appts.size() > 0;
     }
 
-    public void ComputeSchedule(ScheduleCallbackListener listener) {
+    public void ComputeSchedule(Context context, ScheduleCallbackListener listener) {
+        callStateWeatherAPI = false;
+
         if(this.appts.size() > 0) {
 
-            //TODO DECIDERE SE SPOSTARE LA CHIAMATA ALLE API DEL METEO
-            /** call API to optimize time during arragements computation */
-            //WeatherForecastAPIWrapper.getInstance().getWeather(this, appts.get(0).date, appts.get(0).coords);
+            /** get weather conditions for select date and baricentre of the daily appointments */
+            // 1
+            WeatherForecastAPIWrapper.getInstance().getWeather(context, this, appts.get(0).getDate(), MapUtils.baricentre(appts));
 
-            // 1-2
+            // 2
             CalculatePredecessorsAndDistanceMatrix(appts);
 
             // 3
-            CalculateCombinations(appts, pred.clone(), 0, 1);
+            CalculateArrangements(appts, pred.clone(), 0, 1);
 
-            // 4 TODO==========================
-            // OrderSchedules();
+            // 4
+            WaitForWeatherAPI();
+            GetSchedulesFromArrangements();
 
             // 5
+            /** order schedules to update current minimum cost */
+            // OrderSchedules();
+
+            // debug
             for (Schedule s : schedules) {
                 System.out.printf("%s\n", s.toString());
             }
 
             /**
              * for the current schedule, retrieve all the data for the travel means linking the two appointments
-             * if the time-bounds of the heuristical schedule is exceeded, the schedule is to be considered not valid
+             * if the time-bounds of the heuristical schedule is exceeded, the schedule to be considered not valid
              */
             i=0;
             j=1;
@@ -168,6 +178,10 @@ public class Scheduler {
             listener.ScheduleCallback(null);
     }
 
+    /**
+     * Populate pred matrix and distances list with data from the original list of appointments
+     * @param apps: list of appointments
+     */
     private void CalculatePredecessorsAndDistanceMatrix(ArrayList<Appointment> apps) {
         pred = new byte[apps.size()][apps.size()];
 
@@ -205,9 +219,9 @@ public class Scheduler {
 
 
     /**
-     * Recursively compute dispositions of appointment
+     * Recursively compute dispositions of appointment (arrangement)
      */
-    private void CalculateCombinations(ArrayList<Appointment> appts, byte[][] pr, int curri, int currj) {
+    private void CalculateArrangements(ArrayList<Appointment> appts, byte[][] pr, int curri, int currj) {
 
         for(int i=curri; i < appts.size()-1; i++) {
             for(int j=currj; j < appts.size(); j++) {
@@ -215,11 +229,11 @@ public class Scheduler {
 
                     byte[][] pred0 = CloneMatrix(pr);
                     pred0[i][j] = 0;
-                    CalculateCombinations(appts, pred0, i, j);
+                    CalculateArrangements(appts, pred0, i, j);
 
                     byte[][] pred1 = CloneMatrix(pr);
                     pred1[i][j] = 1;
-                    CalculateCombinations(appts, pred1, i, j);
+                    CalculateArrangements(appts, pred1, i, j);
 
                     return;
                 }
@@ -227,24 +241,21 @@ public class Scheduler {
             currj = i+1;
         }
 
-        // all appointments have been ordered, calculate schedule
-        ArrayList<Appointment> arrangement = ConvertPredMatrixToList(appts, pr);
-        if(arrangement.size() == pred.length) {
-            //StampaArray(pr);
-            // schedule appointments in the arrangement
-            Schedule s = GetScheduleFromArrangement(arrangement);
-            if(s != null) {
-                schedules.add(s);
-                /** order schedules to update current minimum cost */
+        // all appointments have been ordered, add this arrangement to the list if valid
+        ArrayList<Appointment> arrangement = ConvertPredMatrixToArrangement(appts, pr);
+        if(arrangement != null) arrangements.add( arrangement );
 
-            } else {
+    }
 
-                /*for(Appointment appt : arrangement) {
-                    System.out.print(appt.toString() + " ");
-                }
-                System.out.println("- NON FATTIBILE");
-                */
-            }
+
+    /**
+     * Get schedules for each arrangement in the list
+     */
+    private void GetSchedulesFromArrangements() {
+        for(ArrayList<Appointment> arrgmt : arrangements) {
+            Schedule s = GetScheduleFromArrangement(arrgmt);
+            if(s != null) schedules.add(s);
+            // else unfeasible schedule
         }
     }
 
@@ -332,6 +343,13 @@ public class Scheduler {
     }
 
 
+    /**
+     * Retrn the list of usable means to travel from a1 to a2 according to the specified state, ordered by cost
+     * @param a1: starting appointment
+     * @param a2: arrival appointment
+     * @param state: current means state
+     * @return ordered list of usable travel means with relative cost and travel time
+     */
     private ArrayList<TravelMeanCostTimeInfo> GetUsableTravelMeansOrderedByCost(TemporaryAppointment a1, TemporaryAppointment a2, TravelMeansState state) {
         ArrayList<TravelMeanEnum> availableMeans = new ArrayList<>( Arrays.asList(TravelMeanEnum.values()) );
 
@@ -431,6 +449,11 @@ public class Scheduler {
         return means;
     }
 
+    /**
+     * Set time conflicts flag for the appointment at index and its predecessors until the first deterministic
+     * @param appts: list of appointments
+     * @param index: index of conflicting appointment
+     */
     private void SetFlagForTimeConflicts(ArrayList<TemporaryAppointment> appts, int index) {
         appts.get(index).isTimeConflicting = true;
         int i = index-1;
@@ -444,9 +467,9 @@ public class Scheduler {
      * Elaborate predecessor matrix and return the appointment ordered by precedence
      * @param appts
      * @param pred
-     * @return arrangement (ArrayList<Appointment>)
+     * @return arrangement (ArrayList<Appointment>) if valid pred matrix, null if not a valid pred matrix
      */
-    private ArrayList<Appointment> ConvertPredMatrixToList(ArrayList<Appointment> appts, byte[][] pred) {
+    private ArrayList<Appointment> ConvertPredMatrixToArrangement(ArrayList<Appointment> appts, byte[][] pred) {
         ArrayList<Appointment> res = new ArrayList<>();
 
         for(int i = pred.length-1; i >= 0; i--) {
@@ -459,12 +482,13 @@ public class Scheduler {
             }
         }
 
-        return res;
+        if(res.size() == appts.size()) return res;
+        else return null;
     }
 
 
     /**
-     * Set a dummy constraint when a time-conflicting or mean-conflicting is in the arrangement
+     * Set a dummy constraint when a time-conflicting or mean-conflicting appointment is found in the arrangement
      * @param arrangment
      * @param state
      * @return true if the new arrangement must be recomputed with new added constraint, false if the arrangement is unfeasible
@@ -480,7 +504,7 @@ public class Scheduler {
         float value = 0;
         int index = -1;
 
-        for (int i = 0; i < arrangment.size()-1; i++) {
+        for (int i = 0; i < arrangment.size(); i++) {
             TemporaryAppointment appt = arrangment.get(i);
             if (appt.isTimeConflicting && appt.means.size() > 1) {
                 arrangmentIsTimeConflicting = true;
@@ -501,7 +525,7 @@ public class Scheduler {
             arrangment.get(index).incrementalConstraints.add(new ConstraintOnAppointment(
                     arrangment.get(index).means.get(0).getMean().meanEnum, 0));
         }
-        /** ff there aren't appointment with TimeConflict we must check for Mean conflicts */
+        /** if there aren't appointment with TimeConflict we must check for Mean conflicts */
         if(!arrangmentIsTimeConflicting) {
             TravelMeanEnum conflictingMean = null;
             Weather appointmentWeather = null;
@@ -516,9 +540,11 @@ public class Scheduler {
             /** if at least one appointment has a MeanConflict Flag UP */
             if (arrangmentIsMeanConflicting) {
                 for (TemporaryAppointment appt : arrangment) {
-                    if (appt.means.get(0).getMean() == getTravelMean(conflictingMean) &&
-                            weatherConditions.getWeatherForTime(appt.startingTime) == appointmentWeather) {
-                        subArrangmentMeanFlaged.add(appt);
+                    if(appt.means != null) { // wakeup appt has means = null
+                        if (appt.means.get(0).getMean() == getTravelMean(conflictingMean) &&
+                                weatherConditions.getWeatherForTime(appt.startingTime) == appointmentWeather) {
+                            subArrangmentMeanFlaged.add(appt);
+                        }
                     }
                 }
                 float value2 = 0;
@@ -557,6 +583,25 @@ public class Scheduler {
         }
 
     }
+
+    /** On weather results callback: set the weatherConditionList variable
+     */
+    @Override
+    public void onWeatherResults(TimeWeatherList weatherConditionList) {
+        this.weatherConditions = weatherConditionList;
+        callStateWeatherAPI = true;
+    }
+
+    private void WaitForWeatherAPI() {
+        while (weatherConditions == null && callStateWeatherAPI == false) {
+            try {
+                Thread.sleep(5);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     /**
     **  +++++ AUXILIARY FUNCTIONS +++++

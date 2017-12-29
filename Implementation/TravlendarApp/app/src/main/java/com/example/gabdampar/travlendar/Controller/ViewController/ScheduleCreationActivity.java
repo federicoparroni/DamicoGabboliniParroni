@@ -59,8 +59,7 @@ import info.hoang8f.android.segmented.SegmentedGroup;
 
 public class ScheduleCreationActivity extends AppCompatActivity implements CalendarView.OnDateChangeListener,
         TimePicker.OnTimeChangedListener, RadioGroup.OnCheckedChangeListener,
-        OnMapReadyCallback, PlaceSelectionListener, AdapterView.OnItemLongClickListener,
-        WeatherForecastAPIWrapper.WeatherForecastAPIWrapperCallBack {
+        OnMapReadyCallback, PlaceSelectionListener, AdapterView.OnItemLongClickListener {
 
     // view controls
     CalendarView calendar;
@@ -86,6 +85,7 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
         // reference ui control and set listeners
         /** schedule date calendar view */
         calendar = findViewById(R.id.calendarView);
+        calendar.setMinDate(DateTime.now().getMillis() - 1000);
         calendar.setOnDateChangeListener(this);
         /** txtApptNumberForSelectedDay */
         txtApptNumberForSelectedDay = findViewById(R.id.txtApptNumberForSelectedDay);
@@ -124,10 +124,7 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
 
         updateAppointmentNumberForSelectedDate(scheduler.appts.size());
 
-        if(scheduler.appts.size() > 0) {
-            /** get weather conditions for select date and baricentre of the daily appointments */
-            WeatherForecastAPIWrapper.getInstance().getWeather(this, this, date, MapUtils.baricentre(scheduler.appts));
-        }
+        fab.setClickable( scheduler.appts.size() > 0 );
     }
 
 
@@ -145,14 +142,6 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
         } else {
             txtApptNumberForSelectedDay.setTextColor(Color.DKGRAY);
         }
-    }
-
-    /** on weather results callback */
-    @Override
-    public void onWeatherResults(TimeWeatherList weatherConditionList) {
-        Log.e("weather", "weather callback");
-        scheduler.weatherConditions = weatherConditionList;
-        fab.setClickable(true);
     }
 
 
@@ -205,7 +194,7 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
                         alert.show();
 
                         // start schedule computation
-                        scheduler.ComputeSchedule(new Scheduler.ScheduleCallbackListener() {
+                        scheduler.ComputeSchedule(getApplicationContext(), new Scheduler.ScheduleCallbackListener() {
                             @Override
                             public void ScheduleCallback(final Schedule schedule) {
                                 ScheduleManager.GetInstance().schedulesList.add(schedule);
