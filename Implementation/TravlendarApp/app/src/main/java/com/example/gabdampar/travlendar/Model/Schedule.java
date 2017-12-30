@@ -6,7 +6,9 @@ package com.example.gabdampar.travlendar.Model;
 
 import android.support.annotation.NonNull;
 
+import com.example.gabdampar.travlendar.Model.travelMean.PublicTravelMean;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMean;
+import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum;
 
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
@@ -27,11 +29,30 @@ public class Schedule implements Comparable {
         return scheduledAppts.get(0).originalAppointment.getDate();
     }
 
+    // properties
+    private int totTravelTime = 0;      // sec
+    private float totCost = 0;          // eur
+    private float totCarbon = 0;        // mg
+    private boolean canBuyTickets = false;
+
     public Schedule(ArrayList<TemporaryAppointment> apps) {
         // TODO: convert TemporaryAppointments into ScheduledAppointments.. works??
         for(TemporaryAppointment a : apps) {
             TravelMean m = a.means != null ? a.means.get(0).getMean() : null;
             scheduledAppts.add(new ScheduledAppointment(a.originalAppt, a.startingTime, a.ETA, m ));
+        }
+
+        // calculate time, cost, carbon
+        for(int i=0; i < scheduledAppts.size() - 1; i++) {
+            ScheduledAppointment a1 = scheduledAppts.get(i);
+            ScheduledAppointment a2 = scheduledAppts.get(i+1);
+
+            totTravelTime += (a2.ETA.getMillisOfDay() - a2.startingTime.getMillisOfDay()) / 1000;
+            totCost += a2.travelMeanToUse.EstimateCost(a1.originalAppointment.coords, a2.originalAppointment.coords);
+            totCarbon += a2.travelMeanToUse.EstimateCarbon(a1.originalAppointment.coords, a2.originalAppointment.coords);
+
+            //TravelMeanEnum mean = a1.travelMeanToUse.meanEnum;
+            if(a1.travelMeanToUse instanceof PublicTravelMean) canBuyTickets = true;
         }
     }
 
@@ -42,34 +63,26 @@ public class Schedule implements Comparable {
     }
 
     public LocalTime getTotalTravelTime(){
-        int totalTravelTime = 0;
-        for(int i=1; i<this.getScheduledAppts().size(); i++){
-            totalTravelTime += (this.getScheduledAppts().get(i).ETA.getMillisOfDay() - this.getScheduledAppts().get(i).startingTime.getMillisOfDay())/1000;
-        }
-        LocalTime t = new LocalTime(totalTravelTime /3600,totalTravelTime%60);
-        return t;
+        return new LocalTime(totTravelTime /3600, totTravelTime % 60);
     }
 
     public float getTotalCost() {
-        float cost = 0;
-        for (int i=1; i < scheduledAppts.size()-1; i++) {
-            ScheduledAppointment a1 = scheduledAppts.get(i);
-            ScheduledAppointment a2 = scheduledAppts.get(i+1);
-            cost += a2.travelMeanToUse.EstimateCost(a1.originalAppointment.coords, a2.originalAppointment.coords);
-        }
-        return cost/1000; //must count the km
+        return totCost / 1000; //must count the km
     }
 
     public float getTotalCarbon() {
-        float cost = 0;
-        for (int i=1; i < scheduledAppts.size()-1; i++) {
-            ScheduledAppointment a1 = scheduledAppts.get(i);
-            ScheduledAppointment a2 = scheduledAppts.get(i+1);
-            cost += a2.travelMeanToUse.EstimateCarbon(a1.originalAppointment.coords, a2.originalAppointment.coords);
-        }
-        return cost/1000; //must count the km
+        return totCarbon / 1000; //must count the g
     }
 
+    public boolean canBuyTickets() {
+        return canBuyTickets;
+    }
+
+
+
+    /**
+     * String methods
+     */
 
     public String toString() {
         StringBuilder res = new StringBuilder();
@@ -96,6 +109,11 @@ public class Schedule implements Comparable {
         return res.toString();
     }
 
+    /**
+     * Compare two Schedules
+     * @param o: another schedule
+     * @return compare between two float (based on optimization criteria)
+     */
     @Override
     public int compareTo(@NonNull Object o) {
         Schedule s2 = (Schedule) o;
@@ -107,6 +125,6 @@ public class Schedule implements Comparable {
             case OPTIMIZE_CARBON:
                 return Float.compare( this.getTotalCarbon(), s2.getTotalCarbon() );
         }
-        return 2;
+        return 1;
     }
 }

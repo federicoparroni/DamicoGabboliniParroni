@@ -4,7 +4,9 @@
 
 package com.example.gabdampar.travlendar.Controller.ViewController.Fragment;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,6 +19,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -32,6 +35,8 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 
 import org.joda.time.LocalDate;
+
+import java.util.zip.Inflater;
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback {
     /**
@@ -69,8 +74,44 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             askForPermissionAndShowUserPositionOnMap();
             MapUtils.drawScheduleOnMap(ScheduleManager.GetInstance().runningSchedule, map);
             MapUtils.putMapMarkersGivenScheduledAppointmentsAndSetMapZoomToThose(map, ScheduleManager.GetInstance().runningSchedule.getScheduledAppts());
+
+            /** ask user if want to buy tickets */
+            if(ScheduleManager.GetInstance().runningSchedule.canBuyTickets()) {
+                // build dialog
+                final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Tickets purchase")
+                        .setMessage("Do you want to buy tickets for this schedule?")
+                        .setPositiveButton("Yes, open ticket page", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                ShowTicketsPurchaseDialog();
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        }).create().show();
+
+            }
         }
         getActivity().invalidateOptionsMenu();
+    }
+
+    private void ShowTicketsPurchaseDialog() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = LayoutInflater.from(builder.getContext());
+        View inflatedView = inflater.inflate(R.layout.dialog_tickets_purchase, null);
+        builder.setView(inflatedView)
+                .setTitle("Tickets purchase page");
+        final AlertDialog alert = builder.create();
+
+        final WebView webView = inflatedView.findViewById(R.id.tickets_web_view);
+        webView.getSettings().setUseWideViewPort(true);
+        webView.loadUrl("https://www.atm.it/it/ViaggiaConNoi/Abbonamenti/Pagine/Acquistionline.aspx");
+
+        alert.show();
     }
 
     @Override

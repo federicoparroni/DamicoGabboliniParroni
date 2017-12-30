@@ -1,5 +1,6 @@
 package com.example.gabdampar.travlendar.Controller.ViewController;
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -10,7 +11,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.res.ResourcesCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,16 +28,13 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.example.gabdampar.travlendar.Controller.AppointmentManager;
-import com.example.gabdampar.travlendar.Controller.MapUtils;
 import com.example.gabdampar.travlendar.Controller.NetworkManager;
 import com.example.gabdampar.travlendar.Controller.ScheduleManager;
 import com.example.gabdampar.travlendar.Controller.Scheduler;
-import com.example.gabdampar.travlendar.Controller.WeatherForecastAPIWrapper;
 import com.example.gabdampar.travlendar.Model.ConstraintOnSchedule;
 import com.example.gabdampar.travlendar.Model.OptCriteria;
 import com.example.gabdampar.travlendar.Model.Schedule;
 import com.example.gabdampar.travlendar.Model.TimeSlot;
-import com.example.gabdampar.travlendar.Model.TimeWeatherList;
 import com.example.gabdampar.travlendar.Model.Weather;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum;
 import com.example.gabdampar.travlendar.R;

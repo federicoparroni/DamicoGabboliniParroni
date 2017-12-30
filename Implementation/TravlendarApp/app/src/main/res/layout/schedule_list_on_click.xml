@@ -11,7 +11,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,14 +26,14 @@
             tools:context="com.greenfeetsurvival.greenfeetaviator.MapsActivity"></fragment>
 
         <LinearLayout
+            android:id="@+id/linearLayout3"
             android:layout_width="match_parent"
             android:layout_height="246dp"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/appointment_map_on_click"
             android:orientation="horizontal"
             tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="257dp"
-            android:id="@+id/linearLayout3">
+            tools:layout_editor_absoluteY="257dp">
 
             <LinearLayout
                 android:layout_width="230dp"
@@ -107,7 +107,7 @@
                     android:layout_height="8dp" />
 
                 <TextView
-                    android:id="@+id/textView18"
+                    android:id="@+id/textView19"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Total Travelled Time"
@@ -126,7 +126,7 @@
                     android:layout_height="8dp" />
 
                 <TextView
-                    android:id="@+id/textView18"
+                    android:id="@+id/textView20"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Carbon"
