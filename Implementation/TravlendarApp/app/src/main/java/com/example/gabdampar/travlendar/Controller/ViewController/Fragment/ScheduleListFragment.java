@@ -204,7 +204,9 @@ public class ScheduleListFragment extends Fragment implements OnMapReadyCallback
                 cost_textView.setText(String.format("%.2f",clickedSchedule.getTotalCost())+"$");
                 carbon_TextView.setText(String.format("%.2f",clickedSchedule.getTotalCarbon())+"mg");
 
-                clickedSchedule.getScheduledAppts().remove(0);
+                //check if the first appointment is the WakeUp or if it has been removed previously
+                if (clickedSchedule.getScheduledAppts().get(0).startingTime == clickedSchedule.getScheduledAppts().get(0).endingTime())
+                    clickedSchedule.getScheduledAppts().remove(0); // cera 0
                 ScheduledAppointmentsListViewAdapter adapter = new ScheduledAppointmentsListViewAdapter(getActivity(), clickedSchedule.getScheduledAppts());
                 scheduleListView.setAdapter(adapter);
 
