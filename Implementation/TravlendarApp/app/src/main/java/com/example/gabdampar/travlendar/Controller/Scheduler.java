@@ -571,7 +571,7 @@ public class Scheduler{
                         }
                     //}
                 }
-                
+
                 if (bestRelativeCost2 == 0) {
                     return false;   // mustReiterate = false, because cannot add any constraints, so the schedule is unfeasible
                 }

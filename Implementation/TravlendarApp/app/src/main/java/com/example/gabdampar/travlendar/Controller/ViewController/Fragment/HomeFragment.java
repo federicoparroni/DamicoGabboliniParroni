@@ -8,6 +8,7 @@ import android.app.Fragment;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -32,14 +33,12 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 
 import org.joda.time.LocalDate;
 
-import java.util.Map;
-
 public class HomeFragment extends Fragment implements OnMapReadyCallback {
     /**
      * infos about permission given to the user of the application
      */
     boolean mLocationPermissionGranted=false;
-    public final static int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION =1;
+    public final static int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
 
     /**
      * references to view elements
@@ -52,7 +51,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     public void changeState(){
         if(ScheduleManager.GetInstance().runningSchedule==null) {
             layout.setWeightSum(4);
-            ViewGroup.LayoutParams params = (ViewGroup.LayoutParams) scrollView.getLayoutParams();
+            ViewGroup.LayoutParams params = scrollView.getLayoutParams();
             params.height = 0;
             scrollView.setLayoutParams(params);
             map.clear();
@@ -62,7 +61,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         }
         else {
             layout.setWeightSum(10);
-            ViewGroup.LayoutParams params = (ViewGroup.LayoutParams) scrollView.getLayoutParams();
+            ViewGroup.LayoutParams params = scrollView.getLayoutParams();
             params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
             scrollView.setLayoutParams(params);
             map.clear();
@@ -125,14 +124,14 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         // reference ui control here
         // TextField f = view.findViewById(...);
         directionTextView = view.findViewById(R.id.directionsTextView);
-        layout=(LinearLayout)view.findViewById(R.id.linearLayoutMap);
-        scrollView=view.findViewById(R.id.directionsScrollView);
+        layout = view.findViewById(R.id.linearLayoutMap);
+        scrollView = view.findViewById(R.id.directionsScrollView);
 
         if(NetworkManager.isOnline(this.getContext())) {
             MapFragment mapFragment = (MapFragment) getChildFragmentManager().findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
         } else {
-            //Snackbar.make(view, "Internet connection appears to be offline", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(view, "Internet connection appears to be offline", Snackbar.LENGTH_LONG).show();
         }
         return view;
     }
@@ -172,8 +171,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         switch (requestCode) {
             case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
                 // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     mLocationPermissionGranted = true;
                 }
             }

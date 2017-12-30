@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -73,6 +74,9 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
     FloatingActionButton fab;
 
     ConstraintScheduleListViewAdapter constraintsAdapter;
+
+    // thread handler
+    Handler schedulerHandler = new Handler();
 
     // schedule data
     protected Scheduler scheduler = new Scheduler();
@@ -173,8 +177,10 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
         if(!time.isEmpty()) scheduler.scheduleStartingTime = new LocalTime( time );
 
         // TODO get starting location from preferences
+        /** DEBUG */
         scheduler.startingLocation = new LatLng(45.4809352, 9.233779);
         scheduler.criteria = OptCriteria.OPTIMIZE_TIME;
+        /** ========= */
 
         // enable fab click listener
         fab.setOnClickListener(new View.OnClickListener() {
@@ -188,24 +194,34 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
                         // Inflate and set the layout for the dialog, parent is null because its going in the dialog layout
                         LayoutInflater inflater = LayoutInflater.from(builder.getContext());
                         View inflatedView = inflater.inflate(R.layout.waiting_view, null);
-                        builder.setView(inflatedView);
-                        builder.setTitle("Schedule Creation");
+                        builder.setView(inflatedView)
+                                .setTitle("Schedule Creation")
+                                .setCancelable(false);
                         final AlertDialog alert = builder.create();
                         alert.show();
 
-                        // start schedule computation
-                        scheduler.ComputeSchedule(getApplicationContext(), new Scheduler.ScheduleCallbackListener() {
+                        Runnable runnable = new Runnable() {
                             @Override
-                            public void ScheduleCallback(final Schedule schedule) {
-                                alert.dismiss();
-                                if(schedule == null) {
-                                    Snackbar.make(view, "Unfeasible schedule", Snackbar.LENGTH_LONG).show();
-                                } else {
-                                    ScheduleManager.GetInstance().schedulesList.add(schedule);
-                                    finish();
-                                }
+                            public void run() {
+                                // start schedule computation
+                                scheduler.ComputeSchedule(getApplicationContext(), new Scheduler.ScheduleCallbackListener() {
+                                    @Override
+                                    public void ScheduleCallback(final Schedule schedule) {
+                                        alert.dismiss();
+                                        if(schedule == null) {
+                                            Snackbar.make(view, "Unfeasible schedule", Snackbar.LENGTH_LONG).show();
+                                        } else {
+                                            ScheduleManager.GetInstance().schedulesList.add(schedule);
+                                            finish();
+                                        }
+                                    }
+                                });
                             }
-                        });
+                        };
+                        if (runnable != null) {
+                            schedulerHandler.post(runnable);
+                        }
+
                     } else {
                         Snackbar.make(view, "Missing fields", Snackbar.LENGTH_LONG).show();
                     }

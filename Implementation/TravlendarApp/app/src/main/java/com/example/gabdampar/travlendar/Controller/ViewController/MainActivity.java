@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity{
     private static final String TAG_APPOINTMENTS = "appts";
     private static final String TAG_SCHEDULES = "schedules";
     private static final  String TAG_PROFILE = "profile";
-    private static final String TAG_NOTIFICATIONS = "notifications";
+    //private static final String TAG_NOTIFICATIONS = "notifications";
 
     public static String CURRENT_TAG = TAG_HOME;
 
