@@ -365,9 +365,9 @@ public class Scheduler{
             if (constraint.maxDistance == 0 && constraint.weather.contains(weatherConditions.getWeatherForTime(a1.endingTime()))) {
                 availableMeans.remove(constraint.mean);
             }
-            /** remove if it is not allowed by time slot */
+            /** remove if it is not allowed by time slot, i.e.: |t.start ---- a1.ending -----t.end|  */
             if(constraint.timeSlot != null) {
-                if((constraint.timeSlot.endingTime.isAfter(a1.endingTime()) && constraint.timeSlot.startingTime.isBefore(a2.startingTime)))
+                if((constraint.timeSlot.endingTime.isAfter(a1.endingTime()) && constraint.timeSlot.startingTime.isBefore(a1.endingTime())))
                     availableMeans.remove(constraint.mean);
             }
         }

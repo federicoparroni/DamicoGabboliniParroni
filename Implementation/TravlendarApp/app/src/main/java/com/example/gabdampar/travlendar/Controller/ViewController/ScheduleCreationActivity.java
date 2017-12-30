@@ -60,7 +60,7 @@ import info.hoang8f.android.segmented.SegmentedGroup;
 
 public class ScheduleCreationActivity extends AppCompatActivity implements CalendarView.OnDateChangeListener,
         TimePicker.OnTimeChangedListener, RadioGroup.OnCheckedChangeListener,
-        OnMapReadyCallback, PlaceSelectionListener, AdapterView.OnItemLongClickListener {
+        OnMapReadyCallback, PlaceSelectionListener, AdapterView.OnItemLongClickListener, View.OnClickListener {
 
     // view controls
     CalendarView calendar;
@@ -183,59 +183,59 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
         /** ========= */
 
         // enable fab click listener
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View view) {
-                if(NetworkManager.isOnline(getApplicationContext())) {
-                    if(scheduler.isConsistent()) {
-
-                        //creation of the waiting view through an alert dialogue
-                        final AlertDialog.Builder builder = new AlertDialog.Builder(ScheduleCreationActivity.this);
-                        // Inflate and set the layout for the dialog, parent is null because its going in the dialog layout
-                        LayoutInflater inflater = LayoutInflater.from(builder.getContext());
-                        View inflatedView = inflater.inflate(R.layout.waiting_view, null);
-                        builder.setView(inflatedView)
-                                .setTitle("Schedule Creation")
-                                .setCancelable(false);
-                        final AlertDialog alert = builder.create();
-                        alert.show();
-
-                        Runnable runnable = new Runnable() {
-                            @Override
-                            public void run() {
-                                // start schedule computation
-                                scheduler.ComputeSchedule(getApplicationContext(), new Scheduler.ScheduleCallbackListener() {
-                                    @Override
-                                    public void ScheduleCallback(final Schedule schedule) {
-                                        alert.dismiss();
-                                        if(schedule == null) {
-                                            Snackbar.make(view, "Unfeasible schedule", Snackbar.LENGTH_LONG).show();
-                                        } else {
-                                            ScheduleManager.GetInstance().schedulesList.add(schedule);
-                                            finish();
-                                        }
-                                    }
-                                });
-                            }
-                        };
-                        if (runnable != null) {
-                            schedulerHandler.post(runnable);
-                        }
-
-                    } else {
-                        Snackbar.make(view, "Missing fields", Snackbar.LENGTH_LONG).show();
-                    }
-                } else {
-                    Snackbar.make(view, "Internet connection appears to be offline", Snackbar.LENGTH_LONG).show();
-                }
-            }
-        });
+        fab.setOnClickListener(this);
     }
 
-    /*public void SetViewState(Boolean active) {
-        fab.setActivated(active);
-        bar.setVisibility(active ? View.INVISIBLE : View.VISIBLE);
-    }*/
+    /**
+     * FAB button click listener: start scheduler computation
+     * @param view: FAB button
+     */
+    @Override
+    public void onClick(final View view) {
+        if(NetworkManager.isOnline(getApplicationContext())) {
+            if(scheduler.isConsistent()) {
+
+                //creation of the waiting view through an alert dialogue
+                final AlertDialog.Builder builder = new AlertDialog.Builder(ScheduleCreationActivity.this);
+                // Inflate and set the layout for the dialog, parent is null because its going in the dialog layout
+                LayoutInflater inflater = LayoutInflater.from(builder.getContext());
+                View inflatedView = inflater.inflate(R.layout.waiting_view, null);
+                builder.setView(inflatedView)
+                        .setTitle("Schedule Creation")
+                        .setCancelable(false);
+                final AlertDialog alert = builder.create();
+                alert.show();
+
+                Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        // start schedule computation
+                        scheduler.ComputeSchedule(getApplicationContext(), new Scheduler.ScheduleCallbackListener() {
+                            @Override
+                            public void ScheduleCallback(final Schedule schedule) {
+                                alert.dismiss();
+                                if(schedule == null) {
+                                    Snackbar.make(view, "Unfeasible schedule", Snackbar.LENGTH_LONG).show();
+                                } else {
+                                    ScheduleManager.GetInstance().schedulesList.add(schedule);
+                                    finish();
+                                }
+                            }
+                        });
+                    }
+                };
+                if (runnable != null) {
+                    schedulerHandler.post(runnable);
+                }
+
+            } else {
+                Snackbar.make(view, "Missing fields", Snackbar.LENGTH_LONG).show();
+            }
+        } else {
+            Snackbar.make(view, "Internet connection appears to be offline", Snackbar.LENGTH_LONG).show();
+        }
+    }
+
 
     @Override
     public void onPlaceSelected(Place place) {
