@@ -87,15 +87,6 @@ public class MainActivity extends AppCompatActivity{
          * take care to initialize with the same default values of the database
          */
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-        //SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-
-        /*MappingServiceAPIWrapper.getInstance().getTravelOptionData(new MappingServiceAPIWrapper.MappingServiceCallbackListener() {
-            @Override
-            public void MappingServiceCallback(List<TravelOptionData> travelData) {
-
-            }
-        },new ArrayList<TravelMeanEnum>(Arrays.asList(TravelMeanEnum.METRO)), new LatLng(45.481784,9.2476635), new LatLng(45.4641013,9.1897325), new DateTime(2017,12,19,16,0));
-*/
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -149,20 +140,6 @@ public class MainActivity extends AppCompatActivity{
             }
         }
     });
-
-        // loading header background image
-        /*Glide.with(this).load(urlNavHeaderBg)
-                .crossFade()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(imgNavHeaderBg);*/
-
-        // Loading profile image
-       /*Glide.with(this).load(urlProfileImg)
-                .crossFade()
-                .thumbnail(0.5f)
-                .bitmapTransform(new CircleTransform(this))
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(imgProfile);*/
 
     }
 
@@ -365,18 +342,6 @@ public class MainActivity extends AppCompatActivity{
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        /*if (id == R.id.action_logout) {
-            Toast.makeText(getApplicationContext(), "Logout user!", Toast.LENGTH_LONG).show();
-            return true;
-        }
-
-        if (id == R.id.action_mark_all_read) {
-            Toast.makeText(getApplicationContext(), "All notifications marked as read!", Toast.LENGTH_LONG).show();
-        }
-
-        if (id == R.id.action_clear_notifications) {
-            Toast.makeText(getApplicationContext(), "Clear all notifications!", Toast.LENGTH_LONG).show();
-        }*/
 
         if(id == R.id.nav_user_profile) {
             navItemIndex = 3;

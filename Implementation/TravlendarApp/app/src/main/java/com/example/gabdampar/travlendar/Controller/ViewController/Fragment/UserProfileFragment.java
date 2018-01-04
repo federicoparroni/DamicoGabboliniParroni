@@ -34,66 +34,23 @@ public class UserProfileFragment extends PreferenceFragment implements SharedPre
      * LocalTime l = new LocalTime(time);
      */
 
-    PlaceAutocompleteFragment autocompleteFragment;
-    MapFragment appointmentMap;
-    GoogleMap map;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
-
-        //PreferenceManager.getDefaultSharedPreferences(getContext()).edit().putString("starting_location", "50,50").apply();
-
-        //String s=PreferenceManager.getDefaultSharedPreferences(getContext()).getString("starting_location", "30,30");
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
-
-        /*autocompleteFragment = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment_settings);
-        appointmentMap =  (MapFragment) getFragmentManager().findFragmentById(R.id.appointment_map_settings);
-        appointmentMap.getMapAsync(this);
-
-        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(Place place) {
-                map.clear();
-                String placeName = place.getName().toString();
-                LatLng latLng = place.getLatLng();
-                map.addMarker(new MarkerOptions().position(latLng).title(placeName));
-                map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,15));
-
-                LatLng coords = place.getLatLng();
-            }
-            @Override
-            public void onError(Status status) {
-                // TODO: Handle the error.
-            }
-        });
-        */
         return view;
     }
 
-    /**
-     * https://developer.android.com/guide/topics/ui/settings.html
-     * not working. if needed to make it work follow the suggestions of the link above
-     * in particular, in the activity should be registered the events implementing onPause and onResume
-     */
+
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
     }
 
-    /*@Override
-    public void onMapReady(GoogleMap googleMap) {
-        map = googleMap;
-        //disable the zoom option
-        map.getUiSettings().setZoomGesturesEnabled(false);
-        //disable the scroll gesture in the minimap
-        map.getUiSettings().setScrollGesturesEnabled(false);
-        //disable the google map button
-        map.getUiSettings().setMapToolbarEnabled(false);
-    }*/
 }
