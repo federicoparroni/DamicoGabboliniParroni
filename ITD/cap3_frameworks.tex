@@ -1,10 +1,60 @@
 \chapter{Frameworks}
+In this chapter we show the main implementation details, in particular the choice we have made about frameworks, programming languages, tools, environment used to develop the entire application.
  
 
-\section{Programming languages}
+\section{Frameworks and Programming languages}
+\subsection{Database}
+Application data are stored in a MySQL database, located in a free remote host at 000.webhost.com. This service offers the possibility to have a completely free domain in which is present a MySQL database. We decided to choose MySQL because is a really reliable DBMS and allows to build quickly all the relational schemas thanks to his handy and comfortable web interface (php-admin). In addition, it is well known for its performance and flexibility.
+
+\subsection{Server side}
+The server side part has been developed using Slim Framework, a PHP set of libraries that facilitate the process to write a wide variety of web applications (\url{https://www.slimframework.com}). We chose this for its simplicity and rich documentation. PHP is the open source most popular server side language and it can run on both UNIX and Windows servers. In general, PHP is secure, fast, reliable and compatible with the majority of DBMS, so really suitable for developing web applications (and it is already installed in 000webhost hosts).
+
+\subsection{Client Side}
+The client side part consists in an Android application. It is written completely in Java, the most used object-oriented programming languages at all. The crucial advantage of Java is that it is platform independent: it can run on whichever machine, also in mobile devices. Android Studio, the IDE for developing android mobile application, is really integrated with Java and its packages-class structure. We chose to create an Android application because we already familiar in programming with Java and for its versatility. In addition, one can publish applications into the Google Play Store for free (for the Apple Store you have to pay the developer account fee). One disadvantage is the poor backward compatibility of Android, in fact lots of previous version of Android running on older devices do not support newest application. This because the Android framework is introducing more advanced features only nowadays. In conclusion, Android is quite good mobile environment, but it has some little drawbacks (battery usage, performances, anti-malware security…)
 
 
 \section{Middleware}
+The authorization mechanism we used is a middleware that allows to give some access control to the API offered by the server side service. OAuth libraries for PHP has been used in the API development. (see \RASDref{chapter 3.4.1} of RASD document) This middleware handles communication between different levels of the API structure, providing a smart way to stratificate and separate the logic layers.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=250pt, keepaspectratio]{"images/middleware".png}
+\caption{Middleware pattern}
+\end{center}
+\end{figure}
 
 
-\section{Not included API}		
+\section{API}
+In this first version of Travlendar, we have implemented only a few strictly necessary web api. The following table summaries the main available API:
+
+\subsection{Token: Request a bearer token to authorize the client application}
+\textbf{POST travlendar/public/token}\\
+BODY:\\
+grant\textunderscore type: client\textunderscore credentials\\
+client\textunderscore id: <id>\\
+client\textunderscore secret: <secret>\\
+
+\subsection{Token: Request a bearer token to authorize the user by username and password}
+\textbf{POST travlendar/public/token}\\
+BODY:\\
+grant\textunderscore type: password\\
+client\textunderscore id: <id>\\
+client\textunderscore secret: <secret>\\
+username: <username>\\
+password: <password>\\
+
+\subsection{Registration: Register a new user}
+\textbf{POST travlendar/public/api/register}\\
+HEADERS:\\
+Authorization: Bearer <token>\\
+BODY:\\
+email: <email>\\
+password: <password>\\
+
+\subsection{User profile: Request user profile information}
+\textbf{POST travlendar/public/api/user/profile}\\
+HEADERS:\\
+Authorization: Bearer <token>\\
+BODY:\\
+email: <email>\\
+password: <password>\\
