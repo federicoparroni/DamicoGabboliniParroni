@@ -1,3 +1,37 @@
-\chapter{Requirements and functionalities}
+\chapter{Requirements and functionalities implemented}
 
-\section{}
+In this chapter it's reported a mapping between all the functionalities that were considered during the analysis part (i.e. the ones listed in section \RASDref{1.1} of the RASD, and then better described also in \RASDref{2.2} and \RASDref{3.2}. In these sections all the goals and requirements at which will be referred are listed) and the featuers that the proposed prototype actually has. Since functionalities and requirements are fully described by goals, here we will specify just which goals are actually implemented, explaining the reasons of the choices made.
+It's clear that, since the fullfilling of goals it's possible only when all the requirements associated are implemented, when it's said that a goal it's present in the prototype also all the requirements associated are implemented.
+However, a further description of requirements will be presented when needed.
+
+\subsection{The system should offer the possibility to create a new account} \label{subsect:gNewAccount}
+The functionality is fully implemented.
+
+\subsection{The system should be able to handle a login phase} \label{subsect:gLoginPhase}
+The functionality is implemented but the requirement \RASDref{R6} isn't: all the parts involving the online part of data synchronization are not implemented in the prototype. It has been chosen not to implement these features since they weren't considered to be basic, something not stricly needed for a prototype implementation. However, the data of the user are saved locally to the device in which the application it's installed: it won't be difficult to extend this client-side data management to a server-side one, once a fully implementation will be required.
+
+\subsection{The system should give to the signed user the possibility to recover his password} \label{subsect:gPasswordRecovery}
+The functionality is fully implemented.
+
+\subsection{The system should allow the user to insert an appointment according to his necessities and his preferences} \label{subsect:gAppointmentCreation}
+The functionality is fully implemented, but the appointments are saved (\RASDref{R10}) just in the device and not online, as explained in \ref{subsect:gLoginPhase}.
+
+\subsection{The system should provide a way to modify an inserted appointment} \label{subsect:gAppointmentModification}
+The functionality is fully implemented, but the modified appointments are saved (\RASDref{R12}) just in the device and not online, as explained in \ref{subsect:gLoginPhase}.
+
+\subsection{The system should provide a way to create a valid schedule of the user appointments when requested and display the scheduling result}
+\label{subsect:gScheduleCreation}
+The functionality is implemented, in particular all the various data are retrieved from the user and from external API (\RASDref{R12} through \RASDref{R16}), except for the informations about strike days and delays that are not yet considered, since it turned out that these data were available to be retrieved only by paing the various API services. So, since the application it's still a prototype and since these added details weren't bringing any basic features but just advanced ones, we decided to forget about them. Moreover, except for the described lacking data that are not considered, the \RASDref{R17} it's fullfilled. Last, the created schedules are saved (\RASDref{R18}) just in the device and not online, as explained in \ref{subsect:gLoginPhase}.
+
+\subsection{The system should let the user create valid multiple schedules and decide which one is chosen for the current day} \label{subsect:gScheduleSelection}
+This functionality it's fully implemented.
+
+\subsection{The system should be able to book the travel means involved in the current schedule under user approval} \label{subsect:gScheduleSelection}
+This functionality it's not fully implemented, our prototype presents just a draft of the final desired behaviour. Infact, a full implementation was too much effort-costy: it was needed to interface with the transit services and with the user's credit account, in a way that just a click was needed from the user side to buy the tickets for a schedule. So, since the purpose was to build a basic prototype, this feature was considered to be advanced, and so this functionality has being implemented as a simple redirecting to the website of the transit company. So \RASDref{R20} it's not fullfilled.
+
+\subsection{The system should be able to display in real time user position and the directions to be followed in order to arrive to the next appointment on a dinamically updated map} \label{subsect:gDirections}
+This functionality it's implemented: when a schedule is running, the static directions that link all the appointments, according to the schedule that has beign computed, are displayed on the main page of the application, together with the user position. So, even if the directions are just static and not dynamic, the requirements \RASDref{R21} through \RASDref{R23} can be considered as fullfilled.
+
+\subsection{The system should be able to notify the user when a shared travel mean is available and it would optmize the current schedule} \label{subsect:gSharedTMNotifications}
+This functionality it's not implemented, together with it's requirement. In particular the shared travel means are not considered at all in our prototype, since they can be thought as an extension of what it's actually implemented and don't add any relevant feature to our draft, apart from having more kind of travel means to choose. Moreover, the data-retrieving concerning the presence of neighbor shared means was available just for some kind of shared services. 
+Anyway, the prototype it's prone to consider new travel services that can be added in the final version of the application without changing the structure of the code, as explained in \textbf{code structure section}
