@@ -75,7 +75,6 @@ $authorization = new Middleware\Authorization($server, $app->getContainer());
 
 
 
-
 // ROUTES
 $app->get('/hello/{name}', function (Request $request, Response $response) {
     $name = $request->getAttribute('name');
@@ -90,19 +89,11 @@ $app->group('/api', function () use ($app) {
         return \App\Controllers\AuthenticationController::Register($request, $response, $this->db);
     });
 
-    $app->post('/profile', function (Request $request, Response $response) {
-        return \App\Controllers\AuthenticationController::Profile($request, $response, $this->db);
-    });
-
-    $app->get('/test', function ($request, $response) {
-        return $response->withJson(array( 'success' => true, 'message' => 'You\'re authorized to access this API!' ), 201);            
-    });
-
+    
     $app->group('/user', function () use ($app) {
 
         $app->post('/profile', function ($request, $response) {
             return \App\Controllers\UserController::Profile($request, $response, $this->db);
-            //return $response->withJson($this->user_repository, 200);
         });
 
     });
