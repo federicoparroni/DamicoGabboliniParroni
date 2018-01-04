@@ -9,6 +9,18 @@ class UserController
 {
     
     public static function Profile($request, $response, $db) {
+        $user = UserController::CheckUserCredentials($request, $response, $db);
+        
+        if($user) {
+            return $response->withJson(array(   'success' => true, 
+                                                'data' => $user
+                ), 200);
+        } else {
+            return $response->withJson(array( 'success' => false, 'message' => 'Incorrect email or password' ), 400);
+        }
+    }
+
+    public static function CheckUserCredentials($request, $response, $db) {
         $data = $request->getParsedBody();
         
         if(isset($data['email'], $data['password'])) {
@@ -16,22 +28,18 @@ class UserController
             $password = filter_var($data['password'], FILTER_SANITIZE_STRING);
 
             $emailESC = $db->quote($email);
-            // check if user already exists
-            if($db->query("SELECT COUNT(*) FROM oauth_users WHERE username=$emailESC")->fetchColumn() == 1) {
-
-                // return user profile
-                $statement = $db->prepare("SELECT * FROM Users WHERE email = :mail");
-                $statement->execute(array('mail' => $email));
-                $result = $statement->fetchAll(PDO::FETCH_ASSOC)[0];
-
-                return $response->withJson(array( 'success' => true, 'user' => json_encode($result) ), 200);            
+            // check if user exists
+            $result = $db->query("SELECT * FROM Users WHERE email=$emailESC");
+            if($result->rowCount() == 1) {
+                $row = $result->fetch(\PDO::FETCH_OBJ);
+                return $row;
             } else {
-                return $response->withJson(array( 'success' => false, 'message' => 'User email already existing' ), 400);
+                return null;
             }
         } else {
-            return $response->withJson(array( 'success' => false, 'message' => 'Incorrect email or password' ), 400);
+            return null;
         }
     }
 
-
+    
 }
