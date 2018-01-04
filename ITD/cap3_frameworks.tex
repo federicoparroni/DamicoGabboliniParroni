@@ -14,7 +14,7 @@ The client side part consists in an Android application. It is written completel
 
 
 \section{Middleware}
-The authorization mechanism we used is a middleware that allows to give some access control to the API offered by the server side service. OAuth libraries for PHP has been used in the API development. (see \RASDref{chapter 3.4.1} of RASD document) This middleware handles communication between different levels of the API structure, providing a smart way to stratificate and separate the logic layers.
+The authorization mechanism we used is a middleware that allows to give some access control to the API offered by the server side service. OAuth libraries for PHP has been used in the API development. (see chapter \RASDref{3.4.1}) This middleware handles communication between different levels of the API structure, providing a smart way to stratificate and separate the logic layers.
 
 \begin{figure}[H]
 \begin{center}
@@ -23,6 +23,45 @@ The authorization mechanism we used is a middleware that allows to give some acc
 \end{center}
 \end{figure}
 
+This is the core of the API in the index.php file of the server:\\
+\\
+\lstset{language=Pascal}
+\begin{lstlisting}
+$app->map(['GET', 'POST'], Routes\Authorize::ROUTE, new Routes\Authorize($server, $renderer))->setName('authorize');
+$app->post(Routes\Token::ROUTE, new Routes\Token($server))->setName('token');
+
+$authorization = new Middleware\Authorization($server, $app->getContainer());
+
+// ROUTES
+$app->get('/hello/{name}', function (Request $request, Response $response) {
+    $name = $request->getAttribute('name');
+    $response->getBody()->write("Hello, $name");
+
+    return $response;
+});
+
+$app->group('/api', function () use ($app) {
+
+    $app->post('/register', function ($request, $response) {
+        return \App\Controllers\AuthenticationController::Register($request, $response, $this->db);
+    });
+
+    
+    $app->group('/user', function () use ($app) {
+
+        $app->post('/profile', function ($request, $response) {
+            return \App\Controllers\UserController::Profile($request, $response, $this->db);
+        });
+
+    });
+
+})->add($authorization);
+
+
+$app->run();
+\end{lstlisting}
+
+We can see how it's easy to define the APIs structure and relative callbacks. 
 
 \section{API}
 In this first version of Travlendar, we have implemented only a few strictly necessary web api. The following table summaries the main available API:
