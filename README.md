@@ -33,7 +33,7 @@ Request a bearer token to authorize the user by username and password
 
 
 
-## POST travlendar.000webhostapp.com/travlendar/public/api/profile
+## POST travlendar.000webhostapp.com/travlendar/public/api/user/profile
 
 ### Headers
 Authorization: Bearer <token>

@@ -33,8 +33,17 @@ public class MapUtils {
 
     public static void drawScheduleOnMap(Schedule s,GoogleMap map){
         for(ScheduledAppointment sa : s.getScheduledAppts())
-            if(sa.dataFromPreviousToThis!=null)
-                MapUtils.drawPolyline(map, sa.dataFromPreviousToThis.getTravelMeanPolylineCouples());
+            if(sa.dataFromPreviousToThis!=null) {
+                /**
+                 * turnaround: necessary since we treat bicycle as a special case of walk. now we have to do the conversion-back
+                 */
+                if(sa.travelMeanToUse.meanEnum.equals(TravelMeanEnum.BIKE)){
+                    MapUtils.drawPolyline(map, sa.dataFromPreviousToThis.getTravelMeanPolylineCouples().get(0).polylineOptions, TravelMeanEnum.BIKE);
+                }
+                else {
+                    MapUtils.drawPolyline(map, sa.dataFromPreviousToThis.getTravelMeanPolylineCouples());
+                }
+            }
     }
 
     public static void drawPolyline(GoogleMap map, ArrayList<TravelMeanPolylineCouple> travelMeanPolylineCouples){
