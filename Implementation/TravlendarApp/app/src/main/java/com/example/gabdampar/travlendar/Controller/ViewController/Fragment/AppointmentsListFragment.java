@@ -168,7 +168,8 @@ public class AppointmentsListFragment extends Fragment implements OnMapReadyCall
                                 //trick for the fragment nested in another fragment
                                 getFragmentManager().beginTransaction().remove(appointment_map).commit();
                             }
-                        });
+                        })
+                        .setCancelable(false);
 
                 //Fields of the inflated view
                 TextView onClickListViewName = inflatedView.findViewById(R.id.onClickListViewName);
