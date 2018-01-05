@@ -1,0 +1,20 @@
+\chapter{Server code structure}
+The server code is organized in 3 main files:
+
+\classDescription{index.php}
+This file contains the entry point of the web api. The central object of this part is \$app, a Slim/App object that is responsible of all the API handling mechanism. The logical code flow is the following:
+
+\begin{enumerate}
+\item at first, it initializes a db connection reference (in order to use afterwards). This object (of PDO class) is useful to query the database and retrieve data in a high level manner.
+\item it initializes the Authorization Server object and related Storage, providing the possibility to use the database as support to save and set authorization token to the client that will connect to the server. These classes offers a middleware layer used for authorization control.
+\item it registers several routes. These allows to establish a mapping between an url request and a callback (that will handle that request and will send a response). For instance, when we go to <domain>/travlendar/public/api/user/profile, we handle that request with a callback (UserController::Profile) located in somewhere in the class structure. The majority of the routes has been set up with the authorization middleware, in order to be accessed only if the request contains a valid access token.
+\end{enumerate}
+
+\classDescription{controllers/AuthenticationController.php}
+The class contained in this file manages the user authentication. This means that a user can register to the application and then be recognized through its credentials. The method Register is the callback for the /travlendar/public/api/register api. The method allows a user to register providing valid email and password.
+
+\classDescription{controllers/UserController.php}
+The class contained in this file manages all the data related to a particular user, for example, profile, appointments, schedules... The method Profile is the callback for the /travlendar/public/api/user/profile api. The method allows to retrieve the information about a user profile (bike, car and public means pass).
+
+
+

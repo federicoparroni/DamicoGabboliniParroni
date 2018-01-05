@@ -1,24 +1,126 @@
-\chapter{Code structure}
+\chapter{Client application code structure}
 
-\section{Server code structure}
-The server code is organized in 3 main files:
+In this chapter is shown the main structure of the application code.
+For the code structure, how said in the DD document, has been decided to use the MVC pattern. These means that there are mainly 3 category of class:
 
-\classDescription{index.php}
-This file contains the entry point of the web api. The central object of this part is \$app, a Slim/App object that is responsible of all the API handling mechanism. The logical code flow is the following:
+\begin{itemize}
+\item \textbf{Model Class}, used for modelling the logical property of the objects represented in the class 
 
-\begin{enumerate}
-\item at first, it initializes a db connection reference (in order to use afterwards). This object (of PDO class) is useful to query the database and retrieve data in a high level manner.
-\item it initializes the Authorization Server object and related Storage, providing the possibility to use the database as support to save and set authorization token to the client that will connect to the server. These classes offers a middleware layer used for authorization control.
-\item it registers several routes. These allows to establish a mapping between an url request and a callback (that will handle that request and will send a response). For instance, when we go to <domain>/travlendar/public/api/user/profile, we handle that request with a callback (UserController::Profile) located in somewhere in the class structure. The majority of the routes has been set up with the authorization middleware, in order to be accessed only if the request contains a valid access token.
-\end{enumerate}
+\item \textbf{View Class}, this class is used for modelling the design of a view of the applications
 
-\classDescription{controllers/AuthenticationController.php}
-The class contained in this file manages the user authentication. This means that a user can register to the application and then be recognized through its credentials. The method Register is the callback for the /travlendar/public/api/register api. The method allows a user to register providing valid email and password.
+\item \textbf{Controller Class}, these classes manage to handle the interaction beetwen the Model objects and the Views.
+\end{itemize}
 
-\classDescription{controllers/UserController.php}
-The class contained in this file manages all the data related to a particular user, for example, profile, appointments, schedules... The method Profile is the callback for the /travlendar/public/api/user/profile api. The method allows to retrieve the information about a user profile (bike, car and public means pass).
+This is the project main structure:
 
-\section{Client application code structure}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=250pt, keepaspectratio]{"image/Code_Structure/Global_Structure".png}
+\caption{Global Structure of the code}
+\end{center}
+\end{figure}
+
+The application is divided in three main projects:
+
+\begin{itemize}
+\item app project, containing the bigger part of the code
+
+\item darkskyandroidlib project, containing some classes used for managing the interaction between the application and the wheater forecast api
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=250pt, keepaspectratio]{"image/Code_Structure/DarkSky1".png}
+\caption{Wheather forecast api folder}
+\end{center}
+\end{figure}
+
+\item placesAPI project, containing the classes used for handle the interaction with the google map api
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=250pt, keepaspectratio]{"image/Code_Structure/PlacesAPI1".png}
+\caption{Places api folder}
+\end{center}
+\end{figure}
+\end{itemize}
+
+plus the Gradle Scripts an advanced build toolkit, to automate and manage the build process, while allowing you to define flexible custom build configurations. Each build configuration can define its own set of code and resources, while reusing the parts common to all versions of your app. The Android plugin for Gradle works with the build toolkit to provide processes and configurable settings that are specific to building and testing Android applications. One of the most important feature of the gradle is that it can generate the application apk.\\
+
+In the following sections we explain in a more exhaustive way the \textbf{app project structure} going more deeply in it.
+
+\section{Manifests folder}
+Every application must have an AndroidManifest.xml file (with precisely that name) in its root directory. The manifest file provides essential information about your app to the Android system, which the system must have before it can run any of the app's code.
+
+Among other things, the manifest file does the following:
+
+\begin{itemize}
+\item It names the Java package for the application. The package name serves as a unique identifier for the application.
+
+\item It describes the components of the application, which include the activities, services, broadcast receivers, and content providers that compose the application. It also names the classes that implement each of the components and publishes their capabilities, such as the Intent messages that they can handle. These declarations inform the Android system of the components and the conditions in which they can be launched.
+
+\item It determines the processes that host the application components.
+
+\item It declares the permissions that the application must have in order to access protected parts of the API and interact with other applications. It also declares the permissions that others are required to have in order to interact with the application's components.
+
+\item It lists the Instrumentation classes that provide profiling and other information as the application runs. These declarations are present in the manifest only while the application is being developed and are removed before the application is published.
+
+\item It declares the minimum level of the Android API that the application requires.
+
+\item It lists the libraries that the application must be linked against.
+\end{itemize}
+
+\section{Res folder}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=250pt, keepaspectratio]{"image/Code_Structure/App4".png}
+\caption{Res folder structure}
+\end{center}
+\end{figure}
+
+This folder contain all the graphic elements such as  the views of the application saved under xml format, or the images used for create the views, for example the button icon and stuff like that.
+
+More precisely:
+
+\begin{itemize}
+
+\item \textbf{drawable} and \textbf{mipmap} folders, they contain all the images used for create the views.
+
+\item \textbf{layout} folder,it contains all the xml files representing the real view of the application such as the main page or the appointment page.
+
+\item \textbf{Menu }folder,there we can find other xml used for modelling the navigation bar (the bar located on the top of each view) of each single view.
+
+\item \textbf{values} folder, it contains some parameters for the view such as colors,dimensions,strings id and styles.  
+
+\end{itemize}
+
+\textbf{NOTA: LA CARTELLA XML NON CI DOVREBBE ESSERE IL FILE AL SUO INTERNO DOVREBBE ESSERE DENTRO LAYOUT !}
+
+\section{Java folder}
+
+There are two folder one for the Model and the other for the Controller.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=250pt, keepaspectratio]{"image/Code_Structure/App1".png}
+\caption{Model folder}
+\end{center}
+\end{figure}
+
+In the model folder there all the classes used for the logic modeling, there is another folder used for group all the travel mean since they have similar classes.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=250pt, keepaspectratio]{"image/Code_Structure/App2".png}
+\caption{Controller folder}
+\end{center}
+\end{figure}
+
+The controller folder is divided in two main parts:
+\begin{itemize}
+\item Controller class
+\item View Controller Class, all the classes in the homonym package.
+\end{itemize}
+
+there is this division since android studio when a new view is created, generates automatically the controller of this view as a new class. We have added more controller in order to divide the tasks, that each controller have to perform, in a more logic way.
 
 \classDescription{Controller/IdentityManager}
 This class manages all the necessary step allowing a user to be authenticated in the application. It is made up of 5 main methods:
@@ -32,10 +134,10 @@ This class manages all the necessary step allowing a user to be authenticated in
 \end{enumerate}
 
 
-\classDescription{Controller/ViewController/Login}
+\classDescription{LoginActivity}
 The activity that handle the interaction between the user and the Login view. The activity calls IdentityManager methods to perform login and registration processes.
 
-\classDescription{Controller/Scheduler}
+\classDescription{Scheduler}
 This class is used to compute asincronously a new schedule. Inputs are an appointments list, a starting time, a starting location, some constraints and an optimization criteria. The only exposed method are IsConsistent and ComputeSchedule. The first one check if all the input parameters have been set correctly. The second one actually does the big work. It perform the following actions:
 \begin{enumerate}
 \item retrieving weather conditions information
@@ -60,7 +162,6 @@ The method takes every schedule that was computed, starting from the most conven
 In case a schedule it's accepted by this method, the various calls that were performed have set all the useful data for further computation on the \textbf{TravelOptionData} object, linking couples of scheduled appointments of the schedule.
 When the method terminates, the listener it's called, passing the computed schedule, if any, or null. Infact, since also the Scheduler deals with asynchronous calls (perfomed in \methodDescription{getBestScheduleAsync}) it has to provide an interface through which getting the results back.
 When the caller will receive the results, it will add it to the list of schedules.
-
 
 \classDescription{ScheduleManager}
 It lists all the schedules that have been computed over time, other than an handle to the current schedule that it's under execution right now. Based on this variable, the \textbf{HomeFragment} can decide it's state. The class offers also the method \methodDescription{getDirectionsForRunningSchedule} which retrieves, by means of the \textbf{TravelOptionData} objects contained in the schedule, a textual representation for the directions to give to the user.
@@ -109,3 +210,16 @@ This subcomponent relays on another 2 wrappers which were already built for the 
 \classDescription{TravelMeanAPIWrapper}
 This class it's not implemented because it deals with strike days and tickets, which are details that are not considered in our prototype, as explained in \ref{chap:reqAndFuct}
 
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=250pt, keepaspectratio]{"image/Code_Structure/App3".png}
+\caption{Other folders inside the Controller folder}
+\end{center}
+\end{figure}
+
+Must be mentioned the JsonSerializer folder, containing some classes used for serialize some model classes in order to save their object in the devices memory.
+
+The folder CustomPreferences contains some classes used to specify a user preference such as the starting location of one of his schedule.
+
+\textbf{NOTA: QUI MANCHEREBBE DA SPIEGARE PERCHè C'è IL FOLDER FRAGMENT SOLTANTO CHE AI FINI DELLA SPIEGAZIONE NON MI SEMBRA IMPORTANTE IN QUANTO è STATO FATTO COSI SOLTANTO PER POTER AGGIUNGERE QUEL MENU A SCORRIMENTO PERO ECCO SI PUO FARE SOLO CHE ANDREBBE A QUEL PUNTO SPIEGATO COSA è UN ACTIVITY COME SI DIFFERENZIA DA UN FRAGMENT}
