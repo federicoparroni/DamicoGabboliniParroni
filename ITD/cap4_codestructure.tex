@@ -155,10 +155,58 @@ The folder CustomPreferences contains some classes used to specify a user prefer
  
  
 
+\classDescription{ScheduleManager}
+It lists all the schedules that have been computed over time, other than an handle to the current schedule that it's under execution right now. Based on this variable, the \textbf{HomeFragment} can decide it's state. The class offers also the method \methodDescription{getDirectionsForRunningSchedule} which retrieves, by means of the \textbf{TravelOptionData} objects contained in the schedule, a textual representation for the directions to give to the user.
+This class is made up as a Singleton, since just an instance of this object can be available.
 
+\classDescription{AppointmentManager}
+It lists all the appointments that have been created over time. It also offers a method which, relying on the \methodDescription{getStopDistance} method of \textbf{MappingServiceAPIWrapper}, sets the minimun distances to each kind of transit stop, from the selected appointment.
+This class is made up as a Singleton, since just an instance of this object can be available.
 
+\classDescription{HomeFragment}
+It's the view that first appears to the user when he/she opens the application. It has, as background, an object of type \textbf{GoogleMap}, showing all the appointments of the actual day, spreaded across the region that it's considered. This is the view as it shows up with it's starting state, that is, without any schedule on running. The state of it changes when some schedule is ran: the map is resized and at the bottom appear the directions for the schedule that it's actually running. When a schedule it's stopped (by means of the Cross button on the view), the state of the view returns as initial.
 
+\classDescription{UserProfileFragment}
+It's the view that lets the user change it's personal parameters, saved and managed by the built-in \textbf{SharedPreferences} environment in Android.
 
+\classDescription{ScheduleListFragment}
+Interprets in a graphic way, by means of an \textbf{ArrayAdapter}, the list of computed schedules contained in the \textbf{ScheduleManager} as a \textbf{ListView}. Using the filter features granted by the ArrayAdapter class, it separates the schedules in past schedules and current schedules (that are computed for the current day or in the future). 
 
+\classDescription{MapUtils}
+Encapsulates a \textbf{GoogleMap} object, allowing to draw a schedule (meaning all the appointments as markers and the polylines linking the appointments as lines of different colors) or a list of appointments (meaning as a set of markers) on map. Note that this it's implemented as a static class instead of an extension of the \textbf{GoogleMap} class because \textbf{GoogleMap} it's declared as static.
+
+\classDescription{Scheduler}
+\methodDescription{getBestScheduleAsync} it's the point were the API calls are performed to get the real data for a schedule, and to decide if the schedules (ordered by the most convenient one) are actually feasible, infact all the computation was based on estimates so far.
+The method takes every schedule that was computed, starting from the most convenient one, and performs the API calls (\methodDescription{getTravelOptionData} in particular) for every couple of scheduled appointments of the schedule, passing theire locations and starting times as parameters. If the results don't fit on the timings that were previously calculated, the schedule it's discarded and we try with the next one, until we conclude that there's a feasible schedule or not.
+In case a schedule it's accepted by this method, the various calls that were performed have set all the useful data for further computation on the \textbf{TravelOptionData} object, linking couples of scheduled appointments of the schedule.
+When the method terminates, the listener it's called, passing the computed schedule, if any, or null. Infact, since also the Scheduler deals with asynchronous calls (perfomed in \methodDescription{getBestScheduleAsync}) it has to provide an interface through which getting the results back.
+When the caller will receive the results, it will add it to the list of schedules.
+
+\subsection{API wrappers} \label{sect:APIWrappers}
+As underlined in \DDref{2.2}, an indipendent set of components of our application is represented by the API wrappers. That is, they represents the way in which the system gather information from the external world. These informations, together with the internal data provided by the user, are the fundamental ingredients for the schedule computation.
+The use of the Adapter pattern (as introduced in \DDref{2.6}) is adopted for any class belonging to this subset of components, since we had these needs:
+
+\begin{enumerate}
+\item Retrieve data in a format that was requested by the other classes;
+\item Separate the other classes from the specific external API service that was used;
+\end{enumerate}
+
+The Adapter pattern fits perfectly these requests, leaving these part of the application totally open to modifications: if we will have the need to use another external source of data, will be enough to change the Adapter class, leaving the methods firm unchanged.
+Moreover, all these classes are Singletons: just one instance of a wrapper its needed.
+Last, since all the classes perform asynchronous calls, the results from these wrappers can be obtained only by extending the interfaces that they provide, and passing those objects to the methods that perform the calls (say, \methodDescription{getWeather}, \methodDescription{getTravelOptionData}, etc..), as suggested by asynchronous programming patters.
+
+\classDescription{WeatherForecastAPIWrapper}
+This subcomponent relays on another wrapper which was already built for the DarkSky libraries, so, basically, we exploited the functionalities of this wrapper adapting the data for our purposes. In particular, by calling \methodDescription{getWeather}, we can retrieve the weather conditions for the next 48 in a certain location, starting on a certain date. This can lead to the possibility of caching the weather data, saving some API calls when not needed
+
+\classDescription{MappingServiceAPIWrapper}
+This subcomponent relays on another 2 wrappers which were already built for the Google Places API and Google Directions API. Two features are offered:
+
+\begin{enumerate}
+\item \methodDescription{getStopDistance}: useful to retrieve all the transit stops that can be found in a certain range, with the relative distance from a specified location.
+\item \methodDescription{getTravelOptionData}: useful to retrieve all the useful data about the travelling from a spot to another, specifying a deterministic starting time. These data are filled in a \textbf{TravelOptionData} object, which is a field available in every scheduled appointment.
+\end{enumerate}
+
+\classDescription{TravelMeanAPIWrapper}
+This class it's not implemented because it deals with strike days and tickets, which are details that are not considered in our prototype, as explained in \ref{chap:reqAndFuct}
 
 
