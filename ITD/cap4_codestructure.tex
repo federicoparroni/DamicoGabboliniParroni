@@ -1,1 +1,164 @@
 \chapter{Code structure}
+
+In this chapter is shown the main structure of the application code.
+
+\subsection{MVC}
+For the code structure, how said in the DD document, has been decided to use the MVC pattern. These means that there are mainly 3 category of class:
+\begin{itemize}
+\item \textbf{Model Class}, used for modelling the logical property of the objects represented in the class 
+
+\item \textbf{View Class}, this class is used for modelling the design of a view of the applications
+
+\item \textbf{Controller Class}, these classes manage to handle the interaction beetwen the Model objects and the Views.
+\end{itemize}
+
+\subsection{Main Structure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=250pt, keepaspectratio]{"image/Code_Structure/Global_Structure".png}
+\caption{Global Structure of the code}
+\end{center}
+\end{figure}
+
+The application code is divided in three main folders:
+
+\begin{itemize}
+\item app folder, containing the bigger part of the code. 
+\item darkskyandroidlib folder, containing some classes used for managing the interaction between the application and the wheater forecast api. 
+\item placesAPI folder, containing the classes used for handle the interaction with the google map api
+\end{itemize}
+
+plus the Gradle Scripts an advanced build toolkit, to automate and manage the build process, while allowing you to define flexible custom build configurations. Each build configuration can define its own set of code and resources, while reusing the parts common to all versions of your app. The Android plugin for Gradle works with the build toolkit to provide processes and configurable settings that are specific to building and testing Android applications. One of the most important feature of the gradle is that it can generate the application apk.
+
+\subsection{App Structure}
+
+in this subsection we explain in a more exhaustive way the structure of the app folder going more deeply in its structure.
+
+\subsubsection{Manifests folder}
+Every application must have an AndroidManifest.xml file (with precisely that name) in its root directory. The manifest file provides essential information about your app to the Android system, which the system must have before it can run any of the app's code.
+
+Among other things, the manifest file does the following:
+
+\begin{itemize}
+\item It names the Java package for the application. The package name serves as a unique identifier for the application.
+
+\item It describes the components of the application, which include the activities, services, broadcast receivers, and content providers that compose the application. It also names the classes that implement each of the components and publishes their capabilities, such as the Intent messages that they can handle. These declarations inform the Android system of the components and the conditions in which they can be launched.
+
+\item It determines the processes that host the application components.
+
+\item It declares the permissions that the application must have in order to access protected parts of the API and interact with other applications. It also declares the permissions that others are required to have in order to interact with the application's components.
+
+\item It lists the Instrumentation classes that provide profiling and other information as the application runs. These declarations are present in the manifest only while the application is being developed and are removed before the application is published.
+
+\item It declares the minimum level of the Android API that the application requires.
+
+\item It lists the libraries that the application must be linked against.
+\end{itemize}
+
+\subsubsection{Res folder}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=250pt, keepaspectratio]{"image/Code_Structure/App4".png}
+\caption{Res folder structure}
+\end{center}
+\end{figure}
+
+This folder contain all the graphic elements such as  the views of the application saved under xml format, or the images used for create the views, for example the button icon and stuff like that.
+
+More precisely:
+
+\begin{itemize}
+
+\item \textbf{drawable} and \textbf{mipmap} folders, they contain all the images used for create the views.
+
+\item \textbf{layout} folder,it contains all the xml files representing the real view of the application such as the main page or the appointment page.
+
+\item \textbf{Menu }folder,there we can find other xml used for modelling the navigation bar (the bar located on the top of each view) of each single view.
+
+\item \textbf{values} folder, it contains some parameters for the view such as colors,dimensions,strings id and styles.  
+
+\end{itemize}
+
+\textbf{NOTA: LA CARTELLA XML NON CI DOVREBBE ESSERE IL FILE AL SUO INTERNO DOVREBBE ESSERE DENTRO LAYOUT !}
+
+\subsubsection{Java folder}
+
+There are two folder one for the Model and the other for the Controller.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=250pt, keepaspectratio]{"image/Code_Structure/App1".png}
+\caption{Model folder}
+\end{center}
+\end{figure}
+
+In the model folder there all the classes used for the logic modeling, there is another folder used for group all the travel mean since they have similar classes.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=250pt, keepaspectratio]{"image/Code_Structure/App2".png}
+\caption{Controller folder}
+\end{center}
+\end{figure}
+
+The controller folder is divided in two main parts:
+\begin{itemize}
+\item Controller class
+\item View Controller Class, all the classes in the homonym package.
+\end{itemize}
+
+there is this division since android studio when a new view is created, generates automatically the controller of this view as a new class. We have added more controller in order to divide the tasks, that each controller have to perform, in a more logic way.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=250pt, keepaspectratio]{"image/Code_Structure/App3".png}
+\caption{Other folders inside the Controller folder}
+\end{center}
+\end{figure}
+
+Must be mentioned the JsonSerializer folder, containing some classes used for serialize some model classes in order to save their object in the devices memory.
+
+The folder CustomPreferences contains some classes used to specify a user preference such as the starting location of one of his schedule.
+
+\textbf{NOTA: QUI MANCHEREBBE DA SPIEGARE PERCHè C'è IL FOLDER FRAGMENT SOLTANTO CHE AI FINI DELLA SPIEGAZIONE NON MI SEMBRA IMPORTANTE IN QUANTO è STATO FATTO COSI SOLTANTO PER POTER AGGIUNGERE QUEL MENU A SCORRIMENTO PERO ECCO SI PUO FARE SOLO CHE ANDREBBE A QUEL PUNTO SPIEGATO COSA è UN ACTIVITY COME SI DIFFERENZIA DA UN FRAGMENT}
+
+\subsection{Dark Sky Structure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=250pt, keepaspectratio]{"image/Code_Structure/DarkSky1".png}
+\caption{Wheather forecast api folder}
+\end{center}
+\end{figure}
+
+\textbf{NOTA LASCIO A TE GABBO}
+
+\subsection{Places Api Structure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=250pt, keepaspectratio]{"image/Code_Structure/PlacesAPI1".png}
+\caption{Places api folder}
+\end{center}
+\end{figure}
+
+\textbf{NOTA LASCIO A TE GABBO}
+
+
+
+
+
+ 
+ 
+ 
+ 
+
+
+
+
+
+
+
+
