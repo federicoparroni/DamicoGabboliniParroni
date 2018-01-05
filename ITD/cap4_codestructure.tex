@@ -5,6 +5,7 @@ The server code is organized in 3 main files:
 
 \classDescription{index.php}
 This file contains the entry point of the web api. The central object of this part is \$app, a Slim/App object that is responsible of all the API handling mechanism. The logical code flow is the following:
+
 \begin{enumerate}
 \item at first, it initializes a db connection reference (in order to use afterwards). This object (of PDO class) is useful to query the database and retrieve data in a high level manner.
 \item it initializes the Authorization Server object and related Storage, providing the possibility to use the database as support to save and set authorization token to the client that will connect to the server. These classes offers a middleware layer used for authorization control.
@@ -18,3 +19,48 @@ The class contained in this file manages the user authentication. This means tha
 The class contained in this file manages all the data related to a particular user, for example, profile, appointments, schedules... The method Profile is the callback for the /travlendar/public/api/user/profile api. The method allows to retrieve the information about a user profile (bike, car and public means pass).
 
 \section{Client application code structure}
+
+\classDescription{Controller/IdentityManager}
+This class manages all the necessary step allowing a user to be authenticated in the application. It is made up of 5 main methods:
+
+\begin{enumerate}
+\item TokenRequest: sends an asincronous request to the token api and return the obtained token through the specified callback
+\item Login: basically call TokenRequest with the provided email and password and cache those credentials with the token in case of success
+\item Register: call asincronously the register api passing the specified email and password
+\item GetUserProfile: call asincronously the user profile api passing the specified email and password
+\item Logout: de-cache the user credentials and token
+\end{enumerate}
+
+
+\classDescription{Controller/ViewController/Login}
+The activity that handle the interaction between the user and the Login view. The activity calls IdentityManager methods to perform login and registration processes.
+
+\classDescription{Controller/Scheduler}
+This class is used to compute asincronously a new schedule. Inputs are an appointments list, a starting time, a starting location, some constraints and an optimization criteria. The only exposed method are IsConsistent and ComputeSchedule. The first one check if all the input parameters have been set correctly. The second one actually does the big work. It perform the following actions:
+\begin{enumerate}
+\item retrieving weather conditions information
+\item computing predecessors and distances matrixes (see \DDref{3.2}) of all the appointments
+\item recursively building arrangements (all the possible ways of ordering the  appointments consistently with respect to the starting times)
+\item trying to create a schedule from each arrangement. This consists of some substeps:
+\begin{enumerate}
+\item create temporary appointment with a wake-up dummy appointment. These appointments have additional information supporting next computations
+\item loop two by two the temporary appointments until the end and assign the best travel mean to the second. The best travel mean is chosen from the available and usable list of travel means. This brings to also assign the starting time and the cost (time, cost, carbon), calculated for that travel mean.
+\item check if there are a time conflict (starting time of the current appointment and ending time of the previous are overlapping) or a mean conflict (taking that mean causes to exceed the maximum distance imposed by some constraints).
+\item if confilicts are found, add a dummy constraint on a temporary appointment to avoid taking that mean. In case of time conflict, this dummy constraints allows to take a faster travel mean (penalizing at least the cost); in case of mean conflict, it allows to take a different mean (penalizing at least the time).
+\item repeat from point (b) until there are no more time/mean conflicts or no more dummy constraints can be added to any appointment
+\end{enumerate}
+
+\item ordering all the created schedules
+\item calling the mapping service api to get route information on the "best" schedule (with the least cost) and verify the real feasibility of that schedule
+\item returning the schedule if feasible or null otherwise
+\end{enumerate}
+
+
+
+
+
+
+
+
+
+

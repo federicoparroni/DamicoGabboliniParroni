@@ -1,6 +1,5 @@
 package com.example.gabdampar.travlendar.Controller.ViewController.Fragment;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AlertDialog;
-import android.transition.Scene;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,23 +17,17 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.gabdampar.travlendar.Controller.AppointmentManager;
 import com.example.gabdampar.travlendar.Controller.MapUtils;
 import com.example.gabdampar.travlendar.Controller.ScheduleManager;
-import com.example.gabdampar.travlendar.Controller.ScheduledAppointmentsListViewAdapter;
-import com.example.gabdampar.travlendar.Controller.ViewController.AppointmentCreationActivity;
+import com.example.gabdampar.travlendar.Controller.ViewController.ScheduledAppointmentsListViewAdapter;
 import com.example.gabdampar.travlendar.Controller.ViewController.MainActivity;
 import com.example.gabdampar.travlendar.Controller.ViewController.ScheduleCreationActivity;
 import com.example.gabdampar.travlendar.Controller.ViewController.ScheduleListViewAdapter;
-import com.example.gabdampar.travlendar.Model.Appointment;
 import com.example.gabdampar.travlendar.Model.Schedule;
 import com.example.gabdampar.travlendar.R;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
-
-import static android.app.Activity.RESULT_OK;
 
 public class ScheduleListFragment extends Fragment implements OnMapReadyCallback{
 

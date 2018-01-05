@@ -1,4 +1,4 @@
-package com.example.gabdampar.travlendar.Controller;
+package com.example.gabdampar.travlendar.Controller.ViewController;
 
 import android.content.Context;
 import android.view.LayoutInflater;

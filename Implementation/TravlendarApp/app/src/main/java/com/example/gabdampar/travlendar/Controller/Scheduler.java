@@ -113,7 +113,7 @@ public class Scheduler{
 
     private int i=0;
     private int j=1;
-    public void getBestScheduleAsync(final ScheduleCallbackListener listener){
+    private void getBestScheduleAsync(final ScheduleCallbackListener listener){
         if(schedules.size()>0) {
             MappingServiceAPIWrapper.getInstance().getTravelOptionData(
                 new MappingServiceAPIWrapper.MappingServiceCallbackListener() {
@@ -504,7 +504,7 @@ public class Scheduler{
      * @param state
      * @return true if the new arrangement must be recomputed with new added constraint, false if the arrangement is unfeasible
      */
-    public boolean addConstraintToUnfeasibleSchedule (ArrayList<TemporaryAppointment> arrangment, TravelMeansState state) {
+    private boolean addConstraintToUnfeasibleSchedule (ArrayList<TemporaryAppointment> arrangment, TravelMeansState state) {
 
         boolean timeConflictFound = false;
 
@@ -588,7 +588,7 @@ public class Scheduler{
     }
 
 
-    void AddWakeUpDistances(Appointment wakeUpAppt, Appointment appt) {
+    private void AddWakeUpDistances(Appointment wakeUpAppt, Appointment appt) {
         AppointmentCouple key = new AppointmentCouple(wakeUpAppt, appt);
         if(!distances.containsKey(key)) {
             distances.put(key, MapUtils.distance(wakeUpAppt.coords, appt.coords));
@@ -628,18 +628,6 @@ public class Scheduler{
             }
         }
         return clone;
-    }
-
-    private void StampaArray(byte[][] m) {
-        for(int i=0; i < m.length; i++) {
-            for(int j=0; j < m.length; j++) {
-                System.out.print(String.format("%d ", m[i][j]));
-            }
-            System.out.println("");
-        }
-        System.out.println("");
-        System.out.println("---------------------------------");
-        System.out.println("");
     }
 
     public interface ScheduleCallbackListener{

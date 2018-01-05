@@ -3,7 +3,6 @@ package com.example.gabdampar.travlendar.Controller.ViewController;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -14,36 +13,19 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.gabdampar.travlendar.Controller.AppointmentManager;
 import com.example.gabdampar.travlendar.Controller.IdentityManager;
-import com.example.gabdampar.travlendar.Controller.MappingServiceAPIWrapper;
 import com.example.gabdampar.travlendar.Controller.Synchronizer;
-import com.example.gabdampar.travlendar.Controller.User;
+import com.example.gabdampar.travlendar.Model.User;
 import com.example.gabdampar.travlendar.Controller.ViewController.Fragment.AppointmentsListFragment;
 import com.example.gabdampar.travlendar.Controller.ViewController.Fragment.HomeFragment;
 import com.example.gabdampar.travlendar.Controller.ViewController.Fragment.ScheduleListFragment;
 import com.example.gabdampar.travlendar.Controller.ViewController.Fragment.UserProfileFragment;
-import com.example.gabdampar.travlendar.Model.TravelOptionData;
-import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum;
 import com.example.gabdampar.travlendar.R;
-import com.google.android.gms.maps.model.LatLng;
-
-import org.joda.time.DateTime;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import noman.googleplaces.NRPlaces;
-import noman.googleplaces.Place;
-import noman.googleplaces.PlacesException;
-import noman.googleplaces.PlacesListener;
 
 public class MainActivity extends AppCompatActivity{
 

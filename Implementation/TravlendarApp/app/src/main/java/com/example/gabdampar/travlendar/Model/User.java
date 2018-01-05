@@ -1,8 +1,6 @@
-package com.example.gabdampar.travlendar.Controller;
+package com.example.gabdampar.travlendar.Model;
 
 import android.util.Log;
-
-import com.google.gson.JsonObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
