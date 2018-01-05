@@ -22,9 +22,5 @@
             android:key="wake_up_time"
             android:title="@string/wake_up_time"
             android:summary="@string/wake_up_time_summary"/>
-        <!--<com.example.gabdampar.travlendar.Controller.ViewController.CustomPreferences.LocationPreference
-            android:key="starting_location"
-            android:title="@string/starting_location"
-            android:summary="@string/starting_location_summary"/> -->
     </PreferenceCategory>
 </PreferenceScreen>
