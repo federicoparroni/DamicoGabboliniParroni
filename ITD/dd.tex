@@ -32,6 +32,15 @@
 \setcounter{tocdepth}{3}
 
 \newcommand{\RASDref}[1]{\textbf{RASD: #1}}
+\newcommand{\DDref}[1]{\textbf{DD: #1}}
+\newcommand{\classDescription}[1]{\subsubsection{#1}\label{class:#1}}
+\newcommand{\testTable}[3]{
+\begin{longtable}{|p{14cm}|} \hline
+\textbf{Precondition and action tested: } #1  \\ \hline
+\textbf{Expected behaviour: } #2  \\ \hline
+\textbf{Actual outcome: } #3  \\ \hline
+\end{longtable}
+}
 
 \definecolor{darkgreen}{rgb}{0,0.6,0}
 \lstset{frame=tb,
