@@ -52,12 +52,6 @@ public class AppointmentsListViewAdapter extends ArrayAdapter<Appointment> imple
         this.filteredData.remove(position);
     }
 
-    public void removeFilter(){
-        filteredData = AppointmentManager.GetInstance().getAppointmentList();
-        notifyDataSetChanged();
-    }
-
-
     private class ItemFilter extends Filter {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
