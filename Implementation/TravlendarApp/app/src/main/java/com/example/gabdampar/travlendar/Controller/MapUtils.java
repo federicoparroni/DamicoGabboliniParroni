@@ -38,7 +38,8 @@ public class MapUtils {
                  * turnaround: necessary since we treat bicycle as a special case of walk. now we have to do the conversion-back
                  */
                 if(sa.travelMeanToUse.meanEnum.equals(TravelMeanEnum.BIKE)){
-                    MapUtils.drawPolyline(map, sa.dataFromPreviousToThis.getTravelMeanPolylineCouples().get(0).polylineOptions, TravelMeanEnum.BIKE);
+                    for(TravelMeanPolylineCouple travelMeanPolylineCouple : sa.dataFromPreviousToThis.getTravelMeanPolylineCouples())
+                        drawPolyline(map,travelMeanPolylineCouple.polylineOptions, TravelMeanEnum.BIKE);
                 }
                 else {
                     MapUtils.drawPolyline(map, sa.dataFromPreviousToThis.getTravelMeanPolylineCouples());

@@ -1,7 +1,5 @@
 \chapter{Testing}
 
-
-
 \section{Server tests}
 
 \subsection{Goal 1}
@@ -43,20 +41,25 @@
 \testImage{"testClient/invalidLogin".png}
 
 \subsection{Goal 4}
-\testTable{The appointment list is blank and the user likes to insert a new appointment, say a Software Engineering II lesson dated 15-01-2018, located in Via Camillo Golgi 42 and which lasts 2 hours. So, from the appointments section, the users adds a new appointment with these peculiarities.}
+\textbf{The system should allow the user to insert an appointment according to his necessities and his preferences}
+\TestTable{The appointment list is blank}{The user likes to insert a new appointment, say a Software Engineering II lesson dated 15-01-2018, located in Via Camillo Golgi 42 and which lasts 2 hours. So, from the appointments section, the users adds a new appointment with these peculiarities.}
 {The appointment should be created and thus appear in the appointments list.}{As expected}
+\testImage{testClient/appointment_creation.png}
 
-\testTable{The user wants to see the characteristics of a previously created appointment, say the Software Engineering II lesson created before, so the user taps the appointment on the appointments list}{A view should appear, showing the peculiarities of the selected appointment}{As expected}
+\TestTable{The appointment list is not empty}{The user wants to see the characteristics of a previously created appointment, say the Software Engineering II lesson created before, so the user taps the appointment on the appointments list}{A view should appear, showing the peculiarities of the selected appointment}{As expected}
+\testImage{testClient/appointment_details.png}
 
 \subsection{Goal 5}
-\testTable{The user wants to modify the Software Engineering II lesson's details, setting the starting time at 10.30, so he taps the appointments and he clicks on the edit button and he modifies the starting time}{The appointment should be modified according to the new value of starting time imposed}{As expected}
+\textbf{The system should provide a way to modify an inserted appointment}\\
 
-\testTable{The user wants to delete the Software Engineering II appointment, so he holds the click to this appointment on the appointment view and decide to delete it}{The appointment should disappear from the view}{As expected}
+\TestTable{The appointment list is not empty}{The user wants to modify the Software Engineering II lesson's details, setting the starting time at 10.30, so he taps the appointments and he clicks on the edit button and he modifies the starting time}{The appointment should be modified according to the new value of starting time imposed}{As expected}
+\testImage{testClient/appointment_editing.png}
+
+\TestTable{The appointment list is not empty}{The user wants to delete the Software Engineering II appointment, so he holds the click to this appointment on the appointment view and decide to delete it}{The appointment should disappear from the view}{As expected}
+\testImage{testClient/appointment_deletion.png}
 
 \subsection{Goal 6}
-
-The system S.P.W. to create a valid schedule (1.3.6) of the user appointments when
-requested and display the scheduling result (1.3.9);
+\textbf{The system should provide a way to create a valid schedule of the user appointments when requested and display the scheduling result}\\
 
 \TestTable{
 user has no computed schedule in his schedule list.}
@@ -74,10 +77,17 @@ user has no computed schedule in his schedule list.}
 \TestImage{test_goal_6/2}{execution of point 2}
 \TestImage{test_goal_6/3}{execution of point 5}
 \TestImage{test_goal_6/4}{execution of point 6}
+\subsection{Goal 7}
+\textbf{The system should let the user create valid multiple schedules and decide which one is chosen for the current day}\\
 
+\TestTable{Schedule list is not empty}{The user wants to run a schedule, so he taps on it and runs it}{The schedule is ran}{As expected}
 
+\testImage{testClient/schedule_running.png}
 
+\subsection{Goal 9}
+\textbf{The system should be able to display in real time user position and the directions to be followed in order to arrive to the next appointment on a dinamically updated map}\\
 
+\TestTable{Schedule list is not empty}{The user wants to see the directions to follow for a schedule, so he runs it}{The schedule directions are shown in the main page}{As expected}
 
-
+\testImage{testClient/directions.png}
 
