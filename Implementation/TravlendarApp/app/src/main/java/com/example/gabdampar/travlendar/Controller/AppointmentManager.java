@@ -65,13 +65,17 @@ public class AppointmentManager {
     /**
      * TODO: synchronize the results of these call, a schedule can be created only after the results of these calls
      */
-    public void setAllStopsCloseToAppointment(final Appointment app){
+    public void setAllStopsCloseToAppointment(final Appointment app, final StopsListener listener){
+        sync=0;
         MappingServiceAPIWrapper.getInstance().getStopDistance(new MappingServiceAPIWrapper.StopServiceCallbackListener() {
             @Override
             public void StopServiceCallback(LatLng latLng) {
                 sync++;
                 if(latLng!=null) {
                     app.distanceOfEachTransitStop.put(TravelMeanEnum.TRAM, latLng);
+                }
+                if(sync==4){
+                    listener.callbackStopListener(app);
                 }
 
             }
@@ -83,6 +87,9 @@ public class AppointmentManager {
                 if(latLng!=null) {
                     app.distanceOfEachTransitStop.put(TravelMeanEnum.BUS, latLng);
                 }
+                if(sync==4){
+                    listener.callbackStopListener(app);
+                }
             }
         }, TravelMeanEnum.BUS, app.coords, 2000);
         MappingServiceAPIWrapper.getInstance().getStopDistance(new MappingServiceAPIWrapper.StopServiceCallbackListener() {
@@ -92,6 +99,9 @@ public class AppointmentManager {
                 if(latLng!=null) {
                     app.distanceOfEachTransitStop.put(TravelMeanEnum.METRO, latLng);
                 }
+                if(sync==4){
+                    listener.callbackStopListener(app);
+                }
             }
         }, TravelMeanEnum.METRO, app.coords, 2000);
         MappingServiceAPIWrapper.getInstance().getStopDistance(new MappingServiceAPIWrapper.StopServiceCallbackListener() {
@@ -100,6 +110,9 @@ public class AppointmentManager {
                 sync++;
                 if (latLng != null){
                     app.distanceOfEachTransitStop.put(TravelMeanEnum.TRAIN, latLng);
+                }
+                if(sync==4){
+                    listener.callbackStopListener(app);
                 }
             }
         }, TravelMeanEnum.TRAIN, app.coords, 2000);
@@ -212,5 +225,7 @@ public class AppointmentManager {
         apptList.add(F);
 
     }
-
+    public interface StopsListener{
+        void callbackStopListener(Appointment app);
+    }
 }

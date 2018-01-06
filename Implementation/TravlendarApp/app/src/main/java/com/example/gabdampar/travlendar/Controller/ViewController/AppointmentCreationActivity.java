@@ -198,14 +198,19 @@ public class AppointmentCreationActivity extends AppCompatActivity implements On
                     } else {
                         appointment = new Appointment(name, date, null, timeSlot, duration, coords, location, involvedPeople, isRecurrent);
                 }
-                    AppointmentManager.GetInstance().setAllStopsCloseToAppointment(appointment);
+
+                    AppointmentManager.GetInstance().setAllStopsCloseToAppointment(appointment, new AppointmentManager.StopsListener() {
+                        @Override
+                        public void callbackStopListener(Appointment app) {
+                            // save appointments to file
+                            AppointmentManager.GetInstance().saveAppointments(getApplicationContext());
+                        }
+                    });
+
                     AppointmentManager.GetInstance().apptList.add(appointment);
 
                     //TODO add the constraint to the appointment
                     if(constraints != null) appointment.setConstraints(constraints);
-
-                    // save appointments to file
-                    AppointmentManager.GetInstance().saveAppointments(this);
 
                     //verifying that the appointment is added to the appointment list
                     Log.e("addAppointmentToTheList", String.valueOf(AppointmentManager.GetInstance().apptList.size()));
