@@ -22,9 +22,9 @@ public class User {
         try {
             u.id = json.getInt("id");
             u.email = json.getString("email");
-            u.hasCar = json.getBoolean("hasCar");
-            u.hasBike = json.getBoolean("hasBike");
-            u.hasPass = json.getBoolean("hasPass");
+            u.hasCar = json.getString("hasCar").equals("0") ? false : true;
+            u.hasBike = json.getString("hasBike").equals("0") ? false : true;
+            u.hasPass = json.getString("hasPass").equals("0") ? false : true;
             return u;
         } catch (JSONException e) {
             Log.e("JSONError", "Cannot parse user");

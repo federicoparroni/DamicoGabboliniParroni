@@ -201,11 +201,11 @@ public class AppointmentCreationActivity extends AppCompatActivity implements On
                     AppointmentManager.GetInstance().setAllStopsCloseToAppointment(appointment);
                     AppointmentManager.GetInstance().apptList.add(appointment);
 
+                    //TODO add the constraint to the appointment
+                    if(constraints != null) appointment.setConstraints(constraints);
+
                     // save appointments to file
                     AppointmentManager.GetInstance().saveAppointments(this);
-
-                    //add the constraint to the appointment
-                    appointment.setConstraints(constraints);
 
                     //verifying that the appointment is added to the appointment list
                     Log.e("addAppointmentToTheList", String.valueOf(AppointmentManager.GetInstance().apptList.size()));
@@ -216,6 +216,7 @@ public class AppointmentCreationActivity extends AppCompatActivity implements On
             else {
                 //appointment that must be modified
                 Appointment appointment = AppointmentManager.GetInstance().GetAppointment(position);
+                constraints = appointment.constraints;
                 if (checkBoxStartingTime.isChecked()) {
                     if (startingTime == null)
                         startingTime = appointment.getStartingTime();
@@ -227,27 +228,21 @@ public class AppointmentCreationActivity extends AppCompatActivity implements On
                         Snackbar.make(view, "WARNING: Missing Field", Snackbar.LENGTH_LONG).show();
                     }else {
                         appointment.EditAppointment(name, date, startingTime, null, duration, coords, location, involvedPeople, isRecurrent);
-                        //if the constraints has been changed update that ones
-                        if (constraints != null) {
-                            appointment.setConstraints(constraints);
-                        }
+                        //TODO if the constraints has been changed update that ones
+                        appointment.setConstraints(constraints);
                         super.onBackPressed();
                     }
                 } else {
-                    if (timeSlot == null)
-                        timeSlot = appointment.getTimeSlot();
-                    if (coords == null)
-                        coords = appointment.getCoords();
+                    if (timeSlot == null) timeSlot = appointment.getTimeSlot();
+                    if (coords == null) coords = appointment.getCoords();
                     if (name.isEmpty() || date == null || startingTime == null && timeSlot == null || duration == -1 ||
                             coords == null || involvedPeople <= -1 || isRecurrent == null) {
                         //Missing fields
                         Snackbar.make(view, "WARNING: Missing Field", Snackbar.LENGTH_LONG).show();
                     }else {
                         appointment.EditAppointment(name, date, null, timeSlot, duration, coords, location, involvedPeople, isRecurrent);
-                        //if the constraints has been changed update that ones
-                        if (constraints != null) {
-                            appointment.setConstraints(constraints);
-                        }
+                        //TODO if the constraints has been changed update that ones
+                        appointment.setConstraints(constraints);
                         super.onBackPressed();
                     }
                 }

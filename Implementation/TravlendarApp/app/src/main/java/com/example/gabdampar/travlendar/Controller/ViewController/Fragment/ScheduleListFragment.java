@@ -106,6 +106,9 @@ public class ScheduleListFragment extends Fragment implements OnMapReadyCallback
                         .setPositiveButton("OK",new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
+                                /*if(ScheduleManager.GetInstance().runningSchedule.equals(
+                                        ScheduleManager.GetInstance().schedulesList.get(pos)))
+                                    ScheduleManager.GetInstance().runningSchedule=null;*/
                                 ScheduleManager.GetInstance().schedulesList.remove(pos);
                                 arrayAdapter.removeFromFilteredData(pos);
                                 //the adapter must redraw the list

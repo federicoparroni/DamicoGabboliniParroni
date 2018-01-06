@@ -24,8 +24,8 @@ public class Appointment {
     public LatLng coords;
     public boolean isRecurrent = false;
     public String location;
-    public ArrayList<ConstraintOnAppointment> constraints = new ArrayList<ConstraintOnAppointment>();
-    public HashMap<TravelMeanEnum,LatLng> distanceOfEachTransitStop = new HashMap<TravelMeanEnum,LatLng>();
+    public ArrayList<ConstraintOnAppointment> constraints = new ArrayList<>();
+    public HashMap<TravelMeanEnum,LatLng> distanceOfEachTransitStop = new HashMap<>();
 
     public Appointment(String n, LocalDate date, LocalTime startingTime, int duration, LatLng coord) {
         this.name = n;

@@ -195,7 +195,7 @@ public class IdentityManager implements Response.Listener<JSONObject>, Response.
                         @Override
                         public void onResponse(JSONObject response) {
                             try {
-                                User user = User.ParseUser(response.getJSONObject("user"));
+                                User user = User.ParseUser(response.getJSONObject("data"));
                                 if(user != null) {
                                     callback.UserProfileCallback(true, user);
                                 } else {
