@@ -17,7 +17,7 @@ The functionality is implemented but the requirement \RASDref{R6} isn't: all the
 \subsection{Goal 3} \label{subsect:gPasswordRecovery}
 \textbf{The system should give to the signed user the possibility to recover his password} \\
 
-The functionality is fully implemented.
+The functionality has not been implemented.
 
 \subsection{Goal 4} \label{subsect:gAppointmentCreation}
 \textbf{The system should allow the user to insert an appointment according to his necessities and his preferences}\\
@@ -38,20 +38,20 @@ The functionality is implemented, in particular all the various data are retriev
 \subsection{Goal 7} \label{subsect:gScheduleSelection}
 \textbf{The system should let the user create valid multiple schedules and decide which one is chosen for the current day}\\
 
-This functionality it's fully implemented.
+This functionality is fully implemented.
 
 \subsection{Goal 8} \label{subsect:gScheduleSelection}
 \textbf{The system should be able to book the travel means involved in the current schedule under user approval}\\
 
-This functionality it's not fully implemented, our prototype presents just a draft of the final desired behaviour. Infact, a full implementation was too much effort-costy: it was needed to interface with the transit services and with the user's credit account, in a way that just a click was needed from the user side to buy the tickets for a schedule. So, since the purpose was to build a basic prototype, this feature was considered to be advanced, and so this functionality has being implemented as a simple redirecting to the website of the transit company. So \RASDref{R20} it's not fullfilled.
+This functionality is not fully implemented, our prototype presents just a draft of the final desired behaviour. Infact, a full implementation was too much effort-costy: it was needed to interface with the transit services and with the user's credit account, in a way that just a click was needed from the user side to buy the tickets for a schedule. So, since the purpose was to build a basic prototype, this feature was considered to be advanced, and so this functionality has being implemented as a simple redirecting to the website of the transit company. So \RASDref{R20} it's not fullfilled.
 
 \subsection{Goal 9} \label{subsect:gDirections}
 \textbf{The system should be able to display in real time user position and the directions to be followed in order to arrive to the next appointment on a dinamically updated map}\\
 
-This functionality it's implemented: when a schedule is running, the static directions that link all the appointments, according to the schedule that has beign computed, are displayed on the main page of the application, together with the user position. So, even if the directions are just static and not dynamic, the requirements \RASDref{R21} through \RASDref{R23} can be considered as fullfilled.
+This functionality is implemented: when a schedule is running, the static directions that link all the appointments, according to the schedule that has beign computed, are displayed on the main page of the application, together with the user position. So, even if the directions are just static and not dynamic, the requirements \RASDref{R21} through \RASDref{R23} can be considered as fullfilled.
 
 \subsection{Goal 10} \label{subsect:gSharedTMNotifications}
 \textbf{The system should be able to notify the user when a shared travel mean is available and it would optmize the current schedule}\\
 
-This functionality it's not implemented, together with it's requirement. In particular the shared travel means are not considered at all in our prototype, since they can be thought as an extension of what it's actually implemented and don't add any relevant feature to our draft, apart from having more kind of travel means to choose. Moreover, the data-retrieving concerning the presence of neighbor shared means was available just for some kind of shared services. 
+This functionality is not implemented, together with it's requirement. In particular the shared travel means are not considered at all in our prototype, since they can be thought as an extension of what it's actually implemented and don't add any relevant feature to our draft, apart from having more kind of travel means to choose. Moreover, the data-retrieving concerning the presence of neighbor shared means was available just for some kind of shared services. 
 Anyway, the prototype it's prone to consider new travel services that can be added in the final version of the application without changing the structure of the code, as explained in \textbf{code structure section}
