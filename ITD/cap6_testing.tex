@@ -1,21 +1,26 @@
 \chapter{Testing}
 
-\section{Goal 1}
-
-\section{Goal 2}
-
-\section{Goal 3}
-
-\section{Goal 4}
-
-\section{Goal 5}
-
 \section{Goal 6}
 
-\section{Goal 7}
+The system S.P.W. to create a valid schedule (1.3.6) of the user appointments when
+requested and display the scheduling result (1.3.9);
 
-\section{Goal 8}
+\TestTable{
+user has no computed schedule in his schedule list.}
+{Creation of a new schedule.}
+{{\begin{enumerate}
+\item a click on the add schedule button is performed and the user is redirected to the schedule creation view.
+\item the user selects the date in which he/she wants compute his/her schedule.
+\item the empty fields are filled by the user.
+\item the button for computing the schedule is clicked and the progress bar is shown.
+\item the user is redirected to the schedule list and there, is added the new computed schedule.
+\item with one click on the created schedule the schedule results are shown.
+\end{enumerate}}}
+{The outcome is equal to the expected behaviour.}
 
-\section{Goal 9}
 
-\section{Goal 10}
+
+
+
+
+
