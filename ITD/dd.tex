@@ -35,12 +35,24 @@
 \newcommand{\DDref}[1]{\textbf{DD: #1}}
 \newcommand{\classDescription}[1]{\subsubsection{#1}\label{class:#1}}
 \newcommand{\methodDescription}[1]{\textit{#1}(..)}
+
+
 \newcommand{\testTable}[3]{
 \begin{longtable}{|p{14cm}|} \hline
 \textbf{Precondition and action tested: } #1  \\ \hline
 \textbf{Expected behaviour: } #2  \\ \hline
 \textbf{Actual outcome: } #3  \\ \hline
 \end{longtable}
+}
+
+% #1: name of the image on the images folder. eg: middleware.png
+\newcommand{\testImage}[1]{
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=250pt, keepaspectratio]{"images/"#1}
+\caption{Graphical representation of the actual outcome}
+\end{center}
+\end{figure}
 }
 
 \definecolor{darkgreen}{rgb}{0,0.6,0}
