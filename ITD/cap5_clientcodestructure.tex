@@ -23,7 +23,7 @@ This is the project main structure:
 The application is divided in three main projects:
 
 \begin{itemize}
-\item app project, containing the bigger part of the code
+\item app project, containing the biggest part of the code
 
 \item darkskyandroidlib project, containing some classes used for managing the interaction between the application and the wheater forecast api
 \begin{figure}[H]
@@ -105,12 +105,19 @@ There are two folder one for the Model and the other for the Controller.
 \end{center}
 \end{figure}
 
-In the model folder there all the classes used for the logic modeling, there is another folder used for group all the travel mean since they have similar classes.
+In the model folder there all the classes used for the logic modeling, there is another folder used for group up all the travel mean since they have similar classes.
 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=250pt, keepaspectratio]{"image/Code_Structure/App2".png}
 \caption{Controller folder}
+\end{center}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=250pt, keepaspectratio]{"image/Code_Structure/App3".png}
+\caption{Other folders inside the Controller folder}
 \end{center}
 \end{figure}
 
@@ -122,7 +129,15 @@ The controller folder is divided in two main parts:
 
 there is this division since android studio when a new view is created, generates automatically the controller of this view as a new class. We have added more controller in order to divide the tasks, that each controller have to perform, in a more logic way.
 
-\classDescription{Controller/IdentityManager}
+Must be mentioned the JsonSerializer folder, containing some classes used for serialize some model classes in order to save their object in the devices memory.
+
+The folder CustomPreferences contains some classes used to specify a user preference such as the starting location of one of his schedule.
+
+%\textbf{NOTA: QUI MANCHEREBBE DA SPIEGARE PERCHè C'è IL FOLDER FRAGMENT SOLTANTO CHE AI FINI DELLA SPIEGAZIONE NON MI SEMBRA IMPORTANTE IN QUANTO è STATO FATTO COSI SOLTANTO PER POTER AGGIUNGERE QUEL MENU A SCORRIMENTO PERO ECCO SI PUO FARE SOLO CHE ANDREBBE A QUEL PUNTO SPIEGATO COSA è UN ACTIVITY COME SI DIFFERENZIA DA UN FRAGMENT}
+
+In the next part of the section the most important classes will be explained.
+
+\classDescription{IdentityManager}
 This class manages all the necessary step allowing a user to be authenticated in the application. It is made up of 5 main methods:
 
 \begin{enumerate}
@@ -171,14 +186,26 @@ This class is made up as a Singleton, since just an instance of this object can 
 It lists all the appointments that have been created over time. It also offers a method which, relying on the \methodDescription{getStopDistance} method of \textbf{MappingServiceAPIWrapper}, sets the minimun distances to each kind of transit stop, from the selected appointment.
 This class is made up as a Singleton, since just an instance of this object can be available.
 
+\classDescription{AppointmentCreationActivity}
+this class is responsible for the appointments creation and editing, before one of the two actions mentioned before is performed it checks if all the mandatory fields has been filled, if that has not been done it shows a warning message. This class handles the interactions with the minor classes AddConstrantOnAppointmentActivity, SettingStartingTimeActivity, SettingTimeSlotActivity, classes used for set some parameters during the creation of an appointment. These interaction is made mainly with the callback method onActivityResult called from one of the three classes when the data expected has been inserted by the user.
+
+\classDescription{ScheduleCreationActivity}
+it manages the creation of the schedules grouping up all the data inserted by the user. If some mandatory fields are left empty it shows a warning message.
+
 \classDescription{HomeFragment}
 It's the view that first appears to the user when he/she opens the application. It has, as background, an object of type \textbf{GoogleMap}, showing all the appointments of the actual day, spreaded across the region that it's considered. This is the view as it shows up with it's starting state, that is, without any schedule on running. The state of it changes when some schedule is ran: the map is resized and at the bottom appear the directions for the schedule that it's actually running. When a schedule it's stopped (by means of the Cross button on the view), the state of the view returns as initial.
 
 \classDescription{UserProfileFragment}
 It's the view that lets the user change it's personal parameters, saved and managed by the built-in \textbf{SharedPreferences} environment in Android.
 
+\classDescription{AppointmentListFragment}
+Interprets in a graphic way, by means of an \textbf{ArrayAdapter}(AppointmentListViewAdapter class), the list of the created appointments contained in the \textbf{AppointmentManager} as a \textbf{ListView}. Using the filter features granted by the ArrayAdapter class, it can show the appointments according to a date chosen by the user. this class handles even the event generated by the click and the long click of the user on one of the appointment, in the first case showing the  main infos of the appointment and its position on a minimap, in the second giving to the user the possibility to delete the selected appointment.  
+
 \classDescription{ScheduleListFragment}
-Interprets in a graphic way, by means of an \textbf{ArrayAdapter}, the list of computed schedules contained in the \textbf{ScheduleManager} as a \textbf{ListView}. Using the filter features granted by the ArrayAdapter class, it separates the schedules in past schedules and current schedules (that are computed for the current day or in the future). 
+Interprets in a graphic way, by means of an \textbf{ArrayAdapter}(ScheduleListViewAdapter class), the list of computed schedules contained in the \textbf{ScheduleManager} as a \textbf{ListView}. Using the filter features granted by the ArrayAdapter class, it separates the schedules in past schedules and current schedules (that are computed for the current day or in the future).this class handles even the event generated by the click and the long click of the user on one of the schedule, in the first case showing the  main infos of the schedule clicked and the route that the user must follow to reach all the appointment composing the schedule on a minimap, and a list view showing the travel mean to take to reach the next appointment. In the second giving to the user the possibility to delete the selected schedule.  
+ 
+\classDescription{NetworkManager}
+Class with one method used for check if the user is connected to internet.
 
 \classDescription{MapUtils}
 Encapsulates a \textbf{GoogleMap} object, allowing to draw a schedule (meaning all the appointments as markers and the polylines linking the appointments as lines of different colors) or a list of appointments (meaning as a set of markers) on map. Note that this it's implemented as a static class instead of an extension of the \textbf{GoogleMap} class because \textbf{GoogleMap} it's declared as static.
@@ -211,15 +238,3 @@ This subcomponent relays on another 2 wrappers which were already built for the 
 This class it's not implemented because it deals with strike days and tickets, which are details that are not considered in our prototype, as explained in \ref{chap:reqAndFuct}
 
 
-\begin{figure}[H]
-\begin{center}
-\includegraphics[width=250pt, keepaspectratio]{"image/Code_Structure/App3".png}
-\caption{Other folders inside the Controller folder}
-\end{center}
-\end{figure}
-
-Must be mentioned the JsonSerializer folder, containing some classes used for serialize some model classes in order to save their object in the devices memory.
-
-The folder CustomPreferences contains some classes used to specify a user preference such as the starting location of one of his schedule.
-
-\textbf{NOTA: QUI MANCHEREBBE DA SPIEGARE PERCHè C'è IL FOLDER FRAGMENT SOLTANTO CHE AI FINI DELLA SPIEGAZIONE NON MI SEMBRA IMPORTANTE IN QUANTO è STATO FATTO COSI SOLTANTO PER POTER AGGIUNGERE QUEL MENU A SCORRIMENTO PERO ECCO SI PUO FARE SOLO CHE ANDREBBE A QUEL PUNTO SPIEGATO COSA è UN ACTIVITY COME SI DIFFERENZIA DA UN FRAGMENT}
