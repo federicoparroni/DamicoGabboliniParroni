@@ -1,6 +1,46 @@
 \chapter{Testing}
 
-\section{Goal 6}
+\section{Server tests}
+
+\subsection{Goal 1}
+\testTable{Registration with empty email}{Incorrect email error response}{Incorrect email error response}
+\testImage{"testServer/emptyEmail".png}
+
+\testTable{Registration with empty password}{Incorrect password error response}{Incorrect email error response}
+\testImage{"testServer/emptyPassword".png}
+
+\subsection{Goal 2}
+\testTable{Login with wrong client credentials}{Wrong credentials error response}{Wrong credentials error response}
+\testImage{"testServer/wrongCredentials".png}
+
+\testTable{Login with wrong user credentials}{Wrong username or password error response}{Wrong username or password response}
+\testImage{"testServer/wrongUserPassword".png}
+
+\subsection{Other tests}
+\testTable{Access auth-protected api with correct access token}{Response succesfully returns}{Response succesfully returns}
+\testImage{"testServer/correctToken".png}
+
+\testTable{Access auth-protected api with wrong access token}{Wrong access token error response}{Wrong access token error response}
+\testImage{"testServer/wrongToken".png}
+
+
+\section{Client test}
+
+\subsection{Goal 1}
+\testTable{Registration with invalid email}{Incorrect email error message}{Incorrect email error message}
+\testImage{"testClient/invalidRegistration".png}
+
+\testTable{Registration with non matching passwords confirmation}{Non matching passwords error message}{Non matching passwords error message}
+\testImage{"testClient/nonmatchingPassword".png}
+
+\testTable{Registration with correct user credentials and password confirmation}{Registration succesfully done}{Registration done message}
+\testImage{"testClient/correctRegistration".png}
+
+\subsection{Goal 2}
+\testTable{Login with wrong user credentials}{Wrong username or password error message}{Wrong username or password error message}
+\testImage{"testClient/invalidLogin".png}
+
+\subsection{Goal 6}
 
 The system S.P.W. to create a valid schedule (1.3.6) of the user appointments when
 requested and display the scheduling result (1.3.9);
