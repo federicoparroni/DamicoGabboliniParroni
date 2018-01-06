@@ -207,7 +207,7 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
                 }
             }, this);
         } else {
-            Snackbar.make(findViewById(R.id.progressBarLogin), "Passwords not missing", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(findViewById(R.id.progressBarLogin), "Passwords are not matching", Snackbar.LENGTH_LONG).show();
         }
     }
 
