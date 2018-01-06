@@ -1,5 +1,7 @@
 \chapter{Testing}
 
+
+
 \section{Server tests}
 
 \subsection{Goal 1}
@@ -39,6 +41,17 @@
 \subsection{Goal 2}
 \testTable{Login with wrong user credentials}{Wrong username or password error message}{Wrong username or password error message}
 \testImage{"testClient/invalidLogin".png}
+
+\subsection{Goal 4}
+\testTable{The appointment list is blank and the user likes to insert a new appointment, say a Software Engineering II lesson dated 15-01-2018, located in Via Camillo Golgi 42 and which lasts 2 hours. So, from the appointments section, the users adds a new appointment with these peculiarities.}
+{The appointment should be created and thus appear in the appointments list.}{As expected}
+
+\testTable{The user wants to see the characteristics of a previously created appointment, say the Software Engineering II lesson created before, so the user taps the appointment on the appointments list}{A view should appear, showing the peculiarities of the selected appointment}{As expected}
+
+\subsection{Goal 5}
+\testTable{The user wants to modify the Software Engineering II lesson's details, setting the starting time at 10.30, so he taps the appointments and he clicks on the edit button and he modifies the starting time}{The appointment should be modified according to the new value of starting time imposed}{As expected}
+
+\testTable{The user wants to delete the Software Engineering II appointment, so he holds the click to this appointment on the appointment view and decide to delete it}{The appointment should disappear from the view}{As expected}
 
 \subsection{Goal 6}
 

@@ -72,9 +72,7 @@ public class AppointmentsListFragment extends Fragment implements OnMapReadyCall
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
         appointmentsDate = null;
-
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -112,6 +110,7 @@ public class AppointmentsListFragment extends Fragment implements OnMapReadyCall
                                 //the adapter must redraw the list
                                 arrayAdapter.removeFromFilteredData(pos);
                                 arrayAdapter.notifyDataSetChanged();
+                                AppointmentManager.GetInstance().saveAppointments(getContext());
                                 dialog.cancel();
                             }
                         })
@@ -202,6 +201,8 @@ public class AppointmentsListFragment extends Fragment implements OnMapReadyCall
             }
         });
 
+        arrayAdapter.getFilter().filter("");
+
         return fragmentView;
     }
 
@@ -220,7 +221,6 @@ public class AppointmentsListFragment extends Fragment implements OnMapReadyCall
                 Intent createAppointment = new Intent(getActivity(), AppointmentCreationActivity.class);
                 startActivity(createAppointment);
                 return TRUE;
-
             case R.id.sortByDateButton:
                 //button used to sort the appointments chosen a date
                 final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -253,15 +253,14 @@ public class AppointmentsListFragment extends Fragment implements OnMapReadyCall
                         .setNeutralButton("Show All", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
-                                arrayAdapter.removeFilter();
+                                appointmentsDate = null;
+                                arrayAdapter.getFilter().filter("");
                                 dateFilteredView.setText("Date: All");
                                 dialog.cancel();
                             }
                         });
 
                 //Fields of the inflated view
-
-
 
                 //for show the alert
                 AlertDialog alert = builder.create();
