@@ -69,15 +69,27 @@ public class MappingServiceAPIWrapper{
         if (type!=null)
             new NRPlaces.Builder()
                 .listener(new PlacesListener() {
+                    ArrayList<Place> list=new ArrayList<>();
                     @Override
                     public void onPlacesFailure(PlacesException e) {
                         listener.StopServiceCallback(null);
                     }
+
                     @Override
                     public void onPlacesSuccess(List<Place> places) {
+                        for(Place p : places)
+                            list.add(p);
+                    }
+
+                    @Override
+                    public void onPlacesStart() {
+                    }
+
+                    @Override
+                    public void onPlacesFinished() {
                         LatLng r=null;
                         float minDist = Float.MAX_VALUE;
-                        for(Place p : places){
+                        for(Place p : list){
                             float actualDistance = MapUtils.distance(position,new LatLng(p.getLatitude(),p.getLongitude()));
                             if (actualDistance < minDist) {
                                 minDist = actualDistance;
@@ -85,14 +97,6 @@ public class MappingServiceAPIWrapper{
                             }
                         }
                         listener.StopServiceCallback(r);
-                    }
-                    @Override
-                    public void onPlacesStart() {
-
-                    }
-                    @Override
-                    public void onPlacesFinished() {
-
                     }
                 })
                 .key("AIzaSyAs4xaJnBh5JEsVm1MmQjg6CpUdwwL_Txk")
