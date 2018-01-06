@@ -40,7 +40,7 @@
         <activity
             android:name=".Controller.ViewController.Fragment.HomeFragment"
             android:label="@string/main_page_activity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Controller.ViewController.Fragment.AppointmentsListFragment"
             android:label="Appointments" />
@@ -80,11 +80,11 @@
         <activity android:name=".Controller.ViewController.Fragment.UserProfileFragment" />
         <activity
             android:name=".Controller.ViewController.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Controller.ViewController.ScheduleCreationActivity"
-            android:label="@string/title_activity_schedule_creation"
-            />
+            android:label="@string/title_activity_schedule_creation" />
+        <activity android:name=".Controller.ViewController.AboutUsActivity"></activity>
     </application>
 
 </manifest>
