@@ -20,13 +20,16 @@ import android.widget.TextView;
 
 import com.example.gabdampar.travlendar.Controller.AppointmentManager;
 import com.example.gabdampar.travlendar.Controller.IdentityManager;
+import com.example.gabdampar.travlendar.Controller.MappingServiceAPIWrapper;
 import com.example.gabdampar.travlendar.Controller.Synchronizer;
 import com.example.gabdampar.travlendar.Model.User;
 import com.example.gabdampar.travlendar.Controller.ViewController.Fragment.AppointmentsListFragment;
 import com.example.gabdampar.travlendar.Controller.ViewController.Fragment.HomeFragment;
 import com.example.gabdampar.travlendar.Controller.ViewController.Fragment.ScheduleListFragment;
 import com.example.gabdampar.travlendar.Controller.ViewController.Fragment.UserProfileFragment;
+import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum;
 import com.example.gabdampar.travlendar.R;
+import com.google.android.gms.maps.model.LatLng;
 
 public class MainActivity extends AppCompatActivity{
 
@@ -101,7 +104,13 @@ public class MainActivity extends AppCompatActivity{
             loadHomeFragment();
         }
 
-        AppointmentManager.GetInstance().CreateDummyAppointments();
+        /*MappingServiceAPIWrapper.getInstance().getStopDistance(new MappingServiceAPIWrapper.StopServiceCallbackListener() {
+            @Override
+            public void StopServiceCallback(LatLng latLng) {
+            }
+        }, TravelMeanEnum.BUS, new LatLng(45.484075,9.241673), 2000);*/
+
+        //AppointmentManager.GetInstance().CreateDummyAppointments();
     }
 
     /***

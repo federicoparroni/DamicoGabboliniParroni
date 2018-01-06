@@ -197,7 +197,7 @@ public class AppointmentCreationActivity extends AppCompatActivity implements On
                         appointment = new Appointment(name, date, startingTime, null, duration, coords, location, involvedPeople, isRecurrent);
                     } else {
                         appointment = new Appointment(name, date, null, timeSlot, duration, coords, location, involvedPeople, isRecurrent);
-                }
+                    }
 
                     AppointmentManager.GetInstance().setAllStopsCloseToAppointment(appointment, new AppointmentManager.StopsListener() {
                         @Override

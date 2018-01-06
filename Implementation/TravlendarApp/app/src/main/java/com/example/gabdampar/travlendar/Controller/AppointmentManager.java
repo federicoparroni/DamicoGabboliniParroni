@@ -77,7 +77,6 @@ public class AppointmentManager {
                 if(sync==4){
                     listener.callbackStopListener(app);
                 }
-
             }
         }, TravelMeanEnum.TRAM, app.coords, 2000);
         MappingServiceAPIWrapper.getInstance().getStopDistance(new MappingServiceAPIWrapper.StopServiceCallbackListener() {
