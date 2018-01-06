@@ -35,7 +35,6 @@ import org.joda.time.LocalTime;
 
 import java.util.ArrayList;
 
-
 public class AppointmentCreationActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     //Appointment creation activity view elements

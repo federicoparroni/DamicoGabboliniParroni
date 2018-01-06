@@ -157,7 +157,7 @@ public class AppointmentManager {
      * dummy appointments creational part
      */
     public void CreateDummyAppointments() {
-        Appointment A = new Appointment("A", new LocalDate(2017, 12, 31),
+        Appointment A = new Appointment("A", new LocalDate(2018, 1, 10),
                 new LocalTime(11, 30), 20 * 60, new LatLng(45.4372464, 9.165939));
         A.distanceOfEachTransitStop.put(TravelMeanEnum.TRAIN, new LatLng(45.4432113,9.1674042));
         A.distanceOfEachTransitStop.put(TravelMeanEnum.BUS, new LatLng(45.4456313,9.1638094));
@@ -165,7 +165,7 @@ public class AppointmentManager {
         A.distanceOfEachTransitStop.put(TravelMeanEnum.TRAM, new LatLng(45.4486643,9.1797234));
 
 
-        Appointment B = new Appointment("B", new LocalDate(2017, 12, 31),
+        Appointment B = new Appointment("B", new LocalDate(2018, 1, 10),
                 new LocalTime(15, 0), 15 * 60, new LatLng(45.4781108, 9.2250824));
         B.distanceOfEachTransitStop.put(TravelMeanEnum.TRAIN, new LatLng(45.4847227,9.236799899999998));
         B.distanceOfEachTransitStop.put(TravelMeanEnum.BUS, new LatLng(45.4811073,9.2160672));
@@ -173,7 +173,7 @@ public class AppointmentManager {
         B.distanceOfEachTransitStop.put(TravelMeanEnum.TRAM, new LatLng(45.47140590000001,9.2378056));
 
 
-        Appointment C = new Appointment("C", new LocalDate(2017, 12, 31),
+        Appointment C = new Appointment("C", new LocalDate(2018, 1, 10),
                 new LocalTime(16, 0), 10 * 60, new LatLng(45.4641013, 9.1897325));
         C.distanceOfEachTransitStop.put(TravelMeanEnum.TRAIN, new LatLng(45.468359,9.175595999999999));
         C.distanceOfEachTransitStop.put(TravelMeanEnum.BUS, new LatLng(45.4560192,9.1871891));
@@ -181,7 +181,7 @@ public class AppointmentManager {
         C.distanceOfEachTransitStop.put(TravelMeanEnum.TRAM, new LatLng(45.4577231,9.1931098));
 
 
-        Appointment D = new Appointment("D", new LocalDate(2017, 12, 31),
+        Appointment D = new Appointment("D", new LocalDate(2018, 1, 10),
                 new TimeSlot(new LocalTime(13, 30), new LocalTime(23, 40)), 5 * 60, new LatLng(45.4955892, 9.1919801));
         D.distanceOfEachTransitStop.put(TravelMeanEnum.TRAIN, new LatLng(45.495387,9.175915));
         D.distanceOfEachTransitStop.put(TravelMeanEnum.BUS, new LatLng(45.49571580000001,9.1919748));
@@ -189,7 +189,7 @@ public class AppointmentManager {
         D.distanceOfEachTransitStop.put(TravelMeanEnum.TRAM, new LatLng(45.488764,9.183057));
 
 
-        Appointment E = new Appointment("E", new LocalDate(2017,12,31),
+        Appointment E = new Appointment("E", new LocalDate(2018,1,10),
                 new TimeSlot(new LocalTime(10,0),new LocalTime(15,10)),
                 10*60, new LatLng(45.4704799,9.1771438));
         E.distanceOfEachTransitStop.put(TravelMeanEnum.TRAIN, new LatLng(45.468359,9.175595999999999));
@@ -197,7 +197,7 @@ public class AppointmentManager {
         E.distanceOfEachTransitStop.put(TravelMeanEnum.METRO, new LatLng(45.4781414,9.1566191));
         E.distanceOfEachTransitStop.put(TravelMeanEnum.TRAM, new LatLng(45.47812130000001,9.180900800000002));
 
-        Appointment F = new Appointment("F", new LocalDate(2017,12,31),
+        Appointment F = new Appointment("F", new LocalDate(2018,1,10),
                 new TimeSlot(new LocalTime(14,30),new LocalTime(19,0)),
                 25*60, new LatLng(45.5061279,9.1500127));
         F.distanceOfEachTransitStop.put(TravelMeanEnum.TRAIN, new LatLng(45.50205820000001,9.150917999999997));

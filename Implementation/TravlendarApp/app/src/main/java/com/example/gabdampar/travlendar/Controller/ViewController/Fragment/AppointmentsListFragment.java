@@ -277,6 +277,8 @@ public class AppointmentsListFragment extends Fragment implements OnMapReadyCall
     //needed for the refresh of the appointments list
     @Override public void onResume() {
         //during the resume of the view the adapter of the appointmentList is set
+        appointmentsDate=null;
+        arrayAdapter.getFilter().filter("");
         arrayAdapter.notifyDataSetChanged();
 
         super.onResume();
