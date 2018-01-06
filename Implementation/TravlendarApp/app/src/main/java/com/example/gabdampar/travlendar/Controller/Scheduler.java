@@ -50,6 +50,9 @@ public class Scheduler{
     /** contains the schedules computed until now */
     private ArrayList<Schedule> schedules = new ArrayList<>();
 
+    private Appointment wakeUpAppt;
+    private int sync;
+
 
     /** constructors */
     public Scheduler() {}
@@ -69,46 +72,64 @@ public class Scheduler{
 
     public void ComputeSchedule(Context context, final ScheduleCallbackListener listener) {
         if(this.appts.size() > 0) {
+            sync = 2;
+
+            // 1
+            /** create and set wake-up dummy appointment */
+            wakeUpAppt = new Appointment("WakeUp", appts.get(0).date, scheduleStartingTime, 0, startingLocation);
+            AppointmentManager.GetInstance().setAllStopsCloseToAppointment(wakeUpAppt, new AppointmentManager.StopsListener() {
+                @Override
+                public void callbackStopListener(Appointment app) {
+                    CommonCallback(listener);
+                }
+            });
 
             /** get weather conditions for select date and baricentre of the daily appointments */
-            // 1
             WeatherForecastAPIWrapper.getInstance().getWeather(context, new WeatherForecastAPIWrapper.WeatherForecastAPIWrapperCallBack() {
                 @Override
                 public void onWeatherResults(TimeWeatherList weatherConditionList) {
-                    weatherConditions=weatherConditionList;
-
-                    // 2
-                    CalculatePredecessorsAndDistanceMatrix(appts);
-
-                    // 3
-                    CalculateArrangements(appts, pred.clone(), 0, 1);
-
-                    // 4
-                    //WaitForWeatherAPI();
-                    GetSchedulesFromArrangements();
-
-                    // 5
-                    /** order schedules to update current minimum cost */
-                    Collections.sort(schedules);
-
-                    // debug
-                    for (Schedule s : schedules) {
-                        System.out.printf("%s\n", s.toString());
-                    }
-
-                    /**
-                     * for the current schedule, retrieve all the data for the travel means linking the two appointments
-                     * if the time-bounds of the heuristical schedule is exceeded, the schedule to be considered not valid
-                     */
-                    i=0;
-                    j=1;
-                    getBestScheduleAsync(listener);
+                    weatherConditions = weatherConditionList;
+                    CommonCallback(listener);
                 }
             }, appts.get(0).getDate(), MapUtils.baricentre(appts));
 
         } else {
             throw new IllegalArgumentException("Empty appointment list");
         }
+    }
+
+    private void CommonCallback(final ScheduleCallbackListener listener) {
+        sync--;
+        if(sync==0) Compute(listener);
+    }
+
+    private void Compute(final ScheduleCallbackListener listener) {
+        // 2
+        CalculatePredecessorsAndDistanceMatrix(appts);
+
+        // 3
+        CalculateArrangements(appts, pred.clone(), 0, 1);
+
+        // 4
+        //WaitForWeatherAPI();
+        GetSchedulesFromArrangements();
+
+        // 5
+        /** order schedules to update current minimum cost */
+        Collections.sort(schedules);
+
+        // debug
+        for (Schedule s : schedules) {
+            System.out.printf("%s\n", s.toString());
+        }
+
+        /**
+         * for the current schedule, retrieve all the data for the travel means linking the two appointments
+         * if the time-bounds of the heuristical schedule is exceeded, the schedule to be considered not valid
+         */
+        i=0;
+        j=1;
+        getBestScheduleAsync(listener);
     }
 
     private int i=0;
@@ -267,9 +288,7 @@ public class Scheduler{
      * 	First appt is dummy wake-up appointment
      */
     private Schedule GetScheduleFromArrangement(ArrayList<Appointment> arrangement) {
-        /** create and set wake-up dummy appointment */
-        Appointment wakeUpAppt = new Appointment("WakeUp", appts.get(0).date, scheduleStartingTime, 0, startingLocation);
-        //arrangement.add(wakeUpAppt);
+        /** add wake up appointment to arrangement */
         AddWakeUpDistances(wakeUpAppt, arrangement.get(0));
         ArrayList<TemporaryAppointment> tempAppts = TemporaryAppointment.Create(arrangement);
         tempAppts.add(0, new TemporaryAppointment(wakeUpAppt, wakeUpAppt.startingTime, wakeUpAppt.startingTime, null));
