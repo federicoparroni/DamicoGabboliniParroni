@@ -1,7 +1,8 @@
 # DamicoGabboliniParroni
 Software Engineering 2 project - Travlendar+
 
-
+## Download apk from:
+https://www.dropbox.com/s/qoldgag188dm6ra/app-armeabi-v7a-debug.apk?dl=0
 
 # Travlendar Server API
 
