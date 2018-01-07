@@ -41,7 +41,7 @@ public class Metro extends PublicTravelMean {
     @Override
     public float EstimateTime(TemporaryAppointment from, TemporaryAppointment to, float distance) {
         LatLng stationFrom = from.originalAppt.distanceOfEachTransitStop.get(TravelMeanEnum.METRO);
-        LatLng stationTo = from.originalAppt.distanceOfEachTransitStop.get(TravelMeanEnum.METRO);
+        LatLng stationTo = to.originalAppt.distanceOfEachTransitStop.get(TravelMeanEnum.METRO);
         float totalTime = 0;
 
         if(stationFrom == null || stationTo == null || stationFrom.equals(stationTo)){

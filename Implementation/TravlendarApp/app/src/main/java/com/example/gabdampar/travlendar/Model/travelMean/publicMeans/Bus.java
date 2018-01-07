@@ -41,7 +41,7 @@ public class Bus extends PublicTravelMean {
     @Override
     public float EstimateTime(TemporaryAppointment from, TemporaryAppointment to, float distance) {
         LatLng stationFrom = from.originalAppt.distanceOfEachTransitStop.get(TravelMeanEnum.BUS);
-        LatLng stationTo = from.originalAppt.distanceOfEachTransitStop.get(TravelMeanEnum.BUS);
+        LatLng stationTo = to.originalAppt.distanceOfEachTransitStop.get(TravelMeanEnum.BUS);
         float totalTime = 0;
 
         if(stationFrom == null || stationTo == null || stationFrom.equals(stationTo)){

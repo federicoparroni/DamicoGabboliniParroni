@@ -44,7 +44,7 @@ public class Tram extends PublicTravelMean {
     @Override
     public float EstimateTime(TemporaryAppointment from, TemporaryAppointment to, float distance) {
         LatLng stationFrom = from.originalAppt.distanceOfEachTransitStop.get(TravelMeanEnum.TRAM);
-        LatLng stationTo = from.originalAppt.distanceOfEachTransitStop.get(TravelMeanEnum.TRAM);
+        LatLng stationTo = to.originalAppt.distanceOfEachTransitStop.get(TravelMeanEnum.TRAM);
         float totalTime = 0;
 
         if(stationFrom == null || stationTo == null || stationFrom.equals(stationTo)){
