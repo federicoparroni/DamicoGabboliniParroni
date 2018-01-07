@@ -2,6 +2,7 @@ package com.example.gabdampar.travlendar.Model.travelMean.publicMeans;
 
 import android.graphics.Color;
 
+import com.example.gabdampar.travlendar.Controller.IdentityManager;
 import com.example.gabdampar.travlendar.Controller.MapUtils;
 import com.example.gabdampar.travlendar.Model.TemporaryAppointment;
 import com.example.gabdampar.travlendar.Model.travelMean.PublicTravelMean;
@@ -62,11 +63,13 @@ public class Metro extends PublicTravelMean {
 
     @Override
     public float EstimateCost(TemporaryAppointment from, TemporaryAppointment to, float distance) {
-        return TICKET_COST;
+        if(IdentityManager.GetInstance().user.hasPass) return 0f;
+        else return TICKET_COST;
     }
     @Override
     public float EstimateCost(LatLng from, LatLng to) {
-        return TICKET_COST;
+        if(IdentityManager.GetInstance().user.hasPass) return 0f;
+        else return TICKET_COST;
     }
 
     @Override

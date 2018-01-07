@@ -178,7 +178,7 @@ public class ScheduleListFragment extends Fragment implements OnMapReadyCallback
                             }
                         });
 
-                //TODO: THE SAME AS BELOW BUT FOR THE CLICKED SCHEDULE
+
                 //Fields of the inflated view
                 TextView starting_timeText = inflatedView.findViewById(R.id.starting_timeText);
                 TextView cost_textView = inflatedView.findViewById(R.id.cost_textView);

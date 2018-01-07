@@ -1,27 +1,18 @@
 package com.example.gabdampar.travlendar.Controller.ViewController.Fragment;
 
-import android.app.Fragment;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
-import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.example.gabdampar.travlendar.Controller.IdentityManager;
 import com.example.gabdampar.travlendar.R;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
-import com.google.android.gms.location.places.ui.PlaceSelectionListener;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 public class UserProfileFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener{ //, OnMapReadyCallback {
 
@@ -38,19 +29,32 @@ public class UserProfileFragment extends PreferenceFragment implements SharedPre
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        /** init preference view in order to handle preferences from xml */
         addPreferencesFromResource(R.xml.preferences);
+        PreferenceManager.getDefaultSharedPreferences(getActivity()).registerOnSharedPreferenceChangeListener(this);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
+        TextView txtUserEmail = view.findViewById(R.id.txtUserEmail);
+        txtUserEmail.setText(IdentityManager.GetInstance().user.email);
+
         return view;
     }
 
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+        if(s.equals("has_bike"))
+            IdentityManager.GetInstance().user.hasBike = sharedPreferences.getBoolean(s, false);
+        else if(s.equals("has_car"))
+            IdentityManager.GetInstance().user.hasCar = sharedPreferences.getBoolean(s, false);
+        else if(s.equals("has_pass"))
+            IdentityManager.GetInstance().user.hasPass = sharedPreferences.getBoolean(s, false);
+        else
+            Log.e("InvalidPref", "Invalid user preference changedd");
     }
 
 }

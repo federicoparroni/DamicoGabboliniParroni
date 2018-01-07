@@ -38,7 +38,6 @@ public class Schedule implements Comparable {
     private boolean canBuyTickets = false;
 
     public Schedule(ArrayList<TemporaryAppointment> apps) {
-        // TODO: convert TemporaryAppointments into ScheduledAppointments.. works??
         for(TemporaryAppointment a : apps) {
             TravelMean m = a.means != null ? a.means.get(0).getMean() : null;
             scheduledAppts.add(new ScheduledAppointment(a.originalAppt, a.startingTime, a.ETA, m ));
@@ -59,7 +58,6 @@ public class Schedule implements Comparable {
     }
 
     public Schedule(ArrayList<TemporaryAppointment> apps, OptCriteria criteria) {
-        // TODO: convert TemporaryAppointments into ScheduledAppointments.. works??
         this(apps);
         this.criteria = criteria;
         this.startingLocation=apps.get(0).originalAppt.coords;
@@ -70,7 +68,7 @@ public class Schedule implements Comparable {
     }
 
     public float getTotalCost() {
-        return totCost / 1000; //must count the km
+        return totCost /*/ 1000*/;
     }
 
     public float getTotalCarbon() {
