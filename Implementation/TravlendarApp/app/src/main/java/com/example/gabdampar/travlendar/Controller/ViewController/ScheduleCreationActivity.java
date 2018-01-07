@@ -179,6 +179,8 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
         String time = pref.getString("wake_up_time", "");
         if(!time.isEmpty()) scheduler.scheduleStartingTime = new LocalTime( time );
 
+        scheduler.criteria=OptCriteria.OPTIMIZE_TIME;
+
         // enable fab click listener
         fab.setOnClickListener(this);
     }

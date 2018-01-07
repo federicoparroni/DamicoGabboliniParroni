@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import com.example.gabdampar.travlendar.Model.travelMean.PublicTravelMean;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMean;
 import com.example.gabdampar.travlendar.Model.travelMean.TravelMeanEnum;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
@@ -21,6 +22,7 @@ public class Schedule implements Comparable {
     public ArrayList<ScheduledAppointment> getScheduledAppts() {
         return scheduledAppts;
     }
+    public LatLng startingLocation;
 
     private ArrayList<ScheduledAppointment> scheduledAppts = new ArrayList<>();
     public OptCriteria criteria;
@@ -60,6 +62,7 @@ public class Schedule implements Comparable {
         // TODO: convert TemporaryAppointments into ScheduledAppointments.. works??
         this(apps);
         this.criteria = criteria;
+        this.startingLocation=apps.get(0).originalAppt.coords;
     }
 
     public LocalTime getTotalTravelTime(){

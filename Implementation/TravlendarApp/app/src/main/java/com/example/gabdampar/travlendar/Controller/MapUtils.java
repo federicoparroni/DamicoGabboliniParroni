@@ -85,7 +85,8 @@ public class MapUtils {
         }
     }
 
-    public static void putMapMarkersGivenScheduledAppointmentsAndSetMapZoomToThose(GoogleMap map, List<ScheduledAppointment> appointments){
+    public static void putMapMarkersGivenScheduledAppointmentsAndSetMapZoomToThose(GoogleMap map, Schedule schedule){
+        List<ScheduledAppointment> appointments = schedule.getScheduledAppts();
         if(appointments.size()>0) {
             LatLngBounds.Builder builder = new LatLngBounds.Builder();
             for (ScheduledAppointment a : appointments) {
@@ -95,6 +96,15 @@ public class MapUtils {
                 map.addMarker(marker);
                 builder.include(marker.getPosition());
             }
+            /**
+             * special behaviour for the starting appointment
+             */
+            MarkerOptions marker = new MarkerOptions()
+                    .position(schedule.startingLocation)
+                    .title("Starting Location");
+            map.addMarker(marker);
+            builder.include(marker.getPosition());
+
             LatLngBounds bounds = builder.build();
             CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 120);
             map.animateCamera(cu);

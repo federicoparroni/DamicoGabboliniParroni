@@ -73,7 +73,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             directionTextView.setText(ScheduleManager.GetInstance().getDirectionForRunningSchedule());
             askForPermissionAndShowUserPositionOnMap();
             MapUtils.drawScheduleOnMap(ScheduleManager.GetInstance().runningSchedule, map);
-            MapUtils.putMapMarkersGivenScheduledAppointmentsAndSetMapZoomToThose(map, ScheduleManager.GetInstance().runningSchedule.getScheduledAppts());
+            MapUtils.putMapMarkersGivenScheduledAppointmentsAndSetMapZoomToThose(map, ScheduleManager.GetInstance().runningSchedule);
 
             /** ask user if want to buy tickets */
             if(ScheduleManager.GetInstance().runningSchedule.canBuyTickets()) {
