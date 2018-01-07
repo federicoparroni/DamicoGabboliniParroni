@@ -82,6 +82,23 @@ user has no computed schedule in his schedule list.}
 \TestImage{test_goal_6/2}{execution of point 2}
 \TestImage{test_goal_6/3}{execution of point 5}
 \TestImage{test_goal_6/4}{execution of point 6}
+
+\TestTable{User has no computed schedule in his schedule list.}
+{Creation of a new schedule.}
+{{\begin{enumerate}
+\item a click on the add schedule button is performed and the user is redirected to the schedule creation view.
+\item the user selects the date in which he/she wants compute his/her schedule.
+\item the empty fields are filled by the user.
+\item a time-slot constraint for car is set
+\item the button for computing the schedule is clicked and the progress bar is shown.
+\item the user is redirected to the schedule list and there, is added the new computed schedule.
+\item with one click on the created schedule the schedule results are shown.
+\end{enumerate}}}
+{The outcome is equal to the expected behaviour: car is not taken for the specified time slot}
+
+\testImage{"test_goal_6/timeSlotConstraint".png}
+\testImage{"test_goal_6/timeSlotConstraintResult".png}
+
 \subsection{Goal 7}
 \textbf{The system should let the user create valid multiple schedules and decide which one is chosen for the current day}\\
 
