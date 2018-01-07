@@ -67,7 +67,7 @@
 \textbf{The system should provide a way to create a valid schedule of the user appointments when requested and display the scheduling result}\\
 
 \TestTable{
-user has no computed schedule in his schedule list.}
+User has no computed schedule in his schedule list.}
 {Creation of a new schedule.}
 {{\begin{enumerate}
 \item a click on the add schedule button is performed and the user is redirected to the schedule creation view.
@@ -90,12 +90,42 @@ user has no computed schedule in his schedule list.}
 
 \TestImage{test_scheduler/2}{computed schedule}
 
+\TestTable{User has no computed schedule in his schedule list.}
+{Creation of a new schedule.}
+{{\begin{enumerate}
+\item a click on the add schedule button is performed and the user is redirected to the schedule creation view.
+\item the user selects the date in which he/she wants compute his/her schedule.
+\item the empty fields are filled by the user.
+\item a time-slot constraint for car is set
+\item the button for computing the schedule is clicked and the progress bar is shown.
+\item the user is redirected to the schedule list and there, is added the new computed schedule.
+\item with one click on the created schedule the schedule results are shown.
+\end{enumerate}}}
+{The outcome is equal to the expected behaviour: car is not taken for the specified time slot}
+
+\testImage{"test_goal_6/timeSlotConstraint".png}
+\testImage{"test_goal_6/timeSlotConstraintResult".png}
+
+\TestTable{The user has three appointments in the same time slot ranging from 3 pm to 6 pm}
+{The user wants to schedule his appointments, starting from 3 pm in Via Privata Giovanni Ventura, Lambrate, optimizing the cost of the schedule}
+{It's expected that the scheduler will prefer travelling by public travel means and by foot, providing directions to reach the appointments and setting a real starting time to those}
+{The actual behaviour is equal to the expected one. In particular notice   that the scheduler will manage by itself the order in which the appointments should be travelled, taking into account the optimization criteria}
+
+\testImage{test_goal_6/schedule_time_slot.png}
+
 \subsection{Goal 7}
 \textbf{The system should let the user create valid multiple schedules and decide which one is chosen for the current day}\\
 
 \TestTable{Schedule list is not empty}{The user wants to run a schedule, so he taps on it and runs it}{The schedule is ran}{As expected}
 
 \testImage{testClient/schedule_running.png}
+
+\subsection{Goal 8}
+\textbf{The system should be able to book the travel means involved in the current schedule under user approval}
+
+\TestTable{A previusly computed schedule involves some public travel means}{The user runs that schedule}{The application asks to the user if he wants to buy the tickets for that schedule}{As expected}
+
+\testImage{testClient/tickets.png}
 
 \subsection{Goal 9}
 \textbf{The system should be able to display in real time user position and the directions to be followed in order to arrive to the next appointment on a dinamically updated map}\\
