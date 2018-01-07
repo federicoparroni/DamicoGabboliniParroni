@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -20,7 +21,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -36,41 +36,38 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 
 import org.joda.time.LocalDate;
 
-import java.util.zip.Inflater;
-
 public class HomeFragment extends Fragment implements OnMapReadyCallback {
     /**
      * infos about permission given to the user of the application
      */
     boolean mLocationPermissionGranted=false;
     public final static int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+    final int MAX_VISIBLE_DIRECTION_TEXTVIEW_LINES = 15;
 
     /**
      * references to view elements
      */
     GoogleMap map;
     TextView directionTextView;
-    LinearLayout layout;
+    ConstraintLayout layout;
     ScrollView scrollView;
 
     public void changeState(){
-        if(ScheduleManager.GetInstance().runningSchedule==null) {
-            layout.setWeightSum(4);
-            ViewGroup.LayoutParams params = scrollView.getLayoutParams();
-            params.height = 0;
-            scrollView.setLayoutParams(params);
+        if(ScheduleManager.GetInstance().runningSchedule == null) {
+            scrollView.getLayoutParams().height = 1;
+
             map.clear();
             askForPermissionAndShowUserPositionOnMap();
             MapUtils.putMapMarkersGivenAppointmentsAndSetMapZoomToThose(map, AppointmentManager.GetInstance().GetAppointmentsByDate(LocalDate.now()));
             directionTextView.setText("");
         }
         else {
-            layout.setWeightSum(10);
-            ViewGroup.LayoutParams params = scrollView.getLayoutParams();
-            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-            scrollView.setLayoutParams(params);
-            map.clear();
             directionTextView.setText(ScheduleManager.GetInstance().getDirectionForRunningSchedule());
+
+            int lineCount = Math.min(directionTextView.getLineCount(), MAX_VISIBLE_DIRECTION_TEXTVIEW_LINES);
+            scrollView.getLayoutParams().height = lineCount * 55;
+
+            map.clear();
             askForPermissionAndShowUserPositionOnMap();
             MapUtils.drawScheduleOnMap(ScheduleManager.GetInstance().runningSchedule, map);
             MapUtils.putMapMarkersGivenScheduledAppointmentsAndSetMapZoomToThose(map, ScheduleManager.GetInstance().runningSchedule.getScheduledAppts());
