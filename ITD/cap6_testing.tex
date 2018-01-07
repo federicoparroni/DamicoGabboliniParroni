@@ -3,6 +3,7 @@
 \section{Server tests}
 
 \subsection{Goal 1}
+\textbf{The system should offer the possibility to create a new account}
 \testTable{Registration with empty email}{Incorrect email error response}{Incorrect email error response}
 \testImage{"testServer/emptyEmail".png}
 
@@ -10,6 +11,7 @@
 \testImage{"testServer/emptyPassword".png}
 
 \subsection{Goal 2}
+\textbf{The system should be able to handle a login phase}
 \testTable{Login with wrong client credentials}{Wrong credentials error response}{Wrong credentials error response}
 \testImage{"testServer/wrongCredentials".png}
 
@@ -27,16 +29,19 @@
 \section{Client test}
 
 \subsection{Goal 1}
+\textbf{The system should offer the possibility to create a new account}
+
 \testTable{Registration with invalid email}{Incorrect email error message}{Incorrect email error message}
 \testImage{"testClient/invalidRegistration".png}
 
 \testTable{Registration with non matching passwords confirmation}{Non matching passwords error message}{Non matching passwords error message}
 \testImage{"testClient/nonmatchingPassword".png}
 
-\testTable{Registration with correct user credentials and password confirmation}{Registration succesfully done}{Registration done message}
+\TestTable{User is at the login page}{The user wants to register inside Travlendar, so he taps on the REGISTER button}{The user inputs a valid email and a password for the new account, a view appear in order to confirm the inserted password}{As expected: registration done message}
 \testImage{"testClient/correctRegistration".png}
 
 \subsection{Goal 2}
+\textbf{The system should be able to handle a login phase}
 \testTable{Login with wrong user credentials}{Wrong username or password error message}{Wrong username or password error message}
 \testImage{"testClient/invalidLogin".png}
 
