@@ -233,7 +233,7 @@ public class AppointmentCreationActivity extends AppCompatActivity implements On
                         Snackbar.make(view, "WARNING: Missing Field", Snackbar.LENGTH_LONG).show();
                     }else {
                         appointment.EditAppointment(name, date, startingTime, null, duration, coords, location, involvedPeople, isRecurrent);
-                        //TODO if the constraints has been changed update that ones
+                        //if the constraints has been changed update that ones
                         appointment.setConstraints(constraints);
                         super.onBackPressed();
                     }
@@ -252,8 +252,16 @@ public class AppointmentCreationActivity extends AppCompatActivity implements On
                     }
                 }
 
-                // save appointments to file
-                AppointmentManager.GetInstance().saveAppointments(this);
+                // clear the previous place stops from the hashmap
+                appointment.distanceOfEachTransitStop.clear();
+                //recreate the stops hashmap
+                AppointmentManager.GetInstance().setAllStopsCloseToAppointment(appointment, new AppointmentManager.StopsListener() {
+                    @Override
+                    public void callbackStopListener(Appointment app) {
+                        // save appointments to file
+                        AppointmentManager.GetInstance().saveAppointments(getApplicationContext());
+                    }
+                });
             }
         }
 
