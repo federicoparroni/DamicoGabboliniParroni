@@ -116,6 +116,8 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
         fab = findViewById(R.id.fab);
         fab.setClickable(false);
 
+        scheduler.criteria = OptCriteria.OPTIMIZE_TIME;
+
         // LoadUserDefaults();
         final DateTime now = DateTime.now();
         onSelectedDayChange(calendar, now.getYear(), now.getMonthOfYear()-1, now.getDayOfMonth());
