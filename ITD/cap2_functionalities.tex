@@ -1,7 +1,7 @@
 \chapter{Requirements and functionalities implemented} \label{chap:reqAndFuct}
 
 In this chapter it's reported a mapping between all the functionalities that were considered during the analysis part (i.e. the ones listed in section \RASDref{1.1} of the RASD, and then better described also in \RASDref{2.2} and \RASDref{3.2}. In these sections all the goals and requirements at which will be referred are listed) and the featuers that the proposed prototype actually has. Since functionalities and requirements are fully described by goals, here we will specify just which goals are actually implemented, explaining the reasons of the choices made.
-It's clear that, since the fullfilling of goals it's possible only when all the requirements associated are implemented, when it's said that a goal it's present in the prototype also all the requirements associated are implemented.
+It's clear that, since the fullfilling of goals is possible only when all the requirements associated are implemented, when it's said that a goal it's present in the prototype also all the requirements associated are implemented.
 However, a further description of requirements will be presented when needed.
 
 \subsection{Goal 1} \label{subsect:gNewAccount}
@@ -12,7 +12,7 @@ The functionality is fully implemented.
 \subsection{Goal 2} \label{subsect:gLoginPhase}
 \textbf{The system should be able to handle a login phase}\\
 
-The functionality is implemented but the requirement \RASDref{R6} isn't: all the parts involving the online part of data synchronization are not implemented in the prototype. It has been chosen not to implement these features since they weren't considered to be basic, something not stricly needed for a prototype implementation. However, the data of the user are saved locally to the device in which the application it's installed: it won't be difficult to extend this client-side data management to a server-side one, once a fully implementation will be required.
+The functionality is implemented but the requirement \RASDref{R6} isn't: all the parts involving the online part of data synchronization are not implemented in the prototype. It has been chosen not to implement these features since they weren't considered to be basic, something not stricly needed for a prototype implementation. However, the data of the user are saved locally to the device in which the application is installed: it won't be difficult to extend this client-side data management to a server-side one, once a fully implementation will be required.
 
 \subsection{Goal 3} \label{subsect:gPasswordRecovery}
 \textbf{The system should give to the signed user the possibility to recover his password} \\
@@ -33,12 +33,12 @@ The functionality is fully implemented, but the modified appointments are saved 
 \label{subsect:gScheduleCreation}
 \textbf{The system should provide a way to create a valid schedule of the user appointments when requested and display the scheduling result}\\
 
-The functionality is implemented, in particular all the various data are retrieved from the user and from external API (\RASDref{R12} through \RASDref{R16}), except for the informations about strike days and delays that are not yet considered, since it turned out that these data were available to be retrieved only by paing the various API services. So, since the application it's still a prototype and since these added details weren't bringing any basic features but just advanced ones, we decided to forget about them. Moreover, except for the described lacking data that are not considered, the \RASDref{R17} it's fullfilled. Last, the created schedules are saved (\RASDref{R18}) just in the device and not online, as explained in \ref{subsect:gLoginPhase}.
+The functionality is implemented, in particular all the various data are retrieved from the user and from external API (\RASDref{R12} through \RASDref{R16}), except for the informations about strike days and delays that are not yet considered, since it turned out that these data were available to be retrieved only by paying the various API services. So, since the application is still a prototype and since these added details weren't bringing any basic features but just advanced ones, we decided to forget about them. Moreover, except for the described lacking data that are not considered, the \RASDref{R17} it's fullfilled. Last, the created schedules are saved (\RASDref{R18}) just in the device and not online, as explained in \ref{subsect:gLoginPhase}.
 
 \subsection{Goal 7} \label{subsect:gScheduleCreation}
 \textbf{The system should let the user create valid multiple schedules and decide which one is chosen for the current day}\\
 
-This functionality is partially implemented. Taxis are not implemented, because there is no available API for taxis.
+This functionality is implemented but taxis are not considered, because there is no available API for taxis.
 
 \subsection{Goal 8} \label{subsect:gScheduleSelection}
 \textbf{The system should be able to book the travel means involved in the current schedule under user approval}\\

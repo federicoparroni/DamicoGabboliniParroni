@@ -1,0 +1,170 @@
+\documentclass [11pt,a4paper,oneside,openany]{book} %Classe del documento, formato carta, singola facciata, apertura capitoli pag destra/sinista (ininfluente se impostato oneside). Formato libro
+\usepackage[italian]{babel} %Lingua Documento (da impostare per la sillabazione)
+\usepackage{graphicx} %Pacchetto necessario per la gestione delle immagini
+\usepackage{xcolor,colortbl} %Colori
+\usepackage{enumitem} % pacchetto per gestire le enumerazioni e resume
+\usepackage{fancyhdr} %Pacchetto per la gestione accurata della pagina
+\usepackage{setspace} %Pacchetto necessario per i comandi successivi onehalfspacing, singlespacing....
+\usepackage{titlesec} % Pacchetto per le sezioni e sottosezioni
+\usepackage{longtable} %Pacchetto per la gestione delle tabelle grandi
+\usepackage[colorlinks=true]{hyperref} %Segnalibri nel pdf finale, sotto relativi parametri
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc} %Pacchetti per le lettere accentate utf8
+\usepackage{listings} %Pacchetto per formattare codice sorgente
+\usepackage{mathtools} %Pacchetto matematica
+\usepackage{float} %Pacchetto per il posizionamento delle figure
+\usepackage{amsthm}
+\usepackage{supertabular}
+
+\hypersetup{
+	bookmarksnumbered=true,
+	linkcolor=black,
+	citecolor=black,
+	urlcolor=black,
+}
+
+\usepackage{geometry} % Dimensione pagina
+
+\geometry{a4paper} % Formato carta
+\addtolength{\textheight}{75pt} %Margini
+\oddsidemargin 30pt
+
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{3}
+
+\newcommand{\RASDref}[1]{\textbf{RASD: #1}}
+\newcommand{\DDref}[1]{\textbf{DD: #1}}
+\newcommand{\classDescription}[1]{\subsubsection{#1}\label{class:#1}}
+\newcommand{\methodDescription}[1]{\textit{#1}(..)}
+
+
+\newcommand{\testTable}[3]{
+\begin{longtable}{|p{14cm}|} \hline
+\textbf{Precondition and action tested: } #1  \\ \hline
+\textbf{Expected behaviour: } #2  \\ \hline
+\textbf{Actual outcome: } #3  \\ \hline
+\end{longtable}
+}
+
+% #1: name of the image on the images folder. eg: middleware.png
+\newcommand{\testImage}[1]{
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=250pt, keepaspectratio]{"images/"#1}
+\caption{Graphical representation of the actual outcome}
+\end{center}
+\end{figure}
+}
+
+\newcommand{\TestTable}[4]{
+\begin{longtable}{|p{14cm}|} \hline
+\textbf{Precondition: } #1  \\ \hline
+\textbf{Action tested: } #2  \\ \hline
+\textbf{Expected behaviour: } #3  \\ \hline
+\textbf{Actual outcome: } #4  \\ \hline
+\end{longtable}
+}
+
+\newcommand{\TestImage}[2]{
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=250pt, keepaspectratio]{"images/#1".png}
+\caption{#2}
+\end{center}
+\end{figure}
+}
+
+\definecolor{darkgreen}{rgb}{0,0.6,0}
+\lstset{frame=tb,
+  language=php,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  keywordstyle=\color{blue},
+  commentstyle=\color{black},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+\begin{document} %Inizio Documento
+
+%%FRONTESPIZIO%%=========================================
+\begin{titlepage}
+
+ \begin{center} 
+     \includegraphics[height=6cm]{logo.eps}\\
+     \vspace{4em}
+     {\Large \textsc{Software Engineering II}}\\
+     \vspace{6em}
+     {\LARGE \textbf{Travlendar+}}\\
+     \vspace{3em}
+     {\Large \textsc{Implementation \& Testing}}\\
+     \vspace{1em}
+     {\Large \textsc{Document}}\\
+ \end{center}
+ 
+    \vskip 1cm
+ 
+ 	Authors:
+ 	\vspace{0.5em}
+ 	\begin{center}
+      {\Large \textit{Edoardo D'Amico}}\\
+      {\Large \textit{Gabbolini Giovanni}}\\
+      {\Large \textit{Parroni Federico}}\\
+    \end{center}
+
+	\vskip 1.5cm    
+    
+    \begin{center}
+    Git Repository: \url{https://github.com/keyblade95/DamicoGabboliniParroni}
+	\end{center}
+
+\vskip 2cm
+\begin{center}
+{\normalsize 1$^{st}$ December 2017}
+\end{center}
+
+\end{titlepage}
+
+\newpage
+
+%%INTESTAZIONI PAGINA%%==================================
+\pagestyle{fancy}
+\renewcommand{\chaptername}{Chapter}
+\renewcommand{\chaptermark} [1]{\chaptername\ \thechapter.\ #1}{} 
+\renewcommand{\chaptermark}[1]{\markboth{\thechapter.\ #1}{}} 
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+\fancyhf{}
+\fancyhead[LE,RO]{\bfseries\thepage} 
+\fancyhead[LO,RE]{\bfseries\leftmark}
+\fancypagestyle{plain}{%
+\fancyhead{} % leva l'intestazione
+\renewcommand{\headrulewidth}{0pt} % e la linea
+}
+
+%%INDICE%%==============================================
+\renewcommand{\contentsname}{Indice}
+\renewcommand{\listfigurename}{Elenco delle Figure}
+\renewcommand{\listtablename}{Elenco delle Tabelle}
+\tableofcontents
+
+\linespread{1.5}\selectfont		%interlinea
+%%CAPITOLI===============================================
+\input{cap1_introduzione}
+\input{cap2_functionalities}
+\input{cap3_frameworks}
+\input{cap4_servercodestructure}
+\input{cap5_clientcodestructure}
+\input{cap6_testing}
+\input{cap7_installation}
+\input{cap8_effort}
+
+%%APPENDICI==============================================
+\appendix
+%%\input{appendiceA}
+
+\end{document}
