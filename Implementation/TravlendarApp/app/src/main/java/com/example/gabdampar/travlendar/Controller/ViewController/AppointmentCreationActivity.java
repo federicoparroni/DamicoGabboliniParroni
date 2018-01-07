@@ -94,6 +94,13 @@ public class AppointmentCreationActivity extends AppCompatActivity implements On
         //position of the appointment in the list
         position = getIntent().getIntExtra("position",-1);
 
+        //initialize the constraints
+        if(position >= 0)
+            constraints = AppointmentManager.GetInstance().getAppointmentList().get(position).constraints;
+        else
+            constraints = new ArrayList<>();
+
+
         durationTimePicker.setIs24HourView(true);
         durationTimePicker.setHour(1);
         durationTimePicker.setMinute(0);
@@ -209,8 +216,8 @@ public class AppointmentCreationActivity extends AppCompatActivity implements On
 
                     AppointmentManager.GetInstance().apptList.add(appointment);
 
-                    //TODO add the constraint to the appointment
-                    if(constraints != null) appointment.setConstraints(constraints);
+                    if(constraints.size() > 0)
+                        appointment.setConstraints(constraints);
 
                     //verifying that the appointment is added to the appointment list
                     Log.e("addAppointmentToTheList", String.valueOf(AppointmentManager.GetInstance().apptList.size()));
@@ -221,7 +228,8 @@ public class AppointmentCreationActivity extends AppCompatActivity implements On
             else {
                 //appointment that must be modified
                 Appointment appointment = AppointmentManager.GetInstance().GetAppointment(position);
-                constraints = appointment.constraints;
+
+
                 if (checkBoxStartingTime.isChecked()) {
                     if (startingTime == null)
                         startingTime = appointment.getStartingTime();
@@ -246,7 +254,7 @@ public class AppointmentCreationActivity extends AppCompatActivity implements On
                         Snackbar.make(view, "WARNING: Missing Field", Snackbar.LENGTH_LONG).show();
                     }else {
                         appointment.EditAppointment(name, date, null, timeSlot, duration, coords, location, involvedPeople, isRecurrent);
-                        //TODO if the constraints has been changed update that ones
+                        // if the constraints has been changed update that ones
                         appointment.setConstraints(constraints);
                         super.onBackPressed();
                     }
