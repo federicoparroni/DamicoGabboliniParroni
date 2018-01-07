@@ -42,10 +42,13 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -64,8 +67,9 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
 
     TextView txtApptNumberForSelectedDay;
     TimePicker timePickerWakeUp;
-    SupportMapFragment startingLocationMap;
+    SupportMapFragment startingLocationFragment;
     PlaceAutocompleteFragment autocompleteFragment;
+    GoogleMap startingLocationMap;
     SegmentedGroup group;
     ListView constraintsListView;
     FloatingActionButton fab;
@@ -98,8 +102,8 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
         group.setTintColor( ResourcesCompat.getColor(getResources(), R.color.colorPrimary, null) );
         group.setOnCheckedChangeListener(this);
         /** map */
-        startingLocationMap = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.starting_location_map);
-        startingLocationMap.getMapAsync(this);
+        startingLocationFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.starting_location_map);
+        startingLocationFragment.getMapAsync(this);
         autocompleteFragment = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         autocompleteFragment.setOnPlaceSelectedListener(this);
         /** constraints list view */
@@ -169,15 +173,11 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        startingLocationMap = googleMap;
+
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         String time = pref.getString("wake_up_time", "");
         if(!time.isEmpty()) scheduler.scheduleStartingTime = new LocalTime( time );
-
-        // TODO get starting location from preferences
-        /** DEBUG */
-        scheduler.startingLocation = new LatLng(45.4809352, 9.233779);
-        scheduler.criteria = OptCriteria.OPTIMIZE_TIME;
-        /** ========= */
 
         // enable fab click listener
         fab.setOnClickListener(this);
@@ -236,6 +236,11 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
 
     @Override
     public void onPlaceSelected(Place place) {
+        startingLocationMap.clear();
+        String placeName = place.getName().toString();
+        LatLng coords = place.getLatLng();
+        startingLocationMap.addMarker(new MarkerOptions().position(coords).title(placeName));
+        startingLocationMap.animateCamera(CameraUpdateFactory.newLatLngZoom(coords,15));
         scheduler.startingLocation = place.getLatLng();
     }
 
