@@ -3,6 +3,7 @@ package com.example.gabdampar.travlendar.Controller.ViewController;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;

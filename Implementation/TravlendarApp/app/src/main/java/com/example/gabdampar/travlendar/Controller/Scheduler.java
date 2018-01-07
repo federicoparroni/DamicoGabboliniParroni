@@ -5,7 +5,10 @@
 package com.example.gabdampar.travlendar.Controller;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
+import com.example.gabdampar.travlendar.Controller.ViewController.MainActivity;
 import com.example.gabdampar.travlendar.Model.Appointment;
 import com.example.gabdampar.travlendar.Model.AppointmentCouple;
 import com.example.gabdampar.travlendar.Model.ConstraintOnAppointment;
@@ -73,6 +76,7 @@ public class Scheduler{
     public void ComputeSchedule(Context context, final ScheduleCallbackListener listener) {
         if(this.appts.size() > 0) {
             sync = 2;
+
 
             // 1
             /** create and set wake-up dummy appointment */
@@ -378,6 +382,12 @@ public class Scheduler{
      */
     private ArrayList<TravelMeanCostTimeInfo> GetUsableTravelMeansOrderedByCost(TemporaryAppointment a1, TemporaryAppointment a2, TravelMeansState state) {
         ArrayList<TravelMeanEnum> availableMeans = new ArrayList<>( Arrays.asList(TravelMeanEnum.values()) );
+
+        /** discard travel means that are not allowed by MEANS OWNAGE */
+        //CAR
+        if(!IdentityManager.GetInstance().user.hasCar) availableMeans.remove(TravelMeanEnum.CAR);
+        //BIKE
+        if(!IdentityManager.GetInstance().user.hasBike) availableMeans.remove(TravelMeanEnum.BIKE);
 
         /** discard travel means that are not allowed by CONSTRAINTS on SCHEDULES */
         for(ConstraintOnSchedule constraint : constraints) {

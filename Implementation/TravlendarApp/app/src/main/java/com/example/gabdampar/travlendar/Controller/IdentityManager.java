@@ -24,6 +24,7 @@ import java.util.TimerTask;
 public class IdentityManager implements Response.Listener<JSONObject>, Response.ErrorListener {
     private static String baseUrl = "http://travlendar.000webhostapp.com/travlendar/public";
 
+    public User user;
     private String email = "";
     private String password = "";
     private String token = "";
@@ -197,6 +198,7 @@ public class IdentityManager implements Response.Listener<JSONObject>, Response.
                             try {
                                 User user = User.ParseUser(response.getJSONObject("data"));
                                 if(user != null) {
+                                    IdentityManager.GetInstance().user = user;
                                     callback.UserProfileCallback(true, user);
                                 } else {
                                     callback.UserProfileCallback(false, null);
