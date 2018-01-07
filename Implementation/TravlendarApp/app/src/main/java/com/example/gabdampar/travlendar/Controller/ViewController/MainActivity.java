@@ -124,10 +124,14 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void UserProfileCallback(boolean success, User user) {
                 if(success) {
-                    txtUserDetails.setText(user.email);
-                    txtUserDetails.setText("Standard user");
+                    txtUsername.setText(user.email);
+                    // sync user
+                    SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+                    IdentityManager.GetInstance().user.hasCar = sharedPref.getBoolean("has_car", false);
+                    IdentityManager.GetInstance().user.hasBike = sharedPref.getBoolean("has_bike", false);
+                    IdentityManager.GetInstance().user.hasPass = sharedPref.getBoolean("has_pass", false);
+
                 } else {
-                    txtUserDetails.setText("null");
                     txtUserDetails.setText("null");
                     Log.e("Error", "Cannot load user profile");
             }
