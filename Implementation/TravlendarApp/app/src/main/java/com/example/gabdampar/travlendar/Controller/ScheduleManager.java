@@ -39,7 +39,7 @@ public class ScheduleManager {
         else{
             for(int i=0; i<ScheduleManager.GetInstance().runningSchedule.getScheduledAppts().size(); i++) {
                 ScheduledAppointment scheduledAppointment = ScheduleManager.GetInstance().runningSchedule.getScheduledAppts().get(i);
-                directions += i==0 ? scheduledAppointment.toString() + "\n" : "";
+                directions += i==0 ? "Directions to reach " + scheduledAppointment.toString() + "\n" : "";
                 if (scheduledAppointment.dataFromPreviousToThis != null) {
                     directions += "Start at " + scheduledAppointment.dataFromPreviousToThis.getTime().startingTime.toString("HH:mm")+"\n";
                     directions += scheduledAppointment.dataFromPreviousToThis.getDirections();

@@ -116,6 +116,8 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
         fab = findViewById(R.id.fab);
         fab.setClickable(false);
 
+        scheduler.criteria = OptCriteria.OPTIMIZE_TIME;
+
         // LoadUserDefaults();
         final DateTime now = DateTime.now();
         onSelectedDayChange(calendar, now.getYear(), now.getMonthOfYear()-1, now.getDayOfMonth());
@@ -178,6 +180,8 @@ public class ScheduleCreationActivity extends AppCompatActivity implements Calen
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         String time = pref.getString("wake_up_time", "");
         if(!time.isEmpty()) scheduler.scheduleStartingTime = new LocalTime( time );
+
+        scheduler.criteria=OptCriteria.OPTIMIZE_TIME;
 
         // enable fab click listener
         fab.setOnClickListener(this);

@@ -254,9 +254,7 @@ public class ScheduleListFragment extends Fragment implements OnMapReadyCallback
         map.getUiSettings().setMapToolbarEnabled(false);
 
         Schedule s = ScheduleManager.GetInstance().getSchedule(pos);
-        MapUtils.putMapMarkersGivenScheduledAppointmentsAndSetMapZoomToThose(map,s.getScheduledAppts());
+        MapUtils.putMapMarkersGivenScheduledAppointmentsAndSetMapZoomToThose(map,s);
         MapUtils.drawScheduleOnMap(s,map);
     }
-
-
 }
