@@ -157,8 +157,17 @@ public class Scheduler{
                                 j++;
                             }
                             else {
-                                if (travelData.get(0).getTime().endingTime.isBefore(
-                                        schedules.get(i).getScheduledAppts().get(j).ETA)) {
+                                int usefulTime = schedules.get(i).getScheduledAppts().get(j).ETA.getMillisOfDay() -
+                                                    schedules.get(i).getScheduledAppts().get(j-1).endingTime().getMillisOfDay();
+                                int travelTime = travelData.get(0).getTime().getDuration()*1000;
+                                if(travelTime<usefulTime){
+                                    if (travelData.get(0).getTime().endingTime.isAfter(
+                                            schedules.get(i).getScheduledAppts().get(j).ETA)) {
+                                        int slack = travelData.get(0).getTime().endingTime.getMillisOfDay() -
+                                                schedules.get(i).getScheduledAppts().get(j).ETA.getMillisOfDay();
+                                        travelData.get(0).getTime().startingTime.minusMillis(slack);
+                                        travelData.get(0).getTime().endingTime.minusMillis(slack);
+                                    }
                                     schedules.get(i).getScheduledAppts().get(j).dataFromPreviousToThis = travelData.get(0);
                                     if ((j == schedules.get(i).getScheduledAppts().size() - 1))
                                         listener.ScheduleCallback(schedules.get(i));
