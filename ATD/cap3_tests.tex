@@ -1,0 +1,87 @@
+\chapter{Tests}
+
+\section{Test of the implemented functionalities}
+The tests have been done on the implemented functionalities declared on the ITD document released by the other team, for each of them at least on test has been carried out.
+
+\subsection{Insertion of events and free times}
+
+The insertion of an event can be done by clicking the button the main page of the application
+
+\TestImage{func1/MainView}{Main page view}
+
+The user is redirect to an event creation view with some fields to fill as shown below.
+
+\TestImage{func1/AddEventPage}{Event Creation View}
+
+The view has some missing graphic constraints that put the two clock picker in the middle of the view hiding the bar that made possible the selection of a travel mean for the event that is currently being created.\\
+Another small issue is that the year of the selected day is wrong(is 0118 instead of 2018).\\
+There isn't any check for correctness of the location inserted.\\
+\subsubsection{Test1}
+A first test has been carried out with a normal insertion of an event without free time and without repetition.
+After the click of the add event button the user is redirected to the main page but the appointment has not been added,although with a change of date on the calendar (change date and after rechange on the current date) the appointment is added, as shown in the image below,probably a little problem in refreshing the view after the insertion.
+
+\TestImage{func1/AppAdded1}{Insertion of an event}
+
+Another issue is represented by the insertion of an appointment with ending time which is previous than the starting time. In this case the application crashes
+
+\subsubsection{Test2}
+Here is tryed to add an event with repetition that is possible pushing the button on the event creation view named "repetition" the user is redirected to the following view
+
+\TestImage{func1/RepetitionApp}{Repetition view}
+
+The confirm button has some missign constraints so it stay on the middle of the field for the insertion of the date.\\
+After the click of the confirm button the user is redirected to the main page after the refresh of the view the appointment is visible only on the first date of the slot selected for the repetition, on the other days in which the appointment should be shown nothing has been added.
+
+\subsubsection{Test3}
+Here is tried to add two overlapping appointments, in this case after the insertion of the second one the application crashes.
+
+\subsubsection{Test4}
+Here is tried to add a free time, when the save button is clicked the application crashes.
+
+\subsubsection{Test5}
+As the other team has reported in theire \textbf{DD}, after the insertion of any appointment, the temporal feasibility of that appointment should be checked, meaning that the application should calculate the traveling times and therefore check if the user will be able to attend two consequent appointments without being late.
+This functionality actually is not working: the application lets the user insert two appointments that differ for one minute, even if they are located in very far places, like Via Golgi 42 and Duomo di Milano.
+
+\TestImage{func1/closeappointments}{Temporaly close appointments}
+
+\subsection{Notification System}
+This functionality is declared to be implemented on the ITD document but it isn't working, no notification are sent to the final user.
+
+\subsection{Setting Preferences}
+By clicking the preferences button on the main page we are redirected to the preferences page, where it's possible to set some user attribute, such as the ownage of travel means and of a transit travel pass, other than preferences on how many Kms the user wants to travel with some travel means.
+
+One can argue that this view isn't complete at all: it's not possible to set the distance contraints for all the kind of travel means (for instace, for the public travel means).
+Moreover, it's possible to set as an optimization criteria just the carbon footprint emitted by the means taken, but not the cost optimization or the time optimization, as stated on the assignment given us.
+
+\TestImage{preferenceshome}{Preferences view}
+
+However, for the settings considered, the application works properly, letting the user save it's characteristics.
+
+\subsection{Persistance Database to store events and free times}
+The user preferences and the user events are declared to be saved inside the device in a persistence database.
+
+\subsubsection{Test 1}
+Here it's tested the persistence of an user event.
+First an event (let's say, a Software Engineering II lesson, located in Via Golgi 42, lasting 2 hours, from 14.15 to 16.15) it's added. After having closed the application, when it is opened again we can notice that the event it's still present.
+
+\TestImage{persistenceappointment}{Persistence appointment}
+
+\subsubsection{Test 2}
+Here it's tested the persistence of an user preference.
+First the ownage of a car is set to true. After having closed the application, when it is opened again we can notice that the car ownage checkbox it's still checked.
+
+\TestImage{persistencepreference}{Persistence appointment}
+
+\subsection{BikeMI API}
+This functionality is declared to be implemented on the ITD document but it isn't working, no calls to this service are performed at all during the execution of the application.
+
+\subsection{Wheather API}
+This functionality is declared to be implemented on the ITD document but it isn't working, the weather conditions aren't checked.
+
+\subsection{Preferences Management}
+As declared, the user preferences are used during the computations to avoid some behaviour or to enhance others.
+
+\subsubsection{Test 1}
+This section it's not easy to test, infact most of the characteristics that has are encapsulated in the code. However, the coherence between the user's owned means and the means that the application admits to reach an event can be checked: first it's set in the preferences that we don't own a car. Then is set up a new appointment and, as transportation mean, we set our owned car. The application allow the insertion of this appointment, even if this is incoherent with the preferences.
+
+\TestImage{preferencemanagement}{Preference Coherence}
